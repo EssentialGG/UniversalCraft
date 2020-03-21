@@ -1,36 +1,24 @@
 pipeline {
   agent any
   stages {
-    stage('Initialize 1.8.9') {
+    stage('Initialize') {
       steps {
         sh '''echo username=sk1erdeploy'\n'password=d2eb5509b27c5df1bda08f5c7d652f1b22017cc2 > gradle.properties.private'''
         sh '''./gradlew clean
-        ./gradlew changeMcVersion -PminecraftVersion=10809
-        ./gradlew setupCiWorkspace -PminecraftVersion=10809'''
+        ./gradlew setupCiWorkspace'''
       }
     }
-    stage('Build 1.8.9') {
+    stage('Build') {
       steps {
-        sh "./gradlew build -PminecraftVersion=10809 -PBUILD_ID=${env.BUILD_ID}"
+        sh "./gradlew build -PBUILD_ID=${env.BUILD_ID}"
       }
     }
 
-    stage('Initialize 1.12.2') {
-      steps {
-        sh '''echo username=sk1erdeploy'\n'password=d2eb5509b27c5df1bda08f5c7d652f1b22017cc2 > gradle.properties.private'''
-        sh '''./gradlew clean
-            ./gradlew changeMcVersion -PminecraftVersion=11202
-            ./gradlew setupCiWorkspace -PminecraftVersion=11202'''
-      }
-    }
-    stage('Build 1.12.2') {
-      steps {
-        sh "./gradlew build -PminecraftVersion=11202 -PBUILD_ID=${env.BUILD_ID}"
-      }
-    }
+
     stage('Report') {
       steps {
-        archiveArtifacts 'build/libs/*.jar'
+        archiveArtifacts 'versions/1.8.9/build/libs/*.jar'
+        archiveArtifacts 'versions/1.12.2/build/libs/*.jar'
       }
     }
   }

@@ -1,56 +1,56 @@
 // For those who want the bleeding edge
 buildscript {
-    ext.kotlin_version = "1.3.70"
-
-    def f = file("gradle/mcversion.txt")
-
-    project.ext.mcVersion = f.exists() ? f.readLines().first() as int : 10809
-
     repositories {
         jcenter()
+        mavenCentral()
         maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
-
+        maven {
+            url = "https://jitpack.io"
+        }
     }
+
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:" + (
-                mcVersion >= 11200 ? '2.3-SNAPSHOT' :
-                        mcVersion >= 10904 ? '2.2-SNAPSHOT' :
-                                mcVersion >= 10809 ? "2.1-SNAPSHOT" :
-                                        "invalid"
-        )
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
+        if (project.name == "1.14-fabric") {
+            classpath 'fabric-loom:fabric-loom.gradle.plugin:0.2.2-SNAPSHOT'
+        } else if (project.name == "1.14") {
+            classpath('net.minecraftforge.gradle:ForgeGradle:3.+') {
+                exclude group: 'trove', module: 'trove' // preprocessor/idea requires more recent one
+            }
+        } else {
+            classpath('com.github.ReplayMod:ForgeGradle:' + (
+                    project.name == "1.12.2" ? 'd5c13801' : // FG 2.3
+                            'ab81684e'  // FG 2.1
+            )) {
+                exclude group: 'net.sf.trove4j', module: 'trove4j' // preprocessor/idea requires more recent one
+                exclude group: 'trove', module: 'trove' // different name same thing
+            }
+        }
     }
-
 }
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'kotlin'
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: project.name == "1.14" ? 'net.minecraftforge.gradle' : 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.replaymod.preprocess'
+mcVersion = project.ext.mcVersion
 
+preprocess {
+    vars.put("MC", mcVersion)
+}
 
 repositories {
     mavenCentral()
     jcenter()
-    maven {
-        name = "kryonet"
-        url = "http://clojars.org/repo/"
-    }
-    maven {
-        url 'https://repository.apache.org/content/repositories/releases/org/apache/xmlgraphics/'
-    }
-    maven { url 'https://jitpack.io' }
 
+    maven { url 'https://jitpack.io' }
 }
 
-apply from: 'sk1erllc_github_packages.gradle'
+apply from: '../../sk1erllc_github_packages.gradle'
 
 version = this.properties.getOrDefault("BUILD_ID", "LOCAL") //BUI
 group = "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "UniversalCraft"+this.properties.getOrDefault("minecraftVersion","DIRECT˚")
+archivesBaseName = "UniversalCraft" + project.name
 
 sourceCompatibility = targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
@@ -88,9 +88,6 @@ configurations {
 }
 
 dependencies {
-    embed "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-
 }
 
 
@@ -106,18 +103,7 @@ classes.dependsOn moveResources
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
-    }
-
-    exclude "META-INF/**"
 
 }
 
@@ -125,65 +111,12 @@ jar {
     dependsOn configurations.compile
     from {
         configurations.embed.collect {
-            exclude 'club.sk1er.vigilance.example.ExampleMod'
             it.isDirectory() ? it : zipTree(it)
         }
     }
-
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-    manifest {
-        attributes "FMLCorePlugin": "club.sk1er.mods.core.dev.FMLLoadingPlugin",
-                "ModSide": "CLIENT",
-                "FMLCorePluginContainsFMLMod": "Yes, yes it does"
-    }
-    exclude "META-INF/**"
-}
-
-apply from: 'preprocessor.gradle'
-
-ext {
-    customMCVersion = -1
-}
-
-task changeMcVersion() {
-    doLast {
-        def version
-
-        if (customMCVersion != -1) {
-            println "Running forced 1.8.9"
-            version = customMCVersion
-        } else if (project.hasProperty("minecraftVersion")) {
-            version = project.minecraftVersion
-        } else {
-            version = 10809
-            println "Defaulting to version 1.8.9..."
-        }
-
-        project.ext.mcVersion = version
-        def f = file("gradle/mcversion.txt")
-        f.delete()
-        f.createNewFile()
-        f.write(version.toString())
-
-        println "MC target version is $version"
-        def vars = [MC: version as int]
-        project.convertTree(vars, 'src/main/java')
-        project.convertTree(vars, 'src/main/kotlin')
-        project.convertTree(vars, 'src/main/resources')
-    }
 }
 
 
-task changeToDefaultVersion {
-    doLast {
-        customMCVersion = 10809
-    }
-}
-
-deobfCompileDummyTask.finalizedBy(changeMcVersion)
-
-build.finalizedBy(changeToDefaultVersion)
-changeToDefaultVersion.finalizedBy(changeMcVersion)
 compileKotlin {
     kotlinOptions {
         languageVersion = "1.3"
