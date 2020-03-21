@@ -30,7 +30,6 @@ buildscript {
         }
     }
 }
-apply plugin: 'kotlin'
 apply plugin: project.name == "1.15.2" ? 'net.minecraftforge.gradle' : 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.replaymod.preprocess'
 mcVersion = project.ext.mcVersion
@@ -184,8 +183,3 @@ jar {
 }
 
 
-compileKotlin {
-    kotlinOptions {
-        languageVersion = "1.3"
-    }
-}
