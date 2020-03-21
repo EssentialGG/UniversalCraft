@@ -48,9 +48,9 @@ repositories {
 
 apply from: 'sk1erllc_github_packages.gradle'
 
-version = "0.1.19"
+version = this.properties.getOrDefault("BUILD_ID", "LOCAL") //BUI
 group = "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Sk1er Mod Core"
+archivesBaseName = "UniversalCraft$mcVersion"
 
 sourceCompatibility = targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
