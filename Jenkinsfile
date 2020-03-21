@@ -11,7 +11,7 @@ pipeline {
     }
     stage('Build 1.8.9') {
       steps {
-        sh '''./gradlew build -PminecraftVersion=10809 -PBUILD_ID=${env.BUILD_ID}'''
+        sh "./gradlew build -PminecraftVersion=10809 -PBUILD_ID=${env.BUILD_ID}"
       }
     }
 
@@ -25,7 +25,7 @@ pipeline {
     }
     stage('Build 1.12.2') {
       steps {
-        sh '''./gradlew build -PminecraftVersion=11202 -PBUILD_ID=${env.BUILD_ID}'''
+        sh "./gradlew build -PminecraftVersion=11202 -PBUILD_ID=${env.BUILD_ID}"
       }
     }
     stage('Report') {
