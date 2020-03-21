@@ -11,7 +11,11 @@ public class UniversalPotion {
         //#if MC<=10809
         return potion.getPotionID();
         //#else
+        //#if MC<11502
         //$$ return Potion.getIdFromPotion(potion.getPotion());
+        //#else
+        //$$ return -1;
+        //#endif
         //#endif
     }
 }

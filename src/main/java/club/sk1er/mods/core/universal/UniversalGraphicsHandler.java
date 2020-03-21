@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.List;
 //#if MC>=11502
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
+//$$ import net.minecraft.client.renderer.Vector3f;
 //#endif
 
 public class UniversalGraphicsHandler {
@@ -88,7 +89,7 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         GlStateManager.scale(x, y, z);
         //#else
-        //$$ stack.scale(x, y, z);
+        //$$ stack.scale((float) x, (float) y, (float) z);
         //#endif
     }
 
@@ -101,17 +102,21 @@ public class UniversalGraphicsHandler {
     }
 
     public static void cullFace(int mode) {
-        //#if MC>10809
-        //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
-        //$$ for (GlStateManager.CullFace value : values) {
-        //$$     if (value.mode == mode) {
-        //$$         GlStateManager.cullFace(value);
-        //$$         return;
-        //$$     }
-        //$$ }
-        //$$ throw new IllegalArgumentException(String.format("Mode %d is not valid!", mode));
+        //#if MC>=11502
+        //$$  GL11.glCullFace(mode);
         //#else
-        GlStateManager.cullFace(mode);
+            //#if MC>10809
+            //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
+            //$$ for (GlStateManager.CullFace value : values) {
+            //$$     if (value.mode == mode) {
+            //$$         GlStateManager.cullFace(value);
+            //$$         return;
+            //$$     }
+            //$$ }
+            //$$ throw new IllegalArgumentException(String.format("Mode %d is not valid!", mode));
+            //#else
+            GlStateManager.cullFace(mode);
+            //#endif
         //#endif
 
     }
@@ -121,15 +126,28 @@ public class UniversalGraphicsHandler {
     }
 
     public static void disableTexture2D() {
+        //#if MC<11502
         GlStateManager.disableTexture2D();
+        //#else
+        //$$ GlStateManager.disableTexture();
+        //#endif
+
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
+        //#if MC<11502
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //#else
+        //$$  GlStateManager.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //#endif
     }
 
     public static void enableTexture2D() {
+        //#if MC<11502
         GlStateManager.enableTexture2D();
+        //#else
+        //$$ GlStateManager.enableTexture();
+        //#endif
     }
 
     public static void disableBlend() {
@@ -141,7 +159,11 @@ public class UniversalGraphicsHandler {
     }
 
     public static void enableAlpha() {
+        //#if MC<11502
         GlStateManager.enableAlpha();
+        //#else
+        //$$ GlStateManager.enableAlphaTest();
+        //#endif
     }
 
     public static void bindTexture(int glTextureId) {
@@ -153,15 +175,20 @@ public class UniversalGraphicsHandler {
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
+        //#if MC<11502
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
+        //#else
+        //$$ if(shadow)  UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
+        //$$ else  UniversalMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
+        //#endif
     }
 
     public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
         return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
     }
 
-    public static int getCharWidth(char character) {
-        return UniversalMinecraft.getFontRenderer().getCharWidth(character);
+    public static float getCharWidth(char character) {
+        return UniversalMinecraft.getFontRenderer().getCharWidth(character); //float because its a float in 1.15+
     }
 
     public static void glClear(int mode) {
@@ -191,7 +218,11 @@ public class UniversalGraphicsHandler {
     }
 
     public UniversalGraphicsHandler tex(double u, double v) {
+        //#if MC<11502
         instance.tex(u, v);
+        //#else
+        //$$ instance.tex((float)u,(float)v);
+        //#endif
         return this;
     }
 }
