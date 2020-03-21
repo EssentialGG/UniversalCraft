@@ -13,13 +13,9 @@ public class UniversalMinecraft {
     }
 
     public static WorldClient getWorld() {
-        //#if MC<=10809
         return getMinecraft().theWorld;
-        //#else
-        //$$ return getMinecraft().world;
-        //#endif
     }
-
+    
     public static NetHandlerPlayClient getNetHandler() {
         //#if MC<=10809
         return getMinecraft().getNetHandler();

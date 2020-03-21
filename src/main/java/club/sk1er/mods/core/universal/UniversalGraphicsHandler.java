@@ -7,10 +7,14 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+//#if MC>=11502
+//$$ import com.mojang.blaze3d.matrix.MatrixStack;
+//#endif
 
 public class UniversalGraphicsHandler {
     //#if MC<=10809
     private WorldRenderer instance;
+
     //#else
     //$$ private BufferBuilder instance;
     //$$
@@ -20,12 +24,23 @@ public class UniversalGraphicsHandler {
         this.instance = instance;
     }
 
+
+
     //#else
     //$$ public UniversalGraphicsHandler(BufferBuilder instance) {
     //$$     this.instance = instance;
     //$$ }
     //#endif
-
+    //#if MC>=11502
+    //$$private static MatrixStack stack;
+    //$$ public static MatrixStack getStack() {
+    //$$      return stack;
+    //$$  }
+    //
+    //$$  public static void setStack(MatrixStack stack) {
+    //$$      UniversalGraphicsHandler.stack = stack;
+    //$$  }
+    //#endif
     public static void pushMatrix() {
         GlStateManager.pushMatrix();
     }
@@ -47,11 +62,22 @@ public class UniversalGraphicsHandler {
     }
 
     public static void translate(double x, double y, double z) {
+        //#if MC<11502
         GlStateManager.translate(x, y, z);
+        //#else
+        //$$ stack.translate(x, y, z);
+        //#endif
     }
 
     public static void rotate(float angle, float x, float y, float z) {
+        //#if MC<11502
         GlStateManager.rotate(angle, x, y, z);
+        //#else
+        //$$if (x != 0) stack.rotate(Vector3f.XP.rotationDegrees(angle));
+        //$$ if (y != 0) stack.rotate(Vector3f.YP.rotationDegrees(angle));
+        //$$  if (z != 0) stack.rotate(Vector3f.ZP.rotationDegrees(angle));
+        //$$
+        //#endif
     }
 
     public static void scale(float x, float y, float z) {
@@ -59,7 +85,11 @@ public class UniversalGraphicsHandler {
     }
 
     public static void scale(double x, double y, double z) {
+        //#if MC<11502
         GlStateManager.scale(x, y, z);
+        //#else
+        //$$ stack.scale(x, y, z);
+        //#endif
     }
 
     public static Tessellator getTessellator() {
@@ -126,6 +156,22 @@ public class UniversalGraphicsHandler {
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
     }
 
+    public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
+        return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
+    }
+
+    public static int getCharWidth(char character) {
+        return UniversalMinecraft.getFontRenderer().getCharWidth(character);
+    }
+
+    public static void glClear(int mode) {
+        GL11.glClear(mode);
+    }
+
+    public static void glClearStencil(int mode) {
+        GL11.glClearStencil(mode);
+    }
+
     public void begin(int glMode, VertexFormat format) {
         instance.begin(glMode, format);
     }
@@ -147,21 +193,5 @@ public class UniversalGraphicsHandler {
     public UniversalGraphicsHandler tex(double u, double v) {
         instance.tex(u, v);
         return this;
-    }
-
-    public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
-        return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
-    }
-
-    public static int getCharWidth(char character) {
-        return UniversalMinecraft.getFontRenderer().getCharWidth(character);
-    }
-
-    public static void glClear(int mode) {
-        GL11.glClear(mode);
-    }
-
-    public static void glClearStencil(int mode) {
-        GL11.glClearStencil(mode);
     }
 }

@@ -12,7 +12,11 @@ import java.util.List;
 
 public class UniversalEvents {
     public static class UGuiOpenEvent {
+        //#if MC<11502
         public static GuiScreen getGui(GuiOpenEvent event) {
+            //#else
+            //$$ public static Screen getGui(GuiOpenEvent event) {
+            //#endif
             //#if MC<=10809
             return event.gui;
             //#else
@@ -24,7 +28,11 @@ public class UniversalEvents {
 
 
     public static class UGuiScreenEvent {
-        public static GuiScreen getGui(GuiScreenEvent event) {
+        //#if MC<11502
+        public static GuiScreen getGui(GuiOpenEvent event) {
+            //#else
+            //$$ public static Screen getGui(GuiOpenEvent event) {
+            //#endif
             //#if MC<=10809
             return event.gui;
             //#else
@@ -34,11 +42,19 @@ public class UniversalEvents {
     }
     public static class UGuiScreenEvent$InitGuiEvent {
 
+        //#if MC<11502
         public static List<GuiButton> getButtonList(GuiScreenEvent.InitGuiEvent event) {
+            //#else
+            //$$ public static List<Widget> getButtonList(GuiScreenEvent.InitGuiEvent event) {
+            //#endif
             //#if MC<=10809
             return event.buttonList;
             //#else
-            //$$ return event.getButtonList();
+                //#if MC<11502
+                //$$ return event.getButtonList();
+                //#else
+                //$$ return event.getWidgetList();
+                //#endif
             //#endif
         }
     }
@@ -54,34 +70,50 @@ public class UniversalEvents {
     }
     public static class URenderPlayerEvent {
         public static EntityPlayer getPlayer(RenderPlayerEvent event) {
-            //#if MC>10809
-            //$$ return event.getEntityPlayer();
-            //#else
+            //#if MC<=10809
             return event.entityPlayer;
+            //#else
+                //#if MC<11502
+                //$$ return event.getEntityPlayer();
+                //#else
+                //$$ return event.getPlayer();
+                //#endif
             //#endif
         }
 
         public static double getX(RenderPlayerEvent event) {
-            //#if MC>10809
-            //$$ return event.getX();
-            //#else
+            //#if MC<=10809
             return event.x;
+            //#else
+                //#if MC<11502
+                //$$ return event.getX();
+                //#else
+                //$$ return 0;
+                //#endif
             //#endif
         }
 
         public static double getY(RenderPlayerEvent event) {
-            //#if MC>10809
-            //$$ return event.getY();
-            //#else
+            //#if MC<=10809
             return event.y;
+            //#else
+                //#if MC<11502
+                //$$ return event.getY();
+                //#else
+                //$$ return 0;
+                //#endif
             //#endif
         }
 
         public static double getZ(RenderPlayerEvent event) {
-            //#if MC>10809
-            //$$ return event.getZ();
-            //#else
+            //#if MC<=10809
             return event.z;
+            //#else
+                //#if MC<11502
+                //$$ return event.getZ();
+                //#else
+                //$$ return 0;
+                //#endif
             //#endif
         }
 
