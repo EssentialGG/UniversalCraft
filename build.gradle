@@ -50,7 +50,7 @@ apply from: 'sk1erllc_github_packages.gradle'
 
 version = this.properties.getOrDefault("BUILD_ID", "LOCAL") //BUI
 group = "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "UniversalCraft$mcVersion"
+archivesBaseName = "UniversalCraft"+this.properties.getOrDefault("minecraftVersion","DIRECT˚")
 
 sourceCompatibility = targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
