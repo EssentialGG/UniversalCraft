@@ -29,9 +29,9 @@ public class UniversalEvents {
 
     public static class UGuiScreenEvent {
         //#if MC<11502
-        public static GuiScreen getGui(GuiOpenEvent event) {
+        public static GuiScreen getGui(GuiScreenEvent event) {
             //#else
-            //$$ public static Screen getGui(GuiOpenEvent event) {
+            //$$ public static Screen getGui(GuiScreenEvent event) {
             //#endif
             //#if MC<=10809
             return event.gui;
@@ -39,35 +39,36 @@ public class UniversalEvents {
             //$$ return event.getGui();
             //#endif
         }
-    }
-    public static class UGuiScreenEvent$InitGuiEvent {
+        public static class InitGuiEvent {
 
-        //#if MC<11502
-        public static List<GuiButton> getButtonList(GuiScreenEvent.InitGuiEvent event) {
-            //#else
-            //$$ public static List<Widget> getButtonList(GuiScreenEvent.InitGuiEvent event) {
-            //#endif
-            //#if MC<=10809
-            return event.buttonList;
-            //#else
+            //#if MC<11502
+            public static List<GuiButton> getButtonList(GuiScreenEvent.InitGuiEvent event) {
+                //#else
+                //$$ public static List<Widget> getButtonList(GuiScreenEvent.InitGuiEvent event) {
+                //#endif
+                //#if MC<=10809
+                return event.buttonList;
+                //#else
                 //#if MC<11502
                 //$$ return event.getButtonList();
                 //#else
                 //$$ return event.getWidgetList();
                 //#endif
-            //#endif
+                //#endif
+            }
         }
-    }
-    public static class UGuiScreenEvent$ActionPerformedEvent {
+        public static class ActionPerformedEvent {
 
-        public static GuiButton getButton(GuiScreenEvent.ActionPerformedEvent event) {
-            //#if MC<=10809
-            return event.button;
-            //#else
-            //$$ return event.getButton();
-            //#endif
+            public static GuiButton getButton(GuiScreenEvent.ActionPerformedEvent event) {
+                //#if MC<=10809
+                return event.button;
+                //#else
+                //$$ return event.getButton();
+                //#endif
+            }
         }
     }
+
     public static class URenderPlayerEvent {
         public static EntityPlayer getPlayer(RenderPlayerEvent event) {
             //#if MC<=10809
