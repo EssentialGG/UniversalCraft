@@ -1,15 +1,24 @@
 package club.sk1er.mods.core.universal;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.image.BufferedImage;
 
 import java.util.List;
 //#if MC>=11502
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
 //$$ import net.minecraft.client.renderer.Vector3f;
+//$$ import java.io.ByteArrayOutputStream;
+//$$ import javax.imageio.ImageIO;
+//$$ import java.io.IOException;
+//$$ import java.nio.ByteBuffer;
+//$$ import net.minecraft.client.renderer.texture.NativeImage;
 //#endif
 
 public class UniversalGraphicsHandler {
@@ -224,5 +233,23 @@ public class UniversalGraphicsHandler {
         //$$ instance.tex((float)u,(float)v);
         //#endif
         return this;
+    }
+
+    public static DynamicTexture getTexture(BufferedImage img) {
+        //#if MC<11500
+        return new DynamicTexture(img);
+        //#else
+        //$$ try {
+        //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //$$     ImageIO.write(img, "png", baos );
+        //$$     baos.flush();
+        //$$     baos.close();
+        //$$     return new DynamicTexture(NativeImage.read( ByteBuffer.wrap(baos.toByteArray())));
+        //$$ } catch (IOException e) {
+        //$$     e.printStackTrace();
+        //$$ }
+        //$$ throw new IllegalStateException("Failed to create texture");
+
+        //#endif
     }
 }
