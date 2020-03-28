@@ -1,7 +1,6 @@
 package club.sk1er.mods.core.universal;
 
 import net.minecraft.client.renderer.GlStateManager;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
