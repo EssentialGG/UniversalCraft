@@ -324,7 +324,7 @@ public class UniversalGraphicsHandler {
         //#if MC<11500
         instance.pos(x, y, z);
         //#else
-        //$$  instance.pos(stack,x, y, z);
+        //$$  instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
         //#endif
         return this;
     }
