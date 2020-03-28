@@ -1,6 +1,7 @@
 package club.sk1er.mods.core.universal;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -19,7 +20,6 @@ import java.util.List;
 //$$ import java.nio.ByteBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //#else
-import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
 public class UniversalGraphicsHandler {
@@ -231,6 +231,14 @@ public class UniversalGraphicsHandler {
         OpenGlHelper.glUseProgram(program);
         //#else
         //$$ GlStateManager.useProgram(program);
+        //#endif
+    }
+
+    public static boolean areShadersSupported() {
+        //#if MC<11500
+        return OpenGlHelper.areShadersSupported();
+        //#else
+        //$$ return true;
         //#endif
     }
 
