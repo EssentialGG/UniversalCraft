@@ -5,7 +5,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
+
 //#if MC<=11202
+import org.lwjgl.input.Mouse;
+
 //#else
 //$$ import net.minecraft.util.text.StringTextComponent;
 //$$ import net.minecraft.client.gui.screen.Screen;
@@ -213,5 +216,21 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     }
 
+    //#if MC>=11500
+    //$$    public boolean mouseScrolled(double dx, double dy, double dScroll) {
+    //$$         onMouseScroll((int)dScroll);
+    //$$         return false;
+    //$$     }
+    //#else
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int eventDWheel = Mouse.getEventDWheel();
+        if (eventDWheel != 0) onMouseScroll(eventDWheel);
+    }
+    //#endif
+
+    public void onMouseScroll(int delta) {
+
+    }
 
 }
