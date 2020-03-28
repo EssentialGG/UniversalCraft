@@ -210,7 +210,7 @@ public class UniversalScreen extends GuiScreen {
 
     public void onResize(Minecraft mcIn, int w, int h) {
         //#if MC>=11500
-        //$$ resize(mcIn, w, h);
+        //$$ super.resize(mcIn, w, h);
         //#else
         super.onResize(mcIn, w, h);
         //#endif
