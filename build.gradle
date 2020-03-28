@@ -178,6 +178,11 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+    manifest {
+        attributes(
+                'FMLModType': 'LIBRARY'
+        )
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
