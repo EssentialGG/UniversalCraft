@@ -1,6 +1,5 @@
 package club.sk1er.mods.core.universal;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -9,9 +8,9 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
-
 import java.util.List;
-//#if MC>=11502
+
+//#if MC>=11500
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
 //$$ import net.minecraft.client.renderer.Vector3f;
 //$$ import java.io.ByteArrayOutputStream;
@@ -19,6 +18,8 @@ import java.util.List;
 //$$ import java.io.IOException;
 //$$ import java.nio.ByteBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
+//#else
+import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
 public class UniversalGraphicsHandler {
@@ -33,7 +34,6 @@ public class UniversalGraphicsHandler {
     public UniversalGraphicsHandler(WorldRenderer instance) {
         this.instance = instance;
     }
-
 
 
     //#else
@@ -114,18 +114,18 @@ public class UniversalGraphicsHandler {
         //#if MC>=11502
         //$$  GL11.glCullFace(mode);
         //#else
-            //#if MC>10809
-            //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
-            //$$ for (GlStateManager.CullFace value : values) {
-            //$$     if (value.mode == mode) {
-            //$$         GlStateManager.cullFace(value);
-            //$$         return;
-            //$$     }
-            //$$ }
-            //$$ throw new IllegalArgumentException(String.format("Mode %d is not valid!", mode));
-            //#else
-            GlStateManager.cullFace(mode);
-            //#endif
+        //#if MC>10809
+        //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
+        //$$ for (GlStateManager.CullFace value : values) {
+        //$$     if (value.mode == mode) {
+        //$$         GlStateManager.cullFace(value);
+        //$$         return;
+        //$$     }
+        //$$ }
+        //$$ throw new IllegalArgumentException(String.format("Mode %d is not valid!", mode));
+        //#else
+        GlStateManager.cullFace(mode);
+        //#endif
         //#endif
 
     }
@@ -208,6 +208,105 @@ public class UniversalGraphicsHandler {
         GL11.glClearStencil(mode);
     }
 
+    public static DynamicTexture getTexture(BufferedImage img) {
+        //#if MC<11500
+        return new DynamicTexture(img);
+        //#else
+        //$$ try {
+        //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //$$     ImageIO.write(img, "png", baos );
+        //$$     baos.flush();
+        //$$     baos.close();
+        //$$     return new DynamicTexture(NativeImage.read( ByteBuffer.wrap(baos.toByteArray())));
+        //$$ } catch (IOException e) {
+        //$$     e.printStackTrace();
+        //$$ }
+        //$$ throw new IllegalStateException("Failed to create texture");
+
+        //#endif
+    }
+
+    public static void glUseProgram(int program) {
+        //#if MC<11500
+        OpenGlHelper.glUseProgram(program);
+        //#else
+        //$$ GlStateManager.useProgram(program);
+        //#endif
+    }
+
+    public static int glCreateProgram() {
+        //#if MC<11500
+        return OpenGlHelper.glCreateProgram();
+        //#else
+        //$$ return GlStateManager.createProgram();
+        //#endif
+    }
+
+    public static int glCreateShader(int type) {
+        //#if MC<11500
+        return OpenGlHelper.glCreateShader(type);
+        //#else
+        //$$ return GlStateManager.createShader(type);
+        //#endif
+    }
+
+    public static void glCompileShader(int shaderIn) {
+        //#if MC<11500
+        OpenGlHelper.glCompileShader(shaderIn);
+        //#else
+        //$$  GlStateManager.compileShader(shaderIn);
+        //#endif
+    }
+
+    public static int glGetShaderi(int shaderIn, int pname) {
+        //#if MC<11500
+        return OpenGlHelper.glGetShaderi(shaderIn, pname);
+        //#else
+        //$$ return GlStateManager.getShader(shaderIn,pname);
+        //#endif
+    }
+
+    public static String glGetShaderInfoLog(int shader, int maxLen) {
+        //#if MC<11500
+        return OpenGlHelper.glGetShaderInfoLog(shader, maxLen);
+        //#else
+        //$$ return GlStateManager.getShaderInfoLog( shader,maxLen);
+        //#endif
+    }
+
+    public static void glAttachShader(int program, int shaderIn) {
+        //#if MC<11500
+        OpenGlHelper.glAttachShader(program, shaderIn);
+        //#else
+        //$$  GlStateManager.attachShader(program,shaderIn);
+        //#endif
+    }
+
+    public static void glLinkProgram(int program) {
+        //#if MC<11500
+        OpenGlHelper.glLinkProgram(program);
+        //#else
+        //$$  GlStateManager.linkProgram(program);
+        //#endif
+    }
+
+    public static int glGetProgrami(int program, int pname) {
+        //#if MC<11500
+        return OpenGlHelper.glGetProgrami(program, pname);
+        //#else
+        //$$ return GlStateManager.getProgram(program,pname);
+        //#endif
+    }
+
+    public static String glGetProgramInfoLog(int program, int maxLen) {
+        //#if MC<11500
+        return OpenGlHelper.glGetProgramInfoLog(program, maxLen);
+        //#else
+        //$$ return GlStateManager.getProgramInfoLog(program, maxLen);
+        //#endif
+    }
+
+
     public void begin(int glMode, VertexFormat format) {
         instance.begin(glMode, format);
     }
@@ -233,23 +332,5 @@ public class UniversalGraphicsHandler {
         //$$ instance.tex((float)u,(float)v);
         //#endif
         return this;
-    }
-
-    public static DynamicTexture getTexture(BufferedImage img) {
-        //#if MC<11500
-        return new DynamicTexture(img);
-        //#else
-        //$$ try {
-        //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //$$     ImageIO.write(img, "png", baos );
-        //$$     baos.flush();
-        //$$     baos.close();
-        //$$     return new DynamicTexture(NativeImage.read( ByteBuffer.wrap(baos.toByteArray())));
-        //$$ } catch (IOException e) {
-        //$$     e.printStackTrace();
-        //$$ }
-        //$$ throw new IllegalStateException("Failed to create texture");
-
-        //#endif
     }
 }
