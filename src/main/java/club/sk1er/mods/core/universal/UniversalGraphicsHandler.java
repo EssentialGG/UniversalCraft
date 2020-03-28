@@ -189,8 +189,9 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
-        //$$ if(shadow)  UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
-        //$$ else  UniversalMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
+        //$$      IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //$$      UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$      irendertypebuffer$impl.finish();
         //#endif
     }
 
@@ -325,9 +326,7 @@ public class UniversalGraphicsHandler {
         //#if MC<11500
         instance.pos(x, y, z);
         //#else
-        //$$      IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$      UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$      irendertypebuffer$impl.finish();
+        //$$     instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
         //#endif
         return this;
     }
