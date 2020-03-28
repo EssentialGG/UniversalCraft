@@ -321,7 +321,11 @@ public class UniversalGraphicsHandler {
     }
 
     public UniversalGraphicsHandler pos(double x, double y, double z) {
+        //#if MC<11500
         instance.pos(x, y, z);
+        //#else
+        //$$  instance.pos(stack,x, y, z);
+        //#endif
         return this;
     }
 
