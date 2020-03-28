@@ -44,7 +44,7 @@ public class UniversalGraphicsHandler {
     //$$ }
     //#endif
     //#if MC>=11502
-    //$$private static MatrixStack stack;
+    //$$private static MatrixStack stack = new MatrixStack();
     //$$ public static MatrixStack getStack() {
     //$$      return stack;
     //$$  }
