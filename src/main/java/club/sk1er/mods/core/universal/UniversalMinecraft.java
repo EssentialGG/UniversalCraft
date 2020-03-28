@@ -6,6 +6,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 
+//#if MC>11500
+//$$ import net.minecraft.client.util.NativeUtil;
+//#endif
 public class UniversalMinecraft {
 
     public static Minecraft getMinecraft() {
@@ -25,18 +28,18 @@ public class UniversalMinecraft {
     }
 
     public static EntityPlayerSP getPlayer() {
-        //#if MC<=10809
         return getMinecraft().thePlayer;
-        //#else
-        //$$ return getMinecraft().player;
-        //#endif
     }
 
     public static FontRenderer getFontRenderer() {
-        //#if MC<=10809
         return getMinecraft().fontRendererObj;
+    }
+
+    public static long getTime() {
+        //#if MC<=11202
+        return Minecraft.getSystemTime();
         //#else
-        //$$ return getMinecraft().fontRenderer;
+        //$$ return (long) NativeUtil.getTime();
         //#endif
     }
 }
