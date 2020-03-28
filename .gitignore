@@ -30,3 +30,5 @@ Thumbs.db
 
 #Github Packages
 gradle.properties.private
+
+versions/*/tmp.srg

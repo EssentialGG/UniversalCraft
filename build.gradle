@@ -32,6 +32,7 @@ buildscript {
 }
 apply plugin: project.name == "1.15.2" ? 'net.minecraftforge.gradle' : 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.replaymod.preprocess'
+apply plugin: 'maven-publish'
 mcVersion = project.ext.mcVersion
 
 preprocess {
@@ -55,7 +56,7 @@ sourceCompatibility = targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 
 minecraft {
-    if (!project.name.equals("1.15.2")) {
+    if (project.name != "1.15.2") {
         version = [
                 11202: '1.12.2-14.23.0.2486',
                 11201: '1.12.1-14.22.0.2444',
@@ -151,7 +152,7 @@ configurations {
 }
 
 dependencies {
-    if(mcVersion == 11502) {
+    if (mcVersion == 11502) {
         minecraft 'net.minecraftforge:forge:1.15.2-31.1.18'
     }
 }
@@ -170,7 +171,6 @@ classes.dependsOn moveResources
 processResources {
     // this will ensure that this task is redone when the versions change.
 
-
 }
 
 jar {
@@ -178,6 +178,48 @@ jar {
     from {
         configurations.embed.collect {
             it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = "UniversalCraft"
+            version = "${project.version}-$mcVersion${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                configurations.implementation.allDependencies.each {
+                    if (it.group != null && (it.name != null || "unspecified" == it.name) && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+
+            artifact jar
+            artifact sourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            name 'nexus'
+            url "https://repo.sk1er.club/repository/maven-${this.properties.getOrDefault("IS_CI", false) ? "snapshots" : "releases"}/"
+
+            credentials {
+                username project.nexus_user
+                password project.nexus_password
+            }
         }
     }
 }
