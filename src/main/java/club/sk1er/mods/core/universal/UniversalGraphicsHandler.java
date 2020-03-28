@@ -18,6 +18,7 @@ import java.util.List;
 //$$ import java.io.IOException;
 //$$ import java.nio.ByteBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
+//$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //#else
 import net.minecraft.client.renderer.OpenGlHelper;
 
@@ -324,7 +325,9 @@ public class UniversalGraphicsHandler {
         //#if MC<11500
         instance.pos(x, y, z);
         //#else
-        //$$  instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
+        //$$      IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //$$      UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$      irendertypebuffer$impl.finish();
         //#endif
         return this;
     }
