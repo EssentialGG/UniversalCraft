@@ -24,9 +24,9 @@ public class UniversalMouse {
 
     public static int getTrueY() {
         //#if MC<=11202
-        return Mouse.getX();
+        return Mouse.getY();
         //#else
-        //$$ return (int) Minecraft.getInstance().mouseHelper.getMouseX();
+        //$$ return (int) Minecraft.getInstance().mouseHelper.getMouseY();
         //#endif
 
     }
