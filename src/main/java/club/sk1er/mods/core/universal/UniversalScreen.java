@@ -20,6 +20,7 @@ public class UniversalScreen extends GuiScreen {
 //$$ public class UniversalScreen extends Screen {
 //#endif
     private long lastClick = 0;
+    private int lastKeyCode = 0;
 
     //#if MC<11500
     public UniversalScreen() {
@@ -61,15 +62,21 @@ public class UniversalScreen extends GuiScreen {
     }
 
     //#if MC>=11500
-    //$$ public boolean keyPressed(int typedChar, int keyCode, int mods) {
-    //$$     try {
-    //$$         keyTyped((char)typedChar, keyCode);
-    //$$     } catch (IOException e) {
-    //$$         e.printStackTrace();
-    //$$     }
-    //$$ super.keyPressed(typedChar,keyCode,mods);
-    //$$     return false;
-    //$$ }
+    //$$      public boolean charTyped(char key, int mods) {
+    //$$      try {
+    //$$          keyTyped(key, lastKeyCode);
+    //$$      } catch (IOException e) {
+    //$$          e.printStackTrace();
+    //$$      }
+    //$$      return super.charTyped(key, mods);
+    //$$  }
+    //$$
+    //$$  public boolean keyPressed(int typedChar, int keyCode, int mods) {
+    //$$      lastKeyCode = keyCode;
+    //$$      super.keyPressed(typedChar, keyCode, mods);
+    //$$      return false;
+    //$$  }
+
     //#endif
     public void keyTyped(char typedChar, int keyCode) throws IOException {
         //#if MC<11500
