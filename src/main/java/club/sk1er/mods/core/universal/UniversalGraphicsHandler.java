@@ -1,7 +1,6 @@
 package club.sk1er.mods.core.universal;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -25,6 +24,7 @@ import java.util.List;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //$$ import java.io.ByteArrayInputStream;
 //#else
+import net.minecraft.client.renderer.OpenGlHelper;
 
 //#endif
 
@@ -216,16 +216,16 @@ public class UniversalGraphicsHandler {
     }
 
     public static DynamicTexture getTexture(InputStream stream) {
-        //#if MC<11500
         try {
+        //#if MC<11500
             return new DynamicTexture(ImageIO.read(stream));
+        //#else
+        //$$ return new DynamicTexture(NativeImage.read(stream));
+        //#endif
         } catch (IOException e) {
             e.printStackTrace();
         }
         throw new IllegalStateException("Failed to read image");
-        //#else
-        //$$ return new DynamicTexture(NativeImage.read(stream));
-        //#endif
     }
 
     public static DynamicTexture getTexture(BufferedImage img) {
