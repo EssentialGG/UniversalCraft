@@ -19,7 +19,7 @@ public class UniversalMouse {
     public static int getScaledX() {
         int trueX = getTrueX();
         UniversalResolutionUtil instance = UniversalResolutionUtil.getInstance();
-        return trueX * instance.getScaledWidth() / instance.getWindowWidth();
+        return trueX * instance.getScaledWidth() / Math.max(1,instance.getWindowWidth());
     }
 
     public static int getTrueY() {
@@ -34,6 +34,6 @@ public class UniversalMouse {
 
     public static int getScaledY(){
         UniversalResolutionUtil instance = UniversalResolutionUtil.getInstance();
-        return getTrueY() * instance.getScaledHeight() / instance.getWindowHeight();
+        return getTrueY() * instance.getScaledHeight() / Math.max(1,instance.getWindowHeight());
     }
 }
