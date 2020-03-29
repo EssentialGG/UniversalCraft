@@ -23,10 +23,11 @@ public class UniversalMouse {
     }
 
     public static int getTrueY() {
+
         //#if MC<=11202
         return Mouse.getY();
         //#else
-        //$$ return (int) Minecraft.getInstance().mouseHelper.getMouseY();
+        //$$ return UniversalResolutionUtil.getInstance().getScaledHeight() - (int) Minecraft.getInstance().mouseHelper.getMouseY();
         //#endif
 
     }
