@@ -17,13 +17,9 @@ public class UniversalMouse {
     }
 
     public static int getScaledX() {
-
         int trueX = getTrueX();
-        //#if MC<=11202
-        return trueX / new ScaledResolution(UniversalMinecraft.getMinecraft()).getScaledWidth();
-        //#else
-        //$$ return (int)(trueX * (double) UniversalMinecraft.getMinecraft().getMainWindow().getScaledWidth() / (double) UniversalMinecraft.getMinecraft().getMainWindow().getWidth());
-        //#endif
+        UniversalResolutionUtil instance = UniversalResolutionUtil.getInstance();
+        return trueX * instance.getScaledWidth() / instance.getWindowWidth();
     }
 
     public static int getTrueY() {
@@ -36,11 +32,7 @@ public class UniversalMouse {
     }
 
     public static int getScaledY(){
-        int trueY = getTrueY();
-        //#if MC<=11202
-        return trueY / new ScaledResolution(UniversalMinecraft.getMinecraft()).getScaledHeight();
-        //#else
-        //$$ return (int)(trueY * (double) UniversalMinecraft.getMinecraft().getMainWindow().getScaledHeight() / (double) UniversalMinecraft.getMinecraft().getMainWindow().getHeight());
-        //#endif
+        UniversalResolutionUtil instance = UniversalResolutionUtil.getInstance();
+        return getTrueY() * instance.getScaledHeight() / instance.getWindowHeight();
     }
 }
