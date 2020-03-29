@@ -1,13 +1,17 @@
 package club.sk1er.mods.core.universal;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 //#if MC>=11500
@@ -19,8 +23,8 @@ import java.util.List;
 //$$ import java.nio.ByteBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
+//$$ import java.io.ByteArrayInputStream;
 //#else
-import net.minecraft.client.renderer.OpenGlHelper;
 
 //#endif
 
@@ -211,6 +215,19 @@ public class UniversalGraphicsHandler {
         GL11.glClearStencil(mode);
     }
 
+    public static DynamicTexture getTexture(InputStream stream) {
+        //#if MC<11500
+        try {
+            return new DynamicTexture(ImageIO.read(stream));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalStateException("Failed to read image");
+        //#else
+        //$$ return new DynamicTexture(NativeImage.read(stream));
+        //#endif
+    }
+
     public static DynamicTexture getTexture(BufferedImage img) {
         //#if MC<11500
         return new DynamicTexture(img);
@@ -218,9 +235,7 @@ public class UniversalGraphicsHandler {
         //$$ try {
         //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //$$     ImageIO.write(img, "png", baos );
-        //$$     baos.flush();
-        //$$     baos.close();
-        //$$     return new DynamicTexture(NativeImage.read( ByteBuffer.wrap(baos.toByteArray())));
+        //$$ return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
         //$$ } catch (IOException e) {
         //$$     e.printStackTrace();
         //$$ }
