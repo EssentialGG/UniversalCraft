@@ -61,19 +61,18 @@ public class UniversalScreen extends GuiScreen {
     }
 
     //#if MC>=11500
-    //$$ public boolean charTyped(char typedChar, int keyCode) {
+    //$$ public boolean keyPressed(int typedChar, int keyCode, int mods) {
     //$$     try {
-    //$$         keyTyped(typedChar, keyCode);
+    //$$         keyTyped((char)typedChar, keyCode);
     //$$     } catch (IOException e) {
     //$$         e.printStackTrace();
     //$$     }
+    //$$ super.keyPressed(typedChar,keyCode,mods);
     //$$     return false;
     //$$ }
     //#endif
     public void keyTyped(char typedChar, int keyCode) throws IOException {
-        //#if MC>=11500
-        //$$ super.charTyped(typedChar, keyCode);
-        //#else
+        //#if MC<11500
         super.keyTyped(typedChar, keyCode);
         //#endif
     }
