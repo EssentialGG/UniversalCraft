@@ -30,9 +30,9 @@ import net.minecraft.client.renderer.OpenGlHelper;
 
 public class UniversalGraphicsHandler {
     //#if MC<11500
-    public static final int ZERO_TEXT_ALPHA = 10;
+    public static int ZERO_TEXT_ALPHA = 10;
     //#else
-    //$$ public static final int ZERO_TEXT_ALPHA = 1;
+    //$$ public static int ZERO_TEXT_ALPHA = 1;
     //#endif
 
     //#if MC<=10809
