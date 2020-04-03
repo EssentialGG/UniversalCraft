@@ -32,7 +32,7 @@ public class UniversalGraphicsHandler {
     //#if MC<11500
     public static int ZERO_TEXT_ALPHA = 10;
     //#else
-    //$$ public static int ZERO_TEXT_ALPHA = 1;
+    //$$ public static int ZERO_TEXT_ALPHA = 10;
     //#endif
 
     //#if MC<=10809
