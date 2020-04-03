@@ -196,7 +196,8 @@ public class UniversalGraphicsHandler {
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
-        //#if MC<11502
+        if((color >> 24) <=10) return;
+        //#if MC<11500
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
         //$$      IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
