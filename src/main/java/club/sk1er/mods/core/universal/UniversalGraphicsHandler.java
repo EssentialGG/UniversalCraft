@@ -196,8 +196,8 @@ public class UniversalGraphicsHandler {
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
-        System.out.println("Color in: " + color + " Alpha: " + (color >> 24));
-        if(color >> 24 <=10) {
+        System.out.println("Color in: " + color + " Alpha: " + (color >> 24 & 255));
+        if((color >> 24 & 255)<=10) {
             System.out.println("canceling render: " +text);
             return;
         } else System.out.println("Not canceling: " + text);
