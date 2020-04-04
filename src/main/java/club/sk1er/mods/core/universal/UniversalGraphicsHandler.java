@@ -196,11 +196,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
-        System.out.println("Color in: " + color + " Alpha: " + (color >> 24 & 255));
-        if((color >> 24 & 255)<=10) {
-            System.out.println("canceling render: " +text);
-            return;
-        } else System.out.println("Not canceling: " + text);
+        if ((color >> 24 & 255) <= 10) return;
         //#if MC<11500
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
