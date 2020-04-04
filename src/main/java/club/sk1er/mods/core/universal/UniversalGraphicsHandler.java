@@ -196,7 +196,11 @@ public class UniversalGraphicsHandler {
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
-        if((color >> 24) <=10) return;
+        System.out.println("Color in: " + color + " Alpha: " + (color >> 24));
+        if(color >> 24 <=10) {
+            System.out.println("canceling render: " +text);
+            return;
+        } else System.out.println("Not canceling: " + text);
         //#if MC<11500
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
@@ -224,11 +228,11 @@ public class UniversalGraphicsHandler {
 
     public static DynamicTexture getTexture(InputStream stream) {
         try {
-        //#if MC<11500
+            //#if MC<11500
             return new DynamicTexture(ImageIO.read(stream));
-        //#else
-        //$$ return new DynamicTexture(NativeImage.read(stream));
-        //#endif
+            //#else
+            //$$ return new DynamicTexture(NativeImage.read(stream));
+            //#endif
         } catch (IOException e) {
             e.printStackTrace();
         }
