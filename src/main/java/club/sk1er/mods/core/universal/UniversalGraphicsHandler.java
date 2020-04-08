@@ -251,6 +251,14 @@ public class UniversalGraphicsHandler {
         //#endif
     }
 
+    public static DynamicTexture getEmptyTexture() {
+        //#if MC<11500
+        return new DynamicTexture(0, 0);
+        //#else
+        //$$ return new DynamicTexture(0, 0, false);
+        //#endif
+    }
+
     public static void glUseProgram(int program) {
         //#if MC<11500
         OpenGlHelper.glUseProgram(program);
