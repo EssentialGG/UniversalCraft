@@ -143,23 +143,33 @@ public class UniversalGraphicsHandler {
     }
 
     public static void enableLighting() {
+        //#if MC<=11202
         GlStateManager.enableLighting();
+        //#endif
     }
 
     public static void disableLighting() {
+        //#if MC<=11202
         GlStateManager.disableLighting();
+        //#endif
     }
 
     public static void disableLight(int mode) {
+        //#if MC<=11202
         GlStateManager.disableLight(mode);
+        //#endif
     }
 
     public static void enableLight(int mode) {
+        //#if MC<=11202
         GlStateManager.enableLight(mode);
+        //#endif
     }
 
     public static void enableBlend() {
+        //#if MC<=11202
         GlStateManager.enableBlend();
+        //#endif
     }
 
     public static void disableTexture2D() {
