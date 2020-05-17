@@ -142,6 +142,22 @@ public class UniversalGraphicsHandler {
 
     }
 
+    public static void enableLighting() {
+        GlStateManager.enableLighting();
+    }
+
+    public static void disableLighting() {
+        GlStateManager.disableLighting();
+    }
+
+    public static void disableLight(int mode) {
+        GlStateManager.disableLight(mode);
+    }
+
+    public static void enableLight(int mode) {
+        GlStateManager.enableLight(mode);
+    }
+
     public static void enableBlend() {
         GlStateManager.enableBlend();
     }

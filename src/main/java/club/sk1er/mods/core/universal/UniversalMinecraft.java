@@ -23,7 +23,7 @@ public class UniversalMinecraft {
         //#if MC<=10809
         return getMinecraft().getNetHandler();
         //#else
-        //$$ return getPlayer().connection;
+        //$$ return getMinecraft().getConnection();
         //#endif
     }
 
