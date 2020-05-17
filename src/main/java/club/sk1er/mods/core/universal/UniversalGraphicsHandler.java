@@ -64,11 +64,19 @@ public class UniversalGraphicsHandler {
     //$$  }
     //#endif
     public static void pushMatrix() {
+        //#if MC<11502
         GlStateManager.pushMatrix();
+        //#else
+        //$$ stack.push();
+        //#endif
     }
 
     public static void popMatrix() {
+        //#if MC<11502
         GlStateManager.popMatrix();
+        //#else
+        //$$ stack.pop();
+        //#endif
     }
 
     public static UniversalGraphicsHandler getFromTessellator() {
