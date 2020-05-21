@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
@@ -30,15 +31,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
 public class UniversalGraphicsHandler {
-    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
+    //#if MC<11500
+    public static int ZERO_TEXT_ALPHA = 10;
     //#else
     //$$ public static int ZERO_TEXT_ALPHA = 10;
     //#endif
-    //#if MC<11500
-    public static int ZERO_TEXT_ALPHA = 10;
+    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
+
     //#if MC<=10809
     private WorldRenderer instance;
-
 
     //#else
     //$$ private BufferBuilder instance;
@@ -48,6 +49,7 @@ public class UniversalGraphicsHandler {
     public UniversalGraphicsHandler(WorldRenderer instance) {
         this.instance = instance;
     }
+
 
     //#else
     //$$ public UniversalGraphicsHandler(BufferBuilder instance) {
@@ -252,7 +254,7 @@ public class UniversalGraphicsHandler {
             for (String s : tmp.split(" ")) {
                 max = Math.max(max, getStringWidth(s));
             }
-            wrapWidth = Math.max(max, wrapWidth);
+            wrapWidth = Math.max(max,wrapWidth);
         }
         return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
     }
