@@ -191,6 +191,17 @@ public class UniversalGraphicsHandler {
         //#endif
 
     }
+    public static void disableAlpha() {
+        //#if MC<11500
+        GlStateManager.disableAlpha();
+        //#else
+        //$$         GlStateManager.disableAlphaTest();
+        //#endif
+    }
+
+    public static void shadeModel(int mode) {
+        GlStateManager.shadeModel(mode);
+    }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
         //#if MC<11502
