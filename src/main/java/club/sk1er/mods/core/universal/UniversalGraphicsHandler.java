@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Pattern;
 
 //#if MC>=11500
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
@@ -29,14 +30,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
 public class UniversalGraphicsHandler {
-    //#if MC<11500
-    public static int ZERO_TEXT_ALPHA = 10;
+    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
     //#else
     //$$ public static int ZERO_TEXT_ALPHA = 10;
     //#endif
-
+    //#if MC<11500
+    public static int ZERO_TEXT_ALPHA = 10;
     //#if MC<=10809
     private WorldRenderer instance;
+
 
     //#else
     //$$ private BufferBuilder instance;
@@ -46,7 +48,6 @@ public class UniversalGraphicsHandler {
     public UniversalGraphicsHandler(WorldRenderer instance) {
         this.instance = instance;
     }
-
 
     //#else
     //$$ public UniversalGraphicsHandler(BufferBuilder instance) {
@@ -241,8 +242,21 @@ public class UniversalGraphicsHandler {
     }
 
     public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
+        return listFormattedStringToWidth(str, wrapWidth, true);
+    }
+
+    public static List<String> listFormattedStringToWidth(String str, int wrapWidth, boolean safe) {
+        if (safe) {
+            String tmp = formattingCodePattern.matcher(str).replaceAll("");
+            int max = 0;
+            for (String s : tmp.split(" ")) {
+                max = Math.max(max, getStringWidth(s));
+            }
+            wrapWidth = Math.max(max, wrapWidth);
+        }
         return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
     }
+
 
     public static float getCharWidth(char character) {
         return UniversalMinecraft.getFontRenderer().getCharWidth(character); //float because its a float in 1.15+
