@@ -114,7 +114,7 @@ public class UniversalKeyboard {
     }
 
     /**
-     * Decide if an input is a redo function (Control + Y)
+     * Decide if an input is a redo function (Control + Shift + Z)
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlShiftZ(int keyID) {
