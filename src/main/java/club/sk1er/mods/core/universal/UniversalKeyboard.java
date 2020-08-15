@@ -3,14 +3,27 @@ package club.sk1er.mods.core.universal;
 import net.minecraft.client.Minecraft;
 //#if MC<=11202
 import org.lwjgl.input.Keyboard;
-
-import javax.swing.text.JTextComponent;
-import java.security.Key;
 //#else
 //$$ import net.minecraft.client.util.InputMappings;
 //#endif
 
 public class UniversalKeyboard {
+    // These are taken from LWJGL2's Keyboard class for compatibility between MC versions.
+    public static final int KEY_LMETA = 0xDB;
+    public static final int KEY_RMETA = 0xDC;
+    public static final int KEY_LCONTROL = 0x1D;
+    public static final int KEY_RCONTROL = 0x9D;
+    public static final int KEY_LSHIFT = 0x2A;
+    public static final int KEY_RSHIFT = 0x36;
+    public static final int KEY_LMENU = 0x38;
+    public static final int KEY_RMENU = 0xB8;
+    public static final int KEY_X = 0x2D;
+    public static final int KEY_V = 0x2F;
+    public static final int KEY_C = 0x2E;
+    public static final int KEY_A = 0x1E;
+    public static final int KEY_Z = 0x2C;
+    public static final int KEY_Y = 0x15;
+
     public static void enableRepeatEvents(boolean enable) {
         //#if MC<=11202
         Keyboard.enableRepeatEvents(enable);
@@ -25,12 +38,12 @@ public class UniversalKeyboard {
      */
     public static boolean isCtrlKeyDown() {
         //#if MC<=11202
-        return Minecraft.isRunningOnMac ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+        return Minecraft.isRunningOnMac ? Keyboard.isKeyDown(KEY_LMETA) || Keyboard.isKeyDown(KEY_RMETA) : Keyboard.isKeyDown(KEY_LCONTROL) || Keyboard.isKeyDown(KEY_RCONTROL);
         //#else
         //$$  return Minecraft.IS_RUNNING_ON_MAC ?
-        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 343) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 347)
+        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMETA) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMETA)
         //$$      :
-        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 341) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 345);
+        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LCONTROL) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RCONTROL);
         //#endif
 
     }
@@ -42,9 +55,9 @@ public class UniversalKeyboard {
      */
     public static boolean isShiftKeyDown() {
         //#if MC<=11202
-        return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+        return Keyboard.isKeyDown(KEY_LSHIFT) || Keyboard.isKeyDown(KEY_RSHIFT);
         //#else
-        //$$ return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
+        //$$ return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LSHIFT) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RSHIFT);
         //#endif
     }
 
@@ -55,9 +68,9 @@ public class UniversalKeyboard {
      */
     public static boolean isAltKeyDown() {
         //#if MC<=11202
-        return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
+        return Keyboard.isKeyDown(KEY_LMENU) || Keyboard.isKeyDown(KEY_RMENU);
         //#else
-        //$$       return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 342) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 346);
+        //$$       return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMENU) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMENU);
         //#endif
 
     }
@@ -68,7 +81,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlX(int keyID) {
-        return keyID == Keyboard.KEY_X && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_X && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
 
@@ -77,7 +90,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlV(int keyID) {
-        return keyID == Keyboard.KEY_V && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_V && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
     /**
@@ -85,7 +98,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlC(int keyID) {
-        return keyID == Keyboard.KEY_C && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_C && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
     /**
@@ -93,7 +106,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlA(int keyID) {
-        return keyID == Keyboard.KEY_A && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_A && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
 
@@ -102,7 +115,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlZ(int keyID) {
-        return keyID == Keyboard.KEY_Z && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_Z && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
     /**
@@ -110,7 +123,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlY(int keyID) {
-        return keyID == Keyboard.KEY_Y && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_Y && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown();
     }
 
     /**
@@ -118,7 +131,7 @@ public class UniversalKeyboard {
      * @return true if the appropriate keys are down and the right key was pressed
      */
     public static boolean isKeyComboCtrlShiftZ(int keyID) {
-        return keyID == Keyboard.KEY_Z && isCtrlKeyDown() && isShiftKeyDown() && !isAltKeyDown();
+        return keyID == KEY_Z && isCtrlKeyDown() && isShiftKeyDown() && !isAltKeyDown();
     }
 
 
