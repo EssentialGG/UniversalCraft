@@ -34,6 +34,7 @@ public class UniversalResolutionUtil {
         //$$ return UniversalMinecraft.getMinecraft().getMainWindow().getHeight();
         //#endif
     }
+
     //#if MC<11500
     private ScaledResolution get() {
         if (cachedHeight != getWindowHeight() || cachedWidth != getWindowWidth() || scaledResolution == null) {
