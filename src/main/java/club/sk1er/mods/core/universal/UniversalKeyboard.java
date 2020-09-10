@@ -37,17 +37,16 @@ public class UniversalKeyboard {
      * @return true if either control (or command on mac) is pressed
      */
     public static boolean isCtrlKeyDown() {
+        return UniversalMinecraft.isRunningOnMac ?
         //#if MC<=11202
-        return Minecraft.isRunningOnMac ? Keyboard.isKeyDown(KEY_LMETA) || Keyboard.isKeyDown(KEY_RMETA) : Keyboard.isKeyDown(KEY_LCONTROL) || Keyboard.isKeyDown(KEY_RCONTROL);
+               Keyboard.isKeyDown(KEY_LMETA) || Keyboard.isKeyDown(KEY_RMETA) : Keyboard.isKeyDown(KEY_LCONTROL) || Keyboard.isKeyDown(KEY_RCONTROL);
         //#else
-        //$$  return Minecraft.IS_RUNNING_ON_MAC ?
-        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMETA) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMETA)
-        //$$      :
-        //$$      InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LCONTROL) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RCONTROL);
+        //$$       InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMETA) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMETA)
+        //$$       :
+        //$$       InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LCONTROL) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RCONTROL);
         //#endif
 
     }
-
 
     /**
      * Get current state of the shift key
@@ -61,6 +60,13 @@ public class UniversalKeyboard {
         //#endif
     }
 
+    public static Modifier getModifiers() {
+        return new Modifier(
+                isCtrlKeyDown(),
+                isShiftKeyDown(),
+                isAltKeyDown()
+        );
+    }
 
     /**
      * Get current state of the alt key
@@ -70,11 +76,10 @@ public class UniversalKeyboard {
         //#if MC<=11202
         return Keyboard.isKeyDown(KEY_LMENU) || Keyboard.isKeyDown(KEY_RMENU);
         //#else
-        //$$       return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMENU) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMENU);
+        //$$ return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMENU) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMENU);
         //#endif
 
     }
-
 
     /**
      * Decide if an input is a cut function
@@ -134,6 +139,27 @@ public class UniversalKeyboard {
         return keyID == KEY_Z && isCtrlKeyDown() && isShiftKeyDown() && !isAltKeyDown();
     }
 
+    public static class Modifier {
+        private final boolean isCtrl;
+        private final boolean isShift;
+        private final boolean isAlt;
 
+        public Modifier(boolean isCtrl, boolean isShift, boolean isAlt) {
+            this.isCtrl = isCtrl;
+            this.isShift = isShift;
+            this.isAlt = isAlt;
+        }
 
+        public boolean isCtrl() {
+            return isCtrl;
+        }
+
+        public boolean isShift() {
+            return isShift;
+        }
+
+        public boolean isAlt() {
+            return isAlt;
+        }
+    }
 }

@@ -1,8 +1,6 @@
 package club.sk1er.mods.core.universal;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
@@ -14,57 +12,84 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//#if MC>=11500
+//#if MC==11602
+//$$ import net.minecraft.util.ResourceLocation;
+//$$ import net.minecraft.util.text.Style;
+//$$ import net.minecraft.util.math.vector.Vector3f;
+//$$ import net.minecraft.util.text.CharacterManager;
+//$$ import net.minecraft.util.text.StringTextComponent;
+//$$ import net.minecraft.util.text.ITextProperties;
+//$$ import com.mojang.blaze3d.platform.GlStateManager;
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
-//$$ import net.minecraft.client.renderer.Vector3f;
-//$$ import java.io.ByteArrayOutputStream;
-//$$ import javax.imageio.ImageIO;
-//$$ import java.io.IOException;
-//$$ import java.nio.ByteBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //$$ import java.io.ByteArrayInputStream;
-//#else
-import net.minecraft.client.renderer.OpenGlHelper;
+//$$ import java.io.ByteArrayOutputStream;
+//$$ import net.minecraft.client.renderer.BufferBuilder;
+//$$ import java.util.ArrayList;
+//$$ import java.util.List;
+//$$ import java.util.Optional;
+//#endif
 
+//#if MC==11502
+//$$ import net.minecraft.client.renderer.Vector3f;
+//$$ import com.mojang.blaze3d.matrix.MatrixStack;
+//$$ import com.mojang.blaze3d.platform.GlStateManager;
+//$$ import net.minecraft.client.renderer.BufferBuilder;
+//$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
+//$$ import net.minecraft.client.renderer.texture.NativeImage;
+//$$ import java.io.ByteArrayInputStream;
+//$$ import java.io.ByteArrayOutputStream;
+//#endif
+
+//#if MC==11202
+//$$ import net.minecraft.client.renderer.GlStateManager;
+//$$ import net.minecraft.client.renderer.BufferBuilder;
+//$$ import net.minecraft.client.renderer.OpenGlHelper;
+//#endif
+
+//#if MC<=10809
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.WorldRenderer;
 //#endif
 
 public class UniversalGraphicsHandler {
-    //#if MC<11500
     public static int ZERO_TEXT_ALPHA = 10;
-    //#else
-    //$$ public static int ZERO_TEXT_ALPHA = 10;
+
+    //#if MC>=11602
+    //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
+
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
 
     //#if MC<=10809
     private WorldRenderer instance;
-
     //#else
     //$$ private BufferBuilder instance;
-    //$$
     //#endif
+
     //#if MC<=10809
     public UniversalGraphicsHandler(WorldRenderer instance) {
         this.instance = instance;
     }
-
-
     //#else
     //$$ public UniversalGraphicsHandler(BufferBuilder instance) {
     //$$     this.instance = instance;
     //$$ }
     //#endif
+
     //#if MC>=11502
-    //$$private static MatrixStack stack = new MatrixStack();
+    //$$ private static MatrixStack stack = new MatrixStack();
     //$$ public static MatrixStack getStack() {
-    //$$      return stack;
-    //$$  }
-    //
-    //$$  public static void setStack(MatrixStack stack) {
-    //$$      UniversalGraphicsHandler.stack = stack;
-    //$$  }
+    //$$     return stack;
+    //$$ }
+    //$$
+    //$$ public static void setStack(MatrixStack stack) {
+    //$$     UniversalGraphicsHandler.stack = stack;
+    //$$ }
     //#endif
+
     public static void pushMatrix() {
         //#if MC<11502
         GlStateManager.pushMatrix();
@@ -105,9 +130,9 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         GlStateManager.rotate(angle, x, y, z);
         //#else
-        //$$if (x != 0) stack.rotate(Vector3f.XP.rotationDegrees(angle));
+        //$$ if (x != 0) stack.rotate(Vector3f.XP.rotationDegrees(angle));
         //$$ if (y != 0) stack.rotate(Vector3f.YP.rotationDegrees(angle));
-        //$$  if (z != 0) stack.rotate(Vector3f.ZP.rotationDegrees(angle));
+        //$$ if (z != 0) stack.rotate(Vector3f.ZP.rotationDegrees(angle));
         //$$
         //#endif
     }
@@ -134,7 +159,7 @@ public class UniversalGraphicsHandler {
 
     public static void cullFace(int mode) {
         //#if MC>=11502
-        //$$  GL11.glCullFace(mode);
+        //$$ GL11.glCullFace(mode);
         //#else
         //#if MC>10809
         //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
@@ -177,9 +202,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static void enableBlend() {
-        //#if MC<=11202
         GlStateManager.enableBlend();
-        //#endif
     }
 
     public static void disableTexture2D() {
@@ -191,22 +214,22 @@ public class UniversalGraphicsHandler {
 
     }
     public static void disableAlpha() {
-        //#if MC<11500
+        //#if MC<11502
         GlStateManager.disableAlpha();
-        //#else
-        //$$         GlStateManager.disableAlphaTest();
         //#endif
     }
 
     public static void shadeModel(int mode) {
+        //#if MC<11502
         GlStateManager.shadeModel(mode);
+        //#endif
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
         //#if MC<11502
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#else
-        //$$  GlStateManager.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //$$ GlStateManager.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#endif
     }
 
@@ -244,12 +267,12 @@ public class UniversalGraphicsHandler {
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
         if ((color >> 24 & 255) <= 10) return;
-        //#if MC<11500
+        //#if MC<11502
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
-        //$$      IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$      UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$      irendertypebuffer$impl.finish();
+        //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ irendertypebuffer$impl.finish();
         //#endif
     }
 
@@ -261,17 +284,35 @@ public class UniversalGraphicsHandler {
         if (safe) {
             String tmp = formattingCodePattern.matcher(str).replaceAll("");
             int max = 0;
-            for (String s : tmp.split(" ")) {
+            for (String s : tmp.split(" "))
                 max = Math.max(max, getStringWidth(s));
-            }
-            wrapWidth = Math.max(max,wrapWidth);
+            wrapWidth = Math.max(max, wrapWidth);
         }
+        //#if MC<11602
         return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
+        //#else
+        // TODO: Validate this code. Taken from the comparison of the following files:
+        //   - 1.15.2: net.minecraft.util.EnchantmentNameParts lines 37 & 38
+        //   - 1.16.2: net.minecraft.util.EnchantmentNameParts line 38
+        //$$ CharacterManager charManager = UniversalMinecraft.getFontRenderer().func_238420_b_();
+        //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
+        //$$ List<String> strings = new ArrayList<>();
+        //$$ // From net.minecraft.util.text.ITextProperties line 88
+        //$$ properties.func_230438_a_(string -> {
+        //$$     strings.add(string);
+        //$$     return Optional.empty();
+        //$$ });
+        //$$ return strings;
+        //#endif
     }
 
 
     public static float getCharWidth(char character) {
-        return UniversalMinecraft.getFontRenderer().getCharWidth(character); //float because its a float in 1.15+
+        //#if MC<11602
+        return UniversalMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
+        //#else
+        //$$ return getStringWidth(String.valueOf(character));
+        //#endif
     }
 
     public static void glClear(int mode) {
@@ -284,7 +325,7 @@ public class UniversalGraphicsHandler {
 
     public static DynamicTexture getTexture(InputStream stream) {
         try {
-            //#if MC<11500
+            //#if MC<11502
             return new DynamicTexture(ImageIO.read(stream));
             //#else
             //$$ return new DynamicTexture(NativeImage.read(stream));
@@ -296,7 +337,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static DynamicTexture getTexture(BufferedImage img) {
-        //#if MC<11500
+        //#if MC<11502
         return new DynamicTexture(img);
         //#else
         //$$ try {
@@ -307,12 +348,11 @@ public class UniversalGraphicsHandler {
         //$$     e.printStackTrace();
         //$$ }
         //$$ throw new IllegalStateException("Failed to create texture");
-
         //#endif
     }
 
     public static DynamicTexture getEmptyTexture() {
-        //#if MC<11500
+        //#if MC<11502
         return new DynamicTexture(0, 0);
         //#else
         //$$ return new DynamicTexture(0, 0, false);
@@ -320,7 +360,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static void glUseProgram(int program) {
-        //#if MC<11500
+        //#if MC<11502
         OpenGlHelper.glUseProgram(program);
         //#else
         //$$ GlStateManager.useProgram(program);
@@ -328,7 +368,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static boolean areShadersSupported() {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.areShadersSupported();
         //#else
         //$$ return true;
@@ -336,7 +376,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static int glCreateProgram() {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glCreateProgram();
         //#else
         //$$ return GlStateManager.createProgram();
@@ -344,7 +384,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static int glCreateShader(int type) {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glCreateShader(type);
         //#else
         //$$ return GlStateManager.createShader(type);
@@ -352,15 +392,15 @@ public class UniversalGraphicsHandler {
     }
 
     public static void glCompileShader(int shaderIn) {
-        //#if MC<11500
+        //#if MC<11502
         OpenGlHelper.glCompileShader(shaderIn);
         //#else
-        //$$  GlStateManager.compileShader(shaderIn);
+        //$$ GlStateManager.compileShader(shaderIn);
         //#endif
     }
 
     public static int glGetShaderi(int shaderIn, int pname) {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glGetShaderi(shaderIn, pname);
         //#else
         //$$ return GlStateManager.getShader(shaderIn,pname);
@@ -368,7 +408,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static String glGetShaderInfoLog(int shader, int maxLen) {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glGetShaderInfoLog(shader, maxLen);
         //#else
         //$$ return GlStateManager.getShaderInfoLog( shader,maxLen);
@@ -376,23 +416,23 @@ public class UniversalGraphicsHandler {
     }
 
     public static void glAttachShader(int program, int shaderIn) {
-        //#if MC<11500
+        //#if MC<11502
         OpenGlHelper.glAttachShader(program, shaderIn);
         //#else
-        //$$  GlStateManager.attachShader(program,shaderIn);
+        //$$ GlStateManager.attachShader(program,shaderIn);
         //#endif
     }
 
     public static void glLinkProgram(int program) {
-        //#if MC<11500
+        //#if MC<11502
         OpenGlHelper.glLinkProgram(program);
         //#else
-        //$$  GlStateManager.linkProgram(program);
+        //$$ GlStateManager.linkProgram(program);
         //#endif
     }
 
     public static int glGetProgrami(int program, int pname) {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glGetProgrami(program, pname);
         //#else
         //$$ return GlStateManager.getProgram(program,pname);
@@ -400,7 +440,7 @@ public class UniversalGraphicsHandler {
     }
 
     public static String glGetProgramInfoLog(int program, int maxLen) {
-        //#if MC<11500
+        //#if MC<11502
         return OpenGlHelper.glGetProgramInfoLog(program, maxLen);
         //#else
         //$$ return GlStateManager.getProgramInfoLog(program, maxLen);
@@ -413,10 +453,10 @@ public class UniversalGraphicsHandler {
     }
 
     public UniversalGraphicsHandler pos(double x, double y, double z) {
-        //#if MC<11500
+        //#if MC<11502
         instance.pos(x, y, z);
         //#else
-        //$$     instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
+        //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
         //#endif
         return this;
     }
