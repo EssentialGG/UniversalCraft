@@ -243,7 +243,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifactId = "UniversalCraft"
-            version = "${project.version}-$mcVersion${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
+            version = "${project.version}-$mcVersion${FABRIC ? "-fabric" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
