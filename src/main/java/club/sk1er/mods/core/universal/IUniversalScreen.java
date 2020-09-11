@@ -29,6 +29,4 @@ public interface IUniversalScreen {
     boolean onDrawDefaultBackground(int tint);
 
     boolean onDrawWorldBackground(int tint);
-
-    boolean onResize(int width, int height);
 }

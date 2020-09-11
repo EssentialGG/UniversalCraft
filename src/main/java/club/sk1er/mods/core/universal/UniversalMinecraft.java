@@ -1,5 +1,13 @@
 package club.sk1er.mods.core.universal;
 
+//#if FABRIC
+//$$ import net.minecraft.client.MinecraftClient;
+//$$ import net.minecraft.client.font.TextRenderer;
+//$$ import net.minecraft.client.network.ClientPlayNetworkHandler;
+//$$ import net.minecraft.client.network.ClientPlayerEntity;
+//$$ import net.minecraft.client.world.ClientWorld;
+//$$ import org.lwjgl.glfw.GLFW;
+//#else
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
@@ -16,8 +24,36 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 //#if MC>11202
 //$$ import net.minecraft.client.util.NativeUtil;
 //#endif
+//#endif
 
 public class UniversalMinecraft {
+    //#if FABRIC
+    //$$ public static boolean isRunningOnMac = MinecraftClient.IS_SYSTEM_MAC;
+    //$$
+    //$$ public static MinecraftClient getMinecraft() {
+    //$$     return MinecraftClient.getInstance();
+    //$$ }
+    //$$
+    //$$ public static ClientWorld getWorld() {
+    //$$     return getMinecraft().world;
+    //$$ }
+    //$$
+    //$$ public static ClientPlayNetworkHandler getNetHandler() {
+    //$$     return getMinecraft().getNetworkHandler();
+    //$$ }
+    //$$
+    //$$ public static ClientPlayerEntity getPlayer() {
+    //$$     return getMinecraft().player;
+    //$$ }
+    //$$
+    //$$ public static TextRenderer getFontRenderer() {
+    //$$     return getMinecraft().textRenderer;
+    //$$ }
+    //$$
+    //$$ public static long getTime() {
+    //$$     return (long) GLFW.glfwGetTime();
+    //$$ }
+    //#else
     public static boolean isRunningOnMac =
             //#if MC<=10809
             Minecraft.isRunningOnMac;
@@ -84,4 +120,5 @@ public class UniversalMinecraft {
         //$$ return (long) NativeUtil.getTime();
         //#endif
     }
+    //#endif
 }

@@ -1,7 +1,14 @@
 package club.sk1er.mods.core.universal;
 
+//#if FABRIC
+//$$ import net.minecraft.client.MinecraftClient;
+//$$ import net.minecraft.client.gui.screen.Screen;
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.text.LiteralText;
+//$$ import org.lwjgl.glfw.GLFW;
+//#else
 import net.minecraft.client.Minecraft;
-
+//$$
 //#if MC<=11202
 import org.lwjgl.input.Mouse;
 import net.minecraft.client.gui.GuiButton;
@@ -13,6 +20,7 @@ import java.io.IOException;
 //$$ import net.minecraft.client.gui.screen.Screen;
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
 //$$ import org.lwjgl.glfw.GLFW;
+//#endif
 //#endif
 
 //#if MC<=11202
@@ -95,17 +103,15 @@ public class UniversalScreen extends GuiScreen implements IUniversalScreen {
         if (onDrawDefaultBackground(0))
             super.drawDefaultBackground();
     }
-
-    @Override
-    public void setWorldAndResolution(Minecraft mc, int width, int height) {
-        if (onResize(width, height))
-            super.setWorldAndResolution(mc, width, height);
-    }
     //#else
     //$$ private MatrixStack stack = null;
     //$$
     //$$ public UniversalScreen() {
+    //#if FABRIC
+    //$$     super(new LiteralText(""));
+    //#else
     //$$     super(new StringTextComponent(""));
+    //#endif
     //$$ }
     //$$
     //$$ protected MatrixStack getMatrixStack() {
@@ -124,13 +130,12 @@ public class UniversalScreen extends GuiScreen implements IUniversalScreen {
     //$$     stack = matrixStack;
     //$$     if (onDrawScreen(mouseX, mouseY, partialTicks))
     //$$         render(matrixStack, mouseX, mouseY, partialTicks);
-    //$$ }
     //#else
     //$$ public final void render(int mouseX, int mouseY, float partialTicks) {
     //$$     if (onDrawScreen(mouseX, mouseY, partialTicks))
     //$$         render(mouseX, mouseY, partialTicks);
-    //$$ }
     //#endif
+    //$$ }
     //$$
     //$$ @Override
     //$$ public final boolean keyPressed(int keyCode, int scanCode, int modifierCode) {
@@ -217,9 +222,15 @@ public class UniversalScreen extends GuiScreen implements IUniversalScreen {
     //$$ }
     //$$
     //$$ @Override
-    //$$ public void renderDirtBackground(int vOffset) {
+    //#if FABRIC
+    //$$ public void renderBackgroundTexture(int vOffset) {
     //$$     if (onDrawDefaultBackground(vOffset))
-    //$$         super.renderDirtBackground(vOffset);
+    //$$         super.renderBackgroundTexture(vOffset);
+    //#else
+    //$$ public void renderDirtBackground(int vOffset) {
+    //$$    if (onDrawDefaultBackground(vOffset))
+    //$$        super.renderDirtBackground(vOffset);
+    //#endif
     //$$ }
     //$$
     //$$ @Override
@@ -228,20 +239,12 @@ public class UniversalScreen extends GuiScreen implements IUniversalScreen {
     //$$     stack = matrixStack;
     //$$     if (onDrawWorldBackground(vOffset))
     //$$         super.renderBackground(matrixStack, vOffset);
-    //$$ }
     //#else
     //$$ public void renderBackground(int vOffset) {
     //$$     if (onDrawWorldBackground(vOffset))
     //$$         super.renderBackground(vOffset);
-    //$$ }
     //#endif
-    //$$
-    //$$ @Override
-    //$$ public void resize(Minecraft minecraft, int width, int height) {
-    //$$     if (onResize(width, height))
-    //$$         super.resize(minecraft, width, height);
     //$$ }
-    //$$
     //#endif
 
     @Override
@@ -282,7 +285,4 @@ public class UniversalScreen extends GuiScreen implements IUniversalScreen {
 
     @Override
     public boolean onDrawWorldBackground(int tint) { return true; }
-
-    @Override
-    public boolean onResize(int width, int height) { return true; }
 }

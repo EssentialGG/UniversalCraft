@@ -1,18 +1,35 @@
 package club.sk1er.mods.core.universal;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import org.lwjgl.opengl.GL11;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//#if MC==11602
+//#if FABRIC
+//$$ import com.mojang.blaze3d.platform.GlStateManager;
+//$$ import net.minecraft.client.font.TextHandler;
+//$$ import net.minecraft.client.render.BufferBuilder;
+//$$ import net.minecraft.client.render.Tessellator;
+//$$ import net.minecraft.client.render.VertexConsumerProvider;
+//$$ import net.minecraft.client.render.VertexFormat;
+//$$ import net.minecraft.client.util.math.MatrixStack;
+//$$ import net.minecraft.client.util.math.Vector3f;
+//$$ import net.minecraft.text.StringVisitable;
+//$$ import net.minecraft.text.Style;
+//$$ import net.minecraft.util.math.Quaternion;
+//$$ import org.lwjgl.opengl.GL11;
+//#else
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+import org.lwjgl.opengl.GL11;
+//#endif
+
+//#if FORGE && MC>=11602
+//$$ import net.minecraft.util.math.vector.Quaternion;
 //$$ import net.minecraft.util.ResourceLocation;
 //$$ import net.minecraft.util.text.Style;
 //$$ import net.minecraft.util.math.vector.Vector3f;
@@ -31,7 +48,8 @@ import java.util.regex.Pattern;
 //$$ import java.util.Optional;
 //#endif
 
-//#if MC==11502
+//#if MC>=11502 && MC<11602
+//$$ import net.minecraft.client.renderer.Quaternion;
 //$$ import net.minecraft.client.renderer.Vector3f;
 //$$ import com.mojang.blaze3d.matrix.MatrixStack;
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
@@ -42,7 +60,7 @@ import java.util.regex.Pattern;
 //$$ import java.io.ByteArrayOutputStream;
 //#endif
 
-//#if MC==11202
+//#if MC>=11202 && MC<11502
 //$$ import net.minecraft.client.renderer.GlStateManager;
 //$$ import net.minecraft.client.renderer.BufferBuilder;
 //$$ import net.minecraft.client.renderer.OpenGlHelper;
@@ -57,7 +75,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 public class UniversalGraphicsHandler {
     public static int ZERO_TEXT_ALPHA = 10;
 
-    //#if MC>=11602
+    //#if FORGE && MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
 
@@ -130,10 +148,11 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         GlStateManager.rotate(angle, x, y, z);
         //#else
-        //$$ if (x != 0) stack.rotate(Vector3f.XP.rotationDegrees(angle));
-        //$$ if (y != 0) stack.rotate(Vector3f.YP.rotationDegrees(angle));
-        //$$ if (z != 0) stack.rotate(Vector3f.ZP.rotationDegrees(angle));
-        //$$
+        //#if FABRIC
+        //$$ stack.multiply(new Quaternion(new Vector3f(x, y, z), angle, true));
+        //#else
+        //$$ stack.rotate(new Quaternion(new Vector3f(x, y, z), angle, true));
+        //#endif
         //#endif
     }
 
@@ -251,9 +270,11 @@ public class UniversalGraphicsHandler {
 
     public static void enableAlpha() {
         //#if MC<11502
-        GlStateManager.enableAlpha();
+        //$$ GlStateManager.enableAlpha();
         //#else
+        //#if FORGE
         //$$ GlStateManager.enableAlphaTest();
+        //#endif
         //#endif
     }
 
@@ -262,7 +283,11 @@ public class UniversalGraphicsHandler {
     }
 
     public static int getStringWidth(String in) {
+        //#if FABRIC
+        //$$ return UniversalMinecraft.getFontRenderer().getWidth(in);
+        //#else
         return UniversalMinecraft.getFontRenderer().getStringWidth(in);
+        //#endif
     }
 
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
@@ -270,9 +295,14 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#else
+        //#if FABRIC
+        //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //#else
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
+        //#endif
         //#endif
     }
 
@@ -288,30 +318,40 @@ public class UniversalGraphicsHandler {
                 max = Math.max(max, getStringWidth(s));
             wrapWidth = Math.max(max, wrapWidth);
         }
+
         //#if MC<11602
         return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
         //#else
-        // TODO: Validate this code. Taken from the comparison of the following files:
-        //   - 1.15.2: net.minecraft.util.EnchantmentNameParts lines 37 & 38
-        //   - 1.16.2: net.minecraft.util.EnchantmentNameParts line 38
+        // TODO: Validate this code
+        //$$ List<String> strings = new ArrayList<>();
+        //$$
+        //#if FABRIC
+        //$$ TextHandler handler = UniversalMinecraft.getFontRenderer().getTextHandler();
+        //$$ List<StringVisitable> visitables = handler.wrapLines(str, wrapWidth, Style.EMPTY);
+        //$$ for (StringVisitable visitable : visitables)
+        //$$     strings.add(visitable.getString());
+        //#else
         //$$ CharacterManager charManager = UniversalMinecraft.getFontRenderer().func_238420_b_();
         //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
-        //$$ List<String> strings = new ArrayList<>();
-        //$$ // From net.minecraft.util.text.ITextProperties line 88
+        // From net.minecraft.util.text.ITextProperties line 88
         //$$ properties.func_230438_a_(string -> {
         //$$     strings.add(string);
         //$$     return Optional.empty();
         //$$ });
+        //#endif
         //$$ return strings;
         //#endif
     }
 
-
     public static float getCharWidth(char character) {
+        //#if FABRIC
+        //$$ return UniversalMinecraft.getFontRenderer().getWidth(String.valueOf(character));
+        //#else
         //#if MC<11602
         return UniversalMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
         //#else
         //$$ return getStringWidth(String.valueOf(character));
+        //#endif
         //#endif
     }
 
@@ -323,41 +363,44 @@ public class UniversalGraphicsHandler {
         GL11.glClearStencil(mode);
     }
 
+    // TODO: What is the Fabric equivalent of all this?
+    //#if FORGE
     public static DynamicTexture getTexture(InputStream stream) {
-        try {
-            //#if MC<11502
-            return new DynamicTexture(ImageIO.read(stream));
-            //#else
-            //$$ return new DynamicTexture(NativeImage.read(stream));
-            //#endif
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        throw new IllegalStateException("Failed to read image");
-    }
+         try {
+             //#if MC<11502
+             return new DynamicTexture(ImageIO.read(stream));
+             //#else
+             //$$ return new DynamicTexture(NativeImage.read(stream));
+             //#endif
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+         throw new IllegalStateException("Failed to read image");
+     }
 
     public static DynamicTexture getTexture(BufferedImage img) {
-        //#if MC<11502
-        return new DynamicTexture(img);
-        //#else
-        //$$ try {
-        //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //$$     ImageIO.write(img, "png", baos );
-        //$$ return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
-        //$$ } catch (IOException e) {
-        //$$     e.printStackTrace();
-        //$$ }
-        //$$ throw new IllegalStateException("Failed to create texture");
-        //#endif
+         //#if MC<11502
+         return new DynamicTexture(img);
+         //#else
+         //$$ try {
+         //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         //$$     ImageIO.write(img, "png", baos );
+         //$$     return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
+         //$$ } catch (IOException e) {
+         //$$     e.printStackTrace();
+         //$$ }
+         //$$ throw new IllegalStateException("Failed to create texture");
+         //#endif
     }
 
     public static DynamicTexture getEmptyTexture() {
-        //#if MC<11502
-        return new DynamicTexture(0, 0);
-        //#else
-        //$$ return new DynamicTexture(0, 0, false);
-        //#endif
+         //#if MC<11502
+         return new DynamicTexture(0, 0);
+         //#else
+         //$$ return new DynamicTexture(0, 0, false);
+         //#endif
     }
+    //#endif
 
     public static void glUseProgram(int program) {
         //#if MC<11502
@@ -447,16 +490,19 @@ public class UniversalGraphicsHandler {
         //#endif
     }
 
-
     public void begin(int glMode, VertexFormat format) {
         instance.begin(glMode, format);
     }
 
     public UniversalGraphicsHandler pos(double x, double y, double z) {
+        //#if FABRIC
+        //$$ instance.vertex(stack.peek().getModel(), (float) x, (float) y, (float) z);
+        //#else
         //#if MC<11502
         instance.pos(x, y, z);
         //#else
         //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
+        //#endif
         //#endif
         return this;
     }
@@ -467,14 +513,22 @@ public class UniversalGraphicsHandler {
     }
 
     public void endVertex() {
+        //#if FABRIC
+        //$$ instance.end();
+        //#else
         instance.endVertex();
+        //#endif
     }
 
     public UniversalGraphicsHandler tex(double u, double v) {
+        //#if FABRIC
+        //$$ instance.texture((float) u, (float) v);
+        //#else
         //#if MC<11502
         instance.tex(u, v);
         //#else
         //$$ instance.tex((float)u,(float)v);
+        //#endif
         //#endif
         return this;
     }
