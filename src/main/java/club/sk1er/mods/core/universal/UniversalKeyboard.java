@@ -1,11 +1,16 @@
 package club.sk1er.mods.core.universal;
 
-import net.minecraft.client.Minecraft;
+//#if FABRIC
+//$$ import net.minecraft.client.util.InputUtil;
+//#else
+//$$ import net.minecraft.client.Minecraft;
 //#if MC<=11202
 import org.lwjgl.input.Keyboard;
 //#else
 //$$ import net.minecraft.client.util.InputMappings;
 //#endif
+//#endif
+
 
 public class UniversalKeyboard {
     // These are taken from LWJGL2's Keyboard class for compatibility between MC versions.
@@ -25,10 +30,14 @@ public class UniversalKeyboard {
     public static final int KEY_Y = 0x15;
 
     public static void enableRepeatEvents(boolean enable) {
+        //#if FABRIC
+        //$$ UniversalMinecraft.getMinecraft().keyboard.setRepeatEvents(enable);
+        //#else
         //#if MC<=11202
         Keyboard.enableRepeatEvents(enable);
         //#else
         //$$ UniversalMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enable);
+        //#endif
         //#endif
     }
 
@@ -37,15 +46,7 @@ public class UniversalKeyboard {
      * @return true if either control (or command on mac) is pressed
      */
     public static boolean isCtrlKeyDown() {
-        return UniversalMinecraft.isRunningOnMac ?
-        //#if MC<=11202
-               Keyboard.isKeyDown(KEY_LMETA) || Keyboard.isKeyDown(KEY_RMETA) : Keyboard.isKeyDown(KEY_LCONTROL) || Keyboard.isKeyDown(KEY_RCONTROL);
-        //#else
-        //$$       InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMETA) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMETA)
-        //$$       :
-        //$$       InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LCONTROL) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RCONTROL);
-        //#endif
-
+        return UniversalMinecraft.isRunningOnMac ? isKeyDown(KEY_LMETA) || isKeyDown(KEY_RMETA) : isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL);
     }
 
     /**
@@ -53,11 +54,15 @@ public class UniversalKeyboard {
      * @return true if either shift key is pressed
      */
     public static boolean isShiftKeyDown() {
-        //#if MC<=11202
-        return Keyboard.isKeyDown(KEY_LSHIFT) || Keyboard.isKeyDown(KEY_RSHIFT);
-        //#else
-        //$$ return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LSHIFT) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RSHIFT);
-        //#endif
+        return isKeyDown(KEY_LSHIFT) || isKeyDown(KEY_RSHIFT);
+    }
+
+    /**
+     * Get current state of the alt key
+     * @return true if either alt key is pressed
+     */
+    public static boolean isAltKeyDown() {
+        return isKeyDown(KEY_LMENU) || isKeyDown(KEY_RMENU);
     }
 
     public static Modifier getModifiers() {
@@ -68,17 +73,16 @@ public class UniversalKeyboard {
         );
     }
 
-    /**
-     * Get current state of the alt key
-     * @return true if either alt key is pressed
-     */
-    public static boolean isAltKeyDown() {
-        //#if MC<=11202
-        return Keyboard.isKeyDown(KEY_LMENU) || Keyboard.isKeyDown(KEY_RMENU);
+    public static boolean isKeyDown(int key) {
+        //#if FABRIC
+        //$$ return InputUtil.isKeyPressed(UniversalMinecraft.getMinecraft().getWindow().getHandle(), key);
         //#else
-        //$$ return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_LMENU) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), KEY_RMENU);
+        //#if MC<=11202
+        return Keyboard.isKeyDown(key);
+        //#else
+        //$$ return InputMappings.isKeyDown(UniversalMinecraft.getMinecraft().getMainWindow().getHandle(), key);
         //#endif
-
+        //#endif
     }
 
     /**

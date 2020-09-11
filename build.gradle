@@ -65,6 +65,7 @@ apply plugin: 'maven-publish'
 preprocess {
     vars.put("MC", mcVersion)
     vars.put("FABRIC", project.fabric ? 1 : 0)
+    vars.put("FORGE", project.fabric ? 0 : 1)
 }
 
 repositories {
