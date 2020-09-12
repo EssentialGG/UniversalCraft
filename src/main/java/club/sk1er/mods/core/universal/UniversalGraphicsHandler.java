@@ -306,6 +306,25 @@ public class UniversalGraphicsHandler {
         //#endif
     }
 
+    public static void drawString(String text, float x, float y, int color, int shadowColor) {
+        if ((color >> 24 & 255) <= 10) return;
+        //#if MC<11502
+        UniversalMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
+        UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, false);
+        //#else
+        //#if FABRIC
+        //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        //$$ UniversalMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //#else
+        //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ irendertypebuffer$impl.finish();
+        //#endif
+        //#endif
+    }
+
     public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
         return listFormattedStringToWidth(str, wrapWidth, true);
     }
