@@ -26,7 +26,7 @@ import java.io.IOException;
 //#if MC<=11202
 public class UniversalScreen extends GuiScreen {
 //#else
-//$$     public class UniversalScreen extends Screen implements IUniversalScreen {
+//$$     public class UniversalScreen extends Screen {
 //$$         private long lastClick = 0;
 //$$         private int lastScanCode = -1;
 //$$         private int lastModifierCode = -1;
