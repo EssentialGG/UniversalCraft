@@ -91,7 +91,7 @@ public class UniversalScreen extends GuiScreen {
     }
 
     @Override
-    public final void drawBackground(int tint) {
+    public void drawWorldBackground(int tint) {
         onDrawBackground(tint);
     }
     //#else
@@ -203,10 +203,11 @@ public class UniversalScreen extends GuiScreen {
     //$$ }
     //$$
     //$$ @Override
-    //#if FABRIC
-    //$$ public final void renderBackgroundTexture(int vOffset) {
+    //#if MC>=11602
+    //$$ public final void renderBackground(MatrixStack matrices, int vOffset) {
+    //$$     stack = matrices;
     //#else
-    //$$ public final void renderDirtBackground(int vOffset) {
+    //$$ public final void renderBackground(int vOffset) {
     //#endif
     //$$     onDrawBackground(vOffset);
     //$$ }
@@ -304,7 +305,7 @@ public class UniversalScreen extends GuiScreen {
 
     public void onDrawBackground(int tint) {
         //#if MC<11502
-        super.drawDefaultBackground();
+        super.drawWorldBackground(tint);
         //#else
         //#if MC>=11602
         //$$ super.renderBackground(getMatrixStack(), tint);
