@@ -245,6 +245,9 @@ publishing {
             artifactId = "UniversalCraft"
             version = "${project.version}-$mcVersion${FABRIC ? "-fabric" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
 
+            if(this.properties.getOrDefault("branch", "master") != "master")
+                version+=this.properties.getOrDefault("branch", "master")
+
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
 
