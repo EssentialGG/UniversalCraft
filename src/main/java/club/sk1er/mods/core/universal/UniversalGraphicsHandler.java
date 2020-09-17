@@ -66,6 +66,10 @@ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
+//#if MC>=11602
+//$$ import com.mojang.blaze3d.systems.RenderSystem;
+//#endif
+
 //#if MC<=10809
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -603,5 +607,68 @@ public class UniversalGraphicsHandler {
         //#endif
         //#endif
         return this;
+    }
+
+    // A collection of methods for always calling the OpenGL transformations rather than
+    // delegating to the MatrixStack. In versions less than 1.15.2, these methods are no
+    // different than transformation methods in the UniversalGraphicsHandler class.
+    //
+    // The other transformation methods should be preferred.
+    public static class GL {
+        public static void pushMatrix() {
+            //#if MC<11502
+            GlStateManager.pushMatrix();
+            //#else
+            //$$ RenderSystem.pushMatrix();
+            //#endif
+        }
+
+        public static void popMatrix() {
+            //#if MC<11502
+            GlStateManager.popMatrix();
+            //#else
+            //$$ RenderSystem.popMatrix();
+            //#endif
+        }
+
+        public static void translate(float x, float y, float z) {
+            //#if MC<11502
+            translate((double) x, (double) y, (double) z);
+            //#else
+            //$$ RenderSystem.translatef(x, y, z);
+            //#endif
+        }
+
+        public static void translate(double x, double y, double z) {
+            //#if MC<11502
+            GlStateManager.translate(x, y, z);
+            //#else
+            //$$ RenderSystem.translated(x, y, z);
+            //#endif
+        }
+
+        public static void rotate(float angle, float x, float y, float z) {
+            //#if MC<11502
+            GlStateManager.rotate(angle, x, y, z);
+            //#else
+            //$$ RenderSystem.rotatef(angle, x, y, z);
+            //#endif
+        }
+
+        public static void scale(float x, float y, float z) {
+            //#if MC<11502
+            scale((double) x, (double) y, (double) z);
+            //#else
+            //$$ RenderSystem.scalef(x, y, z);
+            //#endif
+        }
+
+        public static void scale(double x, double y, double z) {
+            //#if MC<11502
+            GlStateManager.scale(x, y, z);
+            //#else
+            //$$ RenderSystem.scaled(x, y, z);
+            //#endif
+        }
     }
 }
