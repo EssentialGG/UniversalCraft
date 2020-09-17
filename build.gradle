@@ -243,7 +243,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifactId = "UniversalCraft"
-            version = "${this.properties.getOrDefault("branch", "master") != "master" ? this.properties.getOrDefault("branch", "master")+"-" : ""}${project.version}-$mcVersion${FABRIC ? "-fabric" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
+            version = "${this.properties.getOrDefault("branch", "master") != "master" ? this.properties.getOrDefault("branch", "master") + "-" : ""}${project.version}-$mcVersion${FABRIC ? "-fabric" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
 
 
             pom.withXml {
@@ -259,7 +259,7 @@ publishing {
                 }
             }
 
-            artifact jar
+            artifact FABRIC ? remapJar : jar
             artifact sourcesJar
         }
     }
