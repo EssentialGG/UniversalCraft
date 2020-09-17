@@ -51,7 +51,7 @@ import org.lwjgl.opengl.GL11;
 //#if MC>=11502 && MC<11602
 //$$ import net.minecraft.client.renderer.Quaternion;
 //$$ import net.minecraft.client.renderer.Vector3f;
-//$$ import com.mojang.blaze3d.matrix.MatrixStack;
+//$$ import com.mojang.blaze3d.systems.RenderSystem;
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
 //$$ import net.minecraft.client.renderer.BufferBuilder;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -97,7 +97,7 @@ public class UniversalGraphicsHandler {
     //$$ }
     //#endif
 
-    //#if MC>=11502
+    //#if MC>=11602
     //$$ private static MatrixStack stack = new MatrixStack();
     //$$ public static MatrixStack getStack() {
     //$$     return stack;
@@ -112,7 +112,11 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         GlStateManager.pushMatrix();
         //#else
+        //#if MC<11602
+        //$$ RenderSystem.pushMatrix();
+        //#else
         //$$ stack.push();
+        //#endif
         //#endif
     }
 
@@ -120,7 +124,11 @@ public class UniversalGraphicsHandler {
         //#if MC<11502
         GlStateManager.popMatrix();
         //#else
+        //#if MC<11602
+        //$$ RenderSystem.popMatrix();
+        //#else
         //$$ stack.pop();
+        //#endif
         //#endif
     }
 
@@ -133,14 +141,22 @@ public class UniversalGraphicsHandler {
     }
 
     public static void translate(float x, float y, float z) {
+        //#if MC>=11502 && MC<11602
+        //$$ RenderSystem.translatef(x, y, z);
+        //#else
         translate((double) x, (double) y, (double) z); //Don't remove double casts or this breaks
+        //#endif
     }
 
     public static void translate(double x, double y, double z) {
         //#if MC<11502
         GlStateManager.translate(x, y, z);
         //#else
+        //#if MC<11602
+        //$$ RenderSystem.translated(x, y, z);
+        //#else
         //$$ stack.translate(x, y, z);
+        //#endif
         //#endif
     }
 
@@ -151,20 +167,32 @@ public class UniversalGraphicsHandler {
         //#if FABRIC
         //$$ stack.multiply(new Quaternion(new Vector3f(x, y, z), angle, true));
         //#else
+        //#if MC<11602
+        //$$ RenderSystem.rotatef(angle, x, y, z);
+        //#else
         //$$ stack.rotate(new Quaternion(new Vector3f(x, y, z), angle, true));
+        //#endif
         //#endif
         //#endif
     }
 
     public static void scale(float x, float y, float z) {
+        //#if MC>=11502 && MC<11602
+        //$$ RenderSystem.scalef(x, y, z);
+        //#else
         scale((double) x, (double) y, (double) z);
+        //#endif
     }
 
     public static void scale(double x, double y, double z) {
         //#if MC<11502
         GlStateManager.scale(x, y, z);
         //#else
+        //#if MC<11602
+        //$$ RenderSystem.scaled(x, y, z);
+        //#else
         //$$ stack.scale((float) x, (float) y, (float) z);
+        //#endif
         //#endif
     }
 
@@ -199,12 +227,20 @@ public class UniversalGraphicsHandler {
     public static void enableLighting() {
         //#if MC<=11202
         GlStateManager.enableLighting();
+        //#else
+        //#if MC<11602
+        //$$ RenderSystem.enableLighting();
+        //#endif
         //#endif
     }
 
     public static void disableLighting() {
         //#if MC<=11202
         GlStateManager.disableLighting();
+        //#else
+        //#if MC<11602
+        //$$ RenderSystem.disableLighting();
+        //#endif
         //#endif
     }
 
@@ -241,6 +277,10 @@ public class UniversalGraphicsHandler {
     public static void shadeModel(int mode) {
         //#if MC<11502
         GlStateManager.shadeModel(mode);
+        //#else
+        //#if MC<11502
+        //$$ RenderSystem.shadeModel(mode);
+        //#endif
         //#endif
     }
 
@@ -299,9 +339,17 @@ public class UniversalGraphicsHandler {
         //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
         //#else
+        //#if MC<11602
+        //$$ if (shadow) {
+        //$$     UniversalMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
+        //$$ } else {
+        //$$     UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
+        //$$ }
+        //#else
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
+        //#endif
         //#endif
         //#endif
     }
@@ -317,10 +365,15 @@ public class UniversalGraphicsHandler {
         //$$ UniversalMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
         //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
         //#else
+        //#if MC<11602
+        //$$ UniversalMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
+        //$$ UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
+        //#else
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         //$$ UniversalMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
+        //#endif
         //#endif
         //#endif
     }
@@ -517,7 +570,7 @@ public class UniversalGraphicsHandler {
         //#if FABRIC
         //$$ instance.vertex(stack.peek().getModel(), (float) x, (float) y, (float) z);
         //#else
-        //#if MC<11502
+        //#if MC<=11502
         instance.pos(x, y, z);
         //#else
         //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
