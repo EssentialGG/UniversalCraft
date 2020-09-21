@@ -1,4 +1,6 @@
-package club.sk1er.mods.core.universal.message;
+package club.sk1er.mods.core.universal.wrappers.message;
+
+import club.sk1er.mods.core.universal.UniversalChat;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,15 +16,13 @@ import java.util.stream.Stream;
 //$$ import java.util.function.UnaryOperator;
 //#else
 //#if MC<=10809
-import java.util.List;
+
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatStyle;
-
-import java.util.Iterator;
 //#else
 //$$ import net.minecraft.util.text.*;
 //$$ import net.minecraft.util.text.event.*;
@@ -60,6 +60,28 @@ public class UniversalTextComponent implements IChatComponent {
     private HoverEvent.Action hoverAction = null;
     private Object hoverValue = null;
 
+    public static Optional<UniversalTextComponent> from(Object object) {
+        if (object instanceof UniversalTextComponent)
+            return Optional.of((UniversalTextComponent) object);
+
+        if (object instanceof String)
+            object = buildSimple((String) object);
+
+        //#if MC<=10809
+        if (object instanceof IChatComponent)
+            return Optional.of(new UniversalTextComponent((IChatComponent) object));
+        //#else
+        //#if FORGE
+        //$$ if (object instanceof ITextComponent)
+        //$$    return Optional.of(new UniversalTextComponent((ITextComponent) object));
+        //#else
+        //$$ if (object instanceof MutableText)
+        //$$    return Optional.of(new UniversalTextComponent((MutableText) object));
+        //#endif
+        //#endif
+        return Optional.empty();
+    }
+
     public UniversalTextComponent(String text) {
         this.text = text;
         reInstance();
@@ -83,9 +105,7 @@ public class UniversalTextComponent implements IChatComponent {
         //$$ component.func_230439_a_(builder, Style.EMPTY);
         //$$ text = builder.getString();
         //#else
-        //$$ FormattedTextBuilder builder = new FormattedTextBuilder();
-        //$$ component.asOrderedText().accept(builder);
-        //$$ text = builder.getString();
+        //$$ text = getFormattedText();
         //#endif
         //#endif
 
@@ -346,13 +366,18 @@ public class UniversalTextComponent implements IChatComponent {
     //$$     }
     //$$ }
     //#else
-    //$$ private class FormattedTextBuilder implements CharacterVisitor {
+    //$$ private class TextBuilder implements CharacterVisitor {
     //$$     private StringBuilder builder = new StringBuilder();
     //$$     private Style cachedStyle = null;
+    //$$     private boolean isFormatted;
+    //$$
+    //$$     TextBuilder(boolean isFormatted) {
+    //$$         this.isFormatted = formatted;
+    //$$     }
     //$$
     //$$     @Override
     //$$     public boolean accept(int index, Style style, int codePoint) {
-    //$$         if (style != cachedStyle) {
+    //$$         if (formatted && style != cachedStyle) {
     //$$             cachedStyle = style;
     //$$             builder.append(formatString(style));
     //$$         }
@@ -492,6 +517,10 @@ public class UniversalTextComponent implements IChatComponent {
     //$$ }
     //#else
     //#if MC<=11502
+    //$$ public String getUnformattedText() {
+    //$$     return getUnformattedComponentText();
+    //$$ }
+    //$$
     //$$ @Override
     //$$ public ITextComponent appendText(String text) {
     //$$     return component.appendText(text);
@@ -578,6 +607,18 @@ public class UniversalTextComponent implements IChatComponent {
     //$$ }
     //#else
     //#if FORGE
+    //$$ public void appendSibling(ITextComponent component) {
+    //$$     getSiblings().add(component);
+    //$$ }
+    //$$
+    //$$ public String getUnformattedText() {
+    //$$     return getUnformattedComponentText();
+    //$$ }
+    //$$
+    //$$ public String getFormattedText() {
+    //$$     return getText();
+    //$$ }
+    //$$
     //$$ @Override
     //$$ public String getString() {
     //$$     return component.getString();
@@ -638,6 +679,22 @@ public class UniversalTextComponent implements IChatComponent {
     //$$     return component.func_241878_f();
     //$$ }
     //#else
+    //$$ public String getUnformattedText() {
+    //$$     TextBuilder builder = new TextBuilder(false);
+    //$$     component.asOrderedText().accept(builder);
+    //$$     return builder.getString();
+    //$$ }
+    //$$
+    //$$ public String getFormattedText() {
+    //$$     TextBuilder builder = new TextBuilder(true);
+    //$$     component.asOrderedText().accept(builder);
+    //$$     return builder.getString();
+    //$$ }
+    //$$
+    //$$ public MutableText appendSibling(Text text) {
+    //$$     return append(text);
+    //$$ }
+    //$$
     //$$ @Override
     //$$ public MutableText append(String text) {
     //$$     return component.append(text);

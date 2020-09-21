@@ -23,6 +23,9 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 
 //#if MC>11202
 //$$ import net.minecraft.client.util.NativeUtil;
+//$$ import net.minecraft.client.gui.NewChatGui;
+//#else
+import net.minecraft.client.gui.GuiNewChat;
 //#endif
 //#endif
 
@@ -93,18 +96,6 @@ public class UniversalMinecraft {
         //#endif
     }
 
-    //#if MC<11602
-    public static EntityPlayerSP getPlayer() {
-    //#else
-    //$$ public static ClientPlayerEntity getPlayer() {
-    //#endif
-        //#if MC<=10809
-        return getMinecraft().thePlayer;
-        //#else
-        //$$ return getMinecraft().player;
-        //#endif
-    }
-
     public static FontRenderer getFontRenderer() {
         //#if MC<=10809
         return getMinecraft().fontRendererObj;
@@ -119,6 +110,16 @@ public class UniversalMinecraft {
         //#else
         //$$ return (long) NativeUtil.getTime();
         //#endif
+    }
+
+    //#if MC<=11202
+    public static GuiNewChat getChatGUI() {
+    //#else
+    //$$ public static NewChatGui getChatGUI() {
+    //#endif
+        if (getMinecraft().ingameGUI != null)
+            return getMinecraft().ingameGUI.getChatGUI();
+        return null;
     }
     //#endif
 }
