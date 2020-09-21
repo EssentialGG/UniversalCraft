@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal.message;
+package club.sk1er.mods.core.universal;
 
 import java.util.regex.Pattern;
 
