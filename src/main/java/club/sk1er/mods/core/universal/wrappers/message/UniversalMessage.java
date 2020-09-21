@@ -33,8 +33,8 @@ public class UniversalMessage {
             component.getSiblings().stream().map(UniversalTextComponent::new).forEach(messageParts::add);
             //#else
             //$$ component.getSiblings().stream()
-            //$$     .map(it -> new UniversalTextComponent((MutableText) it))
-            //$$     .forEach(messageParts::add);
+            //$$         .map(it -> new UniversalTextComponent((MutableText) it))
+            //$$         .forEach(messageParts::add);
             //#endif
         }
     }
@@ -43,8 +43,9 @@ public class UniversalMessage {
      * Creates a new Message from a list of strings or UniversalTextComponents
      * @param parts
      */
-    public UniversalMessage(List<Object> parts) {
-        parts.forEach(this::addPart);
+    public UniversalMessage(Object... parts) {
+        for (Object part : parts)
+            addPart(part);
     }
 
     public UniversalTextComponent getChatMessage() {
@@ -125,11 +126,11 @@ public class UniversalMessage {
 
         //TODO: Access transformer
         //#if MC<11602
-        if (chatLineId != -1) {
-            if (UniversalMinecraft.getChatGUI() != null)
-                UniversalMinecraft.getChatGUI().printChatMessageWithOptionalDeletion(chatMessage, chatLineId);
-            return;
-        }
+        //$$ if (chatLineId != -1) {
+        //$$     if (UniversalMinecraft.getChatGUI() != null)
+        //$$         UniversalMinecraft.getChatGUI().printChatMessageWithOptionalDeletion(chatMessage, chatLineId);
+        //$$     return;
+        //$$ }
         //#endif
 
         if (recursive) {
