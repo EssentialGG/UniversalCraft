@@ -39,4 +39,58 @@ public class UniversalPlayer {
     public static UUID getUUID() {
         return UniversalMinecraft.getMinecraft().getSession().getProfile().getId();
     }
+
+    public static double getPosX() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPosX() called with no existing Player");
+
+        //#if MC<11502
+        return getPlayer().posX;
+        //#else
+        //$$ return getPlayer().getPosX();
+        //#endif
+    }
+
+    public static double getPosY() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPosY() called with no existing Player");
+
+        //#if MC<11502
+        return getPlayer().posY;
+        //#else
+        //$$ return getPlayer().getPosY();
+        //#endif
+    }
+
+    public static double getPosZ() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPosZ() called with no existing Player");
+
+        //#if MC<11502
+        return getPlayer().posZ;
+        //#else
+        //$$ return getPlayer().getPosZ();
+        //#endif
+    }
+
+    public static double getPrevPosX() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPrevPosX() called with no existing Player");
+
+        return getPlayer().prevPosX;
+    }
+
+    public static double getPrevPosY() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPrevPosY() called with no existing Player");
+
+        return getPlayer().prevPosY;
+    }
+
+    public static double getPrevPosZ() {
+        if (!hasPlayer())
+            throw new NullPointerException("UniversalPlayer.getPrevPosZ() called with no existing Player");
+
+        return getPlayer().prevPosZ;
+    }
 }
