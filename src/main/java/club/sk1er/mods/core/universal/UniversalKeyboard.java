@@ -5,11 +5,11 @@ package club.sk1er.mods.core.universal;
 //$$ import org.lwjgl.glfw.GLFW;
 //#else
 //$$ import net.minecraft.client.Minecraft;
-//#if MC<=11202
-import org.lwjgl.input.Keyboard;
-//#else
+//#if MC>=11502
 //$$ import org.lwjgl.glfw.GLFW;
 //$$ import net.minecraft.client.util.InputMappings;
+//#else
+import org.lwjgl.input.Keyboard;
 //#endif
 //#endif
 
@@ -50,10 +50,10 @@ public class UniversalKeyboard {
         //#if FABRIC
         //$$ UniversalMinecraft.getMinecraft().keyboard.setRepeatEvents(enable);
         //#else
-        //#if MC<=11202
-        Keyboard.enableRepeatEvents(enable);
-        //#else
+        //#if MC>=11502
         //$$ UniversalMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enable);
+        //#else
+        Keyboard.enableRepeatEvents(enable);
         //#endif
         //#endif
     }
@@ -94,10 +94,10 @@ public class UniversalKeyboard {
         //#if FABRIC
         //$$ return InputUtil.isKeyPressed(UniversalMinecraft.getMinecraft().getWindow().getHandle(), key);
         //#else
-        //#if MC<=11202
-        return Keyboard.isKeyDown(key);
-        //#else
+        //#if MC>=11502
         //$$ return InputMappings.isKeyDown(UniversalMinecraft.getMinecraft().getMainWindow().getHandle(), key);
+        //#else
+        return Keyboard.isKeyDown(key);
         //#endif
         //#endif
     }

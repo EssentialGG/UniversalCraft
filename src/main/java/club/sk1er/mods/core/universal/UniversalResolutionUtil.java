@@ -23,28 +23,24 @@ public class UniversalResolutionUtil {
     public int getWindowWidth() {
         //#if FABRIC
         //$$ return UniversalMinecraft.getMinecraft().getWindow().getWidth();
-        //#else
-        //#if MC<11500
-        return UniversalMinecraft.getMinecraft().displayWidth;
-        //#else
+        //#elseif MC>=11502
         //$$ return UniversalMinecraft.getMinecraft().getMainWindow().getWidth();
-        //#endif
+        //#else
+        return UniversalMinecraft.getMinecraft().displayWidth;
         //#endif
     }
 
     public int getWindowHeight() {
         //#if FABRIC
         //$$ return UniversalMinecraft.getMinecraft().getWindow().getHeight();
-        //#else
-        //#if MC<11500
-        return UniversalMinecraft.getMinecraft().displayHeight;
-        //#else
+        //#elseif MC>=11502
         //$$ return UniversalMinecraft.getMinecraft().getMainWindow().getHeight();
-        //#endif
+        //#else
+        return UniversalMinecraft.getMinecraft().displayHeight;
         //#endif
     }
 
-    //#if MC<11500
+    //#if MC<11502
     private ScaledResolution get() {
         if (cachedHeight != getWindowHeight() || cachedWidth != getWindowWidth() || scaledResolution == null) {
             scaledResolution = new ScaledResolution(UniversalMinecraft.getMinecraft());
@@ -56,36 +52,30 @@ public class UniversalResolutionUtil {
     public int getScaledWidth() {
         //#if FABRIC
         //$$ return UniversalMinecraft.getMinecraft().getWindow().getScaledWidth();
-        //#else
-        //#if MC<11500
-        return get().getScaledWidth();
-        //#else
+        //#elseif MC>=11502
         //$$ return UniversalMinecraft.getMinecraft().getMainWindow().getScaledWidth();
-        //#endif
+        //#else
+        return get().getScaledWidth();
         //#endif
     }
 
     public int getScaledHeight() {
         //#if FABRIC
         //$$ return UniversalMinecraft.getMinecraft().getWindow().getScaledHeight();
-        //#else
-        //#if MC<11500
-        return get().getScaledHeight();
-        //#else
+        //#elseif MC>=11502
         //$$ return UniversalMinecraft.getMinecraft().getMainWindow().getScaledHeight();
-        //#endif
+        //#else
+        return get().getScaledHeight();
         //#endif
     }
 
     public int getScaleFactor() {
         //#if FABRIC
         //$$ return (int) UniversalMinecraft.getMinecraft().getWindow().getScaleFactor();
-        //#else
-        //#if MC<11500
-        return get().getScaleFactor();
-        //#else
+        //#elseif MC>=11502
         //$$ return (int)UniversalMinecraft.getMinecraft().getMainWindow().getGuiScaleFactor();
-        //#endif
+        //#else
+        return get().getScaleFactor();
         //#endif
     }
 }

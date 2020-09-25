@@ -6,95 +6,34 @@ package club.sk1er.mods.core.universal;
 //$$ import net.minecraft.client.util.math.MatrixStack;
 //$$ import net.minecraft.text.LiteralText;
 //$$ import org.lwjgl.glfw.GLFW;
+//#elseif MC>=11502
+//$$ import net.minecraft.util.text.StringTextComponent;
+//$$ import net.minecraft.client.gui.screen.Screen;
+//$$ import com.mojang.blaze3d.matrix.MatrixStack;
+//$$ import org.lwjgl.glfw.GLFW;
 //#else
-import net.minecraft.client.Minecraft;
-
-//#if MC<=11202
 import org.lwjgl.input.Mouse;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
-//#else
-//$$ import net.minecraft.util.text.StringTextComponent;
-//$$ import net.minecraft.client.gui.screen.Screen;
-//$$ import com.mojang.blaze3d.matrix.MatrixStack;
-//$$ import org.lwjgl.glfw.GLFW;
-//#endif
 //#endif
 
-//#if MC<=11202
+//#if MC>=11502
+//$$ public class UniversalScreen extends Screen {
+//$$     private long lastClick = 0;
+//$$     private int lastScanCode = -1;
+//$$     private int lastModifierCode = -1;
+//$$     private char lastChar = 0;
+//$$     private double lastDraggedDx = -1;
+//$$     private double lastDraggedDy = -1;
+//$$     private double lastScrolledX = -1;
+//$$     private double lastScrolledY = -1;
+//#else
 public class UniversalScreen extends GuiScreen {
-//#else
-//$$     public class UniversalScreen extends Screen {
-//$$         private long lastClick = 0;
-//$$         private int lastScanCode = -1;
-//$$         private int lastModifierCode = -1;
-//$$         private char lastChar = 0;
-//$$         private double lastDraggedDx = -1;
-//$$         private double lastDraggedDy = -1;
-//$$         private double lastScrolledX = -1;
-//$$         private double lastScrolledY = -1;
 //#endif
 
-    //#if MC<11502
-    public UniversalScreen() {
-        super();
-    }
-
-    @Override
-    public final void initGui() {
-        initScreen(width, height);
-    }
-
-    @Override
-    public final void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        onDrawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected final void keyTyped(char typedChar, int keyCode) {
-        onKeyPressed(keyCode, typedChar, UniversalKeyboard.getModifiers());
-    }
-
-    @Override
-    protected final void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        onMouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    protected final void mouseReleased(int mouseX, int mouseY, int state) {
-        onMouseReleased(mouseX, mouseY, state);
-    }
-
-    @Override
-    protected final void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        onMouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-    }
-
-    @Override
-    public final void handleMouseInput() throws IOException {
-        super.handleMouseInput();
-        int scrollDelta = Mouse.getEventDWheel();
-        if (scrollDelta != 0)
-            onMouseScrolled(scrollDelta);
-    }
-
-    @Override
-    public final void updateScreen() {
-        onTick();
-    }
-
-    @Override
-    public final void onGuiClosed() {
-        onScreenClose();
-    }
-
-    @Override
-    public void drawWorldBackground(int tint) {
-        onDrawBackground(tint);
-    }
-    //#else
+    //#if MC>=11502
     //$$ private MatrixStack stack = null;
     //$$
     //$$ public UniversalScreen() {
@@ -211,37 +150,92 @@ public class UniversalScreen extends GuiScreen {
     //#endif
     //$$     onDrawBackground(vOffset);
     //$$ }
+    //#else
+    public UniversalScreen() {
+        super();
+    }
+
+    @Override
+    public final void initGui() {
+        initScreen(width, height);
+    }
+
+    @Override
+    public final void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        onDrawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected final void keyTyped(char typedChar, int keyCode) {
+        onKeyPressed(keyCode, typedChar, UniversalKeyboard.getModifiers());
+    }
+
+    @Override
+    protected final void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        onMouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected final void mouseReleased(int mouseX, int mouseY, int state) {
+        onMouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    protected final void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        onMouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+    }
+
+    @Override
+    public final void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int scrollDelta = Mouse.getEventDWheel();
+        if (scrollDelta != 0)
+            onMouseScrolled(scrollDelta);
+    }
+
+    @Override
+    public final void updateScreen() {
+        onTick();
+    }
+
+    @Override
+    public final void onGuiClosed() {
+        onScreenClose();
+    }
+
+    @Override
+    public void drawWorldBackground(int tint) {
+        onDrawBackground(tint);
+    }
     //#endif
 
     public void initScreen(int width, int height) {
-        //#if MC<11502
-        super.initGui();
-        //#else
+        //#if MC>=11502
         //$$ super.init();
+        //#else
+        super.initGui();
         //#endif
     }
 
     public void onDrawScreen(int mouseX, int mouseY, float partialTicks) {
-        //#if MC<11502
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        //#else
         //#if MC>=11602
         //$$ super.render(getMatrixStack(), mouseX, mouseY, partialTicks);
-        //#else
+        //#elseif MC>=11502
         //$$ super.render(mouseX, mouseY, partialTicks);
-        //#endif
+        //#else
+        super.drawScreen(mouseX, mouseY, partialTicks);
         //#endif
     }
 
     public void onKeyPressed(int keyCode, char typedChar, UniversalKeyboard.Modifier modifiers) {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
+        //#else
         try {
             super.keyTyped(typedChar, keyCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //#else
-        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
         //#endif
     }
 
@@ -252,32 +246,32 @@ public class UniversalScreen extends GuiScreen {
     }
 
     public void onMouseClicked(double mouseX, double mouseY, int mouseButton) {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ if (mouseButton == 1)
+        //$$     lastClick = UniversalMinecraft.getTime();
+        //$$ super.mouseClicked(mouseX, mouseY, mouseButton);
+        //#else
         try {
             super.mouseClicked((int) mouseX, (int) mouseY, mouseButton);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //#else
-        //$$ if (mouseButton == 1)
-        //$$     lastClick = UniversalMinecraft.getTime();
-        //$$ super.mouseClicked(mouseX, mouseY, mouseButton);
         //#endif
     }
 
     public void onMouseReleased(double mouseX, double mouseY, int state) {
-        //#if MC<11502
-        super.mouseReleased((int) mouseX, (int) mouseY, state);
-        //#else
+        //#if MC>=11502
         //$$ super.mouseReleased(mouseX, mouseY, state);
+        //#else
+        super.mouseReleased((int) mouseX, (int) mouseY, state);
         //#endif
     }
 
     public void onMouseDragged(double x, double y, int clickedButton, long timeSinceLastClick) {
-        //#if MC<11502
-        super.mouseClickMove((int) x, (int) y, clickedButton, timeSinceLastClick);
-        //#else
+        //#if MC>=11502
         //$$ super.mouseDragged(x, y, clickedButton, lastDraggedDx, lastDraggedDy);
+        //#else
+        super.mouseClickMove((int) x, (int) y, clickedButton, timeSinceLastClick);
         //#endif
     }
 
@@ -288,30 +282,28 @@ public class UniversalScreen extends GuiScreen {
     }
 
     public void onTick() {
-        //#if MC<11502
-        super.updateScreen();
-        //#else
+        //#if MC>=11502
         //$$ super.tick();
+        //#else
+        super.updateScreen();
         //#endif
     }
 
     public void onScreenClose() {
-        //#if MC<11502
-        super.onGuiClosed();
-        //#else
+        //#if MC>=11502
         //$$ super.onClose();
+        //#else
+        super.onGuiClosed();
         //#endif
     }
 
     public void onDrawBackground(int tint) {
-        //#if MC<11502
-        super.drawWorldBackground(tint);
-        //#else
         //#if MC>=11602
         //$$ super.renderBackground(getMatrixStack(), tint);
-        //#else
+        //#elseif MC>=11502
         //$$ super.renderBackground(tint);
-        //#endif
+        //#else
+        super.drawWorldBackground(tint);
         //#endif
     }
 }

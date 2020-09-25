@@ -5,10 +5,10 @@ import club.sk1er.mods.core.universal.wrappers.message.UniversalTextComponent;
 
 import java.util.UUID;
 
-//#if MC<=11202
-import net.minecraft.client.entity.EntityPlayerSP;
-//#else
+//#if MC>=11502
 //$$ import net.minecraft.client.entity.player.ClientPlayerEntity;
+//#else
+import net.minecraft.client.entity.EntityPlayerSP;
 //#endif
 
 public class UniversalPlayer {
@@ -16,23 +16,23 @@ public class UniversalPlayer {
         return getPlayer() != null;
     }
 
-    //#if MC<=11202
-    public static EntityPlayerSP getPlayer() {
-    //#else
+    //#if MC>=11502
     //$$ public static ClientPlayerEntity getPlayer() {
+    //#else
+    public static EntityPlayerSP getPlayer() {
     //#endif
-        //#if MC<=10809
-        return UniversalMinecraft.getMinecraft().thePlayer;
-        //#else
+        //#if MC>=11202
         //$$ return UniversalMinecraft.getMinecraft().player;
+        //#else
+        return UniversalMinecraft.getMinecraft().thePlayer;
         //#endif
     }
 
     public static void sendClientSideMessage(UniversalTextComponent chatMessage) {
-        //#if MC<11602
-        getPlayer().addChatMessage(chatMessage);
-        //#else
+        //#if MC>=11602
         //$$ getPlayer().sendMessage(chatMessage, null);
+        //#else
+        getPlayer().addChatMessage(chatMessage);
         //#endif
     }
 
@@ -44,10 +44,10 @@ public class UniversalPlayer {
         if (!hasPlayer())
             throw new NullPointerException("UniversalPlayer.getPosX() called with no existing Player");
 
-        //#if MC<11502
-        return getPlayer().posX;
-        //#else
+        //#if MC>=11502
         //$$ return getPlayer().getPosX();
+        //#else
+        return getPlayer().posX;
         //#endif
     }
 
@@ -55,10 +55,10 @@ public class UniversalPlayer {
         if (!hasPlayer())
             throw new NullPointerException("UniversalPlayer.getPosY() called with no existing Player");
 
-        //#if MC<11502
-        return getPlayer().posY;
-        //#else
+        //#if MC>=11502
         //$$ return getPlayer().getPosY();
+        //#else
+        return getPlayer().posY;
         //#endif
     }
 
@@ -66,10 +66,10 @@ public class UniversalPlayer {
         if (!hasPlayer())
             throw new NullPointerException("UniversalPlayer.getPosZ() called with no existing Player");
 
-        //#if MC<11502
-        return getPlayer().posZ;
-        //#else
+        //#if MC>=11502
         //$$ return getPlayer().getPosZ();
+        //#else
+        return getPlayer().posZ;
         //#endif
     }
 

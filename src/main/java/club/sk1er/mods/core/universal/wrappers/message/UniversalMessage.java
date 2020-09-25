@@ -1,12 +1,12 @@
 package club.sk1er.mods.core.universal.wrappers.message;
 
-import club.sk1er.mods.core.universal.UniversalMinecraft;
-import club.sk1er.mods.core.universal.UniversalPacket;
-import club.sk1er.mods.core.universal.wrappers.UniversalPlayer;
-
 //#if FABRIC
 //$$ import net.minecraft.text.MutableText;
 //#endif
+
+import club.sk1er.mods.core.universal.UniversalMinecraft;
+import club.sk1er.mods.core.universal.UniversalPacket;
+import club.sk1er.mods.core.universal.wrappers.UniversalPlayer;
 
 import java.util.ArrayList;
 import java.util.List;

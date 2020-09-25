@@ -4,7 +4,6 @@ package club.sk1er.mods.core.universal;
 import java.util.regex.Pattern;
 
 public enum ChatColor {
-
     BLACK('0'),
     DARK_BLUE('1'),
     DARK_GREEN('2'),
