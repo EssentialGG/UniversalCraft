@@ -546,6 +546,10 @@ public class UniversalGraphicsHandler {
         return this;
     }
 
+    public UniversalGraphicsHandler color(int red, int green, int blue, int alpha) {
+        return color(red / 255f, green / 255f, blue / 255f, alpha / 255f);
+    }
+
     public UniversalGraphicsHandler color(float red, float green, float blue, float alpha) {
         instance.color(red, green, blue, alpha);
         return this;
