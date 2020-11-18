@@ -71,14 +71,12 @@ import net.minecraft.client.renderer.WorldRenderer;
 //#endif
 
 public class UniversalGraphicsHandler {
-    public static int ZERO_TEXT_ALPHA = 10;
+    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
 
     //#if FORGE && MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
-
-    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
-
+    public static int ZERO_TEXT_ALPHA = 10;
     //#if MC>10809
     //$$ private BufferBuilder instance;
     //#else
@@ -248,6 +246,7 @@ public class UniversalGraphicsHandler {
         //#endif
 
     }
+
     public static void disableAlpha() {
         //#if MC<11502
         GlStateManager.disableAlpha();
@@ -404,39 +403,39 @@ public class UniversalGraphicsHandler {
     // TODO: What is the Fabric equivalent of all this?
     //#if FORGE
     public static DynamicTexture getTexture(InputStream stream) {
-         try {
-             //#if MC>=11502
-             //$$ return new DynamicTexture(NativeImage.read(stream));
-             //#else
-             return new DynamicTexture(ImageIO.read(stream));
-             //#endif
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-         throw new IllegalStateException("Failed to read image");
-     }
+        try {
+            //#if MC>=11502
+            //$$ return new DynamicTexture(NativeImage.read(stream));
+            //#else
+            return new DynamicTexture(ImageIO.read(stream));
+            //#endif
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalStateException("Failed to read image");
+    }
 
     public static DynamicTexture getTexture(BufferedImage img) {
-         //#if MC>=11502
-         //$$ try {
-         //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         //$$     ImageIO.write(img, "png", baos );
-         //$$     return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
-         //$$ } catch (IOException e) {
-         //$$     e.printStackTrace();
-         //$$ }
-         //$$ throw new IllegalStateException("Failed to create texture");
-         //#else
-         return new DynamicTexture(img);
-         //#endif
+        //#if MC>=11502
+        //$$ try {
+        //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //$$     ImageIO.write(img, "png", baos );
+        //$$     return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
+        //$$ } catch (IOException e) {
+        //$$     e.printStackTrace();
+        //$$ }
+        //$$ throw new IllegalStateException("Failed to create texture");
+        //#else
+        return new DynamicTexture(img);
+        //#endif
     }
 
     public static DynamicTexture getEmptyTexture() {
-         //#if MC>=11502
-         //$$ return new DynamicTexture(0, 0, false);
-         //#else
-         return new DynamicTexture(0, 0);
-         //#endif
+        //#if MC>=11502
+        //$$ return new DynamicTexture(0, 0, false);
+        //#else
+        return new DynamicTexture(0, 0);
+        //#endif
     }
     //#endif
 
@@ -525,6 +524,46 @@ public class UniversalGraphicsHandler {
         //$$ return GlStateManager.getProgramInfoLog(program, maxLen);
         //#else
         return OpenGlHelper.glGetProgramInfoLog(program, maxLen);
+        //#endif
+    }
+
+    public static void color4f(float red, float green, float blue, float alpha) {
+        //#if MC<11502
+        GlStateManager.color(red, green, blue, alpha);
+        //#else
+        //$$ RenderSystem.color4f(red, green, blue, alpha);
+        //#endif
+    }
+
+    public static void directColor3f(float red, float green, float blue) {
+        //#if MC<11502
+        GlStateManager.color(red, green, blue);
+        //#else
+        //$$ RenderSystem.color3f(red, green, blue);
+        //#endif
+    }
+
+    public static void enableDepth() {
+        //#if MC<11502
+        GlStateManager.enableDepth();
+        //#else
+        //$$ RenderSystem.enableDepthTest();
+        //#endif
+    }
+
+    public static void depthFunc(int mode) {
+        GlStateManager.depthFunc(mode);
+    }
+
+    public static void depthMask(boolean flag) {
+        GlStateManager.depthMask(flag);
+    }
+
+    public static void disableDepth() {
+        //#if MC<11502
+        GlStateManager.disableDepth();
+        //#else
+        //$$ RenderSystem.disableDepthTest();
         //#endif
     }
 
