@@ -677,7 +677,7 @@ public class UniversalTextComponent implements IChatComponent {
     //$$
     //$$ @Override
     //$$ public ITextComponent appendSibling(ITextComponent component) {
-    //$$     return component.appendSibling(component);
+    //$$     return this.component.appendSibling(component);
     //$$ }
     //$$
     //$$ @Override
