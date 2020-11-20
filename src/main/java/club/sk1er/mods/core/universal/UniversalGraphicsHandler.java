@@ -1,6 +1,7 @@
 package club.sk1er.mods.core.universal;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -592,6 +593,10 @@ public class UniversalGraphicsHandler {
     public UniversalGraphicsHandler color(float red, float green, float blue, float alpha) {
         instance.color(red, green, blue, alpha);
         return this;
+    }
+
+    public UniversalGraphicsHandler color(Color color) {
+        return color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
     public UniversalGraphicsHandler endVertex() {
