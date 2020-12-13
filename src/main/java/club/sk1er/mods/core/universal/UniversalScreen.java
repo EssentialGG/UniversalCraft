@@ -32,16 +32,25 @@ import java.io.IOException;
 //#else
 public class UniversalScreen extends GuiScreen {
 //#endif
-
     //#if MC>=11502
     //$$ private MatrixStack stack = null;
+    //$$ private Screen screenToRestore = null;
     //$$
     //$$ public UniversalScreen() {
+    //$$     this(false);
+    //$$ }
+    //$$
+    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose) {
         //#if FABRIC
         //$$ super(new LiteralText(""));
         //#else
         //$$ super(new StringTextComponent(""));
         //#endif
+    //$$     if (restoreCurrentGuiOnClose)
+    //$$         screenToRestore = getOpenedScreen();
+    //$$ }
+    //$$ public static Screen getOpenedScreen() {
+    //$$     return UniversalMinecraft.getMinecraft().currentScreen;
     //$$ }
     //$$
     //$$ protected MatrixStack getMatrixStack() {
@@ -139,6 +148,8 @@ public class UniversalScreen extends GuiScreen {
     //$$ @Override
     //$$ public final void onClose() {
     //$$     onScreenClose();
+    //$$     if (screenToRestore != null)
+    //$$         UniversalMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
     //$$ }
     //$$
     //$$ @Override
@@ -151,8 +162,20 @@ public class UniversalScreen extends GuiScreen {
     //$$     onDrawBackground(vOffset);
     //$$ }
     //#else
+    private GuiScreen screenToRestore = null;
+
     public UniversalScreen() {
+        this(false);
+    }
+
+    public UniversalScreen(boolean restoreCurrentGuiOnClose) {
         super();
+        if (restoreCurrentGuiOnClose)
+            screenToRestore = getOpenedScreen();
+    }
+
+    public static GuiScreen getOpenedScreen() {
+        return UniversalMinecraft.getMinecraft().currentScreen;
     }
 
     @Override
@@ -201,6 +224,8 @@ public class UniversalScreen extends GuiScreen {
     @Override
     public final void onGuiClosed() {
         onScreenClose();
+        if (screenToRestore != null)
+            UniversalMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
     }
 
     @Override
