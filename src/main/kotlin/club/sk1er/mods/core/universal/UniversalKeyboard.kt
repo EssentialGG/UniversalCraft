@@ -112,19 +112,22 @@ object UniversalKeyboard {
     fun getModifiers() = Modifiers(isCtrlKeyDown(), isShiftKeyDown(), isAltKeyDown())
 
     @JvmStatic
-    fun isKeyComboCtrlX(key: Int) = key == KEY_X && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
-
-    @JvmStatic
-    fun isKeyComboCtrlV(key: Int) = key == KEY_V && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
+    fun isKeyComboCtrlA(key: Int) = key == KEY_A && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
     @JvmStatic
     fun isKeyComboCtrlC(key: Int) = key == KEY_C && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
     @JvmStatic
-    fun isKeyComboCtrlZ(key: Int) = key == KEY_Z && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
+    fun isKeyComboCtrlV(key: Int) = key == KEY_V && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
+
+    @JvmStatic
+    fun isKeyComboCtrlX(key: Int) = key == KEY_X && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
     @JvmStatic
     fun isKeyComboCtrlY(key: Int) = key == KEY_Y && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
+
+    @JvmStatic
+    fun isKeyComboCtrlZ(key: Int) = key == KEY_Z && isCtrlKeyDown() && !isShiftKeyDown() && !isAltKeyDown()
 
     @JvmStatic
     fun isKeyComboCtrlShiftZ(key: Int) = key == KEY_Z && isCtrlKeyDown() && isShiftKeyDown() && !isAltKeyDown()
