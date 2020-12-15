@@ -223,8 +223,14 @@ public class UniversalScreen extends GuiScreen {
     @Override
     public final void onGuiClosed() {
         onScreenClose();
-        if (screenToRestore != null)
-            UniversalMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
+        if (screenToRestore != null) {
+            //#if FORGE
+            net.minecraftforge.client.event.GuiOpenEvent event = new net.minecraftforge.client.event.GuiOpenEvent(screenToRestore);
+            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                return;
+            //#endif
+            UniversalMinecraft.getMinecraft().currentScreen = screenToRestore;
+        }
     }
 
     @Override
