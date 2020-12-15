@@ -6,16 +6,22 @@ import java.io.IOException
 import java.net.URI
 
 object UniversalDesktop {
+    @JvmStatic
     var isLinux = false
         private set
+    @JvmStatic
     var isXdg = false
         private set
+    @JvmStatic
     var isKde = false
         private set
+    @JvmStatic
     var isGnome = false
         private set
+    @JvmStatic
     var isMac = false
         private set
+    @JvmStatic
     var isWindows = false
         private set
 
@@ -43,10 +49,13 @@ object UniversalDesktop {
         }
     }
 
+    @JvmStatic
     fun browse(uri: URI) = browseDesktop(uri) || openSystemSpecific(uri.toString())
 
+    @JvmStatic
     fun open(file: File) = openDesktop(file) || openSystemSpecific(file.path)
 
+    @JvmStatic
     fun edit(file: File) = editDesktop(file) || openSystemSpecific(file.path)
 
     private fun openSystemSpecific(file: String): Boolean {
