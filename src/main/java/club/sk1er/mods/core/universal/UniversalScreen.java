@@ -13,7 +13,6 @@ package club.sk1er.mods.core.universal;
 //$$ import org.lwjgl.glfw.GLFW;
 //#else
 import org.lwjgl.input.Mouse;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
@@ -76,7 +75,7 @@ public class UniversalScreen extends GuiScreen {
     //$$
     //$$ @Override
     //$$ public final boolean keyPressed(int keyCode, int scanCode, int modifierCode) {
-    //$$     UniversalKeyboard.Modifier modifiers = new UniversalKeyboard.Modifier(
+    //$$     UniversalKeyboard.Modifiers modifiers = new UniversalKeyboard.Modifiers(
     //$$             (modifierCode & GLFW.GLFW_MOD_CONTROL) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_SHIFT) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_ALT) != 0
@@ -91,7 +90,7 @@ public class UniversalScreen extends GuiScreen {
     //$$
     //$$ @Override
     //$$ public final boolean keyReleased(int keyCode, int scanCode, int modifierCode) {
-    //$$     UniversalKeyboard.Modifier modifiers = new UniversalKeyboard.Modifier(
+    //$$     UniversalKeyboard.Modifiers modifiers = new UniversalKeyboard.Modifiers(
     //$$             (modifierCode & GLFW.GLFW_MOD_CONTROL) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_SHIFT) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_ALT) != 0
@@ -252,7 +251,7 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     }
 
-    public void onKeyPressed(int keyCode, char typedChar, UniversalKeyboard.Modifier modifiers) {
+    public void onKeyPressed(int keyCode, char typedChar, UniversalKeyboard.Modifiers modifiers) {
         //#if MC>=11502
         //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
         //#else
@@ -264,7 +263,7 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     }
 
-    public void onKeyReleased(int keyCode, char typedChar, UniversalKeyboard.Modifier modifiers) {
+    public void onKeyReleased(int keyCode, char typedChar, UniversalKeyboard.Modifiers modifiers) {
         //#if MC>=11502
         //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
         //#endif

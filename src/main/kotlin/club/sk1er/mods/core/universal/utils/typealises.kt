@@ -8,6 +8,7 @@ package club.sk1er.mods.core.universal.utils
 //$$ typealias MCChatScreen = net.minecraft.client.gui.screen.ChatScreen
 //$$ typealias MCEntityPlayerSP = net.minecraft.client.network.ClientPlayerEntity
 //$$ typealias MCClientNetworkHandler = net.minecraft.client.network.ClientPlayNetworkHandler
+//$$ typealias MCSChatPacket = net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 //#else
 typealias MCMinecraft = net.minecraft.client.Minecraft
 typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
@@ -18,12 +19,20 @@ typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 //$$ typealias MCChatScreen = net.minecraft.client.gui.NewChatGui
 //$$ typealias MCScreen = net.minecraft.client.gui.AbstractGui
 //$$ typealias MCClientNetworkHandler = net.minecraft.client.network.play.ClientPlayNetHandler
+//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SChatPacket
 //#else
 typealias MCWorld = net.minecraft.client.multiplayer.WorldClient
 typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityPlayerSP
 typealias MCScreen = net.minecraft.client.gui.GuiScreen
 typealias MCChatScreen = net.minecraft.client.gui.GuiNewChat
 typealias MCClientNetworkHandler = net.minecraft.client.network.NetHandlerPlayClient
+
+//#if MC>=11202
+//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SPacketChat
+//#else
+typealias MCSChatPacket = net.minecraft.network.play.server.S02PacketChat
+//#endif
+
 //#endif
 
 //#endif

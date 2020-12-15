@@ -55,7 +55,7 @@ object UniversalChat {
      */
     @JvmStatic
     fun say(text: String) {
-        UniversalPlayer.getPlayer().sendChatMessage(text)
+        UniversalPlayer.getPlayer()!!.sendChatMessage(text)
     }
 
     /**
