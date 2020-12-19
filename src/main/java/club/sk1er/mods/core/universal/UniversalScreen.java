@@ -74,6 +74,10 @@ public class UniversalScreen extends GuiScreen {
     //$$     if (newGuiScale != -1) {
     //$$         guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
     //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+    //$$         setSize(
+    //$$             UniversalResolutionUtil.getScaledWidth(),
+    //$$             UniversalResolutionUtil.getScaledHeight()
+    //$$         );
     //$$     }
     //$$
     //$$     initScreen(width, height);
@@ -211,6 +215,11 @@ public class UniversalScreen extends GuiScreen {
         if (newGuiScale != -1) {
             guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
             UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+            setWorldAndResolution(
+                UniversalMinecraft.getMinecraft(),
+                UniversalResolutionUtil.getScaledWidth(),
+                UniversalResolutionUtil.getScaledHeight()
+            );
         }
 
         initScreen(width, height);
