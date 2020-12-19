@@ -2,7 +2,7 @@ package club.sk1er.mods.core.universal
 
 import club.sk1er.mods.core.universal.utils.MCButton
 
-object UniversalGuiButton {
+object UGuiButton {
     @JvmStatic
     fun getX(button: MCButton): Int {
         //#if MC==10809

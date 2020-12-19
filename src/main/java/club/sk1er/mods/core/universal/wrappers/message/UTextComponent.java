@@ -1,6 +1,6 @@
 package club.sk1er.mods.core.universal.wrappers.message;
 
-import club.sk1er.mods.core.universal.UniversalChat;
+import club.sk1er.mods.core.universal.UChat;
 
 //#if FABRIC
 //$$ import net.minecraft.CharacterVisitor;
@@ -26,15 +26,18 @@ import net.minecraft.util.ChatStyle;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
+
+//#if FORGE && MC>=11502
+//$$ import java.util.stream.Stream;
+//$$ import java.util.function.Consumer;
+//#endif
 
 //#if FABRIC
-//$$ public class UniversalTextComponent implements MutableText {
+//$$ public class UTextComponent implements MutableText {
 //#elseif MC>=11202
-//$$ public class UniversalTextComponent implements ITextComponent {
+//$$ public class UTextComponent implements ITextComponent {
 //#else
-public class UniversalTextComponent implements IChatComponent {
+public class UTextComponent implements IChatComponent {
 //#endif
 
     //#if FABRIC
@@ -53,37 +56,37 @@ public class UniversalTextComponent implements IChatComponent {
     private HoverEvent.Action hoverAction = null;
     private Object hoverValue = null;
 
-    public static Optional<UniversalTextComponent> from(Object object) {
-        if (object instanceof UniversalTextComponent)
-            return Optional.of((UniversalTextComponent) object);
+    public static Optional<UTextComponent> from(Object object) {
+        if (object instanceof UTextComponent)
+            return Optional.of((UTextComponent) object);
 
         if (object instanceof String)
             object = buildSimple((String) object);
 
         //#if FABRIC
         //$$ if (object instanceof MutableText)
-        //$$    return Optional.of(new UniversalTextComponent((MutableText) object));
+        //$$    return Optional.of(new UTextComponent((MutableText) object));
         //#elseif MC>=11202
         //$$ if (object instanceof ITextComponent)
-        //$$    return Optional.of(new UniversalTextComponent((ITextComponent) object));
+        //$$    return Optional.of(new UTextComponent((ITextComponent) object));
         //#else
         if (object instanceof IChatComponent)
-            return Optional.of(new UniversalTextComponent((IChatComponent) object));
+            return Optional.of(new UTextComponent((IChatComponent) object));
         //#endif
         return Optional.empty();
     }
 
-    public UniversalTextComponent(String text) {
+    public UTextComponent(String text) {
         this.text = text;
         reInstance();
     }
 
     //#if FABRIC
-    //$$ public UniversalTextComponent(MutableText component) {
+    //$$ public UTextComponent(MutableText component) {
     //#elseif MC>=11202
-    //$$ public UniversalTextComponent(ITextComponent component) {
+    //$$ public UTextComponent(ITextComponent component) {
     //#else
-    public UniversalTextComponent(IChatComponent component) {
+    public UTextComponent(IChatComponent component) {
     //#endif
         this.component = component;
         //#if FABRIC
@@ -138,7 +141,7 @@ public class UniversalTextComponent implements IChatComponent {
         return text;
     }
 
-    public UniversalTextComponent setText(String text) {
+    public UTextComponent setText(String text) {
         this.text = text;
         reInstance();
         return this;
@@ -148,13 +151,13 @@ public class UniversalTextComponent implements IChatComponent {
         return formatted;
     }
 
-    public UniversalTextComponent setFormatted(boolean formatted) {
+    public UTextComponent setFormatted(boolean formatted) {
         this.formatted = formatted;
         reInstance();
         return this;
     }
 
-    public UniversalTextComponent setClick(ClickEvent.Action action, String value) {
+    public UTextComponent setClick(ClickEvent.Action action, String value) {
         clickAction = action;
         clickValue = value;
         reInstance();
@@ -165,7 +168,7 @@ public class UniversalTextComponent implements IChatComponent {
         return clickAction;
     }
 
-    public UniversalTextComponent setClickAction(ClickEvent.Action action) {
+    public UTextComponent setClickAction(ClickEvent.Action action) {
         clickAction = action;
         reInstance();
         return this;
@@ -175,13 +178,13 @@ public class UniversalTextComponent implements IChatComponent {
         return clickValue;
     }
 
-    public UniversalTextComponent setClickValue(String value) {
+    public UTextComponent setClickValue(String value) {
         clickValue = value;
         reInstance();
         return this;
     }
 
-    public UniversalTextComponent setHover(HoverEvent.Action action, Object value) {
+    public UTextComponent setHover(HoverEvent.Action action, Object value) {
         hoverAction = action;
         hoverValue = value;
         reInstance();
@@ -192,7 +195,7 @@ public class UniversalTextComponent implements IChatComponent {
         return hoverAction;
     }
 
-    public UniversalTextComponent setHoverAction(HoverEvent.Action action) {
+    public UTextComponent setHoverAction(HoverEvent.Action action) {
         hoverAction = action;
         reInstance();
         return this;
@@ -202,7 +205,7 @@ public class UniversalTextComponent implements IChatComponent {
         return hoverValue;
     }
 
-    public UniversalTextComponent setHoverValue(Object value) {
+    public UTextComponent setHoverValue(Object value) {
         hoverValue = value;
         reInstance();
         return this;
@@ -217,7 +220,7 @@ public class UniversalTextComponent implements IChatComponent {
     }
 
     private void reInstance() {
-        component = buildSimple(formatted ? UniversalChat.addColor(text) : text);
+        component = buildSimple(formatted ? UChat.addColor(text) : text);
 
         reInstanceClick();
         reInstanceHover();
@@ -229,7 +232,7 @@ public class UniversalTextComponent implements IChatComponent {
 
         setClickEventHelper(new ClickEvent(
                 clickAction,
-                formatted ? UniversalChat.addColor(clickValue) : clickValue
+                formatted ? UChat.addColor(clickValue) : clickValue
         ));
     }
 
@@ -250,7 +253,7 @@ public class UniversalTextComponent implements IChatComponent {
         //#else
         setHoverEventHelper(new HoverEvent(
                 hoverAction,
-                buildSimple(formatted ? UniversalChat.addColor(hoverValue.toString()) : hoverValue.toString())
+                buildSimple(formatted ? UChat.addColor(hoverValue.toString()) : hoverValue.toString())
         ));
         //#endif
     }

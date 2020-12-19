@@ -5,7 +5,7 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
-object UniversalDesktop {
+object UDesktop {
     @JvmStatic
     var isLinux = false
         private set

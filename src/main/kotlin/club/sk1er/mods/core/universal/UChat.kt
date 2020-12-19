@@ -1,15 +1,15 @@
 package club.sk1er.mods.core.universal
 
-import club.sk1er.mods.core.universal.wrappers.UniversalPlayer
-import club.sk1er.mods.core.universal.wrappers.message.UniversalMessage
-import club.sk1er.mods.core.universal.wrappers.message.UniversalTextComponent
+import club.sk1er.mods.core.universal.wrappers.UPlayer
+import club.sk1er.mods.core.universal.wrappers.message.UMessage
+import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
 import java.util.regex.Pattern
 
-object UniversalChat {
+object UChat {
     private val amperstandPattern = Pattern.compile("(?<!\\\\)&(?![^0-9a-fklmnor]|$)")
 
     /**
-     * Prints a message to chat. Accepts a String, UniversalMessage, UniversalTextComponent,
+     * Prints a message to chat. Accepts a String, UMessage, UTextComponent,
      * or any version-specific text component. If the object is of an unrecognized type,
      * it's toString() method will be called.
      *
@@ -17,35 +17,35 @@ object UniversalChat {
      */
     @JvmStatic
     fun chat(obj: Any) {
-        if (obj is String || obj is UniversalTextComponent) {
-            UniversalMessage(obj).chat()
+        if (obj is String || obj is UTextComponent) {
+            UMessage(obj).chat()
         } else {
-            val component = UniversalTextComponent.from(obj)
+            val component = UTextComponent.from(obj)
             if (component.isPresent) {
                 component.get().chat()
             } else {
-                UniversalMessage(obj.toString()).chat()
+                UMessage(obj.toString()).chat()
             }
         }
     }
 
     /**
-     * Prints a message to the action bar. Accepts a String, UniversalMessage,
-     * UniversalTextComponent, or any version-specific text component. If the
+     * Prints a message to the action bar. Accepts a String, UMessage,
+     * UTextComponent, or any version-specific text component. If the
      * object is of an unrecognized type, it's toString() method will be called.
      *
      * This function is client side.
      */
     @JvmStatic
     fun actionBar(obj: Any) {
-        if (obj is String || obj is UniversalTextComponent) {
-            UniversalMessage(obj).actionBar()
+        if (obj is String || obj is UTextComponent) {
+            UMessage(obj).actionBar()
         } else {
-            val component = UniversalTextComponent.from(obj)
+            val component = UTextComponent.from(obj)
             if (component.isPresent) {
                 component.get().actionBar()
             } else {
-                UniversalMessage(obj.toString()).actionBar()
+                UMessage(obj.toString()).actionBar()
             }
         }
     }
@@ -55,7 +55,7 @@ object UniversalChat {
      */
     @JvmStatic
     fun say(text: String) {
-        UniversalPlayer.getPlayer()!!.sendChatMessage(text)
+        UPlayer.getPlayer()!!.sendChatMessage(text)
     }
 
     /**

@@ -1,18 +1,18 @@
 package club.sk1er.mods.core.universal.wrappers.message
 
-import club.sk1er.mods.core.universal.UniversalPacket
-import club.sk1er.mods.core.universal.UniversalMinecraft
-import club.sk1er.mods.core.universal.wrappers.UniversalPlayer
+import club.sk1er.mods.core.universal.UPacket
+import club.sk1er.mods.core.universal.UMinecraft
+import club.sk1er.mods.core.universal.wrappers.UPlayer
 
 //#if FABRIC
 //$$ import club.sk1er.mods.core.universal.utils.MCITextComponent
 //#endif
 
-class UniversalMessage {
-    private lateinit var _chatMessage: UniversalTextComponent
-    val messageParts = mutableListOf<UniversalTextComponent>()
+class UMessage {
+    private lateinit var _chatMessage: UTextComponent
+    val messageParts = mutableListOf<UTextComponent>()
 
-    val chatMessage: UniversalTextComponent
+    val chatMessage: UTextComponent
         get() {
             parseMessage()
             return _chatMessage
@@ -28,15 +28,15 @@ class UniversalMessage {
     var isRecursive = false
     var isFormatted = true
 
-    constructor(component: UniversalTextComponent) {
+    constructor(component: UTextComponent) {
         if (component.siblings.isEmpty()) {
             messageParts.add(component)
         } else {
             //#if FORGE
-            component.siblings.map(::UniversalTextComponent).forEach { messageParts.add(it) }
+            component.siblings.map(::UTextComponent).forEach { messageParts.add(it) }
             //#else
             //$$ component.siblings
-            //$$         .map { UniversalTextComponent(it as MCITextComponent) }
+            //$$         .map { UTextComponent(it as MCITextComponent) }
             //$$         .forEach { messageParts.add(it) }
             //#endif
         }
@@ -48,66 +48,66 @@ class UniversalMessage {
 
     fun setTextComponent(index: Int, component: Any) = apply {
         if (component is String) {
-            messageParts[index] = UniversalTextComponent(component)
+            messageParts[index] = UTextComponent(component)
         } else {
-            UniversalTextComponent.from(component).ifPresent { messageParts[index] = it }
+            UTextComponent.from(component).ifPresent { messageParts[index] = it }
         }
     }
 
     fun addTextComponent(index: Int, component: Any) = apply {
         if (component is String) {
-            messageParts.add(index, UniversalTextComponent(component))
+            messageParts.add(index, UTextComponent(component))
         } else {
-            UniversalTextComponent.from(component).ifPresent { messageParts.add(index, it) }
+            UTextComponent.from(component).ifPresent { messageParts.add(index, it) }
         }
     }
 
     fun addTextComponent(component: Any) = addTextComponent(messageParts.size, component)
 
-    fun edit(vararg replacements: UniversalMessage) {
+    fun edit(vararg replacements: UMessage) {
         TODO()
     }
 
     fun chat() {
         parseMessage()
 
-        if (!UniversalPlayer.hasPlayer())
+        if (!UPlayer.hasPlayer())
             return
 
         // TODO: expose this field in MC>=11602
         //#if MC<=11502
         if (chatLineId != -1) {
-            UniversalMinecraft.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
+            UMinecraft.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
             return
         }
         //#endif
 
         if (isRecursive) {
-            UniversalPacket.sendChatMessage(_chatMessage)
+            UPacket.sendChatMessage(_chatMessage)
         } else {
-            UniversalPlayer.sendClientSideMessage(_chatMessage)
+            UPlayer.sendClientSideMessage(_chatMessage)
         }
     }
 
     fun actionBar() {
         parseMessage()
 
-        if (!UniversalPlayer.hasPlayer())
+        if (!UPlayer.hasPlayer())
             return
 
-        UniversalPacket.sendActionBarMessage(_chatMessage)
+        UPacket.sendActionBarMessage(_chatMessage)
     }
 
     private fun addPart(part: Any) {
         when (part) {
-            is UniversalTextComponent -> messageParts.add(part)
-            is String -> messageParts.add(UniversalTextComponent(part))
-            else -> UniversalTextComponent.from(part).ifPresent(::addPart)
+            is UTextComponent -> messageParts.add(part)
+            is String -> messageParts.add(UTextComponent(part))
+            else -> UTextComponent.from(part).ifPresent(::addPart)
         }
     }
 
     private fun parseMessage() {
-        _chatMessage = UniversalTextComponent("")
+        _chatMessage = UTextComponent("")
         messageParts.forEach { _chatMessage.appendSibling(it) }
     }
 }

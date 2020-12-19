@@ -6,13 +6,13 @@ import org.lwjgl.input.Mouse
 
 import kotlin.math.max
 
-object UniversalMouse {
+object UMouse {
     @JvmStatic
     fun getTrueX(): Double {
         //#if FABRIC
-        //$$ return UniversalMinecraft.getMinecraft().mouse.x
+        //$$ return UMinecraft.getMinecraft().mouse.x
         //#elseif MC>=11502
-        //$$ return UniversalMinecraft.getMinecraft().mouseHelper.mouseX
+        //$$ return UMinecraft.getMinecraft().mouseHelper.mouseX
         //#else
         return Mouse.getX().toDouble()
         //#endif
@@ -20,15 +20,15 @@ object UniversalMouse {
 
     @JvmStatic
     fun getScaledX(): Double {
-        return getTrueX() * UniversalResolutionUtil.scaledWidth / max(1, UniversalResolutionUtil.windowWidth)
+        return getTrueX() * UResolution.scaledWidth / max(1, UResolution.windowWidth)
     }
 
     @JvmStatic
     fun getTrueY(): Double {
         //#if FABRIC
-        //$$ return UniversalMinecraft.getMinecraft().mouse.y
+        //$$ return UMinecraft.getMinecraft().mouse.y
         //#elseif MC>=11502
-        //$$ return UniversalMinecraft.getMinecraft().mouseHelper.mouseY
+        //$$ return UMinecraft.getMinecraft().mouseHelper.mouseY
         //#else
         return Mouse.getY().toDouble()
         //#endif
@@ -36,6 +36,6 @@ object UniversalMouse {
 
     @JvmStatic
     fun getScaledY(): Double {
-        return getTrueY() * UniversalResolutionUtil.scaledHeight / max(1, UniversalResolutionUtil.windowHeight)
+        return getTrueY() * UResolution.scaledHeight / max(1, UResolution.windowHeight)
     }
 }

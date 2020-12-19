@@ -2,7 +2,7 @@ package club.sk1er.mods.core.universal
 
 import kotlin.math.sqrt
 
-object UniversalMathHelper {
+object UMath {
     @JvmStatic
     fun clampFloat(target: Float, min: Float, max: Float) = target.coerceIn(min, max)
 

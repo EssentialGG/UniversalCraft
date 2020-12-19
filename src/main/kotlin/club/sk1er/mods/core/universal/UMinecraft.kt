@@ -10,7 +10,7 @@ import club.sk1er.mods.core.universal.utils.*
 //$$ import net.minecraft.client.util.NativeUtil
 //#endif
 
-object UniversalMinecraft {
+object UMinecraft {
     //#if FABRIC
     //$$ @JvmField
     //$$ val isRunningOnMac: Boolean = MCMinecraft.IS_SYSTEM_MAC;

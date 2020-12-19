@@ -19,7 +19,7 @@ import java.io.IOException;
 //#endif
 
 //#if MC>=11502
-//$$ public class UniversalScreen extends Screen {
+//$$ public class UScreen extends Screen {
 //$$     private long lastClick = 0;
 //$$     private int lastScanCode = -1;
 //$$     private int lastModifierCode = -1;
@@ -29,7 +29,7 @@ import java.io.IOException;
 //$$     private double lastScrolledX = -1;
 //$$     private double lastScrolledY = -1;
 //#else
-public class UniversalScreen extends GuiScreen {
+public class UScreen extends GuiScreen {
 //#endif
     private int guiScaleToRestore = -1;
     private final int newGuiScale;
@@ -38,19 +38,19 @@ public class UniversalScreen extends GuiScreen {
     //$$ private MatrixStack stack = null;
     //$$ private Screen screenToRestore = null;
     //$$
-    //$$ public UniversalScreen() {
+    //$$ public UScreen() {
     //$$     this(false, -1);
     //$$ }
     //$$
-    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose) {
+    //$$ public UScreen(boolean restoreCurrentGuiOnClose) {
     //$$     this(restoreCurrentGuiOnClose, -1);
     //$$ }
     //$$
-    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
+    //$$ public UScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
     //$$     this(restoreCurrentGuiOnClose, newGuiScale.ordinal());
     //$$ }
     //$$
-    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
+    //$$ public UScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
         //#if FABRIC
         //$$ super(new LiteralText(""));
         //#else
@@ -62,7 +62,7 @@ public class UniversalScreen extends GuiScreen {
     //$$ }
     //$$
     //$$ public static Screen getOpenedScreen() {
-    //$$     return UniversalMinecraft.getMinecraft().currentScreen;
+    //$$     return UMinecraft.getMinecraft().currentScreen;
     //$$ }
     //$$
     //$$ protected MatrixStack getMatrixStack() {
@@ -72,12 +72,10 @@ public class UniversalScreen extends GuiScreen {
     //$$ @Override
     //$$ protected final void init() {
     //$$     if (newGuiScale != -1) {
-    //$$         guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
-    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
-    //$$         setSize(
-    //$$             UniversalResolutionUtil.getScaledWidth(),
-    //$$             UniversalResolutionUtil.getScaledHeight()
-    //$$         );
+    //$$         guiScaleToRestore = UMinecraft.getMinecraft().gameSettings.guiScale;
+    //$$         UMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+    //$$         this.width = UResolution.getScaledWidth();
+    //$$         this.height = UResolution.getScaledHeight();
     //$$     }
     //$$
     //$$     initScreen(width, height);
@@ -97,7 +95,7 @@ public class UniversalScreen extends GuiScreen {
     //$$
     //$$ @Override
     //$$ public final boolean keyPressed(int keyCode, int scanCode, int modifierCode) {
-    //$$     UniversalKeyboard.Modifiers modifiers = new UniversalKeyboard.Modifiers(
+    //$$     UKeyboard.Modifiers modifiers = new UKeyboard.Modifiers(
     //$$             (modifierCode & GLFW.GLFW_MOD_CONTROL) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_SHIFT) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_ALT) != 0
@@ -112,7 +110,7 @@ public class UniversalScreen extends GuiScreen {
     //$$
     //$$ @Override
     //$$ public final boolean keyReleased(int keyCode, int scanCode, int modifierCode) {
-    //$$     UniversalKeyboard.Modifiers modifiers = new UniversalKeyboard.Modifiers(
+    //$$     UKeyboard.Modifiers modifiers = new UKeyboard.Modifiers(
     //$$             (modifierCode & GLFW.GLFW_MOD_CONTROL) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_SHIFT) != 0,
     //$$             (modifierCode & GLFW.GLFW_MOD_ALT) != 0
@@ -134,7 +132,7 @@ public class UniversalScreen extends GuiScreen {
     //$$ @Override
     //$$ public final boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
     //$$     if (mouseButton == 1)
-    //$$         lastClick = UniversalMinecraft.getTime();
+    //$$         lastClick = UMinecraft.getTime();
     //$$     onMouseClicked(mouseX, mouseY, mouseButton);
     //$$     return false;
     //$$ }
@@ -149,7 +147,7 @@ public class UniversalScreen extends GuiScreen {
     //$$ public final boolean mouseDragged(double x, double y, int mouseButton, double dx, double dy) {
     //$$     lastDraggedDx = dx;
     //$$     lastDraggedDy = dy;
-    //$$     onMouseDragged(x, y, mouseButton, UniversalMinecraft.getTime() - lastClick);
+    //$$     onMouseDragged(x, y, mouseButton, UMinecraft.getTime() - lastClick);
     //$$     return false;
     //$$ }
     //$$
@@ -170,9 +168,9 @@ public class UniversalScreen extends GuiScreen {
     //$$ public final void onClose() {
     //$$     onScreenClose();
     //$$     if (screenToRestore != null)
-    //$$         UniversalMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
+    //$$         UMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
     //$$     if (guiScaleToRestore != -1)
-    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
+    //$$         UMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
     //$$ }
     //$$
     //$$ @Override
@@ -187,19 +185,19 @@ public class UniversalScreen extends GuiScreen {
     //#else
     private GuiScreen screenToRestore = null;
 
-    public UniversalScreen() {
+    public UScreen() {
         this(false, -1);
     }
 
-    public UniversalScreen(boolean restoreCurrentGuiOnClose) {
+    public UScreen(boolean restoreCurrentGuiOnClose) {
         this(restoreCurrentGuiOnClose, -1);
     }
 
-    public UniversalScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
+    public UScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
         this(restoreCurrentGuiOnClose, newGuiScale.ordinal());
     }
 
-    public UniversalScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
+    public UScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
         super();
         this.newGuiScale = newGuiScale;
         if (restoreCurrentGuiOnClose)
@@ -207,19 +205,16 @@ public class UniversalScreen extends GuiScreen {
     }
 
     public static GuiScreen getOpenedScreen() {
-        return UniversalMinecraft.getMinecraft().currentScreen;
+        return UMinecraft.getMinecraft().currentScreen;
     }
 
     @Override
     public final void initGui() {
         if (newGuiScale != -1) {
-            guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
-            UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
-            setWorldAndResolution(
-                UniversalMinecraft.getMinecraft(),
-                UniversalResolutionUtil.getScaledWidth(),
-                UniversalResolutionUtil.getScaledHeight()
-            );
+            guiScaleToRestore = UMinecraft.getMinecraft().gameSettings.guiScale;
+            UMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+            this.width = UResolution.getScaledWidth();
+            this.height = UResolution.getScaledHeight();
         }
 
         initScreen(width, height);
@@ -232,7 +227,7 @@ public class UniversalScreen extends GuiScreen {
 
     @Override
     protected final void keyTyped(char typedChar, int keyCode) {
-        onKeyPressed(keyCode, typedChar, UniversalKeyboard.getModifiers());
+        onKeyPressed(keyCode, typedChar, UKeyboard.getModifiers());
     }
 
     @Override
@@ -272,10 +267,10 @@ public class UniversalScreen extends GuiScreen {
             if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
                 return;
             //#endif
-            UniversalMinecraft.getMinecraft().currentScreen = screenToRestore;
+            UMinecraft.getMinecraft().currentScreen = screenToRestore;
         }
         if (guiScaleToRestore != -1)
-            UniversalMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
+            UMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
     }
 
     @Override
@@ -302,7 +297,7 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     }
 
-    public void onKeyPressed(int keyCode, char typedChar, UniversalKeyboard.Modifiers modifiers) {
+    public void onKeyPressed(int keyCode, char typedChar, UKeyboard.Modifiers modifiers) {
         //#if MC>=11502
         //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
         //#else
@@ -314,7 +309,7 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     }
 
-    public void onKeyReleased(int keyCode, char typedChar, UniversalKeyboard.Modifiers modifiers) {
+    public void onKeyReleased(int keyCode, char typedChar, UKeyboard.Modifiers modifiers) {
         //#if MC>=11502
         //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode);
         //#endif
@@ -323,7 +318,7 @@ public class UniversalScreen extends GuiScreen {
     public void onMouseClicked(double mouseX, double mouseY, int mouseButton) {
         //#if MC>=11502
         //$$ if (mouseButton == 1)
-        //$$     lastClick = UniversalMinecraft.getTime();
+        //$$     lastClick = UMinecraft.getTime();
         //$$ super.mouseClicked(mouseX, mouseY, mouseButton);
         //#else
         try {

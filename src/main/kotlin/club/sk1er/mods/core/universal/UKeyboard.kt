@@ -13,7 +13,7 @@ import org.lwjgl.input.Keyboard
 //#endif
 //#endif
 
-object UniversalKeyboard {
+object UKeyboard {
     //#if MC>=11502
     //$$ const val KEY_LMETA: Int = GLFW.GLFW_KEY_LEFT_SUPER // TODO: Correct?
     //$$ const val KEY_RMETA: Int = GLFW.GLFW_KEY_RIGHT_SUPER // TODO: Correct?
@@ -89,16 +89,16 @@ object UniversalKeyboard {
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
         //#if FABRIC
-        //$$ UniversalMinecraft.getMinecraft().keyboard.setRepeatEvents(enabled)
+        //$$ UMinecraft.getMinecraft().keyboard.setRepeatEvents(enabled)
         //#elseif MC>=11502
-        //$$ UniversalMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
+        //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
         Keyboard.enableRepeatEvents(enabled)
         //#endif
     }
 
     @JvmStatic
-    fun isCtrlKeyDown() = if (UniversalMinecraft.isRunningOnMac) {
+    fun isCtrlKeyDown() = if (UMinecraft.isRunningOnMac) {
         isKeyDown(KEY_LMENU) || isKeyDown(KEY_RMENU)
     } else isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL)
 
@@ -135,9 +135,9 @@ object UniversalKeyboard {
     @JvmStatic
     fun isKeyDown(key: Int): Boolean {
         //#if FABRIC
-        //$$ return InputUtil.isKeyPressed(UniversalMinecraft.getMinecraft().window.handle, key)
+        //$$ return InputUtil.isKeyPressed(UMinecraft.getMinecraft().window.handle, key)
         //#elseif MC>=11502
-        //$$ return InputMappings.isKeyDown(UniversalMinecraft.getMinecraft().mainWindow.handle, key)
+        //$$ return InputMappings.isKeyDown(UMinecraft.getMinecraft().mainWindow.handle, key)
         //#else
         return Keyboard.isKeyDown(key)
         //#endif

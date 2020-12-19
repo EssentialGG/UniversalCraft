@@ -5,9 +5,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+//#if MC>=11602
+//$$ import java.util.ArrayList;
+//#endif
 
 //#if FABRIC
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
@@ -71,7 +74,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.WorldRenderer;
 //#endif
 
-public class UniversalGraphicsHandler {
+public class UGraphics {
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
 
     //#if FORGE && MC>=11602
@@ -85,11 +88,11 @@ public class UniversalGraphicsHandler {
     //#endif
 
     //#if MC>10809
-    //$$ public UniversalGraphicsHandler(BufferBuilder instance) {
+    //$$ public UGraphics(BufferBuilder instance) {
     //$$     this.instance = instance;
     //$$ }
     //#else
-    public UniversalGraphicsHandler(WorldRenderer instance) {
+    public UGraphics(WorldRenderer instance) {
         this.instance = instance;
     }
     //#endif
@@ -101,7 +104,7 @@ public class UniversalGraphicsHandler {
     //$$ }
     //$$
     //$$ public static void setStack(MatrixStack stack) {
-    //$$     UniversalGraphicsHandler.stack = stack;
+    //$$     UGraphics.stack = stack;
     //$$ }
     //#endif
 
@@ -125,11 +128,11 @@ public class UniversalGraphicsHandler {
         //#endif
     }
 
-    public static UniversalGraphicsHandler getFromTessellator() {
+    public static UGraphics getFromTessellator() {
         //#if MC>10809
-        //$$ return new UniversalGraphicsHandler(getTessellator().getBuffer());
+        //$$ return new UGraphics(getTessellator().getBuffer());
         //#else
-        return new UniversalGraphicsHandler(getTessellator().getWorldRenderer());
+        return new UGraphics(getTessellator().getWorldRenderer());
         //#endif
     }
 
@@ -300,9 +303,9 @@ public class UniversalGraphicsHandler {
 
     public static int getStringWidth(String in) {
         //#if FABRIC
-        //$$ return UniversalMinecraft.getFontRenderer().getWidth(in);
+        //$$ return UMinecraft.getFontRenderer().getWidth(in);
         //#else
-        return UniversalMinecraft.getFontRenderer().getStringWidth(in);
+        return UMinecraft.getFontRenderer().getStringWidth(in);
         //#endif
     }
 
@@ -310,19 +313,19 @@ public class UniversalGraphicsHandler {
         if ((color >> 24 & 255) <= 10) return;
         //#if FABRIC
         //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
         //#elseif MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#elseif MC>=11502
         //$$ if (shadow) {
-        //$$     UniversalMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
+        //$$     UMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
         //$$ } else {
-        //$$     UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
+        //$$     UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //$$ }
         //#else
-        UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
+        UMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#endif
     }
 
@@ -330,19 +333,19 @@ public class UniversalGraphicsHandler {
         if ((color >> 24 & 255) <= 10) return;
         //#if FABRIC
         //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        //$$ UniversalMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
-        //$$ UniversalMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
         //#elseif MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$ UniversalMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#elseif MC>=11502
-        //$$ UniversalMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
-        //$$ UniversalMinecraft.getFontRenderer().drawString(text, x, y, color);
+        //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
+        //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //#else
-        UniversalMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
-        UniversalMinecraft.getFontRenderer().drawString(text, x, y, color, false);
+        UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
+        UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
         //#endif
     }
 
@@ -364,12 +367,12 @@ public class UniversalGraphicsHandler {
         //$$ List<String> strings = new ArrayList<>();
         //$$
         //#if FABRIC
-        //$$ TextHandler handler = UniversalMinecraft.getFontRenderer().getTextHandler();
+        //$$ TextHandler handler = UMinecraft.getFontRenderer().getTextHandler();
         //$$ List<StringVisitable> visitables = handler.wrapLines(str, wrapWidth, Style.EMPTY);
         //$$ for (StringVisitable visitable : visitables)
         //$$     strings.add(visitable.getString());
         //#else
-        //$$ CharacterManager charManager = UniversalMinecraft.getFontRenderer().func_238420_b_();
+        //$$ CharacterManager charManager = UMinecraft.getFontRenderer().func_238420_b_();
         //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
         //$$ // From net.minecraft.util.text.ITextProperties line 88
         //$$ properties.func_230438_a_(string -> {
@@ -379,17 +382,17 @@ public class UniversalGraphicsHandler {
         //#endif
         //$$ return strings;
         //#else
-        return UniversalMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
+        return UMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
         //#endif
     }
 
     public static float getCharWidth(char character) {
         //#if FABRIC
-        //$$ return UniversalMinecraft.getFontRenderer().getWidth(String.valueOf(character));
+        //$$ return UMinecraft.getFontRenderer().getWidth(String.valueOf(character));
         //#elseif MC>=11602
         //$$ return getStringWidth(String.valueOf(character));
         //#else
-        return UniversalMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
+        return UMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
         //#endif
     }
 
@@ -568,12 +571,12 @@ public class UniversalGraphicsHandler {
         //#endif
     }
 
-    public UniversalGraphicsHandler begin(int glMode, VertexFormat format) {
+    public UGraphics begin(int glMode, VertexFormat format) {
         instance.begin(glMode, format);
         return this;
     }
 
-    public UniversalGraphicsHandler pos(double x, double y, double z) {
+    public UGraphics pos(double x, double y, double z) {
         //#if FABRIC
         //$$ instance.vertex(stack.peek().getModel(), (float) x, (float) y, (float) z);
         //#else
@@ -586,20 +589,20 @@ public class UniversalGraphicsHandler {
         return this;
     }
 
-    public UniversalGraphicsHandler color(int red, int green, int blue, int alpha) {
+    public UGraphics color(int red, int green, int blue, int alpha) {
         return color(red / 255f, green / 255f, blue / 255f, alpha / 255f);
     }
 
-    public UniversalGraphicsHandler color(float red, float green, float blue, float alpha) {
+    public UGraphics color(float red, float green, float blue, float alpha) {
         instance.color(red, green, blue, alpha);
         return this;
     }
 
-    public UniversalGraphicsHandler color(Color color) {
+    public UGraphics color(Color color) {
         return color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
-    public UniversalGraphicsHandler endVertex() {
+    public UGraphics endVertex() {
         //#if FABRIC
         //$$ instance.end();
         //#else
@@ -608,7 +611,7 @@ public class UniversalGraphicsHandler {
         return this;
     }
 
-    public UniversalGraphicsHandler tex(double u, double v) {
+    public UGraphics tex(double u, double v) {
         //#if FABRIC
         //$$ instance.texture((float) u, (float) v);
         //#elseif MC>=11502
@@ -621,7 +624,7 @@ public class UniversalGraphicsHandler {
 
     // A collection of methods for always calling the OpenGL transformations rather than
     // delegating to the MatrixStack. In versions less than 1.15.2, these methods are no
-    // different than transformation methods in the UniversalGraphicsHandler class.
+    // different than transformation methods in the UGraphics class.
     //
     // The other transformation methods should be preferred.
     public static class GL {

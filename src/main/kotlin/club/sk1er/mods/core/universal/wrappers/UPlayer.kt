@@ -1,17 +1,17 @@
 package club.sk1er.mods.core.universal.wrappers
 
-import club.sk1er.mods.core.universal.UniversalMinecraft
+import club.sk1er.mods.core.universal.UMinecraft
 import club.sk1er.mods.core.universal.utils.MCEntityPlayerSP
-import club.sk1er.mods.core.universal.wrappers.message.UniversalTextComponent
+import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
 import java.util.*
 
-object UniversalPlayer {
+object UPlayer {
     @JvmStatic
     fun getPlayer(): MCEntityPlayerSP? {
         //#if MC>=11202
-        //$$ return UniversalMinecraft.getMinecraft().player
+        //$$ return UMinecraft.getMinecraft().player
         //#else
-        return UniversalMinecraft.getMinecraft().thePlayer
+        return UMinecraft.getMinecraft().thePlayer
         //#endif
     }
 
@@ -19,7 +19,7 @@ object UniversalPlayer {
     fun hasPlayer() = getPlayer() != null
 
     @JvmStatic
-    fun sendClientSideMessage(message: UniversalTextComponent) {
+    fun sendClientSideMessage(message: UTextComponent) {
         //#if FABRIC
         //$$ getPlayer()!!.sendMessage(message, false)
         //#elseif MC>=11602
@@ -33,7 +33,7 @@ object UniversalPlayer {
 
     @JvmStatic
     fun getUUID(): UUID {
-        return UniversalMinecraft.getMinecraft().session.profile.id
+        return UMinecraft.getMinecraft().session.profile.id
     }
 
     @JvmStatic
@@ -43,7 +43,7 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.posX
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPosX() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPosX() called with no existing Player")
     }
 
     @JvmStatic
@@ -53,7 +53,7 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.posY
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPosY() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPosY() called with no existing Player")
     }
 
     @JvmStatic
@@ -63,7 +63,7 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.posZ
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPosZ() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPosZ() called with no existing Player")
     }
 
     @JvmStatic
@@ -73,7 +73,7 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.prevPosX
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPrevPosX() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPrevPosX() called with no existing Player")
     }
 
     @JvmStatic
@@ -83,7 +83,7 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.prevPosY
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPrevPosY() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPrevPosY() called with no existing Player")
     }
 
     @JvmStatic
@@ -93,6 +93,6 @@ object UniversalPlayer {
         //#else
         return getPlayer()?.prevPosZ
         //#endif
-            ?: throw NullPointerException("UniversalPlayer.getPrevPosZ() called with no existing Player")
+            ?: throw NullPointerException("UPlayer.getPrevPosZ() called with no existing Player")
     }
 }
