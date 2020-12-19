@@ -31,10 +31,12 @@ import java.io.IOException;
 //#else
 public class UniversalScreen extends GuiScreen {
 //#endif
+    private int guiScaleToRestore = -1;
+    private final int newGuiScale;
+
     //#if MC>=11502
     //$$ private MatrixStack stack = null;
     //$$ private Screen screenToRestore = null;
-    //$$ private int guiScaleToRestore = -1;
     //$$
     //$$ public UniversalScreen() {
     //$$     this(false, -1);
@@ -54,12 +56,9 @@ public class UniversalScreen extends GuiScreen {
         //#else
         //$$ super(new StringTextComponent(""));
         //#endif
+    //$$     this.newGuiScale = newGuiScale;
     //$$     if (restoreCurrentGuiOnClose)
     //$$         screenToRestore = getOpenedScreen();
-    //$$     if (newGuiScale != -1) {
-    //$$         guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
-    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
-    //$$     }
     //$$ }
     //$$
     //$$ public static Screen getOpenedScreen() {
@@ -73,6 +72,11 @@ public class UniversalScreen extends GuiScreen {
     //$$ @Override
     //$$ protected final void init() {
     //$$     initScreen(width, height);
+    //$$
+    //$$     if (newGuiScale != -1) {
+    //$$         guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
+    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+    //$$     }
     //$$ }
     //$$
     //$$ @Override
@@ -178,7 +182,6 @@ public class UniversalScreen extends GuiScreen {
     //$$ }
     //#else
     private GuiScreen screenToRestore = null;
-    private int guiScaleToRestore = -1;
 
     public UniversalScreen() {
         this(false, -1);
@@ -194,12 +197,9 @@ public class UniversalScreen extends GuiScreen {
 
     public UniversalScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
         super();
+        this.newGuiScale = newGuiScale;
         if (restoreCurrentGuiOnClose)
             screenToRestore = getOpenedScreen();
-        if (newGuiScale != -1) {
-            guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
-            UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
-        }
     }
 
     public static GuiScreen getOpenedScreen() {
@@ -209,6 +209,11 @@ public class UniversalScreen extends GuiScreen {
     @Override
     public final void initGui() {
         initScreen(width, height);
+
+        if (newGuiScale != -1) {
+            guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
+            UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+        }
     }
 
     @Override
