@@ -72,7 +72,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 //#endif
 
 public class UniversalGraphicsHandler {
-    private static final Pattern formattingCodePattern = Pattern.compile("(?i)" + String.valueOf('\u00a7') + "[0-9A-FK-OR]");
+    private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
 
     //#if FORGE && MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
