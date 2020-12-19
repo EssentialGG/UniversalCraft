@@ -1,8 +1,12 @@
 package club.sk1er.mods.core.universal.wrappers.message
 
 import club.sk1er.mods.core.universal.UniversalPacket
+import club.sk1er.mods.core.universal.UniversalMinecraft
 import club.sk1er.mods.core.universal.wrappers.UniversalPlayer
-import java.util.function.Function
+
+//#if FABRIC
+//$$ import club.sk1er.mods.core.universal.utils.MCITextComponent
+//#endif
 
 class UniversalMessage {
     private lateinit var _chatMessage: UniversalTextComponent
@@ -32,7 +36,7 @@ class UniversalMessage {
             component.siblings.map(::UniversalTextComponent).forEach { messageParts.add(it) }
             //#else
             //$$ component.siblings
-            //$$         .map { UniversalTextComponent(it as MutableText) }
+            //$$         .map { UniversalTextComponent(it as MCITextComponent) }
             //$$         .forEach { messageParts.add(it) }
             //#endif
         }
@@ -71,11 +75,11 @@ class UniversalMessage {
             return
 
         // TODO: expose this field in MC>=11602
-        //#if MC<11602
-        //$$ if (chatLineId != -1) {
-        //$$     UniversalMinecraft.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
-        //$$     return
-        //$$ }
+        //#if MC<=11502
+        if (chatLineId != -1) {
+            UniversalMinecraft.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
+            return
+        }
         //#endif
 
         if (isRecursive) {

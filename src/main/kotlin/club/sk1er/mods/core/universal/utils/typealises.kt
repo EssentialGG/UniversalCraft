@@ -1,7 +1,5 @@
 package club.sk1er.mods.core.universal.utils
 
-import net.minecraft.event.HoverEvent
-
 //#if FABRIC
 //$$ typealias MCMinecraft = net.minecraft.client.MinecraftClient
 //$$ typealias MCWorld = net.minecraft.client.world.ClientWorld
@@ -17,26 +15,22 @@ import net.minecraft.event.HoverEvent
 //$$ typealias MCClickEvent = net.minecraft.text.ClickEvent
 //$$ typealias MCHoverEvent = net.minecraft.text.HoverEvent
 //$$ typealias MCClickEventAction = net.minecraft.text.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action
+//$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action<*>
 //$$ typealias MCButton = net.minecraft.client.gui.widget.AbstractButtonWidget
 //#else
 typealias MCMinecraft = net.minecraft.client.Minecraft
 typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 
 //#if MC>=11202
-//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SPacketChat
 //$$ typealias MCITextComponent = net.minecraft.util.text.ITextComponent
-//$$ typealias MCClickEvent = net.minecraft.util.text.ClickEvent
-//$$ typealias MCHoverEvent = net.minecraft.util.text.HoverEvent
-//$$ typealias MCClickEventAction = net.minecraft.util.text.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.util.text.HoverEvent.Action
+//$$ typealias MCClickEvent = net.minecraft.util.text.event.ClickEvent
+//$$ typealias MCHoverEvent = net.minecraft.util.text.event.HoverEvent
+//$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
 //#else
-typealias MCSChatPacket = net.minecraft.network.play.server.S02PacketChat
 typealias MCITextComponent = net.minecraft.util.IChatComponent
 typealias MCClickEvent = net.minecraft.event.ClickEvent
 typealias MCHoverEvent = net.minecraft.event.HoverEvent
 typealias MCClickEventAction = net.minecraft.event.ClickEvent.Action
-typealias MCHoverEventAction = net.minecraft.event.HoverEvent.Action
 //#endif
 
 //#if MC>=11502
@@ -45,9 +39,8 @@ typealias MCHoverEventAction = net.minecraft.event.HoverEvent.Action
 //$$ typealias MCChatScreen = net.minecraft.client.gui.NewChatGui
 //$$ typealias MCScreen = net.minecraft.client.gui.AbstractGui
 //$$ typealias MCClientNetworkHandler = net.minecraft.client.network.play.ClientPlayNetHandler
-//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SChatPacket
 //$$ typealias MCMainMenuScreen = net.minecraft.client.gui.screen.MainMenuScreen
-//$$ typealias MCStringTextComponent = net.minecraft.util.text.StringTextComponent
+//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SChatPacket
 //#else
 typealias MCWorld = net.minecraft.client.multiplayer.WorldClient
 typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityPlayerSP
@@ -55,14 +48,27 @@ typealias MCScreen = net.minecraft.client.gui.GuiScreen
 typealias MCChatScreen = net.minecraft.client.gui.GuiNewChat
 typealias MCMainMenuScreen = net.minecraft.client.gui.GuiMainMenu
 typealias MCClientNetworkHandler = net.minecraft.client.network.NetHandlerPlayClient
-typealias MCStringTextComponent = net.minecraft.util.ChatComponentText
 //#endif
 
-//#if MC>=11602
-//$$ typealias MCStringTextComponent = net.minecraft.util.text.LiteralText
+//#if MC>=11502
 //$$ typealias MCButton = net.minecraft.client.gui.widget.button.Button
 //#else
 typealias MCButton = net.minecraft.client.gui.GuiButton
+//#endif
+
+//#if MC>=11602
+//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
+//#elseif MC>=11502
+//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
+//$$ typealias MCStringTextComponent = net.minecraft.util.text.StringTextComponent
+//#elseif MC>=11202
+//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
+//$$ typealias MCStringTextComponent = net.minecraft.util.text.TextComponentString
+//$$ typealias MCSChatPacket = net.minecraft.network.play.server.SPacketChat
+//#else
+typealias MCStringTextComponent = net.minecraft.util.ChatComponentText
+typealias MCSChatPacket = net.minecraft.network.play.server.S02PacketChat
+typealias MCHoverEventAction = net.minecraft.event.HoverEvent.Action
 //#endif
 
 //#endif

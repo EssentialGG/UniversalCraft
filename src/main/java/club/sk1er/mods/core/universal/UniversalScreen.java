@@ -34,12 +34,21 @@ public class UniversalScreen extends GuiScreen {
     //#if MC>=11502
     //$$ private MatrixStack stack = null;
     //$$ private Screen screenToRestore = null;
+    //$$ private int guiScaleToRestore = -1;
     //$$
     //$$ public UniversalScreen() {
-    //$$     this(false);
+    //$$     this(false, -1);
     //$$ }
     //$$
     //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose) {
+    //$$     this(restoreCurrentGuiOnClose, -1);
+    //$$ }
+    //$$
+    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
+    //$$     this(restoreCurrentGuiOnClose, newGuiScale.getNumber());
+    //$$ }
+    //$$
+    //$$ public UniversalScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
         //#if FABRIC
         //$$ super(new LiteralText(""));
         //#else
@@ -47,7 +56,12 @@ public class UniversalScreen extends GuiScreen {
         //#endif
     //$$     if (restoreCurrentGuiOnClose)
     //$$         screenToRestore = getOpenedScreen();
+    //$$     if (newGuiScale != -1) {
+    //$$         guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
+    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+    //$$     }
     //$$ }
+    //$$
     //$$ public static Screen getOpenedScreen() {
     //$$     return UniversalMinecraft.getMinecraft().currentScreen;
     //$$ }
@@ -149,6 +163,8 @@ public class UniversalScreen extends GuiScreen {
     //$$     onScreenClose();
     //$$     if (screenToRestore != null)
     //$$         UniversalMinecraft.getMinecraft().displayGuiScreen(screenToRestore);
+    //$$     if (guiScaleToRestore != -1)
+    //$$         UniversalMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
     //$$ }
     //$$
     //$$ @Override
@@ -162,15 +178,28 @@ public class UniversalScreen extends GuiScreen {
     //$$ }
     //#else
     private GuiScreen screenToRestore = null;
+    private int guiScaleToRestore = -1;
 
     public UniversalScreen() {
-        this(false);
+        this(false, -1);
     }
 
     public UniversalScreen(boolean restoreCurrentGuiOnClose) {
+        this(restoreCurrentGuiOnClose, -1);
+    }
+
+    public UniversalScreen(boolean restoreCurrentGuiOnClose, GuiScale newGuiScale) {
+        this(restoreCurrentGuiOnClose, newGuiScale.getNumber());
+    }
+
+    public UniversalScreen(boolean restoreCurrentGuiOnClose, int newGuiScale) {
         super();
         if (restoreCurrentGuiOnClose)
             screenToRestore = getOpenedScreen();
+        if (newGuiScale != -1) {
+            guiScaleToRestore = UniversalMinecraft.getMinecraft().gameSettings.guiScale;
+            UniversalMinecraft.getMinecraft().gameSettings.guiScale = newGuiScale;
+        }
     }
 
     public static GuiScreen getOpenedScreen() {
@@ -231,6 +260,8 @@ public class UniversalScreen extends GuiScreen {
             //#endif
             UniversalMinecraft.getMinecraft().currentScreen = screenToRestore;
         }
+        if (guiScaleToRestore != -1)
+            UniversalMinecraft.getMinecraft().gameSettings.guiScale = guiScaleToRestore;
     }
 
     @Override
