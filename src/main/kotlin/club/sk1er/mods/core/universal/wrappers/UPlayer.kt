@@ -25,7 +25,7 @@ object UPlayer {
         //#elseif MC>=11602
         //$$ getPlayer()!!.sendMessage(message, null)
         //#elseif MC>=11202
-        //$$ getPlayer()!!.sendChatMessage(message.formattedText)
+        //$$ getPlayer()!!.sendMessage(message)
         //#else
         getPlayer()!!.addChatMessage(message)
         //#endif
