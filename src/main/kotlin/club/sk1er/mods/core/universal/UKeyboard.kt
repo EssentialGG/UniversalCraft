@@ -27,6 +27,7 @@ object UKeyboard {
     //$$ const val KEY_MINUS = GLFW.GLFW_KEY_MINUS
     //$$ const val KEY_EQUALS = GLFW.GLFW_KEY_EQUAL
     //$$ const val KEY_BACKSPACE = GLFW.GLFW_KEY_BACKSPACE
+    //$$ const val KEY_ENTER = GLFW.GLFW_KEY_ENTER
     //$$ const val KEY_TAB = GLFW.GLFW_KEY_TAB
     //$$ const val KEY_LBRACKET = GLFW.GLFW_KEY_LEFT_BRACKET
     //$$ const val KEY_RBRACKET = GLFW.GLFW_KEY_RIGHT_BRACKET
@@ -128,6 +129,7 @@ object UKeyboard {
     const val KEY_MINUS = Keyboard.KEY_MINUS
     const val KEY_EQUALS = Keyboard.KEY_EQUALS
     const val KEY_BACKSPACE = Keyboard.KEY_BACK
+    const val KEY_ENTER = Keyboard.KEY_RETURN
     const val KEY_TAB = Keyboard.KEY_TAB
     const val KEY_LBRACKET = Keyboard.KEY_LBRACKET
     const val KEY_RBRACKET = Keyboard.KEY_RBRACKET
