@@ -73,6 +73,7 @@ preprocess {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     jcenter()
 
     maven { url 'https://jitpack.io' }

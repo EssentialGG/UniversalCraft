@@ -2,6 +2,7 @@ package club.sk1er.mods.core.universal.utils
 
 //#if FABRIC
 //$$ typealias MCMinecraft = net.minecraft.client.MinecraftClient
+//$$ typealias MCSettings = net.minecraft.client.options.GameOptions
 //$$ typealias MCWorld = net.minecraft.client.world.ClientWorld
 //$$ typealias MCFontRenderer = net.minecraft.client.font.TextRenderer
 //$$ typealias MCScreen = net.minecraft.client.gui.screen.Screen
@@ -34,14 +35,16 @@ typealias MCClickEventAction = net.minecraft.event.ClickEvent.Action
 //#endif
 
 //#if MC>=11502
+//$$ typealias MCSettings = net.minecraft.client.GameSettings
 //$$ typealias MCWorld = net.minecraft.client.world.ClientWorld
 //$$ typealias MCEntityPlayerSP = net.minecraft.client.entity.player.ClientPlayerEntity
 //$$ typealias MCChatScreen = net.minecraft.client.gui.NewChatGui
-//$$ typealias MCScreen = net.minecraft.client.gui.AbstractGui
+//$$ typealias MCScreen = net.minecraft.client.gui.screen.Screen
 //$$ typealias MCClientNetworkHandler = net.minecraft.client.network.play.ClientPlayNetHandler
 //$$ typealias MCMainMenuScreen = net.minecraft.client.gui.screen.MainMenuScreen
 //$$ typealias MCSChatPacket = net.minecraft.network.play.server.SChatPacket
 //#else
+typealias MCSettings = net.minecraft.client.settings.GameSettings
 typealias MCWorld = net.minecraft.client.multiplayer.WorldClient
 typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityPlayerSP
 typealias MCScreen = net.minecraft.client.gui.GuiScreen
@@ -58,6 +61,7 @@ typealias MCButton = net.minecraft.client.gui.GuiButton
 
 //#if MC>=11602
 //$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
+//$$ typealias MCStringTextComponent = net.minecraft.util.text.StringTextComponent
 //#elseif MC>=11502
 //$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
 //$$ typealias MCStringTextComponent = net.minecraft.util.text.StringTextComponent

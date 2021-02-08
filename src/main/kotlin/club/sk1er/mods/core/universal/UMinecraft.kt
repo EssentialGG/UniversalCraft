@@ -11,9 +11,16 @@ import club.sk1er.mods.core.universal.utils.*
 //#endif
 
 object UMinecraft {
+    @JvmStatic
+    var guiScale: Int
+        get() = getSettings().guiScale
+        set(value) {
+            getSettings().guiScale = value
+        }
+
     //#if FABRIC
     //$$ @JvmField
-    //$$ val isRunningOnMac: Boolean = MCMinecraft.IS_SYSTEM_MAC;
+    //$$ val isRunningOnMac: Boolean = MCMinecraft.IS_SYSTEM_MAC
     //$$
     //$$ @JvmStatic
     //$$ fun getMinecraft(): MCMinecraft = MCMinecraft.getInstance()
@@ -32,6 +39,9 @@ object UMinecraft {
     //$$
     //$$ @JvmStatic
     //$$ fun getTime() = GLFW.glfwGetTime().toLong()
+    //$$
+    //$$ @JvmStatic
+    //$$ fun getSettings(): MCSettings = getMinecraft().options
     //#else
     @JvmField
     val isRunningOnMac =
@@ -96,8 +106,9 @@ object UMinecraft {
     }
 
     @JvmStatic
-    fun getChatGUI(): MCChatScreen? {
-        return getMinecraft().ingameGUI?.chatGUI
-    }
+    fun getChatGUI(): MCChatScreen? = getMinecraft().ingameGUI?.chatGUI
+
+    @JvmStatic
+    fun getSettings(): MCSettings = getMinecraft().gameSettings
     //#endif
 }
