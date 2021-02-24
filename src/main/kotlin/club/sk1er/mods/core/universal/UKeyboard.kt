@@ -277,5 +277,16 @@ object UKeyboard {
         //#endif
     }
 
+    @JvmStatic
+    fun getKeyName(keyCode: Int): String? {
+        //#if FABRIC
+        //$$ return InputUtil.fromKeyCode(keyCode, -1).translationKey
+        //#elseif MC>=11502
+        //$$ return GLFW.glfwGetKeyName(keyCode, -1)
+        //#else
+        return Keyboard.getKeyName(keyCode)
+        //#endif
+    }
+
     data class Modifiers(val isCtrl: Boolean, val isShift: Boolean, val isAlt: Boolean)
 }
