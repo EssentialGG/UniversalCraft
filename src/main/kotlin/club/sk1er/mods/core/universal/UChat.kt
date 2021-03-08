@@ -21,8 +21,8 @@ object UChat {
             UMessage(obj).chat()
         } else {
             val component = UTextComponent.from(obj)
-            if (component.isPresent) {
-                component.get().chat()
+            if (component != null) {
+                component.chat()
             } else {
                 UMessage(obj.toString()).chat()
             }
@@ -42,8 +42,8 @@ object UChat {
             UMessage(obj).actionBar()
         } else {
             val component = UTextComponent.from(obj)
-            if (component.isPresent) {
-                component.get().actionBar()
+            if (component != null) {
+                component.actionBar()
             } else {
                 UMessage(obj.toString()).actionBar()
             }

@@ -50,7 +50,7 @@ class UMessage {
         if (component is String) {
             messageParts[index] = UTextComponent(component)
         } else {
-            UTextComponent.from(component).ifPresent { messageParts[index] = it }
+            UTextComponent.from(component)?.also { messageParts[index] = it }
         }
     }
 
@@ -58,7 +58,7 @@ class UMessage {
         if (component is String) {
             messageParts.add(index, UTextComponent(component))
         } else {
-            UTextComponent.from(component).ifPresent { messageParts.add(index, it) }
+            UTextComponent.from(component)?.also { messageParts.add(index, it) }
         }
     }
 
@@ -102,7 +102,7 @@ class UMessage {
         when (part) {
             is UTextComponent -> messageParts.add(part)
             is String -> messageParts.add(UTextComponent(part))
-            else -> UTextComponent.from(part).ifPresent(::addPart)
+            else -> UTextComponent.from(part)?.also(::addPart)
         }
     }
 
