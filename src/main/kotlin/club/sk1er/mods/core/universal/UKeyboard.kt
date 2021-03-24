@@ -116,6 +116,7 @@ object UKeyboard {
     //$$ const val KEY_F17 = GLFW.GLFW_KEY_F17
     //$$ const val KEY_F18 = GLFW.GLFW_KEY_F18
     //$$ const val KEY_F19 = GLFW.GLFW_KEY_F19
+    //$$ const val KEY_DELETE = GLFW.GLFW_KEY_DELETE
     //#else
     const val KEY_ESCAPE = Keyboard.KEY_ESCAPE
     const val KEY_LMETA = Keyboard.KEY_LMETA
@@ -218,6 +219,7 @@ object UKeyboard {
     const val KEY_F17 = Keyboard.KEY_F17
     const val KEY_F18 = Keyboard.KEY_F18
     const val KEY_F19 = Keyboard.KEY_F19
+    const val KEY_DELETE = Keyboard.KEY_DELETE
     //#endif
 
     @JvmStatic
