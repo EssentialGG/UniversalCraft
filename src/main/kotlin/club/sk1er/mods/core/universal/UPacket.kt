@@ -3,6 +3,10 @@ package club.sk1er.mods.core.universal
 import club.sk1er.mods.core.universal.utils.MCSChatPacket
 import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
 
+//#if FABRIC
+//$$ import net.minecraft.text.LiteralText
+//#endif
+
 //#if MC>=11602
 //$$ import club.sk1er.mods.core.universal.wrappers.UPlayer
 //#endif
@@ -30,7 +34,7 @@ object UPacket {
     @JvmStatic
     fun sendActionBarMessage(message: UTextComponent) {
         //#if FABRIC
-        //$$ TODO("Figure out how to do this with Fabric")
+        //$$ UPlayer.getPlayer()!!.sendMessage(LiteralText(message.text), true)
         //#elseif MC>=11602
         //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.GAME_INFO, UPlayer.getUUID()))
         //#elseif MC>=11502
