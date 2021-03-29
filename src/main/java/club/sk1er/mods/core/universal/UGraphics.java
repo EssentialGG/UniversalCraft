@@ -25,6 +25,10 @@ import java.util.regex.Pattern;
 //$$ import net.minecraft.text.Style;
 //$$ import net.minecraft.util.math.Quaternion;
 //$$ import org.lwjgl.opengl.GL11;
+//$$ import net.minecraft.client.texture.NativeImage;
+//$$ import net.minecraft.client.texture.NativeImageBackedTexture;
+//$$ import java.io.ByteArrayInputStream;
+//$$ import java.io.ByteArrayOutputStream;
 //#else
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -84,7 +88,7 @@ public class UGraphics {
     //#if MC>10809
     //$$ private BufferBuilder instance;
     //#else
-    private WorldRenderer instance;
+    private final WorldRenderer instance;
     //#endif
 
     //#if MC>10809
@@ -140,7 +144,7 @@ public class UGraphics {
         //#if MC==11502
         //$$ RenderSystem.translatef(x, y, z);
         //#else
-        translate((double) x, (double) y, (double) z); //Don't remove double casts or this breaks
+        translate(x, y, (double) z); //Don't remove double casts or this breaks
         //#endif
     }
 
@@ -170,7 +174,7 @@ public class UGraphics {
         //#if MC==11502
         //$$ RenderSystem.scalef(x, y, z);
         //#else
-        scale((double) x, (double) y, (double) z);
+        scale(x, y, (double) z);
         //#endif
     }
 
@@ -442,6 +446,31 @@ public class UGraphics {
         //#endif
     }
     //#endif
+    //#if FABRIC
+    //$$ public static NativeImageBackedTexture getTexture(InputStream stream) {
+    //$$     try {
+    //$$         return new NativeImageBackedTexture(NativeImage.read(stream));
+    //$$     } catch (IOException e) {
+    //$$            e.printStackTrace();
+    //$$     }
+    //$$     throw new IllegalStateException("Failed to read image");
+    //$$ }
+    //$$
+    //$$ public static NativeImageBackedTexture getTexture(BufferedImage img) {
+    //$$     try {
+    //$$         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    //$$         ImageIO.write(img, "png", baos );
+    //$$         return new NativeImageBackedTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
+    //$$     } catch (IOException e) {
+    //$$          e.printStackTrace();
+    //$$     }
+    //$$     throw new IllegalStateException("Failed to create texture");
+    //$$ }
+    //$$
+    //$$  public static NativeImageBackedTexture getEmptyTexture() {
+    //$$      return new NativeImageBackedTexture(0, 0, false);
+    //$$  }
+    //#endif
 
     public static void glUseProgram(int program) {
         //#if MC>=11502
@@ -648,7 +677,7 @@ public class UGraphics {
             //#if MC>=11502
             //$$ RenderSystem.translatef(x, y, z);
             //#else
-            translate((double) x, (double) y, (double) z);
+            translate(x, y, (double) z);
             //#endif
         }
 
@@ -672,7 +701,7 @@ public class UGraphics {
             //#if MC>=11502
             //$$ RenderSystem.scalef(x, y, z);
             //#else
-            scale((double) x, (double) y, (double) z);
+            scale(x, y, (double) z);
             //#endif
         }
 
