@@ -408,7 +408,6 @@ public class UGraphics {
         GL11.glClearStencil(mode);
     }
 
-    // TODO: What is the Fabric equivalent of all this?
     //#if FORGE
     public static DynamicTexture getTexture(InputStream stream) {
         try {
