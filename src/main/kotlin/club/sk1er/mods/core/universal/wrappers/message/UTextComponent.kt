@@ -5,7 +5,6 @@ import club.sk1er.mods.core.universal.UChat
 import club.sk1er.mods.core.universal.utils.*
 
 //#if FABRIC
-//$$ import net.minecraft.CharacterVisitor
 //$$ import net.minecraft.text.*
 //$$ import net.minecraft.text.StringVisitable.StyledVisitor
 //$$ import net.minecraft.text.StringVisitable.Visitor
