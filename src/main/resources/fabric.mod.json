@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "universalcraft",
+  "name": "UniversalCraft",
+  "version": "1.0.0",
+  "environment": "*",
+  "authors": [
+    "Sk1erLLC"
+  ],
+  "depends": {
+    "fabricloader": "*"
+  },
+  "description": "UniversalCraft"
+}
