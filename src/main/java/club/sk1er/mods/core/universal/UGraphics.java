@@ -89,7 +89,7 @@ public class UGraphics {
     //#if MC>10809
     //$$ private BufferBuilder instance;
     //#else
-    private final WorldRenderer instance;
+    private WorldRenderer instance;
     //#endif
 
     //#if MC>10809
@@ -194,7 +194,12 @@ public class UGraphics {
     }
 
     public static void draw() {
+        //#if FABRIC
+        //$$ getTessellator().getBuffer().end();
+        //$$ BufferRenderer.draw(getTessellator().getBuffer());
+        //#else
         getTessellator().draw();
+        //#endif
     }
 
     public static void cullFace(int mode) {
@@ -632,9 +637,7 @@ public class UGraphics {
     }
 
     public UGraphics endVertex() {
-        //#if FABRIC
-        //$$ instance.end();
-        //#else
+        //#if MC<11502
         instance.endVertex();
         //#endif
         return this;
