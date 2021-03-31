@@ -634,7 +634,9 @@ public class UGraphics {
     }
 
     public UGraphics endVertex() {
-        //#if MC<11502
+        //#if FABRIC
+        //$$ instance.next();
+        //#else
         instance.endVertex();
         //#endif
         return this;
