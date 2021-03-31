@@ -193,12 +193,7 @@ public class UGraphics {
     }
 
     public static void draw() {
-        //#if FABRIC
-        //$$ getTessellator().getBuffer().end();
-        //$$ BufferRenderer.draw(getTessellator().getBuffer());
-        //#else
         getTessellator().draw();
-        //#endif
     }
 
     public static void cullFace(int mode) {
@@ -323,6 +318,7 @@ public class UGraphics {
         //#if FABRIC
         //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ immediate.draw();
         //#elseif MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
@@ -344,6 +340,7 @@ public class UGraphics {
         //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         //$$ UMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
         //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
+        //$$ immediate.draw();
         //#elseif MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
