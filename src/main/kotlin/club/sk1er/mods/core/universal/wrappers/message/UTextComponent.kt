@@ -400,7 +400,7 @@ class UTextComponent : MCITextComponent {
     //$$
     //$$ override fun getStyle(): Style = component.style
     //$$
-    //$$ override fun appendSibling(component: ITextComponent): ITextComponent = component.appendSibling(component)
+    //$$ override fun appendSibling(other: ITextComponent): ITextComponent = component.appendSibling(other)
     //$$
     //$$ override fun getUnformattedComponentText(): String = component.unformattedComponentText
     //$$
@@ -416,7 +416,7 @@ class UTextComponent : MCITextComponent {
     //$$
     //$$ override fun appendText(text: String): ITextComponent = component.appendText(text)
     //$$
-    //$$ override fun appendSibling(component: ITextComponent): ITextComponent = component.appendSibling(component)
+    //$$ override fun appendSibling(other: ITextComponent): ITextComponent = component.appendSibling(other)
     //$$
     //$$ override fun getUnformattedComponentText(): String = component.unformattedComponentText
     //$$
@@ -436,7 +436,7 @@ class UTextComponent : MCITextComponent {
 
     override fun appendText(text: String): IChatComponent = component.appendText(text)
 
-    override fun appendSibling(component: IChatComponent): IChatComponent = component.appendSibling(component)
+    override fun appendSibling(other: IChatComponent): IChatComponent = component.appendSibling(other)
 
     override fun getUnformattedTextForChat(): String = component.unformattedTextForChat
 
