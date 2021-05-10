@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 //$$ import java.io.ByteArrayInputStream;
 //$$ import java.io.ByteArrayOutputStream;
 //#else
+import club.sk1er.mods.core.universal.utils.ReleasedDynamicTexture;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -409,12 +410,12 @@ public class UGraphics {
     }
 
     //#if FORGE
-    public static DynamicTexture getTexture(InputStream stream) {
+    public static ReleasedDynamicTexture getTexture(InputStream stream) {
         try {
             //#if MC>=11502
-            //$$ return new DynamicTexture(NativeImage.read(stream));
+            //$$ return new ReleasedDynamicTexture(NativeImage.read(stream));
             //#else
-            return new DynamicTexture(ImageIO.read(stream));
+            return new ReleasedDynamicTexture(ImageIO.read(stream));
             //#endif
         } catch (IOException e) {
             e.printStackTrace();
@@ -422,26 +423,26 @@ public class UGraphics {
         throw new IllegalStateException("Failed to read image");
     }
 
-    public static DynamicTexture getTexture(BufferedImage img) {
+    public static ReleasedDynamicTexture getTexture(BufferedImage img) {
         //#if MC>=11502
         //$$ try {
         //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //$$     ImageIO.write(img, "png", baos );
-        //$$     return new DynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
+        //$$     return new ReleasedDynamicTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
         //$$ } catch (IOException e) {
         //$$     e.printStackTrace();
         //$$ }
         //$$ throw new IllegalStateException("Failed to create texture");
         //#else
-        return new DynamicTexture(img);
+        return new ReleasedDynamicTexture(img);
         //#endif
     }
 
-    public static DynamicTexture getEmptyTexture() {
+    public static ReleasedDynamicTexture getEmptyTexture() {
         //#if MC>=11502
-        //$$ return new DynamicTexture(0, 0, false);
+        //$$ return new ReleasedDynamicTexture(0, 0, false);
         //#else
-        return new DynamicTexture(0, 0);
+        return new ReleasedDynamicTexture(0, 0);
         //#endif
     }
     //#endif
