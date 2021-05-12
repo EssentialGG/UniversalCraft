@@ -38,7 +38,11 @@ object UResolution {
     //#if MC<=11202
     private fun get(): ScaledResolution {
         if (cachedHeight != windowHeight || cachedWidth != windowWidth || scaledResolution == null)
+            //#if MC<=10800
+            //$$ scaledResolution = ScaledResolution(UMinecraft.getMinecraft(), UMinecraft.getMinecraft().displayWidth, UMinecraft.getMinecraft().displayHeight)
+            //#else
             scaledResolution = ScaledResolution(UMinecraft.getMinecraft())
+            //#endif
         return scaledResolution!!
     }
     //#endif

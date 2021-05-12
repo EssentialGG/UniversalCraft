@@ -90,12 +90,14 @@ class UMessage {
     }
 
     fun actionBar() {
+        //#if MC>=10809
         parseMessage()
 
         if (!UPlayer.hasPlayer())
             return
 
         UPacket.sendActionBarMessage(_chatMessage)
+        //#endif
     }
 
     private fun addPart(part: Any) {

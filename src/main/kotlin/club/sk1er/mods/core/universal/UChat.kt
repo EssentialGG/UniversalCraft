@@ -38,6 +38,7 @@ object UChat {
      */
     @JvmStatic
     fun actionBar(obj: Any) {
+        //#if MC>=10809
         if (obj is String || obj is UTextComponent) {
             UMessage(obj).actionBar()
         } else {
@@ -48,6 +49,7 @@ object UChat {
                 UMessage(obj.toString()).actionBar()
             }
         }
+        //#endif
     }
 
     /**
