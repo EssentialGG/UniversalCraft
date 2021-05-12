@@ -91,7 +91,7 @@ public class UGraphics {
     //#if MC>10809
     //$$ private BufferBuilder instance;
     //#elseif MC==10809
-    private final WorldRenderer instance;
+    private WorldRenderer instance;
     //#endif
 
     //#if MC>10809
@@ -740,7 +740,7 @@ public class UGraphics {
 
     public UGraphics endVertex() {
         //#if FABRIC
-        //$$ instance.end();
+        //$$ instance.next();
         //#elseif MC>=10809
         instance.endVertex();
         //#endif
