@@ -1,5 +1,4 @@
 // For those who want the bleeding edge
-//file:noinspection JCenterRepository
 buildscript {
     ext.kotlin_version = "1.3.72"
 
@@ -59,10 +58,10 @@ def FABRIC = fabric
 
 if (FABRIC) {
     apply plugin: 'fabric-loom'
-} else if (FG1_2) {
-    apply plugin: 'forge'
 } else if (FG3) {
     apply plugin: 'net.minecraftforge.gradle'
+} else if (FG1_2) {
+    apply plugin: 'forge'
 } else {
     apply plugin: 'net.minecraftforge.gradle.forge'
 }
