@@ -99,7 +99,7 @@ object UMinecraft {
     @JvmStatic
     fun getTime(): Long {
         //#if MC>=11502
-        //$$ return NativeUtil.getTime() as Long
+        //$$ return (NativeUtil.getTime() * 1000).toLong()
         //#else
         return MCMinecraft.getSystemTime()
         //#endif

@@ -127,7 +127,7 @@ abstract class UScreen @JvmOverloads constructor(
     //$$ final override fun tick() = onTick()
     //$$
     //$$ final override fun onClose() {
-    //$$     onScreenClose()
+    //$$     // onScreenClose()
     //$$     if (screenToRestore != null)
     //$$         displayScreen(screenToRestore)
     //$$     if (guiScaleToRestore != -1)
