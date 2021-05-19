@@ -1,8 +1,8 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
-import club.sk1er.mods.core.universal.wrappers.UPlayer
-import club.sk1er.mods.core.universal.wrappers.message.UMessage
-import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
+import gg.essential.universal.wrappers.UPlayer
+import gg.essential.universal.wrappers.message.UMessage
+import gg.essential.universal.wrappers.message.UTextComponent
 import java.util.regex.Pattern
 
 object UChat {

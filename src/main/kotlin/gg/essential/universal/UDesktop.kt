@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
 import java.awt.Desktop
 import java.io.File
@@ -7,22 +7,22 @@ import java.net.URI
 
 object UDesktop {
     @JvmStatic
-    var isLinux = false
+    var isLinux: Boolean = false
         private set
     @JvmStatic
-    var isXdg = false
+    var isXdg: Boolean = false
         private set
     @JvmStatic
-    var isKde = false
+    var isKde: Boolean = false
         private set
     @JvmStatic
-    var isGnome = false
+    var isGnome: Boolean = false
         private set
     @JvmStatic
-    var isMac = false
+    var isMac: Boolean = false
         private set
     @JvmStatic
-    var isWindows = false
+    var isWindows: Boolean = false
         private set
 
     init {
@@ -50,13 +50,13 @@ object UDesktop {
     }
 
     @JvmStatic
-    fun browse(uri: URI) = browseDesktop(uri) || openSystemSpecific(uri.toString())
+    fun browse(uri: URI): Boolean = browseDesktop(uri) || openSystemSpecific(uri.toString())
 
     @JvmStatic
-    fun open(file: File) = openDesktop(file) || openSystemSpecific(file.path)
+    fun open(file: File): Boolean = openDesktop(file) || openSystemSpecific(file.path)
 
     @JvmStatic
-    fun edit(file: File) = editDesktop(file) || openSystemSpecific(file.path)
+    fun edit(file: File): Boolean = editDesktop(file) || openSystemSpecific(file.path)
 
     private fun openSystemSpecific(file: String): Boolean {
         return when {

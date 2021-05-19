@@ -1,15 +1,15 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
-import club.sk1er.mods.core.universal.utils.MCScreen
+import gg.essential.universal.utils.MCScreen
 
 //#if FABRIC
-//$$ import club.sk1er.mods.core.universal.utils.MCStringTextComponent
+//$$ import gg.essential.universal.utils.MCStringTextComponent
 //$$ import net.minecraft.client.MinecraftClient
 //$$ import net.minecraft.client.util.math.MatrixStack
 //$$ import net.minecraft.text.LiteralText
 //$$ import org.lwjgl.glfw.GLFW
 //#elseif MC>=11502
-//$$ import club.sk1er.mods.core.universal.utils.MCStringTextComponent
+//$$ import gg.essential.universal.utils.MCStringTextComponent
 //$$ import net.minecraft.util.text.StringTextComponent
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
 //$$ import org.lwjgl.glfw.GLFW
@@ -124,7 +124,7 @@ abstract class UScreen @JvmOverloads constructor(
     //$$     return false
     //$$ }
     //$$
-    //$$ final override fun tick() = onTick()
+    //$$ final override fun tick(): Unit = onTick()
     //$$
     //$$ final override fun onClose() {
     //$$     // onScreenClose()

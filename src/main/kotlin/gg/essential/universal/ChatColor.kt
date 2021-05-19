@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
 enum class ChatColor(val char: Char, val isFormat: Boolean = true) {
     BLACK('0'),
@@ -24,12 +24,12 @@ enum class ChatColor(val char: Char, val isFormat: Boolean = true) {
     ITALIC('o', true),
     RESET('r');
 
-    override fun toString() = "$COLOR_CHAR$char"
+    override fun toString(): String = "${COLOR_CHAR}$char"
 
-    fun isColor() = !isFormat && this != RESET
+    fun isColor(): Boolean = !isFormat && this != RESET
 
     companion object {
-        const val COLOR_CHAR = '\u00a7'
+        const val COLOR_CHAR: Char = '\u00a7'
 
         fun translateAlternateColorCodes(altColorChar: Char, textToTranslate: String): String {
             val b = textToTranslate.toCharArray()

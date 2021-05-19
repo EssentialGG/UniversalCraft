@@ -1,8 +1,8 @@
 
-package club.sk1er.mods.core.universal.wrappers.message
+package gg.essential.universal.wrappers.message
 
-import club.sk1er.mods.core.universal.UChat
-import club.sk1er.mods.core.universal.utils.*
+import gg.essential.universal.UChat
+import gg.essential.universal.utils.*
 
 //#if FABRIC
 //$$ import net.minecraft.text.*

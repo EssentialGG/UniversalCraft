@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal.utils
+package gg.essential.universal.utils
 
 //#if FORGE
 import net.minecraft.client.renderer.texture.TextureUtil

@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal.utils
+package gg.essential.universal.utils
 
 //#if FABRIC
 //$$ typealias MCMinecraft = net.minecraft.client.MinecraftClient

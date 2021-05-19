@@ -80,7 +80,7 @@ repositories {
 }
 
 version = this.properties.getOrDefault("BUILD_ID", "LOCAL") //BUI
-group = "club.sk1er" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "gg.essential" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "UniversalCraft" + project.name
 
 sourceCompatibility = targetCompatibility = 1.8

@@ -1,8 +1,8 @@
-package club.sk1er.mods.core.universal.wrappers
+package gg.essential.universal.wrappers
 
-import club.sk1er.mods.core.universal.UMinecraft
-import club.sk1er.mods.core.universal.utils.MCEntityPlayerSP
-import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
+import gg.essential.universal.UMinecraft
+import gg.essential.universal.utils.MCEntityPlayerSP
+import gg.essential.universal.wrappers.message.UTextComponent
 import java.util.*
 
 object UPlayer {

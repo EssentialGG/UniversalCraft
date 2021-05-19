@@ -1,6 +1,6 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
-import club.sk1er.mods.core.universal.utils.MCButton
+import gg.essential.universal.utils.MCButton
 
 object UGuiButton {
     @JvmStatic

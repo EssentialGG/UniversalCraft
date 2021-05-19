@@ -1,14 +1,14 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
-import club.sk1er.mods.core.universal.utils.MCSChatPacket
-import club.sk1er.mods.core.universal.wrappers.message.UTextComponent
+import gg.essential.universal.utils.MCSChatPacket
+import gg.essential.universal.wrappers.message.UTextComponent
 
 //#if FABRIC
 //$$ import net.minecraft.text.LiteralText
 //#endif
 
 //#if MC>=11602
-//$$ import club.sk1er.mods.core.universal.wrappers.UPlayer
+//$$ import gg.essential.universal.wrappers.UPlayer
 //#endif
 
 //#if FORGE && MC>=11202

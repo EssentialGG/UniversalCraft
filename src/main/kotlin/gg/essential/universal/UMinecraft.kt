@@ -1,6 +1,6 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
-import club.sk1er.mods.core.universal.utils.*
+import gg.essential.universal.utils.*
 
 //#if FABRIC
 //$$ import org.lwjgl.glfw.GLFW
@@ -44,7 +44,7 @@ object UMinecraft {
     //$$ fun getSettings(): MCSettings = getMinecraft().options
     //#else
     @JvmField
-    val isRunningOnMac =
+    val isRunningOnMac: Boolean =
         //#if MC>=11202
         //$$ MCMinecraft.IS_RUNNING_ON_MAC
         //#else

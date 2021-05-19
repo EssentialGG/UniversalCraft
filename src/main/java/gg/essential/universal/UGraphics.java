@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal;
+package gg.essential.universal;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 //$$ import java.io.ByteArrayInputStream;
 //$$ import java.io.ByteArrayOutputStream;
 //#else
-import club.sk1er.mods.core.universal.utils.ReleasedDynamicTexture;
+import gg.essential.universal.utils.ReleasedDynamicTexture;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.VertexFormat;

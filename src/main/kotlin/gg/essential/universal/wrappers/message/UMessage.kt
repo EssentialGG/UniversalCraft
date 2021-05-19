@@ -1,16 +1,16 @@
-package club.sk1er.mods.core.universal.wrappers.message
+package gg.essential.universal.wrappers.message
 
-import club.sk1er.mods.core.universal.UPacket
-import club.sk1er.mods.core.universal.UMinecraft
-import club.sk1er.mods.core.universal.wrappers.UPlayer
+import gg.essential.universal.UPacket
+import gg.essential.universal.UMinecraft
+import gg.essential.universal.wrappers.UPlayer
 
 //#if FABRIC
-//$$ import club.sk1er.mods.core.universal.utils.MCITextComponent
+//$$ import gg.essential.universal.utils.MCITextComponent
 //#endif
 
 class UMessage {
     private lateinit var _chatMessage: UTextComponent
-    val messageParts = mutableListOf<UTextComponent>()
+    val messageParts: MutableList<UTextComponent> = mutableListOf()
 
     val chatMessage: UTextComponent
         get() {
@@ -25,8 +25,8 @@ class UMessage {
         get() = chatMessage.unformattedText
 
     var chatLineId: Int = -1
-    var isRecursive = false
-    var isFormatted = true
+    var isRecursive: Boolean = false
+    var isFormatted: Boolean = true
 
     constructor(component: UTextComponent) {
         if (component.siblings.isEmpty()) {
@@ -62,7 +62,7 @@ class UMessage {
         }
     }
 
-    fun addTextComponent(component: Any) = addTextComponent(messageParts.size, component)
+    fun addTextComponent(component: Any): UMessage = addTextComponent(messageParts.size, component)
 
     fun edit(vararg replacements: UMessage) {
         TODO()

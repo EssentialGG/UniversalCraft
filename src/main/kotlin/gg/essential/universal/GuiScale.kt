@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
 enum class GuiScale {
     Auto,
@@ -9,6 +9,6 @@ enum class GuiScale {
 
     companion object {
         @JvmStatic
-        fun fromNumber(number: Int) = values()[number]
+        fun fromNumber(number: Int): GuiScale = values()[number]
     }
 }

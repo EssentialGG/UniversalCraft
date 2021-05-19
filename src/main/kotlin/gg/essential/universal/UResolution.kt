@@ -1,4 +1,4 @@
-package club.sk1er.mods.core.universal
+package gg.essential.universal
 
 //#if MC<=11202
 import net.minecraft.client.gui.ScaledResolution
