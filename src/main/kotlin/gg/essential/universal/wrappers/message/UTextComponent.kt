@@ -444,11 +444,17 @@ class UTextComponent : MCITextComponent {
 
     override fun getFormattedText(): String = component.formattedText
 
-    override fun getSiblings(): MutableList<IChatComponent> = component.siblings
-
     override fun createCopy(): IChatComponent = component.createCopy()
 
+    //#if MC==10710
+    //$$ override fun getSiblings(): MutableList<IChatComponent> = component.siblings as MutableList<IChatComponent>
+
+    //$$ override fun iterator(): MutableIterator<IChatComponent> = component.iterator() as MutableIterator<IChatComponent>
+    //#else
+    override fun getSiblings(): MutableList<IChatComponent> = component.siblings
+
     override fun iterator(): MutableIterator<IChatComponent> = component.iterator()
+    //#endif
     //#endif
 
     companion object {

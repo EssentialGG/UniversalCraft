@@ -26,13 +26,16 @@ object UPacket {
         //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.CHAT))
         //#elseif MC>=11202
         //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.CHAT))
-        //#else
+        //#elseif MC>=10809
         UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, 0))
+        //#else
+        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, false))
         //#endif
     }
-    
+
     @JvmStatic
     fun sendActionBarMessage(message: UTextComponent) {
+        //#if MC>=10809
         //#if FABRIC
         //$$ UPlayer.getPlayer()!!.sendMessage(LiteralText(message.text), true)
         //#elseif MC>=11602
@@ -43,6 +46,7 @@ object UPacket {
         //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.GAME_INFO))
         //#else
         UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, 2))
+        //#endif
         //#endif
     }
 }

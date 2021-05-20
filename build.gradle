@@ -11,8 +11,8 @@ buildscript {
 
     repositories {
         mavenLocal()
-        jcenter()
         mavenCentral()
+        jcenter()
         maven {
             name = "fabric"
             url = "https://maven.fabricmc.net/"
@@ -20,7 +20,7 @@ buildscript {
         if (!fabric) {
             maven {
                 name = "forge"
-                url = "https://files.minecraftforge.net/maven"
+                url = "https://maven.minecraftforge.net/"
             }
         }
         maven {
@@ -40,9 +40,10 @@ buildscript {
             }
         } else {
             classpath('com.github.ReplayMod:ForgeGradle:' + (
-                    mcVersion >= 11200 ? 'b64de9c' : // FG 2.3
-                            mcVersion >= 10904 ? '5bb7a53' : // FG 2.2
-                                    'fc1eabc'   // FG 2.1
+                    mcVersion >= 11200 ? '541e148' : // FG 2.3
+                            mcVersion >= 10904 ? '5c1f53d' : // FG 2.2
+                                    mcVersion >= 10800 ? '48c4f0c' :   // FG 2.1
+                                            'a8a9e0c' // FG 1.2
             ) + ':all') {
                 exclude group: 'net.sf.trove4j', module: 'trove4j' // preprocessor/idea requires more recent one
                 exclude group: 'trove', module: 'trove' // different name same thing
@@ -52,15 +53,19 @@ buildscript {
 }
 
 def FG3 = !fabric && mcVersion >= 11400
+def FG1_2 = !fabric && mcVersion <= 10800
 def FABRIC = fabric
 
 if (FABRIC) {
     apply plugin: 'fabric-loom'
 } else if (FG3) {
     apply plugin: 'net.minecraftforge.gradle'
+} else if (FG1_2) {
+    apply plugin: 'forge'
 } else {
     apply plugin: 'net.minecraftforge.gradle.forge'
 }
+
 apply plugin: 'kotlin'
 apply plugin: 'com.replaymod.preprocess'
 apply plugin: 'maven-publish'
@@ -74,7 +79,6 @@ preprocess {
 repositories {
     mavenCentral()
     mavenLocal()
-    jcenter()
 
     maven { url 'https://jitpack.io' }
 }
@@ -125,7 +129,7 @@ if (FABRIC) {
                     10904: '1.9.4-12.17.0.1976',
                     10809: '1.8.9-11.15.1.1722',
                     10800: '1.8-11.14.4.1563',
-                    10710: '1.7.10-10.13.4.1558-1.7.10',
+                    10710: '1.7.10-10.13.4.1614-1.7.10',
             ][mcVersion]
             mappings = [
                     11404: "snapshot_20190719-1.14.3",
@@ -279,5 +283,3 @@ publishing {
         }
     }
 }
-
-

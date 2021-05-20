@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 //$$ import net.minecraft.text.StringVisitable;
 //$$ import net.minecraft.text.Style;
 //$$ import net.minecraft.util.math.Quaternion;
-//$$ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraft.client.texture.NativeImage;
 //$$ import net.minecraft.client.texture.NativeImageBackedTexture;
 //$$ import java.io.ByteArrayInputStream;
@@ -32,10 +31,11 @@ import java.util.regex.Pattern;
 //#else
 import gg.essential.universal.utils.ReleasedDynamicTexture;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.DynamicTexture;
+//#if MC>=10809
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import org.lwjgl.opengl.GL11;
 //#endif
+//#endif
+import org.lwjgl.opengl.GL11;
 
 //#if FORGE && MC>=11602
 //$$ import net.minecraft.util.math.vector.Quaternion;
@@ -73,10 +73,12 @@ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraft.client.renderer.GlStateManager;
 //$$ import net.minecraft.client.renderer.BufferBuilder;
 //$$ import net.minecraft.client.renderer.OpenGlHelper;
-//#elseif MC==10809
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+//#else
+//#if MC==10809
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+//#endif
+import net.minecraft.client.renderer.OpenGlHelper;
 //#endif
 
 public class UGraphics {
@@ -88,7 +90,7 @@ public class UGraphics {
     public static int ZERO_TEXT_ALPHA = 10;
     //#if MC>10809
     //$$ private BufferBuilder instance;
-    //#else
+    //#elseif MC==10809
     private WorldRenderer instance;
     //#endif
 
@@ -96,10 +98,12 @@ public class UGraphics {
     //$$ public UGraphics(BufferBuilder instance) {
     //$$     this.instance = instance;
     //$$ }
-    //#else
+    //#elseif MC==10809
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
     }
+    //#else
+    //$$ public UGraphics(){}
     //#endif
 
     //#if MC>=11602
@@ -118,8 +122,10 @@ public class UGraphics {
         //$$ stack.push();
         //#elseif MC>=11502
         //$$ RenderSystem.pushMatrix();
-        //#else
+        //#elseif MC>=10809
         GlStateManager.pushMatrix();
+        //#else
+        //$$ GL11.glPushMatrix();
         //#endif
     }
 
@@ -128,16 +134,20 @@ public class UGraphics {
         //$$ stack.pop();
         //#elseif MC>=11502
         //$$ RenderSystem.popMatrix();
-        //#else
+        //#elseif MC>=10809
         GlStateManager.popMatrix();
+        //#else
+        //$$ GL11.glPopMatrix();
         //#endif
     }
 
     public static UGraphics getFromTessellator() {
         //#if MC>10809
         //$$ return new UGraphics(getTessellator().getBuffer());
-        //#else
+        //#elseif MC==10809
         return new UGraphics(getTessellator().getWorldRenderer());
+        //#else
+        //$$ return new UGraphics();
         //#endif
     }
 
@@ -154,8 +164,10 @@ public class UGraphics {
         //$$ stack.translate(x, y, z);
         //#elseif MC>=11502
         //$$ RenderSystem.translated(x, y, z);
-        //#else
+        //#elseif MC>=10809
         GlStateManager.translate(x, y, z);
+        //#else
+        //$$ GL11.glTranslated(x, y, z);
         //#endif
     }
 
@@ -166,8 +178,10 @@ public class UGraphics {
         //$$ stack.rotate(new Quaternion(new Vector3f(x, y, z), angle, true));
         //#elseif MC>=11502
         //$$ RenderSystem.rotatef(angle, x, y, z);
-        //#else
+        //#elseif MC>=10809
         GlStateManager.rotate(angle, x, y, z);
+        //#else
+        //$$ GL11.glRotatef(angle, x, y, z);
         //#endif
     }
 
@@ -184,13 +198,19 @@ public class UGraphics {
         //$$ stack.scale((float) x, (float) y, (float) z);
         //#elseif MC>=11502
         //$$ RenderSystem.scaled(x, y, z);
-        //#else
+        //#elseif MC>=10809
         GlStateManager.scale(x, y, z);
+        //#else
+        //$$ GL11.glScaled(x, y, z);
         //#endif
     }
 
     public static Tessellator getTessellator() {
+        //#if MC>=10809
         return Tessellator.getInstance();
+        //#else
+        //$$ return Tessellator.instance;
+        //#endif
     }
 
     public static void draw() {
@@ -209,8 +229,10 @@ public class UGraphics {
         //$$     }
         //$$ }
         //$$ throw new IllegalArgumentException(String.format("Mode %d is not valid!", mode));
-        //#else
+        //#elseif MC>=10809
         GlStateManager.cullFace(mode);
+        //#else
+        //$$ GL11.glCullFace(mode);
         //#endif
 
     }
@@ -219,7 +241,11 @@ public class UGraphics {
         //#if MC==11502
         //$$ RenderSystem.enableLighting();
         //#elseif MC<=11202
+        //#if MC>=10809
         GlStateManager.enableLighting();
+        //#else
+        //$$ GL11.glEnable(GL11.GL_LIGHTING);
+        //#endif
         //#endif
     }
 
@@ -227,38 +253,59 @@ public class UGraphics {
         //#if MC==11502
         //$$ RenderSystem.disableLighting();
         //#elseif MC<=11202
+        //#if MC>=10809
         GlStateManager.disableLighting();
+        //#else
+        //$$ GL11.glDisable(GL11.GL_LIGHTING);
+        //#endif
         //#endif
     }
 
     public static void disableLight(int mode) {
         //#if MC<=11202
+        //#if MC>=10809
         GlStateManager.disableLight(mode);
+        //#else
+        //$$ GL11.glDisable(GL11.GL_LIGHT0 + mode);
+        //#endif
         //#endif
     }
 
     public static void enableLight(int mode) {
         //#if MC<=11202
+        //#if MC>=10809
         GlStateManager.enableLight(mode);
+        //#else
+        //$$ GL11.glEnable(GL11.GL_LIGHT0 + mode);
+        //#endif
         //#endif
     }
 
     public static void enableBlend() {
+        //#if MC>=10809
         GlStateManager.enableBlend();
+        //#else
+        //$$ GL11.glEnable(GL11.GL_BLEND);
+        //#endif
     }
 
     public static void disableTexture2D() {
         //#if MC>=11502
         //$$ GlStateManager.disableTexture();
-        //#else
+        //#elseif MC>=10809
         GlStateManager.disableTexture2D();
+        //#else
+        //$$ GL11.glDisable(GL11.GL_TEXTURE_2D);
         //#endif
-
     }
 
     public static void disableAlpha() {
         //#if MC<11502
+        //#if MC>=10809
         GlStateManager.disableAlpha();
+        //#else
+        //$$ GL11.glDisable(GL11.GL_ALPHA_TEST);
+        //#endif
         //#endif
     }
 
@@ -266,44 +313,68 @@ public class UGraphics {
         //#if MC==11502
         //$$ RenderSystem.shadeModel(mode);
         //#elseif MC<11502
+        //#if MC>=10809
         GlStateManager.shadeModel(mode);
+        //#else
+        //$$ GL11.glShadeModel(mode);
+        //#endif
         //#endif
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
         //#if MC>=11502
         //$$ GlStateManager.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
-        //#else
+        //#elseif MC>=10809
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //#else
+        //$$ OpenGlHelper.glBlendFunc(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#endif
     }
 
     public static void enableTexture2D() {
         //#if MC>=11502
         //$$ GlStateManager.enableTexture();
-        //#else
+        //#elseif MC>=10809
         GlStateManager.enableTexture2D();
+        //#else
+        //$$ GL11.glEnable(GL11.GL_TEXTURE_2D);
         //#endif
     }
 
     public static void disableBlend() {
+        //#if MC>=10809
         GlStateManager.disableBlend();
+        //#else
+        //$$ GL11.glDisable(GL11.GL_BLEND);
+        //#endif
     }
 
     public static void deleteTexture(int glTextureId) {
+        //#if MC>=10809
         GlStateManager.deleteTexture(glTextureId);
+        //#else
+        //$$ GL11.glDeleteTextures(glTextureId);
+        //#endif
     }
 
     public static void enableAlpha() {
-        //#if FORGE && MC>=11502
+        //#if FORGE
+        //#if MC>=11502
         //$$ GlStateManager.enableAlphaTest();
-        //#elseif FORGE
+        //#elseif MC>=10809
         GlStateManager.enableAlpha();
+        //#else
+        //$$ GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //#endif
         //#endif
     }
 
     public static void bindTexture(int glTextureId) {
+        //#if MC>=10809
         GlStateManager.bindTexture(glTextureId);
+        //#else
+        //$$ GL11.glBindTexture(GL11.GL_TEXTURE_2D, glTextureId);
+        //#endif
     }
 
     public static int getStringWidth(String in) {
@@ -330,8 +401,10 @@ public class UGraphics {
         //$$ } else {
         //$$     UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //$$ }
-        //#else
+        //#elseif MC>=10809
         UMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
+        //#else
+        //$$ UMinecraft.getFontRenderer().drawString(text, (int)x, (int)y, color, shadow);
         //#endif
     }
 
@@ -350,9 +423,12 @@ public class UGraphics {
         //#elseif MC>=11502
         //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
         //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
-        //#else
+        //#elseif MC>=10809
         UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
         UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
+        //#else
+        //$$ UMinecraft.getFontRenderer().drawString(text, (int)x + 1, (int)y + 1, shadowColor, false);
+        //$$ UMinecraft.getFontRenderer().drawString(text, (int)x, (int)y, color, false);
         //#endif
     }
 
@@ -370,7 +446,7 @@ public class UGraphics {
         }
 
         //#if MC>=11602
-        // TODO: Validate this code
+        //$$ // TODO: Validate this code
         //$$ List<String> strings = new ArrayList<>();
         //$$
         //#if FABRIC
@@ -485,8 +561,10 @@ public class UGraphics {
     public static boolean areShadersSupported() {
         //#if MC>=11502
         //$$ return true;
-        //#else
+        //#elseif MC>=10809
         return OpenGlHelper.areShadersSupported();
+        //#else
+        //$$ return OpenGlHelper.func_153193_b();
         //#endif
     }
 
@@ -563,49 +641,72 @@ public class UGraphics {
     }
 
     public static void color4f(float red, float green, float blue, float alpha) {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ RenderSystem.color4f(red, green, blue, alpha);
+        //#elseif MC>=10809
         GlStateManager.color(red, green, blue, alpha);
         //#else
-        //$$ RenderSystem.color4f(red, green, blue, alpha);
+        //$$ GL11.glColor4f(red, green, blue, alpha);
         //#endif
     }
 
     public static void directColor3f(float red, float green, float blue) {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ RenderSystem.color3f(red, green, blue);
+        //#elseif MC>=10809
         GlStateManager.color(red, green, blue);
         //#else
-        //$$ RenderSystem.color3f(red, green, blue);
+        //$$ GL11.glColor3f(red, green, blue);
         //#endif
     }
 
     public static void enableDepth() {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ RenderSystem.enableDepthTest();
+        //#elseif MC>=10809
         GlStateManager.enableDepth();
         //#else
-        //$$ RenderSystem.enableDepthTest();
+        //$$ GL11.glEnable(GL11.GL_DEPTH_TEST);
         //#endif
     }
 
     public static void depthFunc(int mode) {
+        //#if MC>=10809
         GlStateManager.depthFunc(mode);
-    }
-
-    public static void depthMask(boolean flag) {
-        GlStateManager.depthMask(flag);
-    }
-
-    public static void disableDepth() {
-        //#if MC<11502
-        GlStateManager.disableDepth();
         //#else
-        //$$ RenderSystem.disableDepthTest();
+        //$$ GL11.glDepthFunc(mode);
         //#endif
     }
 
+    public static void depthMask(boolean flag) {
+        //#if MC>=10809
+        GlStateManager.depthMask(flag);
+        //#else
+        //$$ GL11.glDepthMask(flag);
+        //#endif
+    }
+
+    public static void disableDepth() {
+        //#if MC>=11502
+        //$$ RenderSystem.disableDepthTest();
+        //#elseif MC>=10809
+        GlStateManager.disableDepth();
+        //#else
+        //$$ GL11.glDisable(GL11.GL_DEPTH_TEST);
+        //#endif
+    }
+
+    //#if MC>=10809
     public UGraphics begin(int glMode, VertexFormat format) {
         instance.begin(glMode, format);
         return this;
     }
+    //#else
+    //$$ public UGraphics begin(int glMode) {
+    //$$     getTessellator().startDrawing(glMode);
+    //$$     return this;
+    //$$ }
+    //#endif
 
     public UGraphics pos(double x, double y, double z) {
         //#if FABRIC
@@ -613,8 +714,10 @@ public class UGraphics {
         //#else
         //#if MC>=11602
         //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
-        //#else
+        //#elseif MC>=10809
         instance.pos(x, y, z);
+        //#else
+        //$$ getTessellator().addVertex(x, y, z);
         //#endif
         //#endif
         return this;
@@ -625,7 +728,11 @@ public class UGraphics {
     }
 
     public UGraphics color(float red, float green, float blue, float alpha) {
+        //#if MC>=10809
         instance.color(red, green, blue, alpha);
+        //#else
+        //$$ getTessellator().setColorRGBA_F(red, green, blue, alpha);
+        //#endif
         return this;
     }
 
@@ -636,7 +743,7 @@ public class UGraphics {
     public UGraphics endVertex() {
         //#if FABRIC
         //$$ instance.next();
-        //#else
+        //#elseif MC>=10809
         instance.endVertex();
         //#endif
         return this;
@@ -647,8 +754,10 @@ public class UGraphics {
         //$$ instance.texture((float) u, (float) v);
         //#elseif MC>=11502
         //$$ instance.tex((float)u,(float)v);
-        //#else
+        //#elseif MC>=10809
         instance.tex(u, v);
+        //#else
+        //$$ getTessellator().setTextureUV(u, v);
         //#endif
         return this;
     }
@@ -662,16 +771,20 @@ public class UGraphics {
         public static void pushMatrix() {
             //#if MC>=11502
             //$$ RenderSystem.pushMatrix();
-            //#else
+            //#elseif MC>=10809
             GlStateManager.pushMatrix();
+            //#else
+            //$$ GL11.glPushMatrix();
             //#endif
         }
 
         public static void popMatrix() {
             //#if MC>=11502
             //$$ RenderSystem.popMatrix();
-            //#else
+            //#elseif MC>=10809
             GlStateManager.popMatrix();
+            //#else
+            //$$ GL11.glPopMatrix();
             //#endif
         }
 
@@ -686,16 +799,20 @@ public class UGraphics {
         public static void translate(double x, double y, double z) {
             //#if MC>=11502
             //$$ RenderSystem.translated(x, y, z);
-            //#else
+            //#elseif MC>=10809
             GlStateManager.translate(x, y, z);
+            //#else
+            //$$ GL11.glTranslated(x, y, z);
             //#endif
         }
 
         public static void rotate(float angle, float x, float y, float z) {
             //#if MC>=11502
             //$$ RenderSystem.rotatef(angle, x, y, z);
-            //#else
+            //#elseif MC>=10809
             GlStateManager.rotate(angle, x, y, z);
+            //#else
+            //$$ GL11.glRotatef(angle, x, y, z);
             //#endif
         }
 
@@ -710,8 +827,10 @@ public class UGraphics {
         public static void scale(double x, double y, double z) {
             //#if MC>=11502
             //$$ RenderSystem.scaled(x, y, z);
-            //#else
+            //#elseif MC>=10809
             GlStateManager.scale(x, y, z);
+            //#else
+            //$$ GL11.glScaled(x, y, z);
             //#endif
         }
     }

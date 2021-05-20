@@ -44,9 +44,13 @@ typealias MCClickEventAction = net.minecraft.event.ClickEvent.Action
 //$$ typealias MCMainMenuScreen = net.minecraft.client.gui.screen.MainMenuScreen
 //$$ typealias MCSChatPacket = net.minecraft.network.play.server.SChatPacket
 //#else
+//#if MC==10710
+//$$ typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityClientPlayerMP
+//#else
+typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityPlayerSP
+//#endif
 typealias MCSettings = net.minecraft.client.settings.GameSettings
 typealias MCWorld = net.minecraft.client.multiplayer.WorldClient
-typealias MCEntityPlayerSP = net.minecraft.client.entity.EntityPlayerSP
 typealias MCScreen = net.minecraft.client.gui.GuiScreen
 typealias MCChatScreen = net.minecraft.client.gui.GuiNewChat
 typealias MCMainMenuScreen = net.minecraft.client.gui.GuiMainMenu

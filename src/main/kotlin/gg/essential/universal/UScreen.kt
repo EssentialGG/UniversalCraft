@@ -226,12 +226,14 @@ abstract class UScreen @JvmOverloads constructor(
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
         //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode)
-        //#else
+        //#elseif MC>=10809
         try {
             super.keyTyped(typedChar, keyCode)
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        //#else
+        //$$ super.keyTyped(typedChar, keyCode)
         //#endif
     }
 
@@ -246,12 +248,14 @@ abstract class UScreen @JvmOverloads constructor(
         //$$ if (mouseButton == 1)
         //$$     lastClick = UMinecraft.getTime()
         //$$ super.mouseClicked(mouseX, mouseY, mouseButton)
-        //#else
+        //#elseif MC>=10809
         try {
             super.mouseClicked(mouseX.toInt(), mouseY.toInt(), mouseButton)
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        //#else
+        //$$ super.mouseClicked(mouseX.toInt(), mouseY.toInt(), mouseButton)
         //#endif
     }
 
