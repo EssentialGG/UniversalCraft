@@ -15,6 +15,7 @@ import org.lwjgl.input.Keyboard
 
 object UKeyboard {
     //#if MC>=11502
+    //$$ const val KEY_NONE: Int = 0
     //$$ const val KEY_ESCAPE: Int = GLFW.GLFW_KEY_ESCAPE
     //$$ const val KEY_LMETA: Int = GLFW.GLFW_KEY_LEFT_SUPER // TODO: Correct?
     //$$ const val KEY_RMETA: Int = GLFW.GLFW_KEY_RIGHT_SUPER // TODO: Correct?
@@ -117,7 +118,10 @@ object UKeyboard {
     //$$ const val KEY_F18: Int = GLFW.GLFW_KEY_F18
     //$$ const val KEY_F19: Int = GLFW.GLFW_KEY_F19
     //$$ const val KEY_DELETE: Int = GLFW.GLFW_KEY_DELETE
+    //$$ const val KEY_HOME: Int = GLFW.GLFW_KEY_HOME
+    //$$ const val KEY_END: Int = GLFW.GLFW_KEY_END
     //#else
+    const val KEY_NONE: Int = Keyboard.KEY_NONE
     const val KEY_ESCAPE: Int = Keyboard.KEY_ESCAPE
     const val KEY_LMETA: Int = Keyboard.KEY_LMETA
     const val KEY_RMETA: Int = Keyboard.KEY_RMETA
@@ -220,6 +224,8 @@ object UKeyboard {
     const val KEY_F18: Int = Keyboard.KEY_F18
     const val KEY_F19: Int = Keyboard.KEY_F19
     const val KEY_DELETE: Int = Keyboard.KEY_DELETE
+    const val KEY_HOME: Int = Keyboard.KEY_HOME
+    const val KEY_END: Int = Keyboard.KEY_END
     //#endif
 
     @JvmStatic
