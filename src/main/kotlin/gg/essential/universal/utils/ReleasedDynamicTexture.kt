@@ -42,9 +42,9 @@ class ReleasedDynamicTexture(
 
     fun uploadTexture() {
         if (!uploaded) {
-            TextureUtil.allocateTexture(getGlTextureId(), width, height)
+            TextureUtil.allocateTexture(super.getGlTextureId(), width, height)
             TextureUtil.uploadTexture(
-                getGlTextureId(), textureData,
+                super.getGlTextureId(), textureData,
                 width, height
             )
             textureData = IntArray(0)
