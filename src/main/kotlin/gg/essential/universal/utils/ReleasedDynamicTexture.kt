@@ -21,9 +21,9 @@ import java.io.IOException
 //#if MC<11502
 class ReleasedDynamicTexture(
     /** width of this icon in pixels  */
-    private val width: Int,
+    val width: Int,
     /** height of this icon in pixels  */
-    private val height: Int
+    val height: Int
 ) : AbstractTexture() {
     var textureData: IntArray = IntArray(width * height)
     var uploaded: Boolean = false
@@ -65,10 +65,14 @@ class ReleasedDynamicTexture(
 //#elseif MC>=11600
 
 //$$ class ReleasedDynamicTexture : net.minecraft.client.renderer.texture.Texture {
+//$$     val width: Int
+//$$     val height: Int
 //$$     private var dynamicTextureData: net.minecraft.client.renderer.texture.NativeImage?
 //$$
-//$$     constructor(nativeImageIn: net.minecraft.client.renderer.texture.NativeImage?) {
+//$$     constructor(nativeImageIn: net.minecraft.client.renderer.texture.NativeImage) {
 //$$         dynamicTextureData = nativeImageIn
+//$$         width = nativeImageIn.width
+//$$         height = nativeImageIn.height
 //$$         if (!RenderSystem.isOnRenderThread()) {
 //$$             RenderSystem.recordRenderCall {
 //$$                 TextureUtil.prepareImage(
@@ -91,6 +95,8 @@ class ReleasedDynamicTexture(
 //$$     constructor(widthIn: Int, heightIn: Int, clearIn: Boolean) {
 //$$         RenderSystem.assertThread { RenderSystem.isOnGameThreadOrInit() }
 //$$         dynamicTextureData = net.minecraft.client.renderer.texture.NativeImage(widthIn, heightIn, clearIn)
+//$$         width = widthIn
+//$$         height = heightIn
 //$$         TextureUtil.prepareImage(this.getGlTextureId(), dynamicTextureData!!.width, dynamicTextureData!!.height)
 //$$     }
 //$$
@@ -130,10 +136,14 @@ class ReleasedDynamicTexture(
 //$$
 //#else
 //$$ class ReleasedDynamicTexture : net.minecraft.client.renderer.texture.Texture {
+//$$     val width: Int
+//$$     val height: Int
 //$$     private var dynamicTextureData: net.minecraft.client.renderer.texture.NativeImage?
 //$$
-//$$     constructor(nativeImageIn: net.minecraft.client.renderer.texture.NativeImage?) {
+//$$     constructor(nativeImageIn: net.minecraft.client.renderer.texture.NativeImage) {
 //$$         dynamicTextureData = nativeImageIn
+//$$         width = nativeImageIn.width
+//$$         height = nativeImageIn.height
 //$$         if (!RenderSystem.isOnRenderThread()) {
 //$$             RenderSystem.recordRenderCall {
 //$$                 TextureUtil.prepareImage(
@@ -156,6 +166,8 @@ class ReleasedDynamicTexture(
 //$$     constructor(widthIn: Int, heightIn: Int, clearIn: Boolean) {
 //$$         RenderSystem.assertThread { RenderSystem.isOnGameThreadOrInit() }
 //$$         dynamicTextureData = net.minecraft.client.renderer.texture.NativeImage(widthIn, heightIn, clearIn)
+//$$         width = widthIn
+//$$         height = heightIn
 //$$         TextureUtil.prepareImage(this.getGlTextureId(), dynamicTextureData!!.width, dynamicTextureData!!.height)
 //$$     }
 //$$
