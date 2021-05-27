@@ -1,6 +1,7 @@
 package gg.essential.universal.utils
 
 //#if FORGE
+import gg.essential.universal.UGraphics
 import net.minecraft.client.renderer.texture.TextureUtil
 //#if MC<11502
 import net.minecraft.client.renderer.texture.AbstractTexture
@@ -23,10 +24,10 @@ class ReleasedDynamicTexture(
     private val height: Int
 ) : AbstractTexture() {
     var textureData: IntArray = IntArray(width * height)
+    var uploaded: Boolean = false
 
     constructor(bufferedImage: BufferedImage) : this(bufferedImage.width, bufferedImage.height) {
         bufferedImage.getRGB(0, 0, bufferedImage.width, bufferedImage.height, textureData, 0, bufferedImage.width)
-        updateDynamicTexture()
     }
 
     @Throws(IOException::class)
@@ -34,13 +35,29 @@ class ReleasedDynamicTexture(
     }
 
     fun updateDynamicTexture() {
-        TextureUtil.uploadTexture(getGlTextureId(), textureData, width, height)
-        textureData = IntArray(0)
+        if (!uploaded) {
+            TextureUtil.uploadTexture(getGlTextureId(), textureData, width, height)
+            textureData = IntArray(0)
+        }
     }
 
-    init {
-        TextureUtil.allocateTexture(getGlTextureId(), width, height)
+    fun uploadTexture() {
+        if (!uploaded) {
+            TextureUtil.allocateTexture(getGlTextureId(), width, height)
+            updateDynamicTexture()
+            uploaded = true
+        }
     }
+
+    override fun getGlTextureId(): Int {
+        uploadTexture()
+        return super.getGlTextureId()
+    }
+
+    protected fun finalize() {
+       UGraphics.deleteTexture(getGlTextureId())
+    }
+
 }
 //#elseif MC>=11600
 
