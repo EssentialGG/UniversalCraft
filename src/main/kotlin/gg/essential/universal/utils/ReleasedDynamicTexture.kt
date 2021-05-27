@@ -1,17 +1,17 @@
 package gg.essential.universal.utils
 
 //#if FORGE
-import gg.essential.universal.UGraphics
-import net.minecraft.client.renderer.texture.TextureUtil
 //#if MC<11502
-import net.minecraft.client.renderer.texture.AbstractTexture
-import net.minecraft.client.resources.IResourceManager
 //#else
 //$$ import java.util.function.Supplier
 //$$ import org.apache.logging.log4j.LogManager
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //#endif
 
+import gg.essential.universal.UGraphics
+import net.minecraft.client.renderer.texture.AbstractTexture
+import net.minecraft.client.renderer.texture.TextureUtil
+import net.minecraft.client.resources.IResourceManager
 import java.awt.image.BufferedImage
 import java.io.IOException
 
@@ -35,16 +35,16 @@ class ReleasedDynamicTexture(
     }
 
     fun updateDynamicTexture() {
-        if (!uploaded) {
-            TextureUtil.uploadTexture(getGlTextureId(), textureData, width, height)
-            textureData = IntArray(0)
-        }
+        uploadTexture()
     }
 
     fun uploadTexture() {
         if (!uploaded) {
-            TextureUtil.allocateTexture(super.getGlTextureId(), width, height)
-            updateDynamicTexture()
+            TextureUtil.uploadTexture(
+                getGlTextureId(), textureData,
+                width, height
+            )
+            textureData = IntArray(0)
             uploaded = true
         }
     }
@@ -55,7 +55,7 @@ class ReleasedDynamicTexture(
     }
 
     protected fun finalize() {
-       UGraphics.deleteTexture(getGlTextureId())
+        UGraphics.deleteTexture(getGlTextureId())
     }
 
 }
