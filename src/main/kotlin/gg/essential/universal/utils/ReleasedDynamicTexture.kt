@@ -43,7 +43,7 @@ class ReleasedDynamicTexture(
     fun uploadTexture() {
         if (!uploaded) {
             TextureUtil.uploadTexture(
-                getGlTextureId(), textureData,
+                super.getGlTextureId(), textureData,
                 width, height
             )
             textureData = IntArray(0)
@@ -57,7 +57,7 @@ class ReleasedDynamicTexture(
     }
 
     protected fun finalize() {
-        UGraphics.deleteTexture(getGlTextureId())
+        UGraphics.deleteTexture(super.getGlTextureId())
     }
 
 }
