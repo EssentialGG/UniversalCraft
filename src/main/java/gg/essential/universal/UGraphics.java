@@ -22,10 +22,12 @@ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraft.util.text.CharacterManager;
 //$$ import net.minecraft.util.text.StringTextComponent;
 //$$ import net.minecraft.util.text.ITextProperties;
-//$$ import com.mojang.blaze3d.matrix.MatrixStack;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //$$ import java.util.ArrayList;
 //$$ import java.util.Optional;
+//#else
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 //#endif
 
 //#if MC>=11502
@@ -48,6 +50,7 @@ public class UGraphics {
     //#if MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
+    private static UMatrixStack UNIT_STACK = new UMatrixStack();
     public static int ZERO_TEXT_ALPHA = 10;
     private WorldRenderer instance;
 
@@ -55,81 +58,43 @@ public class UGraphics {
         this.instance = instance;
     }
 
-    //#if MC>=11602
-    //$$ private static MatrixStack stack = new MatrixStack();
-    //$$ public static MatrixStack getStack() {
-    //$$     return stack;
-    //$$ }
-    //$$
-    //$$ public static void setStack(MatrixStack stack) {
-    //$$     UGraphics.stack = stack;
-    //$$ }
-    //#endif
-
+    @Deprecated // See UGraphics.GL
     public static void pushMatrix() {
-        //#if MC>=11602
-        //$$ stack.push();
-        //#else
-        GlStateManager.pushMatrix();
-        //#endif
+        GL.pushMatrix();
     }
 
+    @Deprecated // See UGraphics.GL
     public static void popMatrix() {
-        //#if MC>=11602
-        //$$ stack.pop();
-        //#else
-        GlStateManager.popMatrix();
-        //#endif
+        GL.popMatrix();
     }
 
     public static UGraphics getFromTessellator() {
         return new UGraphics(getTessellator().getWorldRenderer());
     }
 
+    @Deprecated // See UGraphics.GL
     public static void translate(float x, float y, float z) {
-        //#if MC==11502
-        //$$ RenderSystem.translatef(x, y, z);
-        //#else
-        translate(x, y, (double) z); //Don't remove double casts or this breaks
-        //#endif
+        GL.translate(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void translate(double x, double y, double z) {
-        //#if MC>=11602
-        //$$ stack.translate(x, y, z);
-        //#elseif MC>=11502
-        //$$ RenderSystem.translated(x, y, z);
-        //#else
-        GlStateManager.translate(x, y, z);
-        //#endif
+        GL.translate(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void rotate(float angle, float x, float y, float z) {
-        //#if MC>=11602
-        //$$ stack.rotate(new Quaternion(new Vector3f(x, y, z), angle, true));
-        //#elseif MC>=11502
-        //$$ RenderSystem.rotatef(angle, x, y, z);
-        //#else
-        GlStateManager.rotate(angle, x, y, z);
-        //#endif
+        GL.rotate(angle, x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void scale(float x, float y, float z) {
-        //#if MC==11502
-        //$$ RenderSystem.scalef(x, y, z);
-        //#else
-        scale(x, y, (double) z);
-        //#endif
+        GL.scale(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void scale(double x, double y, double z) {
-        //#if MC>=11602
-        //$$ stack.scale((float) x, (float) y, (float) z);
-        //#elseif MC>=11502
-        //$$ RenderSystem.scaled(x, y, z);
-        //#else
-        GlStateManager.scale(x, y, z);
-        //#endif
+        GL.scale(x, y, z);
     }
 
     public static Tessellator getTessellator() {
@@ -241,13 +206,21 @@ public class UGraphics {
         return UMinecraft.getFontRenderer().getStringWidth(in);
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
+        drawString(UNIT_STACK, text, x, y, color, shadow);
+    }
+
+    public static void drawString(UMatrixStack stack, String text, float x, float y, int color, boolean shadow) {
         if ((color >> 24 & 255) <= 10) return;
         //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
-        //#elseif MC>=11502
+        //#else
+        if (stack != UNIT_STACK) GL.pushMatrix();
+        if (stack != UNIT_STACK) stack.applyToGlobalState();
+        //#if MC>=11502
         //$$ if (shadow) {
         //$$     UMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
         //$$ } else {
@@ -256,21 +229,33 @@ public class UGraphics {
         //#else
         UMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#endif
+        if (stack != UNIT_STACK) GL.popMatrix();
+        //#endif
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public static void drawString(String text, float x, float y, int color, int shadowColor) {
+        drawString(UNIT_STACK, text, x, y, color, shadowColor);
+    }
+
+    public static void drawString(UMatrixStack stack, String text, float x, float y, int color, int shadowColor) {
         if ((color >> 24 & 255) <= 10) return;
         //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
-        //#elseif MC>=11502
+        //#else
+        if (stack != UNIT_STACK) GL.pushMatrix();
+        if (stack != UNIT_STACK) stack.applyToGlobalState();
+        //#if MC>=11502
         //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
         //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //#else
         UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
         UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
+        //#endif
+        if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
     }
 
@@ -489,11 +474,26 @@ public class UGraphics {
         return this;
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public UGraphics pos(double x, double y, double z) {
+        return pos(UNIT_STACK, x, y, z);
+    }
+
+    public UGraphics pos(UMatrixStack stack, double x, double y, double z) {
         //#if MC>=11602
-        //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
+        //$$ instance.pos(stack.peek().getModel(), (float) x, (float) y, (float) z);
         //#else
-        instance.pos(x, y, z);
+        if (stack == UNIT_STACK) {
+            instance.pos(x, y, z);
+        } else {
+            Vector4f vec = new Vector4f((float) x, (float) y, (float) z, 1f);
+            //#if MC>=11400
+            //$$ vec.transform(stack.peek().getModel());
+            //#else
+            Matrix4f.transform(stack.peek().getModel(), vec, vec);
+            //#endif
+            instance.pos(vec.getX(), vec.getY(), vec.getZ());
+        }
         //#endif
         return this;
     }
@@ -525,11 +525,12 @@ public class UGraphics {
         return this;
     }
 
-    // A collection of methods for always calling the OpenGL transformations rather than
-    // delegating to the MatrixStack. In versions less than 1.15.2, these methods are no
-    // different than transformation methods in the UGraphics class.
-    //
-    // The other transformation methods should be preferred.
+    /**
+     * Using UMatrixStack should be preferred for all versions as direct GL transforms will break in 1.17.
+     *
+     * These methods are no different than transformation methods in the UGraphics class except they are not deprecated
+     * and as such can be used in version-specific code.
+     */
     public static class GL {
         public static void pushMatrix() {
             GlStateManager.pushMatrix();

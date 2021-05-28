@@ -1,7 +1,9 @@
 net.minecraft.client.renderer.Matrix3f org.lwjgl.util.vector.Matrix3f
 net.minecraft.client.renderer.Matrix4f org.lwjgl.util.vector.Matrix4f
+net.minecraft.client.renderer.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
 net.minecraft.client.renderer.Quaternion org.lwjgl.util.vector.Quaternion
 net.minecraft.client.renderer.Vector3f org.lwjgl.util.vector.Vector3f
+net.minecraft.client.renderer.Vector4f org.lwjgl.util.vector.Vector4f
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton
 net.minecraft.client.renderer.entity.RenderPlayer net.minecraft.client.renderer.entity.PlayerRenderer
