@@ -26,7 +26,14 @@ typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 //$$ typealias MCITextComponent = net.minecraft.util.text.ITextComponent
 //$$ typealias MCClickEvent = net.minecraft.util.text.event.ClickEvent
 //$$ typealias MCHoverEvent = net.minecraft.util.text.event.HoverEvent
+// FIXME preprocessor bug: remaps the type to …ClickEvent.Action.Action
+//#if MC>=11600
 //$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
+//#elseif MC>=11400
+//$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
+//#else
+//$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
+//#endif
 //#else
 typealias MCITextComponent = net.minecraft.util.IChatComponent
 typealias MCClickEvent = net.minecraft.event.ClickEvent
