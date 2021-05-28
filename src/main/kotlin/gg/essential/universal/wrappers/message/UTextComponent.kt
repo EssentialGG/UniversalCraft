@@ -3,43 +3,36 @@ package gg.essential.universal.wrappers.message
 
 import gg.essential.universal.UChat
 import gg.essential.universal.utils.*
-
-//#if FABRIC
-//$$ import net.minecraft.text.*
-//$$ import net.minecraft.text.StringVisitable.StyledVisitor
-//$$ import net.minecraft.text.StringVisitable.Visitor
-//$$ import net.minecraft.util.Formatting
-//$$
-//$$ import java.util.function.UnaryOperator
-//#elseif MC<=10809
 import net.minecraft.event.ClickEvent
 import net.minecraft.event.HoverEvent
-import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraft.util.ChatStyle
-//#else
-//$$ import net.minecraft.util.text.*
-//$$ import net.minecraft.util.text.event.*
+
 //#if MC>=11602
 //$$ import net.minecraft.util.IReorderingProcessor
+//$$ import net.minecraft.util.text.IFormattableTextComponent
+//$$ import net.minecraft.util.ICharacterConsumer
+//$$ // FIXME preprocessor bug: same inner class issue as in typealiases.kt
+//#if FABRIC
+//$$ import net.minecraft.text.StringVisitable.StyledVisitor
+//$$ import net.minecraft.text.StringVisitable.Visitor
+//#else
 //$$ import net.minecraft.util.text.ITextProperties.IStyledTextAcceptor
 //$$ import net.minecraft.util.text.ITextProperties.ITextAcceptor
 //#endif
+//$$ import java.util.Optional
+//$$ import java.util.function.UnaryOperator
 //#endif
 
-import java.util.Iterator
-import java.util.List
-import java.util.Optional
-
-//#if FORGE && MC>=11502
+//#if MC==11502
 //$$ import java.util.stream.Stream
 //$$ import java.util.function.Consumer
 //#endif
 
 @Suppress("MemberVisibilityCanBePrivate")
-class UTextComponent : MCITextComponent {
-    lateinit var component: MCITextComponent
+class UTextComponent : MCIMutableText {
+    lateinit var component: MCIMutableText
         private set
     var text: String
         set(value) {
@@ -78,15 +71,11 @@ class UTextComponent : MCITextComponent {
         reInstance()
     }
 
-    constructor(component: MCITextComponent) {
+    constructor(component: MCIMutableText) {
         this.component = component
 
-        //#if FABRIC
+        //#if MC>=11602
         //$$ text = formattedText
-        //#elseif MC>=11602
-        //$$ val builder = FormattedTextBuilder()
-        //$$ component.func_230439_a_(builder, Style.EMPTY)
-        //$$ text = builder.getString()
         //#else
         text = component.formattedText
         //#endif
@@ -111,9 +100,7 @@ class UTextComponent : MCITextComponent {
         if (hoverEvent != null) {
             hoverAction = hoverEvent.action
 
-            //#if FABRIC
-            //$$ hoverValue = hoverEvent.getValue(hoverAction)
-            //#elseif MC>=11602
+            //#if MC>=11602
             //$$ hoverValue = hoverEvent.getParameter(hoverAction)
             //#else
             hoverValue = hoverEvent.value
@@ -154,8 +141,8 @@ class UTextComponent : MCITextComponent {
 
         val event = ClickEvent(clickAction, clickValue!!.formatIf(formatted))
 
-        //#if FABRIC
-        //$$ component.style = component.style.withClickEvent(event)
+        //#if MC>=11600
+        //$$ component.style = component.style.setClickEvent(event)
         //#elseif MC>=11202
         //$$ component.style.clickEvent = event
         //#else
@@ -181,8 +168,8 @@ class UTextComponent : MCITextComponent {
     }
 
     private fun setHoverEventHelper(event: HoverEvent) {
-        //#if FABRIC
-        //$$ component.style = component.style.withHoverEvent(event)
+        //#if MC>=11600
+        //$$ component.style = component.style.setHoverEvent(event)
         //#elseif MC>=11202
         //$$ component.style.hoverEvent = event
         //#else
@@ -193,18 +180,18 @@ class UTextComponent : MCITextComponent {
     private fun String.formatIf(predicate: Boolean) = if (predicate) UChat.addColor(this) else this
 
     //#if MC>=11602
-    //#if FORGE
-    //$$ private class FormattedTextBuilder : ITextProperties.IStyledTextAcceptor<Any> {
+    //$$ private class TextBuilder(private val isFormatted: Boolean) : ICharacterConsumer {
     //$$     private val builder = StringBuilder()
     //$$     private var cachedStyle: Style? = null
     //$$
-    //$$     override fun accept(style: Style, string: String): Optional<Any>  {
-    //$$         if (style != cachedStyle) {
+    //$$     override fun accept(index: Int, style: Style, codePoint: Int): Boolean  {
+    //$$         if (isFormatted && style != cachedStyle) {
     //$$             cachedStyle = style
     //$$             builder.append(formatString(style))
     //$$         }
     //$$
-    //$$         return Optional.empty()
+    //$$         builder.append(codePoint.toChar())
+    //$$         return true
     //$$     }
     //$$
     //$$     fun getString() = builder.toString()
@@ -225,39 +212,6 @@ class UTextComponent : MCITextComponent {
     //$$         return builder.toString()
     //$$     }
     //$$ }
-    //#else
-    //$$ private class TextBuilder(private val isFormatted: Boolean) : CharacterVisitor {
-    //$$     private val builder = StringBuilder()
-    //$$     private var cachedStyle: Style? = null
-    //$$
-    //$$     override fun accept(index: Int, style: Style, codePoint: Int): Boolean {
-    //$$         if (isFormatted && style != cachedStyle) {
-    //$$             cachedStyle = style
-    //$$             builder.append(formatString(style))
-    //$$         }
-    //$$         builder.append(codePoint.toChar())
-    //$$         return true
-    //$$     }
-    //$$
-    //$$     fun getString() = builder.toString()
-    //$$
-    //$$     private fun formatString(style: Style): String {
-    //$$         val builder = StringBuilder("§r");
-    //$$
-    //$$         when {
-    //$$             style.isBold -> builder.append("§l")
-    //$$             style.isItalic -> builder.append("§o")
-    //$$             style.isUnderlined -> builder.append("§n")
-    //$$             style.isStrikethrough -> builder.append("§m")
-    //$$             style.isObfuscated -> builder.append("§k")
-    //$$         }
-    //$$
-    //$$         if (style.color != null)
-    //$$             builder.append(style.color.toString())
-    //$$         return builder.toString()
-    //$$     }
-    //$$ }
-    //#endif
     //#endif
 
     // **********************
@@ -265,74 +219,34 @@ class UTextComponent : MCITextComponent {
     // **********************
 
 
-    //#if FABRIC
+    //#if MC>=11602
     //$$ val unformattedText: String get() {
     //$$     val builder = TextBuilder(false)
-    //$$     component.asOrderedText().accept(builder)
+    //$$     component.func_241878_f().accept(builder)
     //$$     return builder.getString()
     //$$ }
     //$$
     //$$ val formattedText: String get() {
     //$$     val builder = TextBuilder(true)
-    //$$     component.asOrderedText().accept(builder)
+    //$$     component.func_241878_f().accept(builder)
     //$$     return builder.getString()
     //$$ }
     //$$
-    //$$ fun appendSibling(text: Text): MutableText = append(text)
+    //$$ fun appendSibling(text: ITextComponent): IFormattableTextComponent = append(text)
     //$$
-    //$$ override fun append(text: String): MutableText = component.append(text)
+    //$$ override fun setStyle(style: Style): IFormattableTextComponent = component.setStyle(style)
     //$$
-    //$$ override fun styled(styleUpdater: UnaryOperator<Style>): MutableText = component.styled(styleUpdater)
+    //$$ override fun append(sibling: ITextComponent): IFormattableTextComponent = component.append(sibling)
     //$$
-    //$$ override fun fillStyle(styleOverride: Style): MutableText = component.fillStyle(styleOverride)
+    //$$ override fun appendString(string: String): IFormattableTextComponent = component.appendString(string)
     //$$
-    //$$ override fun formatted(vararg formattings: Formatting): MutableText = component.formatted(*formattings)
+    //$$ override fun modifyStyle(func: UnaryOperator<Style>): IFormattableTextComponent = component.modifyStyle(func)
     //$$
-    //$$ override fun formatted(formatting: Formatting): MutableText = component.formatted(formatting)
+    //$$ override fun mergeStyle(style: Style): IFormattableTextComponent = component.mergeStyle(style)
     //$$
-    //$$ override fun setStyle(style: Style): MutableText = component.setStyle(style)
+    //$$ override fun mergeStyle(vararg formats: TextFormatting): IFormattableTextComponent = component.mergeStyle(*formats)
     //$$
-    //$$ override fun append(text: Text): MutableText = component.append(text)
-    //$$
-    //$$ override fun getString(): String = component.string
-    //$$
-    //$$ override fun asTruncatedString(length: Int): String = component.asTruncatedString(length)
-    //$$
-    //$$ override fun <T> visit(styledVisitor: StyledVisitor<T>, style: Style): Optional<T> {
-    //$$     return component.visit(styledVisitor, style)
-    //$$ }
-    //$$
-    //$$ override fun <T> visit(visitor: Visitor<T>): Optional<T> {
-    //$$     return component.visit(visitor)
-    //$$ }
-    //$$
-    //$$ override fun <T> visitSelf(visitor: StyledVisitor<T>, style: Style): Optional<T> {
-    //$$     return component.visitSelf(visitor, style)
-    //$$ }
-    //$$
-    //$$ override fun <T> visitSelf(visitor: Visitor<T>): Optional<T> {
-    //$$     return component.visitSelf(visitor)
-    //$$ }
-    //$$
-    //$$ override fun getStyle(): Style = component.style
-    //$$
-    //$$ override fun asString(): String = component.asString()
-    //$$
-    //$$ override fun getSiblings(): MutableList<Text> = component.siblings
-    //$$
-    //$$ override fun copy(): MutableText = component.copy()
-    //$$
-    //$$ override fun shallowCopy(): MutableText = component.shallowCopy()
-    //$$
-    //$$ override fun asOrderedText(): OrderedText = component.asOrderedText()
-    //#elseif MC>=11602
-    //$$ fun appendSibling(component: ITextComponent) {
-    //$$     siblings.add(component)
-    //$$ }
-    //$$
-    //$$ val unformattedText: String get() = unformattedComponentText
-    //$$
-    //$$ val formattedText: String get() = text
+    //$$ override fun mergeStyle(format: TextFormatting): IFormattableTextComponent = component.mergeStyle(format)
     //$$
     //$$ override fun getString(): String = component.string
     //$$
@@ -456,15 +370,13 @@ class UTextComponent : MCITextComponent {
             return when (obj) {
                 is UTextComponent -> obj
                 is String -> UTextComponent(obj)
-                is MCITextComponent -> UTextComponent(obj)
+                is MCIMutableText -> UTextComponent(obj)
                 else -> null
             }
         }
 
         fun stripFormatting(string: String): String {
-            //#if FABRIC
-            //$$ return Formatting.strip(string)!!
-            //#elseif MC>=11202
+            //#if MC>=11202
             //$$ return TextFormatting.getTextWithoutFormattingCodes(string)!!
             //#else
             return EnumChatFormatting.getTextWithoutFormattingCodes(string)

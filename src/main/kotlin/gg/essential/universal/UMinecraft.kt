@@ -2,11 +2,7 @@ package gg.essential.universal
 
 import gg.essential.universal.utils.*
 
-//#if FABRIC
-//$$ import org.lwjgl.glfw.GLFW
-//#endif
-
-//#if FORGE && MC>=11502
+//#if MC>=11502
 //$$ import net.minecraft.client.util.NativeUtil
 //#endif
 
@@ -18,31 +14,6 @@ object UMinecraft {
             getSettings().guiScale = value
         }
 
-    //#if FABRIC
-    //$$ @JvmField
-    //$$ val isRunningOnMac: Boolean = MCMinecraft.IS_SYSTEM_MAC
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getMinecraft(): MCMinecraft = MCMinecraft.getInstance()
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getWorld(): MCWorld? = getMinecraft().world
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getNetHandler(): MCClientNetworkHandler? = getMinecraft().getNetworkHandler()
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getPlayer(): MCEntityPlayerSP? = getMinecraft().player
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getFontRenderer(): MCFontRenderer = getMinecraft().textRenderer
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getTime() = GLFW.glfwGetTime().toLong()
-    //$$
-    //$$ @JvmStatic
-    //$$ fun getSettings(): MCSettings = getMinecraft().options
-    //#else
     @JvmField
     val isRunningOnMac: Boolean =
         //#if MC>=11202
@@ -110,5 +81,4 @@ object UMinecraft {
 
     @JvmStatic
     fun getSettings(): MCSettings = getMinecraft().gameSettings
-    //#endif
 }

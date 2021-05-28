@@ -1,16 +1,11 @@
 package gg.essential.universal
 
-//#if FABRIC
-//$$ import net.minecraft.client.util.InputUtil
-//$$ import org.lwjgl.glfw.GLFW
-//#else
-//$$ import net.minecraft.client.Minecraft
 //#if MC>=11502
 //$$ import org.lwjgl.glfw.GLFW
+//$$ import net.minecraft.client.Minecraft
 //$$ import net.minecraft.client.util.InputMappings
 //#else
 import org.lwjgl.input.Keyboard
-//#endif
 //#endif
 
 object UKeyboard {
@@ -230,9 +225,7 @@ object UKeyboard {
 
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
-        //#if FABRIC
-        //$$ UMinecraft.getMinecraft().keyboard.setRepeatEvents(enabled)
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
         Keyboard.enableRepeatEvents(enabled)
@@ -276,9 +269,7 @@ object UKeyboard {
 
     @JvmStatic
     fun isKeyDown(key: Int): Boolean {
-        //#if FABRIC
-        //$$ return InputUtil.isKeyPressed(UMinecraft.getMinecraft().window.handle, key)
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ return InputMappings.isKeyDown(UMinecraft.getMinecraft().mainWindow.handle, key)
         //#else
         return Keyboard.isKeyDown(key)
@@ -287,9 +278,7 @@ object UKeyboard {
 
     @JvmStatic
     fun getKeyName(keyCode: Int): String? {
-        //#if FABRIC
-        //$$ return InputUtil.fromKeyCode(keyCode, -1).translationKey
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ return GLFW.glfwGetKeyName(keyCode, -1)
         //#else
         return Keyboard.getKeyName(keyCode)

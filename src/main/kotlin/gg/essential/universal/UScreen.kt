@@ -2,13 +2,7 @@ package gg.essential.universal
 
 import gg.essential.universal.utils.MCScreen
 
-//#if FABRIC
-//$$ import gg.essential.universal.utils.MCStringTextComponent
-//$$ import net.minecraft.client.MinecraftClient
-//$$ import net.minecraft.client.util.math.MatrixStack
-//$$ import net.minecraft.text.LiteralText
-//$$ import org.lwjgl.glfw.GLFW
-//#elseif MC>=11502
+//#if MC>=11502
 //$$ import gg.essential.universal.utils.MCStringTextComponent
 //$$ import net.minecraft.util.text.StringTextComponent
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
@@ -315,12 +309,10 @@ abstract class UScreen @JvmOverloads constructor(
 
         @JvmStatic
         fun displayScreen(screen: MCScreen?) {
-            //#if FABRIC
-            //$$ UMinecraft.getMinecraft().openScreen(screen)
-            //#else
+            //#if MC<11200
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            UMinecraft.getMinecraft().displayGuiScreen(screen)
             //#endif
+            UMinecraft.getMinecraft().displayGuiScreen(screen)
         }
     }
 }

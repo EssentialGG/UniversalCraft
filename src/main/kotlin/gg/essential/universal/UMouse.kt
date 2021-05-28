@@ -9,9 +9,7 @@ import kotlin.math.max
 object UMouse {
     @JvmStatic
     fun getTrueX(): Double {
-        //#if FABRIC
-        //$$ return UMinecraft.getMinecraft().mouse.x
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ return UMinecraft.getMinecraft().mouseHelper.mouseX
         //#else
         return Mouse.getX().toDouble()
@@ -25,9 +23,7 @@ object UMouse {
 
     @JvmStatic
     fun getTrueY(): Double {
-        //#if FABRIC
-        //$$ return UMinecraft.getMinecraft().mouse.y
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ return UMinecraft.getMinecraft().mouseHelper.mouseY
         //#else
         return Mouse.getY().toDouble()
