@@ -143,7 +143,7 @@ if (FABRIC) {
         } else {
             mappings channel: 'snapshot', version: [
                     11502: '20200220-1.15.1',
-                    11602: '20200723-1.16.1'
+                    11602: '20201028-1.16.3',
             ][mcVersion]
         }
     }

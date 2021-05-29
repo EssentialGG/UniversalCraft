@@ -276,10 +276,10 @@ public class UGraphics {
         // TODO: Validate this code
         //$$ List<String> strings = new ArrayList<>();
         //$$
-        //$$ CharacterManager charManager = UMinecraft.getFontRenderer().func_238420_b_();
+        //$$ CharacterManager charManager = UMinecraft.getFontRenderer().getCharacterManager();
         //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
         //$$ // From net.minecraft.util.text.ITextProperties line 88
-        //$$ properties.func_230438_a_(string -> {
+        //$$ properties.getComponent(string -> {
         //$$     strings.add(string);
         //$$     return Optional.empty();
         //$$ });

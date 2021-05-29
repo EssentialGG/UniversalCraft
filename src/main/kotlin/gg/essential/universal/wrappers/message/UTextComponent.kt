@@ -252,12 +252,12 @@ class UTextComponent : MCIMutableText {
     //$$
     //$$ override fun getStringTruncated(maxLen: Int): String = component.getStringTruncated(maxLen)
     //$$
-    //$$ override fun <T> func_230439_a_(p_230439_1_: IStyledTextAcceptor<T>, p_230439_2_: Style): Optional<T> {
-    //$$     return component.func_230439_a_(p_230439_1_, p_230439_2_)
+    //$$ override fun <T> getComponentWithStyle(p_230439_1_: IStyledTextAcceptor<T>, p_230439_2_: Style): Optional<T> {
+    //$$     return component.getComponentWithStyle(p_230439_1_, p_230439_2_)
     //$$ }
     //$$
-    //$$ override fun <T> func_230438_a_(p_230438_1_: ITextAcceptor<T>): Optional<T> {
-    //$$     return component.func_230438_a_(p_230438_1_)
+    //$$ override fun <T> getComponent(p_230438_1_: ITextAcceptor<T>): Optional<T> {
+    //$$     return component.getComponent(p_230438_1_)
     //$$ }
     //$$
     //$$ override fun <T> func_230534_b_(p_230534_1_: IStyledTextAcceptor<T>, p_230534_2_: Style): Optional<T> {
