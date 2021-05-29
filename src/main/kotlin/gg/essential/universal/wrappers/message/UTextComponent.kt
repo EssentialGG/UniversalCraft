@@ -13,6 +13,7 @@ import net.minecraft.util.ChatStyle
 //$$ import net.minecraft.util.IReorderingProcessor
 //$$ import net.minecraft.util.text.IFormattableTextComponent
 //$$ import net.minecraft.util.ICharacterConsumer
+//$$ import net.minecraft.util.text.Color
 //$$ // FIXME preprocessor bug: same inner class issue as in typealiases.kt
 //#if FABRIC
 //$$ import net.minecraft.text.StringVisitable.StyledVisitor
@@ -207,9 +208,16 @@ class UTextComponent : MCIMutableText {
     //$$             style.obfuscated -> builder.append("§k")
     //$$         }
     //$$
-    //$$         if (style.color != null)
-    //$$             builder.append(style.color.toString())
+    //$$         style.color?.let(colorToFormatChar::get)?.let {
+    //$$             builder.append(it)
+    //$$         }
     //$$         return builder.toString()
+    //$$     }
+    //$$
+    //$$     companion object {
+    //$$         private val colorToFormatChar = TextFormatting.values().mapNotNull { format ->
+    //$$             Color.fromTextFormatting(format)?.let { it to format }
+    //$$         }.toMap()
     //$$     }
     //$$ }
     //#endif
