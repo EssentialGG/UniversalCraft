@@ -46,7 +46,8 @@ abstract class UScreen @JvmOverloads constructor(
     //$$
     //$$ final override fun init() {
     //$$     if (newGuiScale != -1) {
-    //$$         guiScaleToRestore = UMinecraft.guiScale
+    //$$        if(guiScaleToRestore ==-1)
+    //$$            guiScaleToRestore = UMinecraft.guiScale
     //$$         UMinecraft.guiScale = newGuiScale
     //$$         width = UResolution.scaledWidth
     //$$         height = UResolution.scaledHeight
@@ -145,7 +146,8 @@ abstract class UScreen @JvmOverloads constructor(
     //#else
     final override fun initGui() {
         if (newGuiScale != -1) {
-            guiScaleToRestore = UMinecraft.guiScale
+            if (guiScaleToRestore == -1)
+                guiScaleToRestore = UMinecraft.guiScale
             UMinecraft.guiScale = newGuiScale
             width = UResolution.scaledWidth
             height = UResolution.scaledHeight
@@ -203,7 +205,10 @@ abstract class UScreen @JvmOverloads constructor(
     }
     //#endif
 
-    constructor(restoreCurrentGuiOnClose: Boolean, newGuiScale: GuiScale) : this(restoreCurrentGuiOnClose, newGuiScale.ordinal)
+    constructor(restoreCurrentGuiOnClose: Boolean, newGuiScale: GuiScale) : this(
+        restoreCurrentGuiOnClose,
+        newGuiScale.ordinal
+    )
 
     open fun initScreen(width: Int, height: Int) {
         //#if MC>=11502
