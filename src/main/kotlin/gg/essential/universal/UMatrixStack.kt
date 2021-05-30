@@ -185,6 +185,37 @@ class UMatrixStack private constructor(
             //#endif
     }
 
+    object Compat {
+        const val DEPRECATED = """For 1.17 this method requires you pass a UMatrixStack as the first argument.
+
+If you are currently extending this method, you should instead extend the method with the added argument.
+Note however for this to be non-breaking, your parent class needs to transition before you do.
+
+If you are calling this method and you cannot guarantee that your target class has been fully updated (such as when
+calling an open method on an open class), you should instead call the method with the "Compat" suffix, which will
+call both methods, the new and the deprecated one.
+If you are sure that your target class has been updated (such as when calling the super method), you should
+(for super calls you must!) instead just call the method with the original name and added argument."""
+
+        private val stack = mutableListOf<UMatrixStack>()
+
+        /**
+         * To preserve backwards compatibility with old subclasses of UScreen or similar hierarchies,
+         * this method allows one to sneak in an artificial matrix stack argument when calling the legacy method
+         * which can then later be retrieved via [get] when the base legacy method calls the new one.
+         *
+         * For an example see [UScreen.onDrawScreenCompat].
+         */
+        fun <R> runLegacyMethod(matrixStack: UMatrixStack, block: () -> R): R {
+            stack.add(matrixStack)
+            return block().also {
+                stack.removeAt(stack.lastIndex)
+            }
+        }
+
+        fun get(): UMatrixStack = stack.lastOrNull() ?: UMatrixStack()
+    }
+
     companion object {
         private val MATRIX_BUFFER: FloatBuffer = GLAllocation.createDirectFloatBuffer(16)
     }

@@ -36,8 +36,6 @@ abstract class UScreen @JvmOverloads constructor(
     //$$ private var lastScrolledX = -1.0
     //$$ private var lastScrolledY = -1.0
     //$$
-    //$$ protected lateinit var matrixStack: MatrixStack
-    //$$
     //$$ final override fun init() {
     //$$     if (newGuiScale != -1) {
     //$$        if(guiScaleToRestore ==-1)
@@ -51,12 +49,10 @@ abstract class UScreen @JvmOverloads constructor(
     //$$
     //#if MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
-    //$$     this.matrixStack = matrixStack
-    //$$     onDrawScreen(mouseX, mouseY, partialTicks)
+    //$$     onDrawScreenCompat(UMatrixStack(matrixStack), mouseX, mouseY, partialTicks)
     //#else
     //$$ final override fun render(mouseX: Int, mouseY: Int, partialTicks: Float) {
-    //$$     onDrawScreen(mouseX, mouseY, partialTicks)
-    //$$     super.render(mouseX, mouseY, partialTicks)
+    //$$     onDrawScreenCompat(UMatrixStack(), mouseX, mouseY, partialTicks)
     //#endif
     //$$ }
     //$$
@@ -131,12 +127,13 @@ abstract class UScreen @JvmOverloads constructor(
     //$$
     //#if MC>=11602
     //$$ final override fun renderBackground(matrixStack: MatrixStack, vOffset: Int) {
-    //$$     this.matrixStack = matrixStack
+    //$$     onDrawBackgroundCompat(UMatrixStack(matrixStack), vOffset)
+    //$$ }
     //#else
     //$$ final override fun renderBackground(vOffset: Int) {
-    //#endif
-    //$$     onDrawBackground(vOffset)
+    //$$     onDrawBackgroundCompat(UMatrixStack(), vOffset)
     //$$ }
+    //#endif
     //#else
     final override fun initGui() {
         if (newGuiScale != -1) {
@@ -150,7 +147,7 @@ abstract class UScreen @JvmOverloads constructor(
     }
 
     final override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        onDrawScreen(mouseX, mouseY, partialTicks)
+        onDrawScreenCompat(UMatrixStack(), mouseX, mouseY, partialTicks)
     }
 
     final override fun keyTyped(typedChar: Char, keyCode: Int) {
@@ -195,7 +192,7 @@ abstract class UScreen @JvmOverloads constructor(
     }
 
     final override fun drawWorldBackground(tint: Int) {
-        onDrawBackground(tint)
+        onDrawBackgroundCompat(UMatrixStack(), tint)
     }
     //#endif
 
@@ -212,14 +209,32 @@ abstract class UScreen @JvmOverloads constructor(
         //#endif
     }
 
-    open fun onDrawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+    open fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
         //#if MC>=11602
-        //$$ super.render(matrixStack, mouseX, mouseY, partialTicks)
-        //#elseif MC>=11502
-        //$$ super.render(mouseX, mouseY, partialTicks)
+        //$$ super.render(matrixStack.toMC(), mouseX, mouseY, partialTicks)
         //#else
-        super.drawScreen(mouseX, mouseY, partialTicks)
+        matrixStack.runWithGlobalState {
+            //#if MC>=11502
+            //$$ super.render(mouseX, mouseY, partialTicks)
+            //#else
+            super.drawScreen(mouseX, mouseY, partialTicks)
+            //#endif
+        }
         //#endif
+    }
+
+    @Deprecated(
+        UMatrixStack.Compat.DEPRECATED,
+        ReplaceWith("onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)")
+    )
+    open fun onDrawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        onDrawScreen(UMatrixStack.Compat.get(), mouseX, mouseY, partialTicks)
+    }
+
+    // Calls the deprecated method (for backwards compat) which then calls the new method (read the deprecation message)
+    private fun onDrawScreenCompat(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) = UMatrixStack.Compat.runLegacyMethod(matrixStack) {
+        @Suppress("DEPRECATION")
+        onDrawScreen(mouseX, mouseY, partialTicks)
     }
 
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
@@ -292,14 +307,32 @@ abstract class UScreen @JvmOverloads constructor(
         //#endif
     }
 
-    open fun onDrawBackground(tint: Int) {
+    open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
         //#if MC>=11602
-        //$$ super.renderBackground(matrixStack, tint)
-        //#elseif MC>=11502
-        //$$ super.renderBackground(tint)
+        //$$ super.renderBackground(matrixStack.toMC(), tint)
         //#else
-        super.drawWorldBackground(tint)
+        matrixStack.runWithGlobalState {
+            //#if MC>=11502
+            //$$ super.renderBackground(tint)
+            //#else
+            super.drawWorldBackground(tint)
+            //#endif
+        }
         //#endif
+    }
+
+    @Deprecated(
+        UMatrixStack.Compat.DEPRECATED,
+        ReplaceWith("onDrawBackground(matrixStack, tint)")
+    )
+    open fun onDrawBackground(tint: Int) {
+        onDrawBackground(UMatrixStack.Compat.get(), tint)
+    }
+
+    // Calls the deprecated method (for backwards compat) which then calls the new method (read the deprecation message)
+    fun onDrawBackgroundCompat(matrixStack: UMatrixStack, tint: Int) = UMatrixStack.Compat.runLegacyMethod(matrixStack) {
+        @Suppress("DEPRECATION")
+        onDrawBackground(tint)
     }
 
     companion object {
