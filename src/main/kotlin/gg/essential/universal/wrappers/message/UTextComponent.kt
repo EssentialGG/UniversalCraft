@@ -156,9 +156,7 @@ class UTextComponent : MCIMutableText {
             return
 
         //#if MC>=11602
-        //$$ val action: HoverEvent.Action<MCITextComponent> = hoverAction!! as HoverEvent.Action<MCITextComponent>
-        //$$ val value: MCITextComponent = MCStringTextComponent(hoverValue!! as String)
-        //$$ val event = HoverEvent<MCITextComponent>(action, value)
+        //$$ val event = HoverEvent<Any>(hoverAction as HoverEvent.Action<Any>, hoverValue!!)
         //$$ setHoverEventHelper(event)
         //#else
         setHoverEventHelper(HoverEvent(
