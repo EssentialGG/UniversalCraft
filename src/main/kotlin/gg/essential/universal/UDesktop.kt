@@ -5,6 +5,11 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
+//#if MC>=11400
+//#else
+import gg.essential.universal.utils.MCScreen
+//#endif
+
 object UDesktop {
     @JvmStatic
     var isLinux: Boolean = false
@@ -113,5 +118,22 @@ object UDesktop {
         } catch (e: IOException) {
             false
         }
+    }
+
+    @JvmStatic
+    fun getClipboardString(): String =
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString
+        //#else
+        MCScreen.getClipboardString()
+        //#endif
+
+    @JvmStatic
+    fun setClipboardString(str: String) {
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString = str
+        //#else
+        MCScreen.setClipboardString(str)
+        //#endif
     }
 }
