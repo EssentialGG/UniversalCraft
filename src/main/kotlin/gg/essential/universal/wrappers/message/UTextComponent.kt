@@ -72,6 +72,10 @@ class UTextComponent : MCIMutableText {
         reInstance()
     }
 
+    //#if MC>=11600
+    //$$ constructor(component: MCITextComponent) : this(component.deepCopy())
+    //#endif
+
     constructor(component: MCIMutableText) {
         this.component = component
 
