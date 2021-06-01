@@ -118,7 +118,7 @@ abstract class UScreen @JvmOverloads constructor(
     //$$ final override fun tick(): Unit = onTick()
     //$$
     //$$ final override fun onClose() {
-    //$$     // onScreenClose()
+    //$$     onScreenClose()
     //$$     if (guiScaleToRestore != -1)
     //$$         UMinecraft.guiScale = guiScaleToRestore
     //$$ }
