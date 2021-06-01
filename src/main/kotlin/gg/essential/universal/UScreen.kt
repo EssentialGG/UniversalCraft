@@ -129,8 +129,6 @@ abstract class UScreen @JvmOverloads constructor(
     //$$
     //$$ final override fun onClose() {
     //$$     // onScreenClose()
-    //$$     if (screenToRestore != null)
-    //$$         displayScreen(screenToRestore)
     //$$     if (guiScaleToRestore != -1)
     //$$         UMinecraft.guiScale = guiScaleToRestore
     //$$ }
@@ -188,14 +186,6 @@ abstract class UScreen @JvmOverloads constructor(
 
     final override fun onGuiClosed() {
         onScreenClose()
-        if (screenToRestore != null) {
-            //#if FORGE
-            val event = net.minecraftforge.client.event.GuiOpenEvent(screenToRestore)
-            if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
-                return
-            //#endif
-            UMinecraft.getMinecraft().currentScreen = screenToRestore
-        }
         if (guiScaleToRestore != -1)
             UMinecraft.guiScale = guiScaleToRestore
     }
@@ -209,6 +199,10 @@ abstract class UScreen @JvmOverloads constructor(
         restoreCurrentGuiOnClose,
         newGuiScale.ordinal
     )
+
+    fun restorePreviousScreen() {
+        displayScreen(screenToRestore)
+    }
 
     open fun initScreen(width: Int, height: Int) {
         //#if MC>=11502
