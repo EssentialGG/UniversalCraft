@@ -75,7 +75,7 @@ class ReleasedDynamicTexture(
 //$$         if (!RenderSystem.isOnRenderThread()) {
 //$$             RenderSystem.recordRenderCall {
 //$$                 TextureUtil.prepareImage(
-//$$                     this.getGlTextureId(),
+//$$                     this.allocGlId(),
 //$$                     dynamicTextureData!!.width,
 //$$                     dynamicTextureData!!.height
 //$$                 )
@@ -83,7 +83,7 @@ class ReleasedDynamicTexture(
 //$$             }
 //$$         } else {
 //$$             TextureUtil.prepareImage(
-//$$                 this.getGlTextureId(),
+//$$                 this.allocGlId(),
 //$$                 dynamicTextureData!!.width,
 //$$                 dynamicTextureData!!.height
 //$$             )
@@ -96,8 +96,15 @@ class ReleasedDynamicTexture(
 //$$         dynamicTextureData = NativeImage(widthIn, heightIn, clearIn)
 //$$         width = widthIn
 //$$         height = heightIn
-//$$         TextureUtil.prepareImage(this.getGlTextureId(), dynamicTextureData!!.width, dynamicTextureData!!.height)
+//$$         TextureUtil.prepareImage(this.allocGlId(), dynamicTextureData!!.width, dynamicTextureData!!.height)
 //$$     }
+//$$
+//$$     // FIXME preprocessor bug: remaps to `this.glId` which gets shadowed by the protected field
+    //#if FABRIC
+    //$$ private fun allocGlId() = this.getGlId()
+    //#else
+    //$$ private fun allocGlId() = this.getGlTextureId()
+    //#endif
 //$$
 //$$     override fun loadTexture(manager: net.minecraft.resources.IResourceManager) {}
 //$$
@@ -106,7 +113,7 @@ class ReleasedDynamicTexture(
 //$$             this.bindTexture()
 //$$             dynamicTextureData!!.uploadTextureSub(0, 0, 0, false)
 //$$         } else {
-//$$             field_243504_d.warn("Trying to upload disposed texture {}", this.getGlTextureId())
+//$$             field_243504_d.warn("Trying to upload disposed texture {}", glTextureId)
 //$$         }
 //$$         dynamicTextureData = null
 //$$     }
