@@ -26,7 +26,9 @@ import org.lwjgl.opengl.GL11;
 //$$ import java.util.ArrayList;
 //$$ import java.util.Optional;
 //#else
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 //#endif
 
@@ -498,8 +500,27 @@ public class UGraphics {
         return this;
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public UGraphics norm(float x, float y, float z) {
-        instance.normal(x, y, z);
+        return norm(UNIT_STACK, x, y, z);
+    }
+
+    public UGraphics norm(UMatrixStack stack, float x, float y, float z) {
+        //#if MC>=11602
+        //$$ instance.normal(stack.peek().getNormal(), x, y, z);
+        //#else
+        if (stack == UNIT_STACK) {
+            instance.normal(x, y, z);
+        } else {
+            Vector3f vec = new Vector3f(x, y, z);
+            //#if MC>=11400
+            //$$ vec.transform(stack.peek().getNormal());
+            //#else
+            Matrix3f.transform(stack.peek().getNormal(), vec, vec);
+            //#endif
+            instance.normal(vec.getX(), vec.getY(), vec.getZ());
+        }
+        //#endif
         return this;
     }
 
