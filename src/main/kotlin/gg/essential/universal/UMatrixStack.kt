@@ -8,6 +8,8 @@ import org.lwjgl.util.vector.Quaternion
 import org.lwjgl.util.vector.Vector3f
 import java.nio.FloatBuffer
 import java.util.*
+import kotlin.math.cos
+import kotlin.math.sin
 
 //#if MC>=11600
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
@@ -105,8 +107,35 @@ class UMatrixStack private constructor(
             //$$ multiply(Quaternion(Vector3f(x, y, z), angle, degrees));
             //#else
             val angleRadians = if (degrees) Math.toRadians(angle.toDouble()).toFloat() else angle
-            Matrix4f.rotate(angleRadians, Vector3f(x, y, z), model, model)
-            // TODO there appears to be no method to rotate a Matrix3f, so I'll pass on that one for now (don't need it)
+            val axis = Vector3f(x, y, z)
+            Matrix4f.rotate(angleRadians, axis, model, model)
+
+            // There appears to be no method to rotate a Matrix3f, so we'll have to do it manually
+            fun makeRotationMatrix(angle: Float, axis: Vector3f) = Matrix3f().apply {
+                val c = cos(angle)
+                val s = sin(angle)
+                val oneMinusC = 1 - c
+                val xx = axis.x * axis.x
+                val xy = axis.x * axis.y
+                val xz = axis.x * axis.z
+                val yy = axis.y * axis.y
+                val yz = axis.y * axis.z
+                val zz = axis.z * axis.z
+                val xs = axis.x * s
+                val ys = axis.y * s
+                val zs = axis.z * s
+
+                m00 = xx * oneMinusC + c
+                m01 = xy * oneMinusC + zs
+                m02 = xz * oneMinusC - ys
+                m10 = xy * oneMinusC - zs
+                m11 = yy * oneMinusC + c
+                m12 = yz * oneMinusC + xs
+                m20 = xz * oneMinusC + ys
+                m21 = yz * oneMinusC - xs
+                m22 = zz * oneMinusC + c
+            }
+            Matrix3f.mul(normal, makeRotationMatrix(angleRadians, axis), normal)
             //#endif
         }
     }
