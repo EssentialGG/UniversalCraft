@@ -498,6 +498,11 @@ public class UGraphics {
         return this;
     }
 
+    public UGraphics norm(float x, float y, float z) {
+        instance.normal(x, y, z);
+        return this;
+    }
+
     public UGraphics color(int red, int green, int blue, int alpha) {
         return color(red / 255f, green / 255f, blue / 255f, alpha / 255f);
     }
