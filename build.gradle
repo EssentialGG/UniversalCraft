@@ -188,15 +188,18 @@ dependencies {
 }
 
 
-task moveResources {
-    doLast {
-        ant.move file: "${buildDir}/resources/main",
-                todir: "${buildDir}/classes/java"
+// Some workaround for FG2 (don't ask me) which is not required for FG3+/Loom
+if (mcVersion <= 11202) {
+    task moveResources {
+        doLast {
+            ant.move file: "${buildDir}/resources/main",
+                    todir: "${buildDir}/classes/java"
+        }
     }
-}
 
-moveResources.dependsOn processResources
-classes.dependsOn moveResources
+    moveResources.dependsOn processResources
+    classes.dependsOn moveResources
+}
 
 processResources {
     inputs.property "version", project.version
