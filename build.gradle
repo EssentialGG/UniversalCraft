@@ -176,24 +176,6 @@ dependencies {
                 11601: '0.8.8+build.202',
                 11602: '0.11.3',
         ][mcVersion]
-        def fabricApiVersion = [
-                11404: '0.4.3+build.247-1.14',
-                11502: '0.5.1+build.294-1.15',
-                11601: '0.14.0+build.371-1.16',
-                11602: '0.32.5+1.16',
-        ][mcVersion]
-        def fabricApiModules = [
-                "api-base",
-                "command-api-v1",
-                "lifecycle-events-v1",
-        ]
-        if (mcVersion >= 11600) {
-            fabricApiModules.add("key-binding-api-v1")
-        }
-        fabricApiModules.each { module ->
-            modCompile fabricApi.module("fabric-$module", fabricApiVersion)
-            include fabricApi.module("fabric-$module", fabricApiVersion)
-        }
     }
 
     if (FG3) {
