@@ -4,7 +4,10 @@ typealias MCMinecraft = net.minecraft.client.Minecraft
 typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 
 // FIXME preprocessor bug: remaps the type to …ClickEvent.Action.Action
-//#if FABRIC
+//#if MC>=11700
+//$$ typealias MCClickEventAction = net.minecraft.text.ClickEvent.Action
+//$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action<*>
+//#elseif FABRIC
 //$$ typealias MCClickEventAction = net.minecraft.text.ClickEvent.Action
 //$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action<*>
 //#elseif MC>=11600

@@ -165,19 +165,16 @@ dependencies {
                 11502: '1.15.2',
                 11601: '1.16.1',
                 11602: '1.16.2',
+                11700: '1.17-pre4',
         ][mcVersion]
         mappings 'net.fabricmc:yarn:' + [
                 11404: '1.14.4+build.16',
                 11502: '1.15.2+build.14',
                 11601: '1.16.1+build.17:v2',
                 11602: '1.16.2+build.47:v2',
+                11700: '1.17-pre4+build.1:v2',
         ][mcVersion]
-        modImplementation 'net.fabricmc:fabric-loader:' + [
-                11404: '0.7.8+build.189',
-                11502: '0.7.8+build.189',
-                11601: '0.8.8+build.202',
-                11602: '0.11.3',
-        ][mcVersion]
+        modImplementation 'net.fabricmc:fabric-loader:0.11.3'
     }
 
     if (FG3) {

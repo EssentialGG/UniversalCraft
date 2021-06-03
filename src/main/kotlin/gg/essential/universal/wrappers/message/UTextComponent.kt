@@ -15,7 +15,10 @@ import net.minecraft.util.ChatStyle
 //$$ import net.minecraft.util.ICharacterConsumer
 //$$ import net.minecraft.util.text.Color
 //$$ // FIXME preprocessor bug: same inner class issue as in typealiases.kt
-//#if FABRIC
+//#if MC>=11700
+//$$ import net.minecraft.text.StringVisitable.StyledVisitor
+//$$ import net.minecraft.text.StringVisitable.Visitor
+//#elseif FABRIC
 //$$ import net.minecraft.text.StringVisitable.StyledVisitor
 //$$ import net.minecraft.text.StringVisitable.Visitor
 //#else
