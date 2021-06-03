@@ -100,7 +100,9 @@ class ReleasedDynamicTexture(
 //$$     }
 //$$
 //$$     // FIXME preprocessor bug: remaps to `this.glId` which gets shadowed by the protected field
-    //#if FABRIC
+    //#if MC>=11700
+    //$$ private fun allocGlId() = this.getGlId()
+    //#elseif FABRIC
     //$$ private fun allocGlId() = this.getGlId()
     //#else
     //$$ private fun allocGlId() = this.getGlTextureId()
