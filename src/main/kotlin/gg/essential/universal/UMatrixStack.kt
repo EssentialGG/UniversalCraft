@@ -12,6 +12,10 @@ import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
+//#if MC>=11700
+//$$ import com.mojang.blaze3d.systems.RenderSystem
+//#endif
+
 //#if MC>=11600
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
 //#endif
@@ -26,7 +30,7 @@ import kotlin.math.sin
  * For MC versions 1.16 and above, methods exist to convert from (via the constructor) and to (via Entry.toMCStack) the
  * vanilla stack type if required.
  * For MC versions below 1.17, the *GlobalState methods can be used to transfer the state of this matrix stack into the
- * global GL state.
+ * global GL state. For 1.17, they transfer state into Mojang's global MatrixStack in RenderSystem.
  */
 class UMatrixStack private constructor(
     private val stack: Deque<Entry>
@@ -165,6 +169,9 @@ class UMatrixStack private constructor(
     fun isEmpty(): Boolean = stack.size == 1
 
     fun applyToGlobalState() {
+        //#if MC>=11700
+        //$$ RenderSystem.getModelViewStack().method_34425(stack.last.model)
+        //#else
         stack.last.model.store(MATRIX_BUFFER)
         // Explicit cast to Buffer required so we do not use the JDK9+ override in FloatBuffer
         (MATRIX_BUFFER as Buffer).rewind()
@@ -173,30 +180,47 @@ class UMatrixStack private constructor(
         //#else
         GL11.glMultMatrix(MATRIX_BUFFER)
         //#endif
+        //#endif
     }
 
     fun replaceGlobalState() {
+        //#if MC>=11700
+        //$$ RenderSystem.getModelViewStack().loadIdentity()
+        //#else
         GL11.glLoadIdentity()
+        //#endif
         applyToGlobalState()
     }
 
     fun runWithGlobalState(block: Runnable) = runWithGlobalState { block.run() }
 
-    inline fun <R> runWithGlobalState(block: () -> R): R {
-        UGraphics.GL.pushMatrix()
+    fun <R> runWithGlobalState(block: () -> R): R  = withGlobalStackPushed {
         applyToGlobalState()
-        return block().also {
-            UGraphics.GL.popMatrix()
-        }
+        block()
     }
 
     fun runReplacingGlobalState(block: Runnable) = runReplacingGlobalState { block.run() }
 
-    inline fun <R> runReplacingGlobalState(block: () -> R): R {
-        UGraphics.GL.pushMatrix()
+    fun <R> runReplacingGlobalState(block: () -> R): R = withGlobalStackPushed {
         replaceGlobalState()
+        block()
+    }
+
+    private inline fun <R> withGlobalStackPushed(block: () -> R) : R {
+        //#if MC>=11700
+        //$$ val stack = RenderSystem.getModelViewStack()
+        //$$ stack.push()
+        //$$ RenderSystem.applyModelViewMatrix()
+        //#else
+        UGraphics.GL.pushMatrix()
+        //#endif
         return block().also {
+            //#if MC>=11700
+            //$$ stack.pop()
+            //$$ RenderSystem.applyModelViewMatrix()
+            //#else
             UGraphics.GL.popMatrix()
+            //#endif
         }
     }
 
@@ -248,6 +272,8 @@ If you are sure that your target class has been updated (such as when calling th
     }
 
     companion object {
+        //#if MC<11700
         private val MATRIX_BUFFER: FloatBuffer = GLAllocation.createDirectFloatBuffer(16)
+        //#endif
     }
 }
