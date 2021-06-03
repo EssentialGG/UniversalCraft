@@ -159,7 +159,9 @@ public class UGraphics {
     }
 
     public static void disableAlpha() {
-        //#if MC<11502
+        //#if MC>=11502
+        //$$ RenderSystem.disableAlphaTest();
+        //#else
         GlStateManager.disableAlpha();
         //#endif
     }
@@ -195,7 +197,7 @@ public class UGraphics {
     public static void enableAlpha() {
         //#if MC>=11502
         //$$ RenderSystem.enableAlphaTest();
-        //#elseif FORGE
+        //#else
         GlStateManager.enableAlpha();
         //#endif
     }
