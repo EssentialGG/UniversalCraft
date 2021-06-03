@@ -679,6 +679,20 @@ public class UGraphics {
         return this;
     }
 
+    public UGraphics overlay(int u, int v) {
+        //#if MC>=11502
+        //$$ instance.overlay(u, v);
+        //#else
+        instance.tex(u, v);
+        //#endif
+        return this;
+    }
+
+    public UGraphics light(int u, int v) {
+        instance.lightmap(u, v);
+        return this;
+    }
+
     /**
      * Using UMatrixStack should be preferred for all versions as direct GL transforms will break in 1.17.
      *
