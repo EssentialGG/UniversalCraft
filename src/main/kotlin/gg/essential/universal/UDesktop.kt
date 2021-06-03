@@ -43,7 +43,7 @@ object UDesktop {
             System.getenv("XDG_SESSION_ID")?.let {
                 isXdg = it.isNotEmpty()
             }
-            System.getenv("GDMSESSION")?.toLowerCase()?.let {
+            System.getenv("GDMSESSION")?.lowercase()?.let {
                 isGnome = "gnome" in it
                 isKde = "kde" in it
             }
