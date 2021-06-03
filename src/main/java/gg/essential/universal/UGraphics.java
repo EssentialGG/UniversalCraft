@@ -12,6 +12,7 @@ import gg.essential.universal.utils.ReleasedDynamicTexture;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 //#if MC>=11700
@@ -51,9 +52,11 @@ import org.lwjgl.util.vector.Vector4f;
 //#endif
 
 //#if MC>=11400
+//$$ import net.minecraft.client.renderer.texture.Texture;
 //#else
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.ITextureObject;
 //#endif
 
 public class UGraphics {
@@ -230,6 +233,17 @@ public class UGraphics {
         //#else
         GlStateManager.bindTexture(glTextureId);
         //#endif
+    }
+
+    public static void bindTexture(ResourceLocation resourceLocation) {
+        //#if MC>=11400
+        //$$ Texture texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        //#else
+        ITextureObject texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        //#endif
+        if (texture != null) {
+            bindTexture(texture.getGlTextureId());
+        }
     }
 
     public static int getStringWidth(String in) {
