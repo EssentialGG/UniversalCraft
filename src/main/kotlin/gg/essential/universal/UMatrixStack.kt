@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Matrix3f
 import org.lwjgl.util.vector.Matrix4f
 import org.lwjgl.util.vector.Quaternion
 import org.lwjgl.util.vector.Vector3f
+import java.nio.Buffer
 import java.nio.FloatBuffer
 import java.util.*
 import kotlin.math.cos
@@ -165,7 +166,8 @@ class UMatrixStack private constructor(
 
     fun applyToGlobalState() {
         stack.last.model.store(MATRIX_BUFFER)
-        MATRIX_BUFFER.rewind()
+        // Explicit cast to Buffer required so we do not use the JDK9+ override in FloatBuffer
+        (MATRIX_BUFFER as Buffer).rewind()
         //#if MC>=11500
         //$$ GL11.glMultMatrixf(MATRIX_BUFFER)
         //#else
