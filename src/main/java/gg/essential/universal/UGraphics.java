@@ -14,6 +14,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
+//#if MC>=11700
+//$$ import net.minecraft.client.render.GameRenderer;
+//$$ import net.minecraft.client.render.Shader;
+//$$ import net.minecraft.client.render.VertexFormats;
+//$$ import java.util.HashMap;
+//$$ import java.util.Map;
+//$$ import java.util.function.Supplier;
+//$$ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+//#endif
+
 //#if MC>=11602
 //$$ import net.minecraft.util.ResourceLocation;
 //$$ import net.minecraft.util.text.Style;
@@ -60,6 +70,11 @@ public class UGraphics {
         this.instance = instance;
     }
 
+    public static UGraphics getFromTessellator() {
+        return new UGraphics(getTessellator().getWorldRenderer());
+    }
+
+    //#if MC<11700
     @Deprecated // See UGraphics.GL
     public static void pushMatrix() {
         GL.pushMatrix();
@@ -68,10 +83,6 @@ public class UGraphics {
     @Deprecated // See UGraphics.GL
     public static void popMatrix() {
         GL.popMatrix();
-    }
-
-    public static UGraphics getFromTessellator() {
-        return new UGraphics(getTessellator().getWorldRenderer());
     }
 
     @Deprecated // See UGraphics.GL
@@ -98,6 +109,7 @@ public class UGraphics {
     public static void scale(double x, double y, double z) {
         GL.scale(x, y, z);
     }
+    //#endif
 
     public static Tessellator getTessellator() {
         return Tessellator.getInstance();
@@ -126,11 +138,15 @@ public class UGraphics {
     }
 
     public static void enableLighting() {
+        //#if MC<11700
         GlStateManager.enableLighting();
+        //#endif
     }
 
     public static void disableLighting() {
+        //#if MC<11700
         GlStateManager.disableLighting();
+        //#endif
     }
 
     public static void disableLight(int mode) {
@@ -159,15 +175,19 @@ public class UGraphics {
     }
 
     public static void disableAlpha() {
+        //#if MC<11700
         //#if MC>=11502
         //$$ RenderSystem.disableAlphaTest();
         //#else
         GlStateManager.disableAlpha();
         //#endif
+        //#endif
     }
 
     public static void shadeModel(int mode) {
+        //#if MC<11700
         GlStateManager.shadeModel(mode);
+        //#endif
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
@@ -195,15 +215,21 @@ public class UGraphics {
     }
 
     public static void enableAlpha() {
+        //#if MC<11700
         //#if MC>=11502
         //$$ RenderSystem.enableAlphaTest();
         //#else
         GlStateManager.enableAlpha();
         //#endif
+        //#endif
     }
 
     public static void bindTexture(int glTextureId) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
+        //#else
         GlStateManager.bindTexture(glTextureId);
+        //#endif
     }
 
     public static int getStringWidth(String in) {
@@ -442,10 +468,14 @@ public class UGraphics {
     }
 
     public static void directColor3f(float red, float green, float blue) {
+        //#if MC>=11700
+        color4f(red, green, blue, 1f);
+        //#else
         //#if MC<11502
         GlStateManager.color(red, green, blue);
         //#else
         //$$ RenderSystem.color3f(red, green, blue);
+        //#endif
         //#endif
     }
 
@@ -473,8 +503,104 @@ public class UGraphics {
         //#endif
     }
 
+    //#if MC>=11700
+    //$$ public static void setShader(Supplier<Shader> shader) {
+    //$$     RenderSystem.setShader(shader);
+    //$$ }
+    //#endif
+
+    public enum DrawMode {
+        LINES(GL11.GL_LINES),
+        LINE_STRIP(GL11.GL_LINE_STRIP),
+        TRIANGLES(GL11.GL_TRIANGLES),
+        TRIANGLE_STRIP(GL11.GL_TRIANGLE_STRIP),
+        TRIANGLE_FAN(GL11.GL_TRIANGLE_FAN),
+        QUADS(GL11.GL_QUADS),
+        ;
+
+        private final int glMode;
+        //#if MC>=11700
+        //$$ private final VertexFormat.DrawMode mcMode;
+        //#else
+        private final int mcMode;
+        //#endif
+
+        DrawMode(int glMode) {
+            this.glMode = glMode;
+            //#if MC>=11700
+            //$$ this.mcMode = glToMcDrawMode(glMode);
+            //#else
+            this.mcMode = glMode;
+            //#endif
+        }
+
+        //#if MC>=11700
+        //$$ private static VertexFormat.DrawMode glToMcDrawMode(int glMode) {
+        //$$     switch (glMode) {
+        //$$         case GL11.GL_LINES: return VertexFormat.DrawMode.LINES;
+        //$$         case GL11.GL_LINE_STRIP: return VertexFormat.DrawMode.LINE_STRIP;
+        //$$         case GL11.GL_TRIANGLES: return VertexFormat.DrawMode.TRIANGLES;
+        //$$         case GL11.GL_TRIANGLE_STRIP: return VertexFormat.DrawMode.TRIANGLE_STRIP;
+        //$$         case GL11.GL_TRIANGLE_FAN: return VertexFormat.DrawMode.TRIANGLE_FAN;
+        //$$         case GL11.GL_QUADS: return VertexFormat.DrawMode.QUADS;
+        //$$         default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
+        //$$     }
+        //$$ }
+        //#endif
+
+        public static DrawMode fromGl(int glMode) {
+            switch (glMode) {
+                case GL11.GL_LINES: return LINES;
+                case GL11.GL_LINE_STRIP: return LINE_STRIP;
+                case GL11.GL_TRIANGLES: return TRIANGLES;
+                case GL11.GL_TRIANGLE_STRIP: return TRIANGLE_STRIP;
+                case GL11.GL_TRIANGLE_FAN: return TRIANGLE_FAN;
+                case GL11.GL_QUADS: return QUADS;
+                default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
+            }
+        }
+    }
+
+    public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
+        instance.begin(mode.mcMode, format);
+        return this;
+    }
+
+    //#if MC>=11700
+    //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new HashMap<>();
+    //$$ static {
+    //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, GameRenderer::getRenderTypeLinesShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, GameRenderer::getParticleShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION, GameRenderer::getPositionShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_LIGHT, GameRenderer::getPositionColorLightmapShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE, GameRenderer::getPositionTexShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE, GameRenderer::getPositionColorTexShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, GameRenderer::getPositionTexColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, GameRenderer::getPositionColorTexLightmapShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_LIGHT_COLOR, GameRenderer::getPositionTexLightmapColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_NORMAL, GameRenderer::getPositionTexColorNormalShader);
+    //$$ }
+    //#endif
+
+    public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
+        //#if MC>=11700
+        //$$ Supplier<Shader> supplier = DEFAULT_SHADERS.get(format);
+        //$$ if (supplier == null) {
+        //$$     throw new IllegalArgumentException("No default shader for " + format + ". Bind your own and use beginWithActiveShader instead.");
+        //$$ }
+        //$$ setShader(supplier);
+        //#endif
+        return beginWithActiveShader(mode, format);
+    }
+
+    @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` instead
     public UGraphics begin(int glMode, VertexFormat format) {
+        //#if MC>=11700
+        //$$ beginWithDefaultShader(DrawMode.fromGl(glMode), format);
+        //#else
         instance.begin(glMode, format);
+        //#endif
         return this;
     }
 
@@ -559,6 +685,7 @@ public class UGraphics {
      * These methods are no different than transformation methods in the UGraphics class except they are not deprecated
      * and as such can be used in version-specific code.
      */
+    //#if MC<11700
     public static class GL {
         public static void pushMatrix() {
             GlStateManager.pushMatrix();
@@ -608,4 +735,5 @@ public class UGraphics {
             //#endif
         }
     }
+    //#endif
 }
