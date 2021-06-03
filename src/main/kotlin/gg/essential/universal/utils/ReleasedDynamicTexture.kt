@@ -99,11 +99,10 @@ class ReleasedDynamicTexture(
 //$$         TextureUtil.prepareImage(this.allocGlId(), dynamicTextureData!!.width, dynamicTextureData!!.height)
 //$$     }
 //$$
-//$$     // FIXME preprocessor bug: remaps to `this.glId` which gets shadowed by the protected field
-    //#if MC>=11700
+    //#if FABRIC
+    //#disable-remap FIXME preprocessor bug: remaps to `this.glId` which gets shadowed by the protected field
     //$$ private fun allocGlId() = this.getGlId()
-    //#elseif FABRIC
-    //$$ private fun allocGlId() = this.getGlId()
+    //#enable-remap
     //#else
     //$$ private fun allocGlId() = this.getGlTextureId()
     //#endif
