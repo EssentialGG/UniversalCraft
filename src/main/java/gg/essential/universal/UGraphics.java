@@ -33,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 //$$ import net.minecraft.util.text.CharacterManager;
 //$$ import net.minecraft.util.text.StringTextComponent;
 //$$ import net.minecraft.util.text.ITextProperties;
+//$$ import net.minecraft.client.renderer.RenderType;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //$$ import java.util.ArrayList;
 //$$ import java.util.Optional;
@@ -561,6 +562,18 @@ public class UGraphics {
         //$$         default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
         //$$     }
         //$$ }
+        //$$
+        //$$ private static DrawMode fromMc(VertexFormat.DrawMode mcMode) {
+        //$$     switch (mcMode) {
+        //$$         case LINES: return DrawMode.LINES;
+        //$$         case LINE_STRIP: return DrawMode.LINE_STRIP;
+        //$$         case TRIANGLES: return DrawMode.TRIANGLES;
+        //$$         case TRIANGLE_STRIP: return DrawMode.TRIANGLE_STRIP;
+        //$$         case TRIANGLE_FAN: return DrawMode.TRIANGLE_FAN;
+        //$$         case QUADS: return DrawMode.QUADS;
+        //$$         default: throw new IllegalArgumentException("Unsupported draw mode " + mcMode);
+        //$$     }
+        //$$ }
         //#endif
 
         public static DrawMode fromGl(int glMode) {
@@ -574,6 +587,16 @@ public class UGraphics {
                 default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
             }
         }
+
+        //#if MC>=11600
+        //$$ public static DrawMode fromRenderLayer(RenderType renderLayer) {
+            //#if MC>=11700
+            //$$ return fromMc(renderLayer.getDrawMode());
+            //#else
+            //$$ return fromGl(renderLayer.getDrawMode());
+            //#endif
+        //$$ }
+        //#endif
     }
 
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
@@ -609,7 +632,16 @@ public class UGraphics {
         return beginWithActiveShader(mode, format);
     }
 
-    @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` instead
+    //#if MC>=11600
+    //$$ private RenderType renderLayer;
+    //$$ public UGraphics beginRenderLayer(RenderType renderLayer) {
+    //$$     this.renderLayer = renderLayer;
+    //$$     beginWithActiveShader(DrawMode.fromRenderLayer(renderLayer), renderLayer.getVertexFormat());
+    //$$     return this;
+    //$$ }
+    //#endif
+
+    @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` or `beginRenderLayer` instead
     public UGraphics begin(int glMode, VertexFormat format) {
         //#if MC>=11700
         //$$ beginWithDefaultShader(DrawMode.fromGl(glMode), format);
@@ -620,10 +652,22 @@ public class UGraphics {
     }
 
     public void drawDirect() {
+        //#if MC>=11600
+        //$$ if (renderLayer != null) {
+        //$$     renderLayer.finish(instance, 0, 0, 0);
+        //$$     return;
+        //$$ }
+        //#endif
         getTessellator().draw();
     }
 
     public void drawSorted(int cameraX, int cameraY, int cameraZ) {
+        //#if MC>=11600
+        //$$ if (renderLayer != null) {
+        //$$     renderLayer.finish(instance, cameraX, cameraY, cameraZ);
+        //$$     return;
+        //$$ }
+        //#endif
         //#if MC>=11700
         //$$ instance.setCameraPosition(cameraX, cameraY, cameraZ);
         //#else
