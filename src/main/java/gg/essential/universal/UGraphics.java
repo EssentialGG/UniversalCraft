@@ -118,6 +118,7 @@ public class UGraphics {
         return Tessellator.getInstance();
     }
 
+    @Deprecated // Use the non-static methods for 1.17+ compatibility or call UGraphics.getTessellator().draw() directly
     public static void draw() {
         getTessellator().draw();
     }
@@ -616,6 +617,19 @@ public class UGraphics {
         instance.begin(glMode, format);
         //#endif
         return this;
+    }
+
+    public void drawDirect() {
+        getTessellator().draw();
+    }
+
+    public void drawSorted(int cameraX, int cameraY, int cameraZ) {
+        //#if MC>=11700
+        //$$ instance.setCameraPosition(cameraX, cameraY, cameraZ);
+        //#else
+        instance.sortVertexData(cameraX, cameraY, cameraZ);
+        //#endif
+        getTessellator().draw();
     }
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
