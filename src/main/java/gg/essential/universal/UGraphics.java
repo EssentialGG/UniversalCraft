@@ -15,6 +15,10 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
+import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+
 //#if MC>=11700
 //$$ import net.minecraft.client.render.GameRenderer;
 //$$ import net.minecraft.client.render.Shader;
@@ -22,7 +26,6 @@ import org.lwjgl.opengl.GL11;
 //$$ import java.util.HashMap;
 //$$ import java.util.Map;
 //$$ import java.util.function.Supplier;
-//$$ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#endif
 
 //#if MC>=11602
@@ -226,6 +229,28 @@ public class UGraphics {
         //#else
         GlStateManager.enableAlpha();
         //#endif
+        //#endif
+    }
+
+    public static void configureTexture(int glTextureId, Runnable block) {
+        int prevActiveTexture = GL11.glGetInteger(GL_ACTIVE_TEXTURE);
+        activeTexture(GL_TEXTURE0);
+        int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
+        GlStateManager.bindTexture(glTextureId);
+
+        block.run();
+
+        GlStateManager.bindTexture(prevTextureBinding);
+        activeTexture(prevActiveTexture);
+    }
+
+    public static void activeTexture(int glId) {
+        //#if MC>=11700
+        //$$ GlStateManager._activeTexture(glId);
+        //#elseif MC>=11400
+        //$$ GlStateManager.activeTexture(glId);
+        //#else
+        GlStateManager.setActiveTexture(glId);
         //#endif
     }
 
