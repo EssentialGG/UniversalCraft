@@ -53,6 +53,8 @@ import org.lwjgl.util.vector.Vector4f;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //$$ import java.io.ByteArrayInputStream;
 //$$ import java.io.ByteArrayOutputStream;
+//#else
+import static org.lwjgl.opengl.GL14.glBlendEquation;
 //#endif
 
 //#if MC>=11400
@@ -195,6 +197,14 @@ public class UGraphics {
     public static void shadeModel(int mode) {
         //#if MC<11700
         GlStateManager.shadeModel(mode);
+        //#endif
+    }
+
+    public static void blendEquation(int equation) {
+        //#if MC>=11500
+        //$$ RenderSystem.blendEquation(equation);
+        //#else
+        glBlendEquation(equation);
         //#endif
     }
 
@@ -417,6 +427,14 @@ public class UGraphics {
         //$$ GlStateManager.useProgram(program);
         //#else
         OpenGlHelper.glUseProgram(program);
+        //#endif
+    }
+
+    public static boolean isOpenGl21Supported() {
+        //#if MC>=11502
+        //$$ return true;
+        //#else
+        return OpenGlHelper.openGL21;
         //#endif
     }
 
