@@ -234,7 +234,7 @@ object UKeyboard {
 
     @JvmStatic
     fun isCtrlKeyDown(): Boolean = if (UMinecraft.isRunningOnMac) {
-        isKeyDown(KEY_LMENU) || isKeyDown(KEY_RMENU)
+        isKeyDown(KEY_LMETA) || isKeyDown(KEY_RMETA)
     } else isKeyDown(KEY_LCONTROL) || isKeyDown(KEY_RCONTROL)
 
     @JvmStatic
