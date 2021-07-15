@@ -18,7 +18,7 @@ enum class GuiScale {
             val width = UResolution.windowWidth
             val height = UResolution.windowHeight
             val step = 700
-            return fromNumber(min((width / step).coerceIn(1, 4), height / (step / 16 * 9).coerceIn(1, 4)))
+            return fromNumber(min((width / step).coerceIn(1, 4), (height / (step / 16 * 9)).coerceIn(1, 4)))
         }
     }
 }
