@@ -17,7 +17,7 @@ enum class GuiScale {
         fun scaleForScreenSize(): GuiScale {
             val width = UResolution.windowWidth
             val height = UResolution.windowHeight
-            val step = 700
+            val step = 650
             return fromNumber(min((width / step).coerceIn(1, 4), (height / (step / 16 * 9)).coerceIn(1, 4)))
         }
     }
