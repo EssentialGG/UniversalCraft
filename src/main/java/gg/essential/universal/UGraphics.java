@@ -415,11 +415,7 @@ public class UGraphics {
     }
 
     public static ReleasedDynamicTexture getEmptyTexture() {
-        //#if MC>=11502
-        //$$ return new ReleasedDynamicTexture(0, 0, false);
-        //#else
         return new ReleasedDynamicTexture(0, 0);
-        //#endif
     }
 
     public static void glUseProgram(int program) {

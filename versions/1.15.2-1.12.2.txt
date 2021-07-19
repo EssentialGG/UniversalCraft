@@ -1,3 +1,6 @@
+net.minecraft.client.renderer.texture.Texture net.minecraft.client.renderer.texture.AbstractTexture
+net.minecraft.resources.IResourceManager net.minecraft.client.resources.IResourceManager
+net.minecraft.client.renderer.texture.TextureUtil prepareImage() allocateTexture()
 net.minecraft.client.renderer.Matrix3f org.lwjgl.util.vector.Matrix3f
 net.minecraft.client.renderer.Matrix4f org.lwjgl.util.vector.Matrix4f
 net.minecraft.client.renderer.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
