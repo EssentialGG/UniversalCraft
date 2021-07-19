@@ -12,6 +12,12 @@ object UMinecraft {
         get() = getSettings().guiScale
         set(value) {
             getSettings().guiScale = value
+            //#if MC>=11502
+            //$$ val mc = getMinecraft()
+            //$$ val window = mc.mainWindow
+            //$$ val scaleFactor = window.calcGuiScale(value, mc.forceUnicodeFont)
+            //$$ window.setGuiScale(scaleFactor.toDouble())
+            //#endif
         }
 
     @JvmField
