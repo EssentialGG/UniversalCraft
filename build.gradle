@@ -269,7 +269,7 @@ publishing {
         repositories {
             maven {
                 name 'nexus'
-                url "https://repo.sk1er.club/repository/maven-${this.properties.getOrDefault("IS_CI", false) ? "snapshots" : "releases"}/"
+                url "https://repo.sk1er.club/repository/maven-releases/"
 
                 credentials {
                     username project.nexus_user
