@@ -27,6 +27,8 @@ enum class ChatColor(val char: Char, val isFormat: Boolean = true) {
     override fun toString(): String = "${COLOR_CHAR}$char"
 
     fun isColor(): Boolean = !isFormat && this != RESET
+    
+    operator fun plus(text: String): String = toString() + text
 
     companion object {
         const val COLOR_CHAR: Char = '\u00a7'
