@@ -2,11 +2,13 @@
 buildscript {
     ext.kotlin_version = "1.5.0"
 
-    def mcVersion
-    def (major, minor, patch) = project.name.tokenize('-')[0].tokenize('.')
-    mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
+    def mcVersionStr = project.name.tokenize('-')[0]
+    def (major, minor, patch) = mcVersionStr.tokenize('.')
+    def mcVersion = "${major}${minor.padLeft(2, '0')}${(patch ?: '').padLeft(2, '0')}" as int
     def fabric = mcVersion >= 11400 && project.name.endsWith("-fabric")
     project.ext.mcVersion = mcVersion
+    project.ext.mcVersionStr = mcVersionStr
+    project.ext.mcPlatform = fabric ? 'fabric' : 'forge'
     project.ext.fabric = fabric
 
     repositories {
@@ -79,7 +81,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-version = this.properties.getOrDefault("BUILD_ID", "LOCAL") //BUI
+version = project.parent.version
 group = "gg.essential" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "UniversalCraft" + project.name
 
@@ -230,9 +232,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId = "UniversalCraft"
-            version = "${this.properties.getOrDefault("branch", "master") != "master" ? this.properties.getOrDefault("branch", "master") + "-" : ""}${project.version}-$mcVersion${FABRIC ? "-fabric" : ""}${this.properties.getOrDefault("IS_CI", false) ? "-SNAPSHOT" : ""}"
-
+            artifactId = "universalcraft-$mcVersionStr-$mcPlatform"
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
@@ -256,7 +256,7 @@ publishing {
         repositories {
             maven {
                 name 'nexus'
-                url "https://repo.sk1er.club/repository/maven-${this.properties.getOrDefault("IS_CI", false) ? "snapshots" : "releases"}/"
+                url "https://repo.sk1er.club/repository/maven-releases/"
 
                 credentials {
                     username project.nexus_user

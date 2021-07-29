@@ -1,3 +1,7 @@
+net.minecraft.client.audio.SimpleSound net.minecraft.client.audio.PositionedSoundRecord
+net.minecraft.client.audio.SimpleSound master() func_194007_a()
+net.minecraft.util.SoundEvents BLOCK_NOTE_BLOCK_PLING net.minecraft.init.SoundEvents BLOCK_NOTE_PLING
+net.minecraft.util.SoundEvents net.minecraft.init.SoundEvents
 net.minecraft.client.renderer.texture.Texture net.minecraft.client.renderer.texture.AbstractTexture
 net.minecraft.resources.IResourceManager net.minecraft.client.resources.IResourceManager
 net.minecraft.client.renderer.texture.TextureUtil prepareImage() allocateTexture()
