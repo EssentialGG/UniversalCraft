@@ -173,9 +173,15 @@ class UTextComponent : MCITextComponent {
         //$$ val event = HoverEvent<MCITextComponent>(action, value)
         //$$ setHoverEventHelper(event)
         //#else
+        val value: MCITextComponent = when (hoverValue) {
+            is String -> MCStringTextComponent(hoverValue as String)
+            is UTextComponent -> (hoverValue as UTextComponent).component
+            is MCITextComponent -> hoverValue as MCITextComponent
+            else -> MCStringTextComponent(hoverValue.toString())
+        }
         setHoverEventHelper(HoverEvent(
             hoverAction,
-            MCStringTextComponent(hoverValue!! as String)
+            value
         ))
         //#endif
     }
