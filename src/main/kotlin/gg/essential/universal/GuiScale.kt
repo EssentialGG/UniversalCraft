@@ -19,8 +19,8 @@ enum class GuiScale {
         fun scaleForScreenSize(): GuiScale {
             if(guiScaleOverride !=-1) return fromNumber(guiScaleOverride.coerceIn(0, 4));
 
-            val width = UResolution.windowWidth
-            val height = UResolution.windowHeight
+            val width = UResolution.viewportWidth
+            val height = UResolution.viewportHeight
             val step = 650
             return fromNumber(min((width / step).coerceIn(1, 4), (height / (step / 16 * 9)).coerceIn(1, 4)))
         }

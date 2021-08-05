@@ -31,9 +31,29 @@ object UResolution {
             //#endif
         }
 
+    @JvmStatic
+    val viewportWidth: Int
+        get() {
+            //#if MC>=11502
+            //$$ return UMinecraft.getMinecraft().mainWindow.framebufferWidth
+            //#else
+            return UMinecraft.getMinecraft().displayWidth
+            //#endif
+        }
+
+    @JvmStatic
+    val viewportHeight: Int
+        get() {
+            //#if MC>=11502
+            //$$ return UMinecraft.getMinecraft().mainWindow.framebufferHeight
+            //#else
+            return UMinecraft.getMinecraft().displayHeight
+            //#endif
+        }
+
     //#if MC<=11202
     private fun get(): ScaledResolution {
-        if (cachedHeight != windowHeight || cachedWidth != windowWidth || scaledResolution == null)
+        if (cachedHeight != viewportHeight || cachedWidth != viewportWidth || scaledResolution == null)
             scaledResolution = ScaledResolution(UMinecraft.getMinecraft())
         return scaledResolution!!
     }
