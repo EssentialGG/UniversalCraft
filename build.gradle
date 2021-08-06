@@ -1,6 +1,6 @@
 // For those who want the bleeding edge
 buildscript {
-    ext.kotlin_version = "1.5.0"
+    ext.kotlin_version = "1.5.21"
 
     def mcVersionStr = project.name.tokenize('-')[0]
     def (major, minor, patch) = mcVersionStr.tokenize('.')

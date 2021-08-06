@@ -1,6 +1,6 @@
 package gg.essential.universal
 
-enum class ChatColor(val char: Char, val isFormat: Boolean = true) {
+enum class ChatColor(val char: Char, val isFormat: Boolean = false) {
     BLACK('0'),
     DARK_BLUE('1'),
     DARK_GREEN('2'),
