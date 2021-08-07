@@ -15,13 +15,13 @@ enum class GuiScale {
         @JvmStatic
         fun fromNumber(number: Int): GuiScale = values()[number]
 
+        @JvmOverloads
         @JvmStatic
-        fun scaleForScreenSize(): GuiScale {
-            if(guiScaleOverride !=-1) return fromNumber(guiScaleOverride.coerceIn(0, 4));
+        fun scaleForScreenSize(step: Int = 650): GuiScale {
+            if(guiScaleOverride != -1) return fromNumber(guiScaleOverride.coerceIn(0, 4))
 
             val width = UResolution.windowWidth
             val height = UResolution.windowHeight
-            val step = 650
             return fromNumber(min((width / step).coerceIn(1, 4), (height / (step / 16 * 9)).coerceIn(1, 4)))
         }
     }
