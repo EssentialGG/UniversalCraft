@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard
 
 object UKeyboard {
     //#if MC>=11502
-    //$$ const val KEY_NONE: Int = 0
+    //$$ @JvmField val KEY_NONE: Int = InputMappings.INPUT_INVALID.keyCode
     //$$ const val KEY_ESCAPE: Int = GLFW.GLFW_KEY_ESCAPE
     //$$ const val KEY_LMETA: Int = GLFW.GLFW_KEY_LEFT_SUPER // TODO: Correct?
     //$$ const val KEY_RMETA: Int = GLFW.GLFW_KEY_RIGHT_SUPER // TODO: Correct?
