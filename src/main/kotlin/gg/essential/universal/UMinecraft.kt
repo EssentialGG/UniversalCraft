@@ -49,7 +49,7 @@ object UMinecraft {
     @JvmStatic
     fun getNetHandler(): MCClientNetworkHandler? {
         //#if MC>=11202
-        //$$ return getMinecraft().getConnection()
+        //$$ return getMinecraft().connection
         //#else
         return getMinecraft().netHandler
         //#endif

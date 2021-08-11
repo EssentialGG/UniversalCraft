@@ -354,7 +354,7 @@ public class UGraphics {
         }
 
         //#if MC>=11602
-        // TODO: Validate this code
+        //$$ // TODO: Validate this code
         //$$ List<String> strings = new ArrayList<>();
         //$$
         //$$ CharacterManager charManager = UMinecraft.getFontRenderer().getCharacterManager();
@@ -524,7 +524,7 @@ public class UGraphics {
 
     public static void directColor3f(float red, float green, float blue) {
         //#if MC>=11700
-        color4f(red, green, blue, 1f);
+        //$$ color4f(red, green, blue, 1f);
         //#else
         //#if MC<11502
         GlStateManager.color(red, green, blue);

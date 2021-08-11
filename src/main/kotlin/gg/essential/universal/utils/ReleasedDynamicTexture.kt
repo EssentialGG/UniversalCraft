@@ -97,7 +97,7 @@ class ReleasedDynamicTexture private constructor(
     //#endif
 
     protected fun finalize() {
-        UGraphics.deleteTexture(getGlTextureId())
+        UGraphics.deleteTexture(glTextureId)
         //#if MC>=11400
         //$$ textureData = null
         //#endif
