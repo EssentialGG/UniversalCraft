@@ -1,32 +1,34 @@
 package gg.essential.universal
 
-enum class ChatColor(val char: Char, val isFormat: Boolean = false) {
-    BLACK('0'),
-    DARK_BLUE('1'),
-    DARK_GREEN('2'),
-    DARK_AQUA('3'),
-    DARK_RED('4'),
-    DARK_PURPLE('5'),
-    GOLD('6'),
-    GRAY('7'),
-    DARK_GRAY('8'),
-    BLUE('9'),
-    GREEN('a'),
-    AQUA('b'),
-    RED('c'),
-    LIGHT_PURPLE('d'),
-    YELLOW('e'),
-    WHITE('f'),
-    MAGIC('k', true),
-    BOLD('l', true),
-    STRIKETHROUGH('m', true),
-    UNDERLINE('n', true),
-    ITALIC('o', true),
+import java.awt.Color
+
+enum class ChatColor(val char: Char, val color: Color? = null, val isFormat: Boolean = false) {
+    BLACK('0', Color(0x000000)),
+    DARK_BLUE('1', Color(0x0000AA)),
+    DARK_GREEN('2', Color(0x00AA00)),
+    DARK_AQUA('3', Color(0x00AAAA)),
+    DARK_RED('4', Color(0xAA0000)),
+    DARK_PURPLE('5', Color(0xAA00AA)),
+    GOLD('6', Color(0xFFAA00)),
+    GRAY('7', Color(0xAAAAAA)),
+    DARK_GRAY('8', Color(0x555555)),
+    BLUE('9', Color(0x5555FF)),
+    GREEN('a', Color(0x55FF55)),
+    AQUA('b', Color(0x55FFFF)),
+    RED('c', Color(0xFF5555)),
+    LIGHT_PURPLE('d', Color(0xFF55FF)),
+    YELLOW('e', Color(0xFFFF55)),
+    WHITE('f', Color(0xFFFFFF)),
+    MAGIC('k', isFormat = true),
+    BOLD('l', isFormat = true),
+    STRIKETHROUGH('m', isFormat = true),
+    UNDERLINE('n', isFormat = true),
+    ITALIC('o', isFormat = true),
     RESET('r');
 
     override fun toString(): String = "${COLOR_CHAR}$char"
 
-    fun isColor(): Boolean = !isFormat && this != RESET
+    fun isColor(): Boolean = color != null
 
     companion object {
         const val COLOR_CHAR: Char = '\u00a7'
