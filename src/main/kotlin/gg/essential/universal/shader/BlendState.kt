@@ -64,9 +64,12 @@ data class BlendState(
     }
 
     companion object {
+        @JvmField
         val DISABLED = BlendState(Equation.ADD, Param.ONE, Param.ZERO, enabled = false)
+        @JvmField
         val NORMAL = BlendState(Equation.ADD, Param.SRC_ALPHA, Param.ONE_MINUS_SRC_ALPHA)
 
+        @JvmStatic
         fun active() = BlendState(
             //#if MC>=11500
             //$$ Equation.fromGl(GL11.glGetInteger(GL20.GL_BLEND_EQUATION_RGB)) ?: Equation.ADD,
@@ -91,6 +94,7 @@ data class BlendState(
 
         companion object {
             private val byGlId = values().associateBy { it.glId }
+            @JvmStatic
             fun fromGl(glId: Int) = byGlId[glId]
         }
     }
@@ -110,6 +114,7 @@ data class BlendState(
 
         companion object {
             private val byGlId = values().associateBy { it.glId }
+            @JvmStatic
             fun fromGl(glId: Int) = byGlId[glId]
         }
     }
