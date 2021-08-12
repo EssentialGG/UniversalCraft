@@ -1,6 +1,7 @@
 package gg.essential.universal.shader
 
 import gg.essential.universal.UGraphics
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.ARBShaderObjects
 import org.lwjgl.opengl.ARBShaderObjects.glGetUniformLocationARB
 import org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB
@@ -50,18 +51,18 @@ internal class GlShader(
     }
 
     internal fun doBindTexture(textureUnit: Int, textureId: Int) {
-        UGraphics.activeTexture(GL_TEXTURE0 + textureUnit)
+        GlStateManager.setActiveTexture(GL_TEXTURE0 + textureUnit)
         prevTextureBindings.computeIfAbsent(textureUnit) { GL11.glGetInteger(GL_TEXTURE_BINDING_2D) }
-        UGraphics.bindTexture(textureId)
+        GlStateManager.bindTexture(textureId)
     }
 
     override fun unbind() {
         for ((textureUnit, textureId) in prevTextureBindings) {
-            UGraphics.activeTexture(GL_TEXTURE0 + textureUnit)
-            UGraphics.bindTexture(textureId)
+            GlStateManager.setActiveTexture(GL_TEXTURE0 + textureUnit)
+            GlStateManager.bindTexture(textureId)
         }
         prevTextureBindings.clear()
-        UGraphics.activeTexture(prevActiveTexture)
+        GlStateManager.setActiveTexture(prevActiveTexture)
         prevBlendState?.activate()
 
         UGraphics.glUseProgram(0)

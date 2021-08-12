@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,7 @@ import gg.essential.universal.utils.ReleasedDynamicTexture;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -74,6 +76,7 @@ public class UGraphics {
     private static UMatrixStack UNIT_STACK = new UMatrixStack();
     public static int ZERO_TEXT_ALPHA = 10;
     private WorldRenderer instance;
+    private VertexFormat vertexFormat;
 
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
@@ -175,6 +178,10 @@ public class UGraphics {
         GlStateManager.enableBlend();
     }
 
+    /**
+     * @deprecated see {@link #enableTexture2D()}
+     */
+    @Deprecated
     public static void disableTexture2D() {
         //#if MC>=11502
         //$$ RenderSystem.disableTexture();
@@ -216,6 +223,15 @@ public class UGraphics {
         //#endif
     }
 
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     *     Instead of manually managing TEXTURE_2D state, prefer using
+     *     {@link #beginWithDefaultShader(DrawMode, VertexFormat)} or any of the other non-deprecated begin methods as
+     *     these will set (and restore) the appropriate state for the given {@link VertexFormat} right before/after
+     *     rendering.<br>
+     *     Also incompatible with OpenGL Core / MC 1.17.
+     */
+    @Deprecated
     public static void enableTexture2D() {
         //#if MC>=11502
         //$$ RenderSystem.enableTexture();
@@ -243,18 +259,41 @@ public class UGraphics {
     }
 
     public static void configureTexture(int glTextureId, Runnable block) {
-        int prevActiveTexture = GL11.glGetInteger(GL_ACTIVE_TEXTURE);
-        activeTexture(GL_TEXTURE0);
         int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
         GlStateManager.bindTexture(glTextureId);
 
         block.run();
 
         GlStateManager.bindTexture(prevTextureBinding);
-        activeTexture(prevActiveTexture);
     }
 
+    public static void configureTextureUnit(int index, Runnable block) {
+        int prevActiveTexture = getActiveTexture();
+        setActiveTexture(GL_TEXTURE0 + index);
+
+        block.run();
+
+        setActiveTexture(prevActiveTexture);
+    }
+
+    /**
+     * @deprecated Changes global state and may as such easily lead to bug if the caller forgets to store the previous
+     * state and restore it afterwards.<br>
+     * Prefer {@link #configureTextureUnit(int, Runnable)} instead (which only changes the global state for the duration
+     * of the given block).<br>
+     * If you must change it for longer, then use {@link #getActiveTexture()} before {@link #setActiveTexture(int)} and
+     * make sure to restore it afterwards.
+     */
+    @Deprecated
     public static void activeTexture(int glId) {
+        setActiveTexture(glId);
+    }
+
+    public static int getActiveTexture() {
+        return GL11.glGetInteger(GL_ACTIVE_TEXTURE);
+    }
+
+    public static void setActiveTexture(int glId) {
         //#if MC>=11700
         //$$ GlStateManager._activeTexture(glId);
         //#elseif MC>=11400
@@ -264,6 +303,11 @@ public class UGraphics {
         //#endif
     }
 
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     * Prefer {@link #bindTexture(int, int)} instead.
+     */
+    @Deprecated
     public static void bindTexture(int glTextureId) {
         //#if MC>=11700
         //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
@@ -272,6 +316,11 @@ public class UGraphics {
         //#endif
     }
 
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     * Prefer {@link #bindTexture(int, ResourceLocation)} instead.
+     */
+    @Deprecated
     public static void bindTexture(ResourceLocation resourceLocation) {
         //#if MC>=11400
         //$$ Texture texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
@@ -280,6 +329,25 @@ public class UGraphics {
         //#endif
         if (texture != null) {
             bindTexture(texture.getGlTextureId());
+        }
+    }
+
+    public static void bindTexture(int index, int glTextureId) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(index, glTextureId);
+        //#else
+        configureTextureUnit(index, () -> GlStateManager.bindTexture(glTextureId));
+        //#endif
+    }
+
+    public static void bindTexture(int index, ResourceLocation resourceLocation) {
+        //#if MC>=11400
+        //$$ Texture texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        //#else
+        ITextureObject texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        //#endif
+        if (texture != null) {
+            bindTexture(index, texture.getGlTextureId());
         }
     }
 
@@ -639,6 +707,7 @@ public class UGraphics {
     }
 
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
+        vertexFormat = format;
         instance.begin(mode.mcMode, format);
         return this;
     }
@@ -697,7 +766,7 @@ public class UGraphics {
         //$$     return;
         //$$ }
         //#endif
-        getTessellator().draw();
+        doDraw();
     }
 
     public void drawSorted(int cameraX, int cameraY, int cameraZ) {
@@ -712,7 +781,70 @@ public class UGraphics {
         //#else
         instance.sortVertexData(cameraX, cameraY, cameraZ);
         //#endif
+        doDraw();
+    }
+
+    private static boolean[] getDesiredTextureUnitState(VertexFormat vertexFormat) {
+        // Vanilla only ever has two UV elements, so we can assume the remainder to be disabled by default and don't
+        // need to check them unless we want them enabled.
+        boolean[] wantEnabled = new boolean[2];
+        for (VertexFormatElement element : vertexFormat.getElements()) {
+            // FIXME preprocessor bug: EnumUsage doesn't remap to Usage
+            //#if MC>=11500
+            //$$ if (element.getUsage() == VertexFormatElement.Usage.UV) {
+            //#else
+            if (element.getUsage() == VertexFormatElement.EnumUsage.UV) {
+                //#endif
+                int index = element.getIndex();
+                if (wantEnabled.length <= index) {
+                    wantEnabled = Arrays.copyOf(wantEnabled, index + 1);
+                }
+                wantEnabled[index] = true;
+            }
+        }
+        return wantEnabled;
+    }
+
+    private void doDraw() {
+        VertexFormat vertexFormat = this.vertexFormat;
+        if (vertexFormat == null) {
+            getTessellator().draw();
+            return;
+        }
+
+        //#if MC<11700
+        boolean[] wantEnabledStates = getDesiredTextureUnitState(vertexFormat);
+        boolean[] wasEnabledStates = new boolean[wantEnabledStates.length];
+        for (int i = 0; i < wasEnabledStates.length; i++) {
+            final int index = i;
+            configureTextureUnit(index, () -> {
+                boolean isEnabled = wasEnabledStates[index] = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+                boolean wantEnabled = wantEnabledStates[index];
+                if (isEnabled != wantEnabled) {
+                    if (wantEnabled) {
+                        GlStateManager.enableTexture2D();
+                    } else {
+                        GlStateManager.disableTexture2D();
+                    }
+                }
+            });
+        }
+        //#endif
+
         getTessellator().draw();
+
+        //#if MC<11700
+        for (int i = 0; i < wasEnabledStates.length; i++) {
+            if (wasEnabledStates[i] == wantEnabledStates[i]) {
+                continue;
+            }
+            if (wasEnabledStates[i]) {
+                configureTextureUnit(i, GlStateManager::enableTexture2D);
+            } else {
+                configureTextureUnit(i, GlStateManager::disableTexture2D);
+            }
+        }
+        //#endif
     }
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
