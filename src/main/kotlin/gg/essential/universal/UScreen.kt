@@ -3,10 +3,10 @@ package gg.essential.universal
 import gg.essential.universal.utils.MCScreen
 
 //#if MC>=11502
+//$$ import gg.essential.universal.UKeyboard.toInt
+//$$ import gg.essential.universal.UKeyboard.toModifiers
 //$$ import gg.essential.universal.utils.MCStringTextComponent
-//$$ import net.minecraft.util.text.StringTextComponent
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
-//$$ import org.lwjgl.glfw.GLFW
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
@@ -28,9 +28,6 @@ abstract class UScreen @JvmOverloads constructor(
 
     //#if MC>=11502
     //$$ private var lastClick = 0L
-    //$$ private var lastScanCode = -1
-    //$$ private var lastModifierCode = -1
-    //$$ private var lastChar = 0.toChar()
     //$$ private var lastDraggedDx = -1.0
     //$$ private var lastDraggedDy = -1.0
     //$$ private var lastScrolledX = -1.0
@@ -51,36 +48,18 @@ abstract class UScreen @JvmOverloads constructor(
     //$$ }
     //$$
     //$$ final override fun keyPressed(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     val modifiers = UKeyboard.Modifiers(
-    //$$         (modifierCode and GLFW.GLFW_MOD_CONTROL) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_SHIFT) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_ALT) != 0
-    //$$     )
-    //$$
-    //$$     lastScanCode = scanCode
-    //$$     lastModifierCode = modifierCode
-    //$$     onKeyPressed(keyCode, lastChar, modifiers)
-    //$$
+    //$$     onKeyPressed(keyCode, 0.toChar(), modifierCode.toModifiers())
     //$$     return false
     //$$ }
     //$$
     //$$ final override fun keyReleased(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     val modifiers = UKeyboard.Modifiers(
-    //$$         (modifierCode and GLFW.GLFW_MOD_CONTROL) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_SHIFT) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_ALT) != 0
-    //$$     )
-    //$$
-    //$$     lastScanCode = scanCode
-    //$$     lastModifierCode = modifierCode
-    //$$     onKeyReleased(keyCode, lastChar, modifiers)
-    //$$
+    //$$     onKeyReleased(keyCode, 0.toChar(), modifierCode.toModifiers())
     //$$     return false
     //$$ }
     //$$
     //$$ final override fun charTyped(char: Char, modifierCode: Int): Boolean {
-    //$$     lastChar = char
-    //$$     return super.charTyped(char, modifierCode)
+    //$$     onKeyPressed(0, char, modifierCode.toModifiers())
+    //$$     return false
     //$$ }
     //$$
     //$$ final override fun mouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
@@ -231,7 +210,12 @@ abstract class UScreen @JvmOverloads constructor(
 
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
-        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode)
+        //$$ if (keyCode != 0) {
+        //$$     super.keyPressed(keyCode, 0, modifiers.toInt())
+        //$$ }
+        //$$ if (typedChar != 0.toChar()) {
+        //$$     super.charTyped(typedChar, modifiers.toInt())
+        //$$ }
         //#else
         try {
             super.keyTyped(typedChar, keyCode)
@@ -243,7 +227,9 @@ abstract class UScreen @JvmOverloads constructor(
 
     open fun onKeyReleased(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
-        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode)
+        //$$ if (keyCode != 0) {
+        //$$     super.keyReleased(keyCode, 0, modifiers.toInt())
+        //$$ }
         //#endif
     }
 

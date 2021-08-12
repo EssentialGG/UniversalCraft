@@ -286,4 +286,18 @@ object UKeyboard {
     }
 
     data class Modifiers(val isCtrl: Boolean, val isShift: Boolean, val isAlt: Boolean)
+
+    //#if MC>=11502
+    //$$ internal fun Modifiers?.toInt() = listOf(
+    //$$     this?.isCtrl to GLFW.GLFW_MOD_CONTROL,
+    //$$     this?.isShift to GLFW.GLFW_MOD_SHIFT,
+    //$$     this?.isAlt to GLFW.GLFW_MOD_ALT,
+    //$$ ).sumOf { (modifier, value) -> if (modifier == true) value else 0 }
+    //$$
+    //$$ internal fun Int.toModifiers() = Modifiers(
+    //$$     isCtrl = (this and GLFW.GLFW_MOD_CONTROL) != 0,
+    //$$     isShift = (this and GLFW.GLFW_MOD_SHIFT) != 0,
+    //$$     isAlt = (this and GLFW.GLFW_MOD_ALT) != 0,
+    //$$ )
+    //#endif
 }
