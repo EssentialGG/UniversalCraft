@@ -133,6 +133,7 @@ internal class ShaderTransformer {
         var source = originalSource
 
         source = source.replace("gl_ModelViewProjectionMatrix", "gl_ProjectionMatrix * gl_ModelViewMatrix")
+        source = source.replace("texture2D", "texture")
 
         val replacements = mutableMapOf<String, String>()
         val transformed = mutableListOf<String>()
