@@ -18,7 +18,7 @@ object UMouse {
 
     @JvmStatic
     fun getScaledX(): Double {
-        return getTrueX() * UResolution.scaledWidth / max(1, UResolution.viewportWidth)
+        return getTrueX() * UResolution.scaledWidth / max(1, UResolution.windowWidth)
     }
 
     @JvmStatic
@@ -32,6 +32,6 @@ object UMouse {
 
     @JvmStatic
     fun getScaledY(): Double {
-        return getTrueY() * UResolution.scaledHeight / max(1, UResolution.viewportHeight)
+        return getTrueY() * UResolution.scaledHeight / max(1, UResolution.windowHeight)
     }
 }
