@@ -279,7 +279,11 @@ object UKeyboard {
     @JvmStatic
     fun getKeyName(keyCode: Int): String? {
         //#if MC>=11502
-        //$$ return GLFW.glfwGetKeyName(keyCode, -1)
+        //$$ return GLFW.glfwGetKeyName(keyCode, -1)?.let {
+        //$$     // If it's a single character, GLFW will give us a lowercase version but that's very weird and
+        //$$     // inconsistent with old versions, so we uppercase it. Longer ones are already fine (e.g. "Space").
+        //$$     if (it.length == 1) it.uppercase() else it
+        //$$ }
         //#else
         return Keyboard.getKeyName(keyCode)
         //#endif
