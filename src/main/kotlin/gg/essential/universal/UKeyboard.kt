@@ -1,5 +1,11 @@
 package gg.essential.universal
 
+import net.minecraft.client.settings.KeyBinding
+
+//#if MC>=11600
+//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//#endif
+
 //#if MC>=11502
 //$$ import org.lwjgl.glfw.GLFW
 //$$ import net.minecraft.client.Minecraft
@@ -276,10 +282,39 @@ object UKeyboard {
         //#endif
     }
 
+    /**
+     * Returns the name of the key assigned to the specified binding as appropriate for display to the user.
+     *
+     * May (or may not) return `null` if the key is not bound or the name is unknown. Do not rely on any specific
+     * behavior. If `null` is returned, assume the key to be unknown; the reverse is not true. If it makes a difference
+     * for you, check whether there is a key bound separately before calling this method.
+     */
     @JvmStatic
-    fun getKeyName(keyCode: Int): String? {
+    fun getKeyName(keyBinding: KeyBinding): String? {
+        //#if MC>=11400
+        //#if MC>=11600
+        //$$ return UTextComponent(keyBinding.func_238171_j_()).unformattedText.let {
+        //#else
+        //$$ return keyBinding.localizedName?.let {
+        //#endif
+        //$$     // If it's a single character, GLFW will give us a lowercase version but that's very weird and
+        //$$     // inconsistent with old versions, so we uppercase it. Longer ones are already fine (e.g. "Space").
+        //$$     if (it.length == 1) it.uppercase() else it
+        //$$ }
+        //#else
+        //#if MC>=11200
+        //$$ return keyBinding.getDisplayName()
+        //#else
+        return net.minecraft.client.settings.GameSettings.getKeyDisplayString(keyBinding.keyCode)
+        //#endif
+        //#endif
+    }
+
+    @Deprecated("Does not work for mouse bindings", replaceWith = ReplaceWith("getKeyName(keyBinding)"))
+    @JvmStatic
+    fun getKeyName(keyCode: Int, scanCode: Int): String? {
         //#if MC>=11502
-        //$$ return GLFW.glfwGetKeyName(keyCode, -1)?.let {
+        //$$ return GLFW.glfwGetKeyName(keyCode, scanCode)?.let {
         //$$     // If it's a single character, GLFW will give us a lowercase version but that's very weird and
         //$$     // inconsistent with old versions, so we uppercase it. Longer ones are already fine (e.g. "Space").
         //$$     if (it.length == 1) it.uppercase() else it
@@ -288,6 +323,10 @@ object UKeyboard {
         return Keyboard.getKeyName(keyCode)
         //#endif
     }
+
+    @Deprecated("Does not work for mouse or scanCode-type bindings", replaceWith = ReplaceWith("getKeyName(keyCode, -1)"))
+    @JvmStatic
+    fun getKeyName(keyCode: Int): String? = getKeyName(keyCode, -1)
 
     data class Modifiers(val isCtrl: Boolean, val isShift: Boolean, val isAlt: Boolean)
 
