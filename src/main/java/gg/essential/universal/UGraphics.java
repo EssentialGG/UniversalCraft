@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import gg.essential.universal.utils.ReleasedDynamicTexture;
+import gg.essential.universal.vertex.UVertexConsumer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -80,6 +81,10 @@ public class UGraphics {
 
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
+    }
+
+    public UVertexConsumer asUVertexConsumer() {
+        return UVertexConsumer.of(instance);
     }
 
     public static UGraphics getFromTessellator() {
