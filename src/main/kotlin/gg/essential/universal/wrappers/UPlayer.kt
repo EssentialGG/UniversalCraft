@@ -8,11 +8,7 @@ import java.util.*
 object UPlayer {
     @JvmStatic
     fun getPlayer(): MCEntityPlayerSP? {
-        //#if MC>=11202
-        //$$ return UMinecraft.getMinecraft().player
-        //#else
         return UMinecraft.getMinecraft().thePlayer
-        //#endif
     }
 
     @JvmStatic

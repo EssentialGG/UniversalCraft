@@ -22,55 +22,31 @@ object UMinecraft {
 
     @JvmField
     val isRunningOnMac: Boolean =
-        //#if MC>=11202
-        //$$ MCMinecraft.IS_RUNNING_ON_MAC
-        //#else
         MCMinecraft.isRunningOnMac
-        //#endif
 
     @JvmStatic
     fun getMinecraft(): MCMinecraft {
-        //#if MC>=11502
-        //$$ return MCMinecraft.getInstance()
-        //#else
         return MCMinecraft.getMinecraft()
-        //#endif
     }
 
     @JvmStatic
     fun getWorld(): MCWorld? {
-        //#if MC>=11202
-        //$$ return getMinecraft().world
-        //#else
         return getMinecraft().theWorld
-        //#endif
     }
 
     @JvmStatic
     fun getNetHandler(): MCClientNetworkHandler? {
-        //#if MC>=11202
-        //$$ return getMinecraft().connection
-        //#else
         return getMinecraft().netHandler
-        //#endif
     }
 
     @JvmStatic
     fun getPlayer(): MCEntityPlayerSP? {
-        //#if MC>=11202
-        //$$ return getMinecraft().player
-        //#else
         return getMinecraft().thePlayer
-        //#endif
     }
 
     @JvmStatic
     fun getFontRenderer(): MCFontRenderer {
-        //#if MC>=11202
-        //$$ return getMinecraft().fontRenderer
-        //#else
         return getMinecraft().fontRendererObj
-        //#endif
     }
 
     @JvmStatic
