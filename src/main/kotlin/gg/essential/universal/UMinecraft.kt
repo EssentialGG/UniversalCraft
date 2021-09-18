@@ -1,6 +1,12 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.*
+import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.EntityPlayerSP
+import net.minecraft.client.gui.FontRenderer
+import net.minecraft.client.gui.GuiNewChat
+import net.minecraft.client.multiplayer.WorldClient
+import net.minecraft.client.network.NetHandlerPlayClient
+import net.minecraft.client.settings.GameSettings
 
 //#if MC>=11502
 //$$ import net.minecraft.client.util.NativeUtil
@@ -22,30 +28,30 @@ object UMinecraft {
 
     @JvmField
     val isRunningOnMac: Boolean =
-        MCMinecraft.isRunningOnMac
+        Minecraft.isRunningOnMac
 
     @JvmStatic
-    fun getMinecraft(): MCMinecraft {
-        return MCMinecraft.getMinecraft()
+    fun getMinecraft(): Minecraft {
+        return Minecraft.getMinecraft()
     }
 
     @JvmStatic
-    fun getWorld(): MCWorld? {
+    fun getWorld(): WorldClient? {
         return getMinecraft().theWorld
     }
 
     @JvmStatic
-    fun getNetHandler(): MCClientNetworkHandler? {
+    fun getNetHandler(): NetHandlerPlayClient? {
         return getMinecraft().netHandler
     }
 
     @JvmStatic
-    fun getPlayer(): MCEntityPlayerSP? {
+    fun getPlayer(): EntityPlayerSP? {
         return getMinecraft().thePlayer
     }
 
     @JvmStatic
-    fun getFontRenderer(): MCFontRenderer {
+    fun getFontRenderer(): FontRenderer {
         return getMinecraft().fontRendererObj
     }
 
@@ -54,13 +60,13 @@ object UMinecraft {
         //#if MC>=11502
         //$$ return (NativeUtil.getTime() * 1000).toLong()
         //#else
-        return MCMinecraft.getSystemTime()
+        return Minecraft.getSystemTime()
         //#endif
     }
 
     @JvmStatic
-    fun getChatGUI(): MCChatScreen? = getMinecraft().ingameGUI?.chatGUI
+    fun getChatGUI(): GuiNewChat? = getMinecraft().ingameGUI?.chatGUI
 
     @JvmStatic
-    fun getSettings(): MCSettings = getMinecraft().gameSettings
+    fun getSettings(): GameSettings = getMinecraft().gameSettings
 }

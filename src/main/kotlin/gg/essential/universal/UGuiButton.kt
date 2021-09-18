@@ -1,15 +1,15 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.MCButton
+import net.minecraft.client.gui.GuiButton
 
 object UGuiButton {
     @JvmStatic
-    fun getX(button: MCButton): Int {
+    fun getX(button: GuiButton): Int {
         return button.xPosition
     }
 
     @JvmStatic
-    fun getY(button: MCButton): Int {
+    fun getY(button: GuiButton): Int {
         return button.yPosition
     }
 }

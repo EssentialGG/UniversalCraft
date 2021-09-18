@@ -5,6 +5,7 @@ import gg.essential.universal.UChat
 import gg.essential.universal.utils.*
 import net.minecraft.event.ClickEvent
 import net.minecraft.event.HoverEvent
+import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraft.util.ChatStyle
@@ -35,8 +36,13 @@ import net.minecraft.util.ChatStyle
 //#endif
 
 @Suppress("MemberVisibilityCanBePrivate")
-class UTextComponent : MCIMutableText {
-    lateinit var component: MCIMutableText
+//#if MC>=11600
+//$$ class UTextComponent : IFormattableTextComponent {
+//$$     lateinit var component: IFormattableTextComponent
+//#else
+class UTextComponent : IChatComponent {
+    lateinit var component: IChatComponent
+//#endif
         private set
     var text: String
         set(value) {
@@ -76,10 +82,11 @@ class UTextComponent : MCIMutableText {
     }
 
     //#if MC>=11600
-    //$$ constructor(component: MCITextComponent) : this(component.deepCopy())
+    //$$ constructor(component: ITextComponent) : this(component.deepCopy())
+    //$$ constructor(component: IFormattableTextComponent) {
+    //#else
+    constructor(component: IChatComponent) {
     //#endif
-
-    constructor(component: MCIMutableText) {
         this.component = component
 
         //#if MC>=11602
@@ -137,7 +144,7 @@ class UTextComponent : MCIMutableText {
     }
 
     private fun reInstance() {
-        component = MCStringTextComponent(text.formatIf(formatted))
+        component = ChatComponentText(text.formatIf(formatted))
 
         reInstanceClick()
         reInstanceHover()
@@ -166,11 +173,11 @@ class UTextComponent : MCIMutableText {
         //$$ val event = HoverEvent<Any>(hoverAction as HoverEvent.Action<Any>, hoverValue!!)
         //$$ setHoverEventHelper(event)
         //#else
-        val value: MCITextComponent = when (hoverValue) {
-            is String -> MCStringTextComponent(hoverValue as String)
+        val value: IChatComponent = when (hoverValue) {
+            is String -> ChatComponentText(hoverValue as String)
             is UTextComponent -> (hoverValue as UTextComponent).component
-            is MCITextComponent -> hoverValue as MCITextComponent
-            else -> MCStringTextComponent(hoverValue.toString())
+            is IChatComponent -> hoverValue as IChatComponent
+            else -> ChatComponentText(hoverValue.toString())
         }
         setHoverEventHelper(HoverEvent(
             hoverAction,
@@ -389,7 +396,7 @@ class UTextComponent : MCIMutableText {
             return when (obj) {
                 is UTextComponent -> obj
                 is String -> UTextComponent(obj)
-                is MCIMutableText -> UTextComponent(obj)
+                is IChatComponent -> UTextComponent(obj)
                 else -> null
             }
         }

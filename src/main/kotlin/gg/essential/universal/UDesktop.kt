@@ -7,7 +7,7 @@ import java.net.URI
 
 //#if MC>=11400
 //#else
-import gg.essential.universal.utils.MCScreen
+import net.minecraft.client.gui.GuiScreen
 //#endif
 
 object UDesktop {
@@ -141,7 +141,7 @@ object UDesktop {
         //#if MC>=11400
         //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString
         //#else
-        MCScreen.getClipboardString()
+        GuiScreen.getClipboardString()
         //#endif
 
     @JvmStatic
@@ -149,7 +149,7 @@ object UDesktop {
         //#if MC>=11400
         //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString = str
         //#else
-        MCScreen.setClipboardString(str)
+        GuiScreen.setClipboardString(str)
         //#endif
     }
 }

@@ -1,12 +1,12 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.MCScreen
+import net.minecraft.client.gui.GuiScreen
 
 //#if MC>=11502
 //$$ import gg.essential.universal.UKeyboard.toInt
 //$$ import gg.essential.universal.UKeyboard.toModifiers
-//$$ import gg.essential.universal.utils.MCStringTextComponent
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
+//$$ import net.minecraft.util.text.StringTextComponent
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
@@ -18,13 +18,13 @@ abstract class UScreen @JvmOverloads constructor(
     open var newGuiScale: Int = -1
 ) :
 //#if MC>=11502
-//$$     MCScreen(MCStringTextComponent(""))
+//$$     Screen(StringTextComponent(""))
 //#else
-    MCScreen()
+    GuiScreen()
 //#endif
 {
     private var guiScaleToRestore = -1
-    private val screenToRestore: MCScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
+    private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
     //#if MC>=11502
     //$$ private var lastClick = 0L
@@ -315,11 +315,11 @@ abstract class UScreen @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        val currentScreen: MCScreen?
+        val currentScreen: GuiScreen?
             get() = UMinecraft.getMinecraft().currentScreen
 
         @JvmStatic
-        fun displayScreen(screen: MCScreen?) {
+        fun displayScreen(screen: GuiScreen?) {
             //#if MC<11200
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             //#endif

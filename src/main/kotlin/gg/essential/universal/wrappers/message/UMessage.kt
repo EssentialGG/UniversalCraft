@@ -5,7 +5,7 @@ import gg.essential.universal.UMinecraft
 import gg.essential.universal.wrappers.UPlayer
 
 //#if MC>=11600
-//$$ import gg.essential.universal.utils.MCIMutableText
+//$$ import net.minecraft.util.text.IFormattableTextComponent
 //#endif
 
 class UMessage {
@@ -34,7 +34,7 @@ class UMessage {
         } else {
             component.siblings
                 //#if MC>=11600
-                //$$ .filterIsInstance<MCIMutableText>()
+                //$$ .filterIsInstance<IFormattableTextComponent>()
                 //#endif
                 .map { UTextComponent(it) }
                 .forEach { messageParts.add(it) }

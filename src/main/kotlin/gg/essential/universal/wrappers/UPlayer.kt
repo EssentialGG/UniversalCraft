@@ -1,13 +1,13 @@
 package gg.essential.universal.wrappers
 
 import gg.essential.universal.UMinecraft
-import gg.essential.universal.utils.MCEntityPlayerSP
 import gg.essential.universal.wrappers.message.UTextComponent
+import net.minecraft.client.entity.EntityPlayerSP
 import java.util.*
 
 object UPlayer {
     @JvmStatic
-    fun getPlayer(): MCEntityPlayerSP? {
+    fun getPlayer(): EntityPlayerSP? {
         return UMinecraft.getMinecraft().thePlayer
     }
 
