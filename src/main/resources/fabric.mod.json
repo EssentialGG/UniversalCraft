@@ -10,5 +10,10 @@
   "depends": {
     "fabricloader": "*"
   },
-  "description": "UniversalCraft"
+  "description": "UniversalCraft",
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  }
 }

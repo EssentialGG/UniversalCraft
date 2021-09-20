@@ -1,20 +1,22 @@
 package gg.essential.universal
 
-//#if FABRIC
-//$$ import net.minecraft.client.util.InputUtil
-//$$ import org.lwjgl.glfw.GLFW
-//#else
-//$$ import net.minecraft.client.Minecraft
+import net.minecraft.client.settings.KeyBinding
+
+//#if MC>=11600
+//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//#endif
+
 //#if MC>=11502
 //$$ import org.lwjgl.glfw.GLFW
+//$$ import net.minecraft.client.Minecraft
 //$$ import net.minecraft.client.util.InputMappings
 //#else
 import org.lwjgl.input.Keyboard
 //#endif
-//#endif
 
 object UKeyboard {
     //#if MC>=11502
+    //$$ @JvmField val KEY_NONE: Int = InputMappings.INPUT_INVALID.keyCode
     //$$ const val KEY_ESCAPE: Int = GLFW.GLFW_KEY_ESCAPE
     //$$ const val KEY_LMETA: Int = GLFW.GLFW_KEY_LEFT_SUPER // TODO: Correct?
     //$$ const val KEY_RMETA: Int = GLFW.GLFW_KEY_RIGHT_SUPER // TODO: Correct?
@@ -117,7 +119,10 @@ object UKeyboard {
     //$$ const val KEY_F18: Int = GLFW.GLFW_KEY_F18
     //$$ const val KEY_F19: Int = GLFW.GLFW_KEY_F19
     //$$ const val KEY_DELETE: Int = GLFW.GLFW_KEY_DELETE
+    //$$ const val KEY_HOME: Int = GLFW.GLFW_KEY_HOME
+    //$$ const val KEY_END: Int = GLFW.GLFW_KEY_END
     //#else
+    const val KEY_NONE: Int = Keyboard.KEY_NONE
     const val KEY_ESCAPE: Int = Keyboard.KEY_ESCAPE
     const val KEY_LMETA: Int = Keyboard.KEY_LMETA
     const val KEY_RMETA: Int = Keyboard.KEY_RMETA
@@ -220,13 +225,13 @@ object UKeyboard {
     const val KEY_F18: Int = Keyboard.KEY_F18
     const val KEY_F19: Int = Keyboard.KEY_F19
     const val KEY_DELETE: Int = Keyboard.KEY_DELETE
+    const val KEY_HOME: Int = Keyboard.KEY_HOME
+    const val KEY_END: Int = Keyboard.KEY_END
     //#endif
 
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
-        //#if FABRIC
-        //$$ UMinecraft.getMinecraft().keyboard.setRepeatEvents(enabled)
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
         Keyboard.enableRepeatEvents(enabled)
@@ -270,25 +275,72 @@ object UKeyboard {
 
     @JvmStatic
     fun isKeyDown(key: Int): Boolean {
-        //#if FABRIC
-        //$$ return InputUtil.isKeyPressed(UMinecraft.getMinecraft().window.handle, key)
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ return InputMappings.isKeyDown(UMinecraft.getMinecraft().mainWindow.handle, key)
         //#else
         return Keyboard.isKeyDown(key)
         //#endif
     }
 
+    /**
+     * Returns the name of the key assigned to the specified binding as appropriate for display to the user.
+     *
+     * May (or may not) return `null` if the key is not bound or the name is unknown. Do not rely on any specific
+     * behavior. If `null` is returned, assume the key to be unknown; the reverse is not true. If it makes a difference
+     * for you, check whether there is a key bound separately before calling this method.
+     */
     @JvmStatic
-    fun getKeyName(keyCode: Int): String? {
-        //#if FABRIC
-        //$$ return InputUtil.fromKeyCode(keyCode, -1).translationKey
-        //#elseif MC>=11502
-        //$$ return GLFW.glfwGetKeyName(keyCode, -1)
+    fun getKeyName(keyBinding: KeyBinding): String? {
+        //#if MC>=11400
+        //#if MC>=11600
+        //$$ return UTextComponent(keyBinding.func_238171_j_()).unformattedText.let {
+        //#else
+        //$$ return keyBinding.localizedName?.let {
+        //#endif
+        //$$     // If it's a single character, GLFW will give us a lowercase version but that's very weird and
+        //$$     // inconsistent with old versions, so we uppercase it. Longer ones are already fine (e.g. "Space").
+        //$$     if (it.length == 1) it.uppercase() else it
+        //$$ }
+        //#else
+        //#if MC>=11200
+        //$$ return keyBinding.getDisplayName()
+        //#else
+        return net.minecraft.client.settings.GameSettings.getKeyDisplayString(keyBinding.keyCode)
+        //#endif
+        //#endif
+    }
+
+    @Deprecated("Does not work for mouse bindings", replaceWith = ReplaceWith("getKeyName(keyBinding)"))
+    @JvmStatic
+    fun getKeyName(keyCode: Int, scanCode: Int): String? {
+        //#if MC>=11502
+        //$$ return GLFW.glfwGetKeyName(keyCode, scanCode)?.let {
+        //$$     // If it's a single character, GLFW will give us a lowercase version but that's very weird and
+        //$$     // inconsistent with old versions, so we uppercase it. Longer ones are already fine (e.g. "Space").
+        //$$     if (it.length == 1) it.uppercase() else it
+        //$$ }
         //#else
         return Keyboard.getKeyName(keyCode)
         //#endif
     }
 
+    @Deprecated("Does not work for mouse or scanCode-type bindings", replaceWith = ReplaceWith("getKeyName(keyCode, -1)"))
+    @JvmStatic
+    fun getKeyName(keyCode: Int): String? = getKeyName(keyCode, -1)
+
     data class Modifiers(val isCtrl: Boolean, val isShift: Boolean, val isAlt: Boolean)
+
+    //#if MC>=11502
+    //$$ internal fun Modifiers?.toInt() = listOf(
+    //$$     this?.isCtrl to GLFW.GLFW_MOD_CONTROL,
+    //$$     this?.isShift to GLFW.GLFW_MOD_SHIFT,
+    //$$     this?.isAlt to GLFW.GLFW_MOD_ALT,
+    //$$ ).sumOf { (modifier, value) -> if (modifier == true) value else 0 }
+    //$$
+    //$$ internal fun Int.toModifiers() = Modifiers(
+    //$$     isCtrl = (this and GLFW.GLFW_MOD_CONTROL) != 0,
+    //$$     isShift = (this and GLFW.GLFW_MOD_SHIFT) != 0,
+    //$$     isAlt = (this and GLFW.GLFW_MOD_ALT) != 0,
+    //$$ )
+    //#endif
 }

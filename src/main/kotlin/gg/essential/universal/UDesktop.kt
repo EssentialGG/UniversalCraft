@@ -5,6 +5,11 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
+//#if MC>=11400
+//#else
+import net.minecraft.client.gui.GuiScreen
+//#endif
+
 object UDesktop {
     @JvmStatic
     var isLinux: Boolean = false
@@ -43,7 +48,7 @@ object UDesktop {
             System.getenv("XDG_SESSION_ID")?.let {
                 isXdg = it.isNotEmpty()
             }
-            System.getenv("GDMSESSION")?.toLowerCase()?.let {
+            System.getenv("GDMSESSION")?.lowercase()?.let {
                 isGnome = "gnome" in it
                 isKde = "kde" in it
             }
@@ -129,5 +134,22 @@ object UDesktop {
         } catch (e: IOException) {
             false
         }
+    }
+
+    @JvmStatic
+    fun getClipboardString(): String =
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString
+        //#else
+        GuiScreen.getClipboardString()
+        //#endif
+
+    @JvmStatic
+    fun setClipboardString(str: String) {
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString = str
+        //#else
+        GuiScreen.setClipboardString(str)
+        //#endif
     }
 }

@@ -1,18 +1,12 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.MCScreen
+import net.minecraft.client.gui.GuiScreen
 
-//#if FABRIC
-//$$ import gg.essential.universal.utils.MCStringTextComponent
-//$$ import net.minecraft.client.MinecraftClient
-//$$ import net.minecraft.client.util.math.MatrixStack
-//$$ import net.minecraft.text.LiteralText
-//$$ import org.lwjgl.glfw.GLFW
-//#elseif MC>=11502
-//$$ import gg.essential.universal.utils.MCStringTextComponent
-//$$ import net.minecraft.util.text.StringTextComponent
+//#if MC>=11502
+//$$ import gg.essential.universal.UKeyboard.toInt
+//$$ import gg.essential.universal.UKeyboard.toModifiers
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
-//$$ import org.lwjgl.glfw.GLFW
+//$$ import net.minecraft.util.text.StringTextComponent
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
@@ -24,79 +18,48 @@ abstract class UScreen @JvmOverloads constructor(
     open var newGuiScale: Int = -1
 ) :
 //#if MC>=11502
-//$$     MCScreen(MCStringTextComponent(""))
+//$$     Screen(StringTextComponent(""))
 //#else
-    MCScreen()
+    GuiScreen()
 //#endif
 {
     private var guiScaleToRestore = -1
-    private val screenToRestore: MCScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
+    private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
     //#if MC>=11502
     //$$ private var lastClick = 0L
-    //$$ private var lastScanCode = -1
-    //$$ private var lastModifierCode = -1
-    //$$ private var lastChar = 0.toChar()
     //$$ private var lastDraggedDx = -1.0
     //$$ private var lastDraggedDy = -1.0
     //$$ private var lastScrolledX = -1.0
     //$$ private var lastScrolledY = -1.0
     //$$
-    //$$ protected lateinit var matrixStack: MatrixStack
-    //$$
     //$$ final override fun init() {
-    //$$     if (newGuiScale != -1) {
-    //$$        if(guiScaleToRestore ==-1)
-    //$$            guiScaleToRestore = UMinecraft.guiScale
-    //$$         UMinecraft.guiScale = newGuiScale
-    //$$         width = UResolution.scaledWidth
-    //$$         height = UResolution.scaledHeight
-    //$$     }
+    //$$     updateGuiScale()
     //$$     initScreen(width, height)
     //$$ }
     //$$
     //#if MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
-    //$$     this.matrixStack = matrixStack
-    //$$     onDrawScreen(mouseX, mouseY, partialTicks)
+    //$$     onDrawScreenCompat(UMatrixStack(matrixStack), mouseX, mouseY, partialTicks)
     //#else
     //$$ final override fun render(mouseX: Int, mouseY: Int, partialTicks: Float) {
-    //$$     onDrawScreen(mouseX, mouseY, partialTicks)
-    //$$     super.render(mouseX, mouseY, partialTicks)
+    //$$     onDrawScreenCompat(UMatrixStack(), mouseX, mouseY, partialTicks)
     //#endif
     //$$ }
     //$$
     //$$ final override fun keyPressed(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     val modifiers = UKeyboard.Modifiers(
-    //$$         (modifierCode and GLFW.GLFW_MOD_CONTROL) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_SHIFT) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_ALT) != 0
-    //$$     )
-    //$$
-    //$$     lastScanCode = scanCode
-    //$$     lastModifierCode = modifierCode
-    //$$     onKeyPressed(keyCode, lastChar, modifiers)
-    //$$
+    //$$     onKeyPressed(keyCode, 0.toChar(), modifierCode.toModifiers())
     //$$     return false
     //$$ }
     //$$
     //$$ final override fun keyReleased(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     val modifiers = UKeyboard.Modifiers(
-    //$$         (modifierCode and GLFW.GLFW_MOD_CONTROL) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_SHIFT) != 0,
-    //$$         (modifierCode and GLFW.GLFW_MOD_ALT) != 0
-    //$$     )
-    //$$
-    //$$     lastScanCode = scanCode
-    //$$     lastModifierCode = modifierCode
-    //$$     onKeyReleased(keyCode, lastChar, modifiers)
-    //$$
+    //$$     onKeyReleased(keyCode, 0.toChar(), modifierCode.toModifiers())
     //$$     return false
     //$$ }
     //$$
     //$$ final override fun charTyped(char: Char, modifierCode: Int): Boolean {
-    //$$     lastChar = char
-    //$$     return super.charTyped(char, modifierCode)
+    //$$     onKeyPressed(0, char, modifierCode.toModifiers())
+    //$$     return false
     //$$ }
     //$$
     //$$ final override fun mouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
@@ -128,33 +91,28 @@ abstract class UScreen @JvmOverloads constructor(
     //$$ final override fun tick(): Unit = onTick()
     //$$
     //$$ final override fun onClose() {
-    //$$     // onScreenClose()
+    //$$     onScreenClose()
     //$$     if (guiScaleToRestore != -1)
     //$$         UMinecraft.guiScale = guiScaleToRestore
     //$$ }
     //$$
     //#if MC>=11602
     //$$ final override fun renderBackground(matrixStack: MatrixStack, vOffset: Int) {
-    //$$     this.matrixStack = matrixStack
-    //#else
-    //$$ final override fun renderBackground(vOffset: Int) {
-    //#endif
-    //$$     onDrawBackground(vOffset)
+    //$$     onDrawBackgroundCompat(UMatrixStack(matrixStack), vOffset)
     //$$ }
     //#else
+    //$$ final override fun renderBackground(vOffset: Int) {
+    //$$     onDrawBackgroundCompat(UMatrixStack(), vOffset)
+    //$$ }
+    //#endif
+    //#else
     final override fun initGui() {
-        if (newGuiScale != -1) {
-            if (guiScaleToRestore == -1)
-                guiScaleToRestore = UMinecraft.guiScale
-            UMinecraft.guiScale = newGuiScale
-            width = UResolution.scaledWidth
-            height = UResolution.scaledHeight
-        }
+        updateGuiScale()
         initScreen(width, height)
     }
 
     final override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
-        onDrawScreen(mouseX, mouseY, partialTicks)
+        onDrawScreenCompat(UMatrixStack(), mouseX, mouseY, partialTicks)
     }
 
     final override fun keyTyped(typedChar: Char, keyCode: Int) {
@@ -191,7 +149,7 @@ abstract class UScreen @JvmOverloads constructor(
     }
 
     final override fun drawWorldBackground(tint: Int) {
-        onDrawBackground(tint)
+        onDrawBackgroundCompat(UMatrixStack(), tint)
     }
     //#endif
 
@@ -204,6 +162,16 @@ abstract class UScreen @JvmOverloads constructor(
         displayScreen(screenToRestore)
     }
 
+    open fun updateGuiScale() {
+        if (newGuiScale != -1) {
+            if (guiScaleToRestore == -1)
+                guiScaleToRestore = UMinecraft.guiScale
+            UMinecraft.guiScale = newGuiScale
+            width = UResolution.scaledWidth
+            height = UResolution.scaledHeight
+        }
+    }
+
     open fun initScreen(width: Int, height: Int) {
         //#if MC>=11502
         //$$ super.init()
@@ -212,19 +180,42 @@ abstract class UScreen @JvmOverloads constructor(
         //#endif
     }
 
-    open fun onDrawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+    open fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
         //#if MC>=11602
-        //$$ super.render(matrixStack, mouseX, mouseY, partialTicks)
-        //#elseif MC>=11502
-        //$$ super.render(mouseX, mouseY, partialTicks)
+        //$$ super.render(matrixStack.toMC(), mouseX, mouseY, partialTicks)
         //#else
-        super.drawScreen(mouseX, mouseY, partialTicks)
+        matrixStack.runWithGlobalState {
+            //#if MC>=11502
+            //$$ super.render(mouseX, mouseY, partialTicks)
+            //#else
+            super.drawScreen(mouseX, mouseY, partialTicks)
+            //#endif
+        }
         //#endif
+    }
+
+    @Deprecated(
+        UMatrixStack.Compat.DEPRECATED,
+        ReplaceWith("onDrawScreen(matrixStack, mouseX, mouseY, partialTicks)")
+    )
+    open fun onDrawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        onDrawScreen(UMatrixStack.Compat.get(), mouseX, mouseY, partialTicks)
+    }
+
+    // Calls the deprecated method (for backwards compat) which then calls the new method (read the deprecation message)
+    private fun onDrawScreenCompat(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) = UMatrixStack.Compat.runLegacyMethod(matrixStack) {
+        @Suppress("DEPRECATION")
+        onDrawScreen(mouseX, mouseY, partialTicks)
     }
 
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
-        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode)
+        //$$ if (keyCode != 0) {
+        //$$     super.keyPressed(keyCode, 0, modifiers.toInt())
+        //$$ }
+        //$$ if (typedChar != 0.toChar()) {
+        //$$     super.charTyped(typedChar, modifiers.toInt())
+        //$$ }
         //#else
         try {
             super.keyTyped(typedChar, keyCode)
@@ -236,7 +227,9 @@ abstract class UScreen @JvmOverloads constructor(
 
     open fun onKeyReleased(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
-        //$$ super.keyPressed(keyCode, lastScanCode, lastModifierCode)
+        //$$ if (keyCode != 0) {
+        //$$     super.keyReleased(keyCode, 0, modifiers.toInt())
+        //$$ }
         //#endif
     }
 
@@ -292,29 +285,45 @@ abstract class UScreen @JvmOverloads constructor(
         //#endif
     }
 
-    open fun onDrawBackground(tint: Int) {
+    open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
         //#if MC>=11602
-        //$$ super.renderBackground(matrixStack, tint)
-        //#elseif MC>=11502
-        //$$ super.renderBackground(tint)
+        //$$ super.renderBackground(matrixStack.toMC(), tint)
         //#else
-        super.drawWorldBackground(tint)
+        matrixStack.runWithGlobalState {
+            //#if MC>=11502
+            //$$ super.renderBackground(tint)
+            //#else
+            super.drawWorldBackground(tint)
+            //#endif
+        }
         //#endif
+    }
+
+    @Deprecated(
+        UMatrixStack.Compat.DEPRECATED,
+        ReplaceWith("onDrawBackground(matrixStack, tint)")
+    )
+    open fun onDrawBackground(tint: Int) {
+        onDrawBackground(UMatrixStack.Compat.get(), tint)
+    }
+
+    // Calls the deprecated method (for backwards compat) which then calls the new method (read the deprecation message)
+    fun onDrawBackgroundCompat(matrixStack: UMatrixStack, tint: Int) = UMatrixStack.Compat.runLegacyMethod(matrixStack) {
+        @Suppress("DEPRECATION")
+        onDrawBackground(tint)
     }
 
     companion object {
         @JvmStatic
-        val currentScreen: MCScreen?
+        val currentScreen: GuiScreen?
             get() = UMinecraft.getMinecraft().currentScreen
 
         @JvmStatic
-        fun displayScreen(screen: MCScreen?) {
-            //#if FABRIC
-            //$$ UMinecraft.getMinecraft().openScreen(screen)
-            //#else
+        fun displayScreen(screen: GuiScreen?) {
+            //#if MC<11200
             @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            UMinecraft.getMinecraft().displayGuiScreen(screen)
             //#endif
+            UMinecraft.getMinecraft().displayGuiScreen(screen)
         }
     }
 }
