@@ -6,7 +6,7 @@ import gg.essential.universal.wrappers.message.UTextComponent
 import java.util.regex.Pattern
 
 object UChat {
-    private val amperstandPattern = Pattern.compile("(?<!\\\\)&(?![^0-9a-fklmnor]|$)")
+    private val ampersandPattern = Pattern.compile("(?<!\\\\)&(?![^0-9a-fklmnor]|$)")
 
     /**
      * Prints a message to chat. Accepts a String, UMessage, UTextComponent,
@@ -63,6 +63,6 @@ object UChat {
      */
     @JvmStatic
     fun addColor(message: String): String {
-        return amperstandPattern.matcher(message).replaceAll("\u00a7")
+        return ampersandPattern.matcher(message).replaceAll("\u00a7")
     }
 }
