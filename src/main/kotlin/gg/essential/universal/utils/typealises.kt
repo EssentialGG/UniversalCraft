@@ -7,6 +7,9 @@ typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 //#if FABRIC
 //$$ typealias MCClickEventAction = net.minecraft.text.ClickEvent.Action
 //$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action<*>
+//#elseif MC>=11700
+//$$ typealias MCClickEventAction = net.minecraft.network.chat.ClickEvent.Action
+//$$ typealias MCHoverEventAction = net.minecraft.network.chat.HoverEvent.Action<*>
 //#elseif MC>=11600
 //$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
 //$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
