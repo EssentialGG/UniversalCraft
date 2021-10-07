@@ -13,6 +13,8 @@ import gg.essential.universal.utils.ReleasedDynamicTexture;
 import gg.essential.universal.vertex.UVertexConsumer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
@@ -327,14 +329,7 @@ public class UGraphics {
      */
     @Deprecated
     public static void bindTexture(ResourceLocation resourceLocation) {
-        //#if MC>=11400
-        //$$ Texture texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
-        //#else
-        ITextureObject texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
-        //#endif
-        if (texture != null) {
-            bindTexture(texture.getGlTextureId());
-        }
+        bindTexture(getOrLoadTextureId(resourceLocation));
     }
 
     public static void bindTexture(int index, int glTextureId) {
@@ -346,14 +341,21 @@ public class UGraphics {
     }
 
     public static void bindTexture(int index, ResourceLocation resourceLocation) {
+        bindTexture(index, getOrLoadTextureId(resourceLocation));
+    }
+
+    private static int getOrLoadTextureId(ResourceLocation resourceLocation) {
+        TextureManager textureManager = UMinecraft.getMinecraft().getTextureManager();
         //#if MC>=11400
-        //$$ Texture texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        //$$ Texture texture = textureManager.getTexture(resourceLocation);
         //#else
-        ITextureObject texture = UMinecraft.getMinecraft().getTextureManager().getTexture(resourceLocation);
+        ITextureObject texture = textureManager.getTexture(resourceLocation);
         //#endif
-        if (texture != null) {
-            bindTexture(index, texture.getGlTextureId());
+        if (texture == null) {
+            texture = new SimpleTexture(resourceLocation);
+            textureManager.loadTexture(resourceLocation, texture);
         }
+        return texture.getGlTextureId();
     }
 
     public static int getStringWidth(String in) {
