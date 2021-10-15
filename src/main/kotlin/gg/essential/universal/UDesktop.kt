@@ -71,13 +71,13 @@ object UDesktop {
     private fun openSystemSpecific(file: String): Boolean {
         return when {
             isLinux -> when {
-                isXdg -> runCommand("xdg-open $file")
-                isKde -> runCommand("kde-open $file")
-                isGnome -> runCommand("gnome-open $file")
-                else -> runCommand("kde-open $file") || runCommand("gnome-open $file")
+                isXdg -> runCommand("xdg-open \"$file\"")
+                isKde -> runCommand("kde-open \"$file\"")
+                isGnome -> runCommand("gnome-open \"$file\"")
+                else -> runCommand("kde-open \"$file\"") || runCommand("gnome-open \"$file\"")
             }
-            isMac -> runCommand("open $file")
-            isWindows -> runCommand("explorer $file")
+            isMac -> runCommand("open \"$file\"")
+            isWindows -> runCommand("explorer \"$file\"")
             else -> false
         }
     }
