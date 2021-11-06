@@ -5,194 +5,136 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//#if MC>=11602
-//$$ import java.util.ArrayList;
-//#endif
-
-//#if FABRIC
-//$$ import com.mojang.blaze3d.platform.GlStateManager;
-//$$ import net.minecraft.client.font.TextHandler;
-//$$ import net.minecraft.client.render.BufferBuilder;
-//$$ import net.minecraft.client.render.Tessellator;
-//$$ import net.minecraft.client.render.VertexConsumerProvider;
-//$$ import net.minecraft.client.render.VertexFormat;
-//$$ import net.minecraft.client.util.math.MatrixStack;
-//$$ import net.minecraft.client.util.math.Vector3f;
-//$$ import net.minecraft.text.StringVisitable;
-//$$ import net.minecraft.text.Style;
-//$$ import net.minecraft.util.math.Quaternion;
-//$$ import org.lwjgl.opengl.GL11;
-//$$ import net.minecraft.client.texture.NativeImage;
-//$$ import net.minecraft.client.texture.NativeImageBackedTexture;
-//$$ import java.io.ByteArrayInputStream;
-//$$ import java.io.ByteArrayOutputStream;
-//#else
 import gg.essential.universal.utils.ReleasedDynamicTexture;
+import gg.essential.universal.vertex.UVertexConsumer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
+import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+
+//#if MC>=11700
+//$$ import net.minecraft.client.render.GameRenderer;
+//$$ import net.minecraft.client.render.Shader;
+//$$ import net.minecraft.client.render.VertexFormats;
+//$$ import java.util.HashMap;
+//$$ import java.util.Map;
+//$$ import java.util.function.Supplier;
 //#endif
 
-//#if FORGE && MC>=11602
-//$$ import net.minecraft.util.math.vector.Quaternion;
+//#if MC>=11602
 //$$ import net.minecraft.util.ResourceLocation;
 //$$ import net.minecraft.util.text.Style;
+//$$ import net.minecraft.util.math.vector.Quaternion;
 //$$ import net.minecraft.util.math.vector.Vector3f;
 //$$ import net.minecraft.util.text.CharacterManager;
 //$$ import net.minecraft.util.text.StringTextComponent;
 //$$ import net.minecraft.util.text.ITextProperties;
-//$$ import com.mojang.blaze3d.platform.GlStateManager;
-//$$ import com.mojang.blaze3d.matrix.MatrixStack;
-//$$ import net.minecraft.client.renderer.texture.NativeImage;
+//$$ import net.minecraft.client.renderer.RenderType;
 //$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
-//$$ import java.io.ByteArrayInputStream;
-//$$ import java.io.ByteArrayOutputStream;
-//$$ import net.minecraft.client.renderer.BufferBuilder;
 //$$ import java.util.ArrayList;
-//$$ import java.util.List;
 //$$ import java.util.Optional;
+//#else
+import org.lwjgl.util.vector.Matrix3f;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 //#endif
 
-//#if MC>=11602
-//$$ import com.mojang.blaze3d.systems.RenderSystem;
-//#elseif MC==11502
-//$$ import net.minecraft.client.renderer.Quaternion;
-//$$ import net.minecraft.client.renderer.Vector3f;
-//$$ import com.mojang.blaze3d.systems.RenderSystem;
+//#if MC>=11502
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
 //$$ import net.minecraft.client.renderer.BufferBuilder;
-//$$ import net.minecraft.client.renderer.IRenderTypeBuffer;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //$$ import java.io.ByteArrayInputStream;
 //$$ import java.io.ByteArrayOutputStream;
-//#elseif MC==11202
-//$$ import net.minecraft.client.renderer.GlStateManager;
-//$$ import net.minecraft.client.renderer.BufferBuilder;
-//$$ import net.minecraft.client.renderer.OpenGlHelper;
-//#elseif MC==10809
-import net.minecraft.client.renderer.GlStateManager;
+//#else
+import static org.lwjgl.opengl.GL14.glBlendEquation;
+//#endif
+
+//#if MC>=11400
+//$$ import net.minecraft.client.renderer.texture.Texture;
+//#else
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.ITextureObject;
 //#endif
 
 public class UGraphics {
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
 
-    //#if FORGE && MC>=11602
+    //#if MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
+    private static UMatrixStack UNIT_STACK = new UMatrixStack();
     public static int ZERO_TEXT_ALPHA = 10;
-    //#if MC>10809
-    //$$ private BufferBuilder instance;
-    //#else
     private WorldRenderer instance;
-    //#endif
+    private VertexFormat vertexFormat;
 
-    //#if MC>10809
-    //$$ public UGraphics(BufferBuilder instance) {
-    //$$     this.instance = instance;
-    //$$ }
-    //#else
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
     }
-    //#endif
 
-    //#if MC>=11602
-    //$$ private static MatrixStack stack = new MatrixStack();
-    //$$ public static MatrixStack getStack() {
-    //$$     return stack;
-    //$$ }
-    //$$
-    //$$ public static void setStack(MatrixStack stack) {
-    //$$     UGraphics.stack = stack;
-    //$$ }
-    //#endif
-
-    public static void pushMatrix() {
-        //#if MC>=11602
-        //$$ stack.push();
-        //#elseif MC>=11502
-        //$$ RenderSystem.pushMatrix();
-        //#else
-        GlStateManager.pushMatrix();
-        //#endif
-    }
-
-    public static void popMatrix() {
-        //#if MC>=11602
-        //$$ stack.pop();
-        //#elseif MC>=11502
-        //$$ RenderSystem.popMatrix();
-        //#else
-        GlStateManager.popMatrix();
-        //#endif
+    public UVertexConsumer asUVertexConsumer() {
+        return UVertexConsumer.of(instance);
     }
 
     public static UGraphics getFromTessellator() {
-        //#if MC>10809
-        //$$ return new UGraphics(getTessellator().getBuffer());
-        //#else
         return new UGraphics(getTessellator().getWorldRenderer());
-        //#endif
     }
 
+    //#if MC<11700
+    @Deprecated // See UGraphics.GL
+    public static void pushMatrix() {
+        GL.pushMatrix();
+    }
+
+    @Deprecated // See UGraphics.GL
+    public static void popMatrix() {
+        GL.popMatrix();
+    }
+
+    @Deprecated // See UGraphics.GL
     public static void translate(float x, float y, float z) {
-        //#if MC==11502
-        //$$ RenderSystem.translatef(x, y, z);
-        //#else
-        translate(x, y, (double) z); //Don't remove double casts or this breaks
-        //#endif
+        GL.translate(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void translate(double x, double y, double z) {
-        //#if MC>=11602
-        //$$ stack.translate(x, y, z);
-        //#elseif MC>=11502
-        //$$ RenderSystem.translated(x, y, z);
-        //#else
-        GlStateManager.translate(x, y, z);
-        //#endif
+        GL.translate(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void rotate(float angle, float x, float y, float z) {
-        //#if FABRIC
-        //$$ stack.multiply(new Quaternion(new Vector3f(x, y, z), angle, true));
-        //#elseif MC>=11602
-        //$$ stack.rotate(new Quaternion(new Vector3f(x, y, z), angle, true));
-        //#elseif MC>=11502
-        //$$ RenderSystem.rotatef(angle, x, y, z);
-        //#else
-        GlStateManager.rotate(angle, x, y, z);
-        //#endif
+        GL.rotate(angle, x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void scale(float x, float y, float z) {
-        //#if MC==11502
-        //$$ RenderSystem.scalef(x, y, z);
-        //#else
-        scale(x, y, (double) z);
-        //#endif
+        GL.scale(x, y, z);
     }
 
+    @Deprecated // See UGraphics.GL
     public static void scale(double x, double y, double z) {
-        //#if MC>=11602
-        //$$ stack.scale((float) x, (float) y, (float) z);
-        //#elseif MC>=11502
-        //$$ RenderSystem.scaled(x, y, z);
-        //#else
-        GlStateManager.scale(x, y, z);
-        //#endif
+        GL.scale(x, y, z);
     }
+    //#endif
 
     public static Tessellator getTessellator() {
         return Tessellator.getInstance();
     }
 
+    @Deprecated // Use the non-static methods for 1.17+ compatibility or call UGraphics.getTessellator().draw() directly
     public static void draw() {
         getTessellator().draw();
     }
@@ -216,17 +158,13 @@ public class UGraphics {
     }
 
     public static void enableLighting() {
-        //#if MC==11502
-        //$$ RenderSystem.enableLighting();
-        //#elseif MC<=11202
+        //#if MC<11700
         GlStateManager.enableLighting();
         //#endif
     }
 
     public static void disableLighting() {
-        //#if MC==11502
-        //$$ RenderSystem.disableLighting();
-        //#elseif MC<=11202
+        //#if MC<11700
         GlStateManager.disableLighting();
         //#endif
     }
@@ -247,9 +185,13 @@ public class UGraphics {
         GlStateManager.enableBlend();
     }
 
+    /**
+     * @deprecated see {@link #enableTexture2D()}
+     */
+    @Deprecated
     public static void disableTexture2D() {
         //#if MC>=11502
-        //$$ GlStateManager.disableTexture();
+        //$$ RenderSystem.disableTexture();
         //#else
         GlStateManager.disableTexture2D();
         //#endif
@@ -257,30 +199,49 @@ public class UGraphics {
     }
 
     public static void disableAlpha() {
-        //#if MC<11502
+        //#if MC<11700
+        //#if MC>=11502
+        //$$ RenderSystem.disableAlphaTest();
+        //#else
         GlStateManager.disableAlpha();
+        //#endif
         //#endif
     }
 
     public static void shadeModel(int mode) {
-        //#if MC==11502
-        //$$ RenderSystem.shadeModel(mode);
-        //#elseif MC<11502
+        //#if MC<11700
         GlStateManager.shadeModel(mode);
+        //#endif
+    }
+
+    public static void blendEquation(int equation) {
+        //#if MC>=11500
+        //$$ RenderSystem.blendEquation(equation);
+        //#else
+        glBlendEquation(equation);
         //#endif
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
         //#if MC>=11502
-        //$$ GlStateManager.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //$$ RenderSystem.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#else
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#endif
     }
 
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     *     Instead of manually managing TEXTURE_2D state, prefer using
+     *     {@link #beginWithDefaultShader(DrawMode, VertexFormat)} or any of the other non-deprecated begin methods as
+     *     these will set (and restore) the appropriate state for the given {@link VertexFormat} right before/after
+     *     rendering.<br>
+     *     Also incompatible with OpenGL Core / MC 1.17.
+     */
+    @Deprecated
     public static void enableTexture2D() {
         //#if MC>=11502
-        //$$ GlStateManager.enableTexture();
+        //$$ RenderSystem.enableTexture();
         //#else
         GlStateManager.enableTexture2D();
         //#endif
@@ -295,36 +256,127 @@ public class UGraphics {
     }
 
     public static void enableAlpha() {
-        //#if FORGE && MC>=11502
-        //$$ GlStateManager.enableAlphaTest();
-        //#elseif FORGE
+        //#if MC<11700
+        //#if MC>=11502
+        //$$ RenderSystem.enableAlphaTest();
+        //#else
         GlStateManager.enableAlpha();
+        //#endif
         //#endif
     }
 
-    public static void bindTexture(int glTextureId) {
+    public static void configureTexture(int glTextureId, Runnable block) {
+        int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
         GlStateManager.bindTexture(glTextureId);
+
+        block.run();
+
+        GlStateManager.bindTexture(prevTextureBinding);
+    }
+
+    public static void configureTextureUnit(int index, Runnable block) {
+        int prevActiveTexture = getActiveTexture();
+        setActiveTexture(GL_TEXTURE0 + index);
+
+        block.run();
+
+        setActiveTexture(prevActiveTexture);
+    }
+
+    /**
+     * @deprecated Changes global state and may as such easily lead to bug if the caller forgets to store the previous
+     * state and restore it afterwards.<br>
+     * Prefer {@link #configureTextureUnit(int, Runnable)} instead (which only changes the global state for the duration
+     * of the given block).<br>
+     * If you must change it for longer, then use {@link #getActiveTexture()} before {@link #setActiveTexture(int)} and
+     * make sure to restore it afterwards.
+     */
+    @Deprecated
+    public static void activeTexture(int glId) {
+        setActiveTexture(glId);
+    }
+
+    public static int getActiveTexture() {
+        return GL11.glGetInteger(GL_ACTIVE_TEXTURE);
+    }
+
+    public static void setActiveTexture(int glId) {
+        //#if MC>=11700
+        //$$ GlStateManager._activeTexture(glId);
+        //#elseif MC>=11400
+        //$$ GlStateManager.activeTexture(glId);
+        //#else
+        GlStateManager.setActiveTexture(glId);
+        //#endif
+    }
+
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     * Prefer {@link #bindTexture(int, int)} instead.
+     */
+    @Deprecated
+    public static void bindTexture(int glTextureId) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
+        //#else
+        GlStateManager.bindTexture(glTextureId);
+        //#endif
+    }
+
+    /**
+     * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
+     * Prefer {@link #bindTexture(int, ResourceLocation)} instead.
+     */
+    @Deprecated
+    public static void bindTexture(ResourceLocation resourceLocation) {
+        bindTexture(getOrLoadTextureId(resourceLocation));
+    }
+
+    public static void bindTexture(int index, int glTextureId) {
+        //#if MC>=11700
+        //$$ RenderSystem.setShaderTexture(index, glTextureId);
+        //#else
+        configureTextureUnit(index, () -> GlStateManager.bindTexture(glTextureId));
+        //#endif
+    }
+
+    public static void bindTexture(int index, ResourceLocation resourceLocation) {
+        bindTexture(index, getOrLoadTextureId(resourceLocation));
+    }
+
+    private static int getOrLoadTextureId(ResourceLocation resourceLocation) {
+        TextureManager textureManager = UMinecraft.getMinecraft().getTextureManager();
+        //#if MC>=11400
+        //$$ Texture texture = textureManager.getTexture(resourceLocation);
+        //#else
+        ITextureObject texture = textureManager.getTexture(resourceLocation);
+        //#endif
+        if (texture == null) {
+            texture = new SimpleTexture(resourceLocation);
+            textureManager.loadTexture(resourceLocation, texture);
+        }
+        return texture.getGlTextureId();
     }
 
     public static int getStringWidth(String in) {
-        //#if FABRIC
-        //$$ return UMinecraft.getFontRenderer().getWidth(in);
-        //#else
         return UMinecraft.getFontRenderer().getStringWidth(in);
-        //#endif
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public static void drawString(String text, float x, float y, int color, boolean shadow) {
+        drawString(UNIT_STACK, text, x, y, color, shadow);
+    }
+
+    public static void drawString(UMatrixStack stack, String text, float x, float y, int color, boolean shadow) {
         if ((color >> 24 & 255) <= 10) return;
-        //#if FABRIC
-        //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, shadow, stack.peek().getModel(), immediate, false, 0, 15728880);
-        //$$ immediate.draw();
-        //#elseif MC>=11602
+        //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
-        //#elseif MC>=11502
+        //#else
+        if (stack != UNIT_STACK) GL.pushMatrix();
+        if (stack != UNIT_STACK) stack.applyToGlobalState();
+        //#if MC>=11502
         //$$ if (shadow) {
         //$$     UMinecraft.getFontRenderer().drawStringWithShadow(text, x, y, color);
         //$$ } else {
@@ -333,26 +385,33 @@ public class UGraphics {
         //#else
         UMinecraft.getFontRenderer().drawString(text, x, y, color, shadow);
         //#endif
+        if (stack != UNIT_STACK) GL.popMatrix();
+        //#endif
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public static void drawString(String text, float x, float y, int color, int shadowColor) {
+        drawString(UNIT_STACK, text, x, y, color, shadowColor);
+    }
+
+    public static void drawString(UMatrixStack stack, String text, float x, float y, int color, int shadowColor) {
         if ((color >> 24 & 255) <= 10) return;
-        //#if FABRIC
-        //$$ VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().draw(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), immediate, false, 0, 15728880);
-        //$$ UMinecraft.getFontRenderer().draw(text, x, y, color, false, stack.peek().getModel(), immediate, false, 0, 15728880);
-        //$$ immediate.draw();
-        //#elseif MC>=11602
+        //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.getLast().getMatrix(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
-        //#elseif MC>=11502
+        //#else
+        if (stack != UNIT_STACK) GL.pushMatrix();
+        if (stack != UNIT_STACK) stack.applyToGlobalState();
+        //#if MC>=11502
         //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
         //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //#else
         UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
         UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
+        //#endif
+        if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
     }
 
@@ -370,23 +429,16 @@ public class UGraphics {
         }
 
         //#if MC>=11602
-        // TODO: Validate this code
+        //$$ // TODO: Validate this code
         //$$ List<String> strings = new ArrayList<>();
         //$$
-        //#if FABRIC
-        //$$ TextHandler handler = UMinecraft.getFontRenderer().getTextHandler();
-        //$$ List<StringVisitable> visitables = handler.wrapLines(str, wrapWidth, Style.EMPTY);
-        //$$ for (StringVisitable visitable : visitables)
-        //$$     strings.add(visitable.getString());
-        //#else
-        //$$ CharacterManager charManager = UMinecraft.getFontRenderer().func_238420_b_();
+        //$$ CharacterManager charManager = UMinecraft.getFontRenderer().getCharacterManager();
         //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
         //$$ // From net.minecraft.util.text.ITextProperties line 88
-        //$$ properties.func_230438_a_(string -> {
+        //$$ properties.getComponent(string -> {
         //$$     strings.add(string);
         //$$     return Optional.empty();
         //$$ });
-        //#endif
         //$$ return strings;
         //#else
         return UMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
@@ -394,9 +446,7 @@ public class UGraphics {
     }
 
     public static float getCharWidth(char character) {
-        //#if FABRIC
-        //$$ return UMinecraft.getFontRenderer().getWidth(String.valueOf(character));
-        //#elseif MC>=11602
+        //#if MC>=11602
         //$$ return getStringWidth(String.valueOf(character));
         //#else
         return UMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
@@ -411,7 +461,6 @@ public class UGraphics {
         GL11.glClearStencil(mode);
     }
 
-    //#if FORGE
     public static ReleasedDynamicTexture getTexture(InputStream stream) {
         try {
             //#if MC>=11502
@@ -441,44 +490,22 @@ public class UGraphics {
     }
 
     public static ReleasedDynamicTexture getEmptyTexture() {
-        //#if MC>=11502
-        //$$ return new ReleasedDynamicTexture(0, 0, false);
-        //#else
         return new ReleasedDynamicTexture(0, 0);
-        //#endif
     }
-    //#endif
-    //#if FABRIC
-    //$$ public static NativeImageBackedTexture getTexture(InputStream stream) {
-    //$$     try {
-    //$$         return new NativeImageBackedTexture(NativeImage.read(stream));
-    //$$     } catch (IOException e) {
-    //$$            e.printStackTrace();
-    //$$     }
-    //$$     throw new IllegalStateException("Failed to read image");
-    //$$ }
-    //$$
-    //$$ public static NativeImageBackedTexture getTexture(BufferedImage img) {
-    //$$     try {
-    //$$         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    //$$         ImageIO.write(img, "png", baos );
-    //$$         return new NativeImageBackedTexture(NativeImage.read(new ByteArrayInputStream(baos.toByteArray())));
-    //$$     } catch (IOException e) {
-    //$$          e.printStackTrace();
-    //$$     }
-    //$$     throw new IllegalStateException("Failed to create texture");
-    //$$ }
-    //$$
-    //$$  public static NativeImageBackedTexture getEmptyTexture() {
-    //$$      return new NativeImageBackedTexture(0, 0, false);
-    //$$  }
-    //#endif
 
     public static void glUseProgram(int program) {
         //#if MC>=11502
         //$$ GlStateManager.useProgram(program);
         //#else
         OpenGlHelper.glUseProgram(program);
+        //#endif
+    }
+
+    public static boolean isOpenGl21Supported() {
+        //#if MC>=11502
+        //$$ return true;
+        //#else
+        return OpenGlHelper.openGL21;
         //#endif
     }
 
@@ -571,10 +598,14 @@ public class UGraphics {
     }
 
     public static void directColor3f(float red, float green, float blue) {
+        //#if MC>=11700
+        //$$ color4f(red, green, blue, 1f);
+        //#else
         //#if MC<11502
         GlStateManager.color(red, green, blue);
         //#else
         //$$ RenderSystem.color3f(red, green, blue);
+        //#endif
         //#endif
     }
 
@@ -602,26 +633,272 @@ public class UGraphics {
         //#endif
     }
 
+    //#if MC>=11700
+    //$$ public static void setShader(Supplier<Shader> shader) {
+    //$$     RenderSystem.setShader(shader);
+    //$$ }
+    //#endif
+
+    public enum DrawMode {
+        LINES(GL11.GL_LINES),
+        LINE_STRIP(GL11.GL_LINE_STRIP),
+        TRIANGLES(GL11.GL_TRIANGLES),
+        TRIANGLE_STRIP(GL11.GL_TRIANGLE_STRIP),
+        TRIANGLE_FAN(GL11.GL_TRIANGLE_FAN),
+        QUADS(GL11.GL_QUADS),
+        ;
+
+        private final int glMode;
+        //#if MC>=11700
+        //$$ private final VertexFormat.DrawMode mcMode;
+        //#else
+        private final int mcMode;
+        //#endif
+
+        DrawMode(int glMode) {
+            this.glMode = glMode;
+            //#if MC>=11700
+            //$$ this.mcMode = glToMcDrawMode(glMode);
+            //#else
+            this.mcMode = glMode;
+            //#endif
+        }
+
+        //#if MC>=11700
+        //$$ private static VertexFormat.DrawMode glToMcDrawMode(int glMode) {
+        //$$     switch (glMode) {
+        //$$         case GL11.GL_LINES: return VertexFormat.DrawMode.LINES;
+        //$$         case GL11.GL_LINE_STRIP: return VertexFormat.DrawMode.LINE_STRIP;
+        //$$         case GL11.GL_TRIANGLES: return VertexFormat.DrawMode.TRIANGLES;
+        //$$         case GL11.GL_TRIANGLE_STRIP: return VertexFormat.DrawMode.TRIANGLE_STRIP;
+        //$$         case GL11.GL_TRIANGLE_FAN: return VertexFormat.DrawMode.TRIANGLE_FAN;
+        //$$         case GL11.GL_QUADS: return VertexFormat.DrawMode.QUADS;
+        //$$         default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
+        //$$     }
+        //$$ }
+        //$$
+        //$$ private static DrawMode fromMc(VertexFormat.DrawMode mcMode) {
+        //$$     switch (mcMode) {
+        //$$         case LINES: return DrawMode.LINES;
+        //$$         case LINE_STRIP: return DrawMode.LINE_STRIP;
+        //$$         case TRIANGLES: return DrawMode.TRIANGLES;
+        //$$         case TRIANGLE_STRIP: return DrawMode.TRIANGLE_STRIP;
+        //$$         case TRIANGLE_FAN: return DrawMode.TRIANGLE_FAN;
+        //$$         case QUADS: return DrawMode.QUADS;
+        //$$         default: throw new IllegalArgumentException("Unsupported draw mode " + mcMode);
+        //$$     }
+        //$$ }
+        //#endif
+
+        public static DrawMode fromGl(int glMode) {
+            switch (glMode) {
+                case GL11.GL_LINES: return LINES;
+                case GL11.GL_LINE_STRIP: return LINE_STRIP;
+                case GL11.GL_TRIANGLES: return TRIANGLES;
+                case GL11.GL_TRIANGLE_STRIP: return TRIANGLE_STRIP;
+                case GL11.GL_TRIANGLE_FAN: return TRIANGLE_FAN;
+                case GL11.GL_QUADS: return QUADS;
+                default: throw new IllegalArgumentException("Unsupported draw mode " + glMode);
+            }
+        }
+
+        //#if MC>=11600
+        //$$ public static DrawMode fromRenderLayer(RenderType renderLayer) {
+            //#if MC>=11700
+            //$$ return fromMc(renderLayer.getDrawMode());
+            //#else
+            //$$ return fromGl(renderLayer.getDrawMode());
+            //#endif
+        //$$ }
+        //#endif
+    }
+
+    public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
+        vertexFormat = format;
+        instance.begin(mode.mcMode, format);
+        return this;
+    }
+
+    //#if MC>=11700
+    //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new HashMap<>();
+    //$$ static {
+    //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, GameRenderer::getRenderTypeLinesShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, GameRenderer::getParticleShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION, GameRenderer::getPositionShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_LIGHT, GameRenderer::getPositionColorLightmapShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE, GameRenderer::getPositionTexShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE, GameRenderer::getPositionColorTexShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, GameRenderer::getPositionTexColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, GameRenderer::getPositionColorTexLightmapShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_LIGHT_COLOR, GameRenderer::getPositionTexLightmapColorShader);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_NORMAL, GameRenderer::getPositionTexColorNormalShader);
+    //$$ }
+    //#endif
+
+    public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
+        //#if MC>=11700
+        //$$ Supplier<Shader> supplier = DEFAULT_SHADERS.get(format);
+        //$$ if (supplier == null) {
+        //$$     throw new IllegalArgumentException("No default shader for " + format + ". Bind your own and use beginWithActiveShader instead.");
+        //$$ }
+        //$$ setShader(supplier);
+        //#endif
+        return beginWithActiveShader(mode, format);
+    }
+
+    //#if MC>=11600
+    //$$ private RenderType renderLayer;
+    //$$ public UGraphics beginRenderLayer(RenderType renderLayer) {
+    //$$     this.renderLayer = renderLayer;
+    //$$     beginWithActiveShader(DrawMode.fromRenderLayer(renderLayer), renderLayer.getVertexFormat());
+    //$$     return this;
+    //$$ }
+    //#endif
+
+    @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` or `beginRenderLayer` instead
     public UGraphics begin(int glMode, VertexFormat format) {
+        //#if MC>=11700
+        //$$ beginWithDefaultShader(DrawMode.fromGl(glMode), format);
+        //#else
         instance.begin(glMode, format);
+        //#endif
         return this;
     }
 
+    public void drawDirect() {
+        //#if MC>=11600
+        //$$ if (renderLayer != null) {
+        //$$     renderLayer.finish(instance, 0, 0, 0);
+        //$$     return;
+        //$$ }
+        //#endif
+        doDraw();
+    }
+
+    public void drawSorted(int cameraX, int cameraY, int cameraZ) {
+        //#if MC>=11600
+        //$$ if (renderLayer != null) {
+        //$$     renderLayer.finish(instance, cameraX, cameraY, cameraZ);
+        //$$     return;
+        //$$ }
+        //#endif
+        //#if MC>=11700
+        //$$ instance.setCameraPosition(cameraX, cameraY, cameraZ);
+        //#else
+        instance.sortVertexData(cameraX, cameraY, cameraZ);
+        //#endif
+        doDraw();
+    }
+
+    private static boolean[] getDesiredTextureUnitState(VertexFormat vertexFormat) {
+        // Vanilla only ever has two UV elements, so we can assume the remainder to be disabled by default and don't
+        // need to check them unless we want them enabled.
+        boolean[] wantEnabled = new boolean[2];
+        for (VertexFormatElement element : vertexFormat.getElements()) {
+            // FIXME preprocessor bug: EnumUsage doesn't remap to Usage
+            //#if MC>=11500
+            //$$ if (element.getUsage() == VertexFormatElement.Usage.UV) {
+            //#else
+            if (element.getUsage() == VertexFormatElement.EnumUsage.UV) {
+                //#endif
+                int index = element.getIndex();
+                if (wantEnabled.length <= index) {
+                    wantEnabled = Arrays.copyOf(wantEnabled, index + 1);
+                }
+                wantEnabled[index] = true;
+            }
+        }
+        return wantEnabled;
+    }
+
+    private void doDraw() {
+        VertexFormat vertexFormat = this.vertexFormat;
+        if (vertexFormat == null) {
+            getTessellator().draw();
+            return;
+        }
+
+        //#if MC<11700
+        boolean[] wantEnabledStates = getDesiredTextureUnitState(vertexFormat);
+        boolean[] wasEnabledStates = new boolean[wantEnabledStates.length];
+        for (int i = 0; i < wasEnabledStates.length; i++) {
+            final int index = i;
+            configureTextureUnit(index, () -> {
+                boolean isEnabled = wasEnabledStates[index] = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+                boolean wantEnabled = wantEnabledStates[index];
+                if (isEnabled != wantEnabled) {
+                    if (wantEnabled) {
+                        GlStateManager.enableTexture2D();
+                    } else {
+                        GlStateManager.disableTexture2D();
+                    }
+                }
+            });
+        }
+        //#endif
+
+        getTessellator().draw();
+
+        //#if MC<11700
+        for (int i = 0; i < wasEnabledStates.length; i++) {
+            if (wasEnabledStates[i] == wantEnabledStates[i]) {
+                continue;
+            }
+            if (wasEnabledStates[i]) {
+                configureTextureUnit(i, GlStateManager::enableTexture2D);
+            } else {
+                configureTextureUnit(i, GlStateManager::disableTexture2D);
+            }
+        }
+        //#endif
+    }
+
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public UGraphics pos(double x, double y, double z) {
-        //#if FABRIC
-        //$$ instance.vertex(stack.peek().getModel(), (float) x, (float) y, (float) z);
-        //#else
+        return pos(UNIT_STACK, x, y, z);
+    }
+
+    public UGraphics pos(UMatrixStack stack, double x, double y, double z) {
         //#if MC>=11602
-        //$$ instance.pos(stack.getLast().getMatrix(), (float) x, (float) y, (float) z);
+        //$$ instance.pos(stack.peek().getModel(), (float) x, (float) y, (float) z);
         //#else
-        instance.pos(x, y, z);
-        //#endif
+        if (stack == UNIT_STACK) {
+            instance.pos(x, y, z);
+        } else {
+            Vector4f vec = new Vector4f((float) x, (float) y, (float) z, 1f);
+            //#if MC>=11400
+            //$$ vec.transform(stack.peek().getModel());
+            //#else
+            Matrix4f.transform(stack.peek().getModel(), vec, vec);
+            //#endif
+            instance.pos(vec.getX(), vec.getY(), vec.getZ());
+        }
         //#endif
         return this;
     }
 
+    @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public UGraphics norm(float x, float y, float z) {
-        instance.normal(x, y, z);
+        return norm(UNIT_STACK, x, y, z);
+    }
+
+    public UGraphics norm(UMatrixStack stack, float x, float y, float z) {
+        //#if MC>=11602
+        //$$ instance.normal(stack.peek().getNormal(), x, y, z);
+        //#else
+        if (stack == UNIT_STACK) {
+            instance.normal(x, y, z);
+        } else {
+            Vector3f vec = new Vector3f(x, y, z);
+            //#if MC>=11400
+            //$$ vec.transform(stack.peek().getNormal());
+            //#else
+            Matrix3f.transform(stack.peek().getNormal(), vec, vec);
+            //#endif
+            instance.normal(vec.getX(), vec.getY(), vec.getZ());
+        }
+        //#endif
         return this;
     }
 
@@ -639,18 +916,12 @@ public class UGraphics {
     }
 
     public UGraphics endVertex() {
-        //#if FABRIC
-        //$$ instance.next();
-        //#else
         instance.endVertex();
-        //#endif
         return this;
     }
 
     public UGraphics tex(double u, double v) {
-        //#if FABRIC
-        //$$ instance.texture((float) u, (float) v);
-        //#elseif MC>=11502
+        //#if MC>=11502
         //$$ instance.tex((float)u,(float)v);
         //#else
         instance.tex(u, v);
@@ -658,26 +929,34 @@ public class UGraphics {
         return this;
     }
 
-    // A collection of methods for always calling the OpenGL transformations rather than
-    // delegating to the MatrixStack. In versions less than 1.15.2, these methods are no
-    // different than transformation methods in the UGraphics class.
-    //
-    // The other transformation methods should be preferred.
+    public UGraphics overlay(int u, int v) {
+        //#if MC>=11502
+        //$$ instance.overlay(u, v);
+        //#else
+        instance.tex(u, v);
+        //#endif
+        return this;
+    }
+
+    public UGraphics light(int u, int v) {
+        instance.lightmap(u, v);
+        return this;
+    }
+
+    /**
+     * Using UMatrixStack should be preferred for all versions as direct GL transforms will break in 1.17.
+     *
+     * These methods are no different than transformation methods in the UGraphics class except they are not deprecated
+     * and as such can be used in version-specific code.
+     */
+    //#if MC<11700
     public static class GL {
         public static void pushMatrix() {
-            //#if MC>=11502
-            //$$ RenderSystem.pushMatrix();
-            //#else
             GlStateManager.pushMatrix();
-            //#endif
         }
 
         public static void popMatrix() {
-            //#if MC>=11502
-            //$$ RenderSystem.popMatrix();
-            //#else
             GlStateManager.popMatrix();
-            //#endif
         }
 
         public static void translate(float x, float y, float z) {
@@ -720,4 +999,5 @@ public class UGraphics {
             //#endif
         }
     }
+    //#endif
 }

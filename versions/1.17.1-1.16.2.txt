@@ -1,0 +1,13 @@
+com.mojang.blaze3d.platform.TextureUtil net.minecraft.client.texture.TextureUtil
+com.mojang.blaze3d.platform.TextureUtil prepareImage() net.minecraft.client.texture.TextureUtil allocate()
+com.mojang.blaze3d.platform.GlStateManager glCreateProgram() createProgram()
+com.mojang.blaze3d.platform.GlStateManager _glUseProgram() useProgram()
+com.mojang.blaze3d.platform.GlStateManager glCreateShader() createShader()
+com.mojang.blaze3d.platform.GlStateManager glCompileShader() compileShader()
+com.mojang.blaze3d.platform.GlStateManager glGetShaderi() getShader()
+com.mojang.blaze3d.platform.GlStateManager glGetShaderInfoLog() getShaderInfoLog()
+com.mojang.blaze3d.platform.GlStateManager glAttachShader() attachShader()
+com.mojang.blaze3d.platform.GlStateManager glLinkProgram() linkProgram()
+com.mojang.blaze3d.platform.GlStateManager glGetProgrami() getProgram()
+com.mojang.blaze3d.platform.GlStateManager glGetProgramInfoLog() getProgramInfoLog()
+com.mojang.blaze3d.systems.RenderSystem setShaderColor() color4f()

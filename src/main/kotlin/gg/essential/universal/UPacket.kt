@@ -1,48 +1,41 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.MCSChatPacket
 import gg.essential.universal.wrappers.message.UTextComponent
-
-//#if FABRIC
-//$$ import net.minecraft.text.LiteralText
-//#endif
+import net.minecraft.network.play.server.S02PacketChat
 
 //#if MC>=11602
 //$$ import gg.essential.universal.wrappers.UPlayer
 //#endif
 
-//#if FORGE && MC>=11202
+//#if MC>=11202
 //$$ import net.minecraft.util.text.ChatType
+//$$
+private object ChatType {
+    const val CHAT: Byte = 0
+    const val GAME_INFO: Byte = 2
+}
 //#endif
 
 object UPacket {
     @JvmStatic
     fun sendChatMessage(message: UTextComponent) {
-        //#if FABRIC
-        //$$ UPlayer.getPlayer()!!.sendChatMessage(message.text)
-        //#elseif MC>=11602
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.CHAT, UPlayer.getUUID()))
-        //#elseif MC>=11502
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.CHAT))
-        //#elseif MC>=11202
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.CHAT))
-        //#else
-        UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, 0))
-        //#endif
+        UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
+            message,
+            ChatType.CHAT,
+            //#if MC>=11600
+            //$$ UPlayer.getUUID(),
+            //#endif
+        ))
     }
     
     @JvmStatic
     fun sendActionBarMessage(message: UTextComponent) {
-        //#if FABRIC
-        //$$ UPlayer.getPlayer()!!.sendMessage(LiteralText(message.text), true)
-        //#elseif MC>=11602
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.GAME_INFO, UPlayer.getUUID()))
-        //#elseif MC>=11502
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.GAME_INFO))
-        //#elseif MC>=11202
-        //$$ UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, ChatType.GAME_INFO))
-        //#else
-        UMinecraft.getNetHandler()!!.handleChat(MCSChatPacket(message, 2))
-        //#endif
+        UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
+            message,
+            ChatType.GAME_INFO,
+            //#if MC>=11600
+            //$$ UPlayer.getUUID(),
+            //#endif
+        ))
     }
 }

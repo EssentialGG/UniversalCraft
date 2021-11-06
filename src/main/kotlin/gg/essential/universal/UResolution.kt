@@ -14,9 +14,7 @@ object UResolution {
     @JvmStatic
     val windowWidth: Int
         get() {
-            //#if FABRIC
-            //$$ return UMinecraft.getMinecraft().window.width
-            //#elseif MC>=11502
+            //#if MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.width
             //#else
             return UMinecraft.getMinecraft().displayWidth
@@ -26,10 +24,28 @@ object UResolution {
     @JvmStatic
     val windowHeight: Int
         get() {
-            //#if FABRIC
-            //$$ return UMinecraft.getMinecraft().window.height
-            //#elseif MC>=11502
+            //#if MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.height
+            //#else
+            return UMinecraft.getMinecraft().displayHeight
+            //#endif
+        }
+
+    @JvmStatic
+    val viewportWidth: Int
+        get() {
+            //#if MC>=11502
+            //$$ return UMinecraft.getMinecraft().mainWindow.framebufferWidth
+            //#else
+            return UMinecraft.getMinecraft().displayWidth
+            //#endif
+        }
+
+    @JvmStatic
+    val viewportHeight: Int
+        get() {
+            //#if MC>=11502
+            //$$ return UMinecraft.getMinecraft().mainWindow.framebufferHeight
             //#else
             return UMinecraft.getMinecraft().displayHeight
             //#endif
@@ -37,7 +53,7 @@ object UResolution {
 
     //#if MC<=11202
     private fun get(): ScaledResolution {
-        if (cachedHeight != windowHeight || cachedWidth != windowWidth || scaledResolution == null)
+        if (cachedHeight != viewportHeight || cachedWidth != viewportWidth || scaledResolution == null)
             scaledResolution = ScaledResolution(UMinecraft.getMinecraft())
         return scaledResolution!!
     }
@@ -46,9 +62,7 @@ object UResolution {
     @JvmStatic
     val scaledWidth: Int
         get() {
-            //#if FABRIC
-            //$$ return UMinecraft.getMinecraft().window.scaledWidth
-            //#elseif MC>=11502
+            //#if MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.scaledWidth
             //#else
             return get().scaledWidth
@@ -58,9 +72,7 @@ object UResolution {
     @JvmStatic
     val scaledHeight: Int
         get() {
-            //#if FABRIC
-            //$$ return UMinecraft.getMinecraft().window.scaledHeight
-            //#elseif MC>=11502
+            //#if MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.scaledHeight
             //#else
             return get().scaledHeight
@@ -70,9 +82,7 @@ object UResolution {
     @JvmStatic
     val scaleFactor: Double
         get() {
-            //#if FABRIC
-            //$$ return UMinecraft.getMinecraft().window.scaleFactor
-            //#elseif MC>=11502
+            //#if MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.guiScaleFactor
             //#else
             return get().scaleFactor.toDouble()

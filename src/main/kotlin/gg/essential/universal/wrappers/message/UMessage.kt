@@ -4,8 +4,8 @@ import gg.essential.universal.UPacket
 import gg.essential.universal.UMinecraft
 import gg.essential.universal.wrappers.UPlayer
 
-//#if FABRIC
-//$$ import gg.essential.universal.utils.MCITextComponent
+//#if MC>=11600
+//$$ import net.minecraft.util.text.IFormattableTextComponent
 //#endif
 
 class UMessage {
@@ -32,13 +32,12 @@ class UMessage {
         if (component.siblings.isEmpty()) {
             messageParts.add(component)
         } else {
-            //#if FORGE
-            component.siblings.map(::UTextComponent).forEach { messageParts.add(it) }
-            //#else
-            //$$ component.siblings
-            //$$         .map { UTextComponent(it as MCITextComponent) }
-            //$$         .forEach { messageParts.add(it) }
-            //#endif
+            component.siblings
+                //#if MC>=11600
+                //$$ .filterIsInstance<IFormattableTextComponent>()
+                //#endif
+                .map { UTextComponent(it) }
+                .forEach { messageParts.add(it) }
         }
     }
 

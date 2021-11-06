@@ -5,22 +5,32 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
+//#if MC>=11400
+//#else
+import net.minecraft.client.gui.GuiScreen
+//#endif
+
 object UDesktop {
     @JvmStatic
     var isLinux: Boolean = false
         private set
+
     @JvmStatic
     var isXdg: Boolean = false
         private set
+
     @JvmStatic
     var isKde: Boolean = false
         private set
+
     @JvmStatic
     var isGnome: Boolean = false
         private set
+
     @JvmStatic
     var isMac: Boolean = false
         private set
+
     @JvmStatic
     var isWindows: Boolean = false
         private set
@@ -38,7 +48,7 @@ object UDesktop {
             System.getenv("XDG_SESSION_ID")?.let {
                 isXdg = it.isNotEmpty()
             }
-            System.getenv("GDMSESSION")?.toLowerCase()?.let {
+            System.getenv("GDMSESSION")?.lowercase()?.let {
                 isGnome = "gnome" in it
                 isKde = "kde" in it
             }
@@ -61,21 +71,32 @@ object UDesktop {
     private fun openSystemSpecific(file: String): Boolean {
         return when {
             isLinux -> when {
-                isXdg -> runCommand("xdg-open $file")
-                isKde -> runCommand("kde-open $file")
-                isGnome -> runCommand("gnome-open $file")
-                else -> runCommand("kde-open $file") || runCommand("gnome-open $file")
+                isXdg -> runCommand("xdg-open \"$file\"")
+                isKde -> runCommand("kde-open \"$file\"")
+                isGnome -> runCommand("gnome-open \"$file\"")
+                else -> runCommand("kde-open \"$file\"") || runCommand("gnome-open \"$file\"")
             }
-            isMac -> runCommand("open $file")
-            isWindows -> runCommand("explorer $file")
+            isMac -> runCommand("open \"$file\"")
+            isWindows -> runCommand("explorer \"$file\"")
             else -> false
         }
     }
 
     private fun browseDesktop(uri: URI): Boolean {
         return if (!Desktop.isDesktopSupported()) false else try {
-            if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+            if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                if (isLinux) {
+                    return when {
+                        isXdg -> runCommand("xdg-open $uri")
+                        isKde -> runCommand("kde-open $uri")
+                        isGnome -> runCommand("gnome-open $uri")
+                        else -> runCommand("kde-open $uri") || runCommand("gnome-open $uri")
+                    }
+
+                }
                 return false
+            }
+
             Desktop.getDesktop().browse(uri)
             true
         } catch (e: Throwable) {
@@ -113,5 +134,22 @@ object UDesktop {
         } catch (e: IOException) {
             false
         }
+    }
+
+    @JvmStatic
+    fun getClipboardString(): String =
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString
+        //#else
+        GuiScreen.getClipboardString()
+        //#endif
+
+    @JvmStatic
+    fun setClipboardString(str: String) {
+        //#if MC>=11400
+        //$$ UMinecraft.getMinecraft().keyboardListener.clipboardString = str
+        //#else
+        GuiScreen.setClipboardString(str)
+        //#endif
     }
 }
