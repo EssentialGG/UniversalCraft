@@ -3,24 +3,12 @@ package gg.essential.universal.utils
 typealias MCMinecraft = net.minecraft.client.Minecraft
 typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 
-//#disable-remap FIXME preprocessor bug: remaps the type to …ClickEvent.Action.Action
-//#if FABRIC
-//$$ typealias MCClickEventAction = net.minecraft.text.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action<*>
-//#elseif MC>=11700
-//$$ typealias MCClickEventAction = net.minecraft.network.chat.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.network.chat.HoverEvent.Action<*>
-//#elseif MC>=11600
-//$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
-//#elseif MC>=11202
-//$$ typealias MCClickEventAction = net.minecraft.util.text.event.ClickEvent.Action
-//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action
-//#else
 typealias MCClickEventAction = net.minecraft.event.ClickEvent.Action
+//#if MC>=11600
+//$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
+//#else
 typealias MCHoverEventAction = net.minecraft.event.HoverEvent.Action
 //#endif
-//#enable-remap
 //#if MC>=11600
 //$$ typealias MCIMutableText = net.minecraft.util.text.IFormattableTextComponent
 //#else

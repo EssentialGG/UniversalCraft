@@ -74,29 +74,12 @@ class ReleasedDynamicTexture private constructor(
         }
     }
 
-    //#if FABRIC
-    //#disable-remap FIXME preprocessor bug: remaps to `super.glId` which gets shadowed by the protected field
-    //$$ private fun allocGlId() = super.getGlId()
-    //#enable-remap
-    //#elseif MC>=11700
-    //$$ private fun allocGlId() = super.getId()
-    //#else
     private fun allocGlId() = super.getGlTextureId()
-    //#endif
 
     override fun getGlTextureId(): Int {
         uploadTexture()
         return super.getGlTextureId()
     }
-
-    @Suppress("DeprecatedCallableAddReplaceWith")
-    @Deprecated("Workaround for preprocessor bug where this property does not get remapped in consumer code. Do not use outside of Elementa and Essential, may be removed in the future.")
-    // FIXME preprocessor bug: consumer code does not get remapped if we overwrite the getter
-    //#if FABRIC || MC>=11700
-    //$$ val glTextureId get() = getGlId()
-    //#else
-    val glId get() = getGlTextureId()
-    //#endif
 
     protected fun finalize() {
         UGraphics.deleteTexture(glTextureId)

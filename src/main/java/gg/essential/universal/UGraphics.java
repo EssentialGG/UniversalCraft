@@ -796,12 +796,7 @@ public class UGraphics {
         // need to check them unless we want them enabled.
         boolean[] wantEnabled = new boolean[2];
         for (VertexFormatElement element : vertexFormat.getElements()) {
-            // FIXME preprocessor bug: EnumUsage doesn't remap to Usage
-            //#if MC>=11500
-            //$$ if (element.getUsage() == VertexFormatElement.Usage.UV) {
-            //#else
             if (element.getUsage() == VertexFormatElement.EnumUsage.UV) {
-                //#endif
                 int index = element.getIndex();
                 if (wantEnabled.length <= index) {
                     wantEnabled = Arrays.copyOf(wantEnabled, index + 1);
