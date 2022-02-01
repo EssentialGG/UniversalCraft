@@ -3,6 +3,7 @@ package gg.essential.universal.wrappers.message
 import gg.essential.universal.UPacket
 import gg.essential.universal.UMinecraft
 import gg.essential.universal.wrappers.UPlayer
+import java.util.concurrent.ThreadLocalRandom
 
 //#if MC>=11600
 //$$ import net.minecraft.util.text.IFormattableTextComponent
@@ -63,8 +64,18 @@ class UMessage {
 
     fun addTextComponent(component: Any): UMessage = addTextComponent(messageParts.size, component)
 
-    fun edit(vararg replacements: UMessage) {
-        TODO()
+    /**
+     * Must be called to be able to edit later
+     */
+    fun mutable() = apply {
+        chatLineId = ThreadLocalRandom.current().nextInt()
+    }
+
+    fun edit(vararg replacements: Any) {
+        if (chatLineId == -1) throw IllegalStateException("This message is not mutable!")
+        messageParts.clear()
+        replacements.forEach(::addPart)
+        chat()
     }
 
     fun chat() {
