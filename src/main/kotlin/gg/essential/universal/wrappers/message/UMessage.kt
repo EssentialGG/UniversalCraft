@@ -1,8 +1,11 @@
 package gg.essential.universal.wrappers.message
 
 import gg.essential.universal.UPacket
-import gg.essential.universal.UMinecraft
+import gg.essential.universal.utils.MCITextComponent
 import gg.essential.universal.wrappers.UPlayer
+import net.minecraft.client.gui.GuiNewChat
+import java.lang.invoke.MethodHandle
+import java.lang.invoke.MethodHandles
 import java.util.concurrent.ThreadLocalRandom
 
 //#if MC>=11600
@@ -84,13 +87,10 @@ class UMessage {
         if (!UPlayer.hasPlayer())
             return
 
-        // TODO: expose this field in MC>=11602
-        //#if MC<=11502
         if (chatLineId != -1) {
-            UMinecraft.getChatGUI()?.printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
+            printChatMessageWithOptionalDeletion(chatMessage, chatLineId)
             return
         }
-        //#endif
 
         if (isRecursive) {
             UPacket.sendChatMessage(_chatMessage)
@@ -120,4 +120,22 @@ class UMessage {
         _chatMessage = UTextComponent("")
         messageParts.forEach { _chatMessage.appendSibling(it) }
     }
+}
+
+private val printChatMessageWithOptionalDeletion: MethodHandle? = try {
+    val method = GuiNewChat::class.java.declaredMethods.find { method ->
+        method.parameterTypes.run {
+            size == 2 &&
+                    get(0) == MCITextComponent::class.java &&
+                    get(1) == Int::class.java
+        }
+    } ?: throw NoSuchMethodException("Couldn't find the right method for UMessage")
+    method.isAccessible = true
+    MethodHandles.lookup().unreflect(method)
+} catch (e: Throwable) {
+    null
+}
+
+internal fun printChatMessageWithOptionalDeletion(textComponent: UTextComponent, lineID: Int) {
+    printChatMessageWithOptionalDeletion?.invokeExact(textComponent, lineID)
 }
