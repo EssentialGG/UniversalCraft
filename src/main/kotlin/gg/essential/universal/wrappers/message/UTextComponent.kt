@@ -127,11 +127,11 @@ class UTextComponent : IChatComponent {
     }
 
     fun chat() {
-        TODO()
+        UMessage(this).chat()
     }
 
     fun actionBar() {
-        TODO()
+        UMessage(this).actionBar()
     }
 
     private fun reInstance() {
