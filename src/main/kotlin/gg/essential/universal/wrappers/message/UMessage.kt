@@ -129,10 +129,14 @@ private val printChatMessageWithOptionalDeletion: MethodHandle? = try {
                     get(0) == MCITextComponent::class.java &&
                     get(1) == Int::class.java
         }
-    } ?: throw NoSuchMethodException("Couldn't find the right method for UMessage")
+    } ?: throw NoSuchMethodException(
+        "Could not find method to edit chat messages. " +
+        "No method with parameters (${MCITextComponent::class.java.name}, int) in ${GuiNewChat::class.java.name}."
+    )
     method.isAccessible = true
     MethodHandles.lookup().unreflect(method)
 } catch (e: Throwable) {
+    e.printStackTrace()
     null
 }
 
