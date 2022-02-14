@@ -12,6 +12,8 @@ import net.minecraft.client.settings.KeyBinding
 //$$ import net.minecraft.client.util.InputMappings
 //#else
 import org.lwjgl.input.Keyboard
+import org.lwjgl.input.Mouse
+
 //#endif
 
 object UKeyboard {
@@ -275,10 +277,13 @@ object UKeyboard {
 
     @JvmStatic
     fun isKeyDown(key: Int): Boolean {
+        if (key == KEY_NONE) return false
         //#if MC>=11502
-        //$$ return InputMappings.isKeyDown(UMinecraft.getMinecraft().mainWindow.handle, key)
+        //$$ val window = UMinecraft.getMinecraft().mainWindow.handle
+        //$$ val state = if (key < 20) GLFW.glfwGetMouseButton(window, key) else GLFW.glfwGetKey(window, key)
+        //$$ return state == GLFW.GLFW_PRESS
         //#else
-        return Keyboard.isKeyDown(key)
+        return if (key < 0) Mouse.isButtonDown(key + 100) else Keyboard.isKeyDown(key)
         //#endif
     }
 
