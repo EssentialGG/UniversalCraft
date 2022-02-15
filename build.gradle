@@ -37,14 +37,14 @@ buildscript {
         if (fabric) {
             classpath 'fabric-loom:fabric-loom.gradle.plugin:0.10-SNAPSHOT'
         } else if (mcVersion >= 11400) {
-            classpath('net.minecraftforge.gradle:ForgeGradle:5.1.20') { // exact version cause FG tends to break stuff
+            classpath('net.minecraftforge.gradle:ForgeGradle:5.1.26') { // exact version cause FG tends to break stuff
                 exclude group: 'trove', module: 'trove' // preprocessor/idea requires more recent one
             }
         } else {
             classpath('com.github.ReplayMod:ForgeGradle:' + (
                     mcVersion >= 11200 ? '717a9f4' : // FG 2.3
-                    mcVersion >= 10904 ? '83163c1' : // FG 2.2
-                                         '4be84bf'   // FG 2.1
+                            mcVersion >= 10904 ? '83163c1' : // FG 2.2
+                                    '4be84bf'   // FG 2.1
             ) + ':all') {
                 exclude group: 'net.sf.trove4j', module: 'trove4j' // preprocessor/idea requires more recent one
                 exclude group: 'trove', module: 'trove' // different name same thing
@@ -89,6 +89,8 @@ archivesBaseName = "UniversalCraft" + project.name
 kotlin.jvmToolchain {
     languageVersion = JavaLanguageVersion.of(mcVersion >= 11800 ? 17 : mcVersion >= 11700 ? 16 : 8)
 }
+if (mcVersion >= 11800)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 compileJava.options.encoding = 'UTF-8'
 
 if (mcVersion >= 11400) {
@@ -192,6 +194,7 @@ dependencies {
                 11502: '1.15.2-31.1.18',
                 11602: '1.16.2-33.0.58',
                 11701: '1.17.1-37.0.41',
+                11800: '1.18-38.0.4',
         ][mcVersion]
     }
 }

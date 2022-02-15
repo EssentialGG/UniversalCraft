@@ -353,7 +353,16 @@ public class UGraphics {
         //#endif
         if (texture == null) {
             texture = new SimpleTexture(resourceLocation);
+            //#if MC<11800
             textureManager.loadTexture(resourceLocation, texture);
+            //#else
+            //Preprocessor doesn't auto map this for some reason
+            //#if FORGE>0
+            //$$ textureManager.register(resourceLocation, texture);
+            //#else
+            //$$ textureManager.registerTexture(resourceLocation, texture);
+            //#endif
+            //#endif
         }
         return texture.getGlTextureId();
     }
