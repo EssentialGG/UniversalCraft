@@ -29,6 +29,9 @@ object UMinecraft {
     @JvmField
     val isRunningOnMac: Boolean =
         Minecraft.isRunningOnMac
+    @JvmStatic
+    val isOnMainThread: Boolean
+        get() = getMinecraft().isCallingFromMinecraftThread
 
     @JvmStatic
     fun getMinecraft(): Minecraft {
@@ -69,4 +72,16 @@ object UMinecraft {
 
     @JvmStatic
     fun getSettings(): GameSettings = getMinecraft().gameSettings
+
+    /**
+     * Based on Skytils
+     * Licensed under AGPL-3.0
+     * Modified
+     */
+    @JvmStatic
+    fun enqueueOnMainThread(run: () -> Unit) {
+        if (!isOnMainThread) {
+            getMinecraft().addScheduledTask(run)
+        } else run()
+    }
 }

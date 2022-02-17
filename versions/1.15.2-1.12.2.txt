@@ -31,6 +31,8 @@ net.minecraft.client.GameSettings net.minecraft.client.settings.GameSettings
 net.minecraft.client.gui.NewChatGui net.minecraft.client.gui.GuiNewChat
 net.minecraft.client.gui.screen.MainMenuScreen net.minecraft.client.gui.GuiMainMenu
 net.minecraft.network.play.server.SChatPacket net.minecraft.network.play.server.SPacketChat
+net.minecraft.client.Minecraft isOnExecutionThread() isCallingFromMinecraftThread()
+net.minecraft.client.Minecraft enqueue() addScheduledTask()
 
 
 
