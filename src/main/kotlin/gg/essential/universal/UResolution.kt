@@ -53,8 +53,11 @@ object UResolution {
 
     //#if MC<=11202
     private fun get(): ScaledResolution {
-        if (cachedHeight != viewportHeight || cachedWidth != viewportWidth || scaledResolution == null)
+        if (cachedHeight != viewportHeight || cachedWidth != viewportWidth || scaledResolution == null) {
+            cachedHeight = viewportHeight
+            cachedWidth = viewportWidth
             scaledResolution = ScaledResolution(UMinecraft.getMinecraft())
+        }
         return scaledResolution!!
     }
     //#endif
