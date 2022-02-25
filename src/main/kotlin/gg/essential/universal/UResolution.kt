@@ -7,8 +7,8 @@ import net.minecraft.client.gui.ScaledResolution
 object UResolution {
     //#if MC<=11202
     private var scaledResolution: ScaledResolution? = null
-    private var cachedWidth: Int? = null
-    private var cachedHeight: Int? = null
+    private data class ScaledResolutionInputs(val width: Int, val height: Int, val scale: Int, val unicode: Boolean)
+    private var cachedScaledResolutionInputs: ScaledResolutionInputs? = null
     //#endif
 
     @JvmStatic
@@ -53,10 +53,11 @@ object UResolution {
 
     //#if MC<=11202
     private fun get(): ScaledResolution {
-        if (cachedHeight != viewportHeight || cachedWidth != viewportWidth || scaledResolution == null) {
-            cachedHeight = viewportHeight
-            cachedWidth = viewportWidth
-            scaledResolution = ScaledResolution(UMinecraft.getMinecraft())
+        val mc = UMinecraft.getMinecraft()
+        val inputs = ScaledResolutionInputs(viewportWidth, viewportHeight, mc.gameSettings.guiScale, mc.isUnicode)
+        if (cachedScaledResolutionInputs != inputs) {
+            cachedScaledResolutionInputs = inputs
+            scaledResolution = ScaledResolution(mc)
         }
         return scaledResolution!!
     }
