@@ -71,13 +71,13 @@ object UDesktop {
     private fun openSystemSpecific(file: String): Boolean {
         return when {
             isLinux -> when {
-                isXdg -> runCommand(arrayOf("xdg-open", "\"$file\""))
-                isKde -> runCommand(arrayOf("kde-open", "\"$file\""))
-                isGnome -> runCommand(arrayOf("gnome-open", "\"$file\""))
-                else -> runCommand(arrayOf("kde-open", "\"$file\"")) || runCommand(arrayOf("gnome-open", "\"$file\""))
+                isXdg -> runCommand("xdg-open", "\"$file\"")
+                isKde -> runCommand("kde-open", "\"$file\"")
+                isGnome -> runCommand("gnome-open", "\"$file\"")
+                else -> runCommand("kde-open", "\"$file\"") || runCommand("gnome-open", "\"$file\"")
             }
-            isMac -> runCommand(arrayOf("bash", "-c", "open \"$file\""))
-            isWindows -> runCommand(arrayOf("explorer", "\"$file\""))
+            isMac -> runCommand("bash", "-c", "open \"$file\"")
+            isWindows -> runCommand("explorer", "\"$file\"")
             else -> false
         }
     }
@@ -87,10 +87,10 @@ object UDesktop {
             if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 if (isLinux) {
                     return when {
-                        isXdg -> runCommand(arrayOf("xdg-open", uri.toString()))
-                        isKde -> runCommand(arrayOf("kde-open", uri.toString()))
-                        isGnome -> runCommand(arrayOf("gnome-open", uri.toString()))
-                        else -> runCommand(arrayOf("kde-open", uri.toString())) || runCommand(arrayOf("gnome-open", uri.toString()))
+                        isXdg -> runCommand("xdg-open", uri.toString())
+                        isKde -> runCommand("kde-open", uri.toString())
+                        isGnome -> runCommand("gnome-open", uri.toString())
+                        else -> runCommand("kde-open", uri.toString()) || runCommand("gnome-open", uri.toString())
                     }
 
                 }
@@ -136,7 +136,7 @@ object UDesktop {
         }
     }
 
-    private fun runCommand(command: Array<String>): Boolean {
+    private fun runCommand(vararg command: String): Boolean {
         return try {
             Runtime.getRuntime().exec(command).let {
                 it != null && it.isAlive
