@@ -71,13 +71,13 @@ object UDesktop {
     private fun openSystemSpecific(file: String): Boolean {
         return when {
             isLinux -> when {
-                isXdg -> runCommand("xdg-open \"$file\"")
-                isKde -> runCommand("kde-open \"$file\"")
-                isGnome -> runCommand("gnome-open \"$file\"")
-                else -> runCommand("kde-open \"$file\"") || runCommand("gnome-open \"$file\"")
+                isXdg -> runCommand(arrayOf("xdg-open", "\"$file\""))
+                isKde -> runCommand(arrayOf("kde-open", "\"$file\""))
+                isGnome -> runCommand(arrayOf("gnome-open", "\"$file\""))
+                else -> runCommand(arrayOf("kde-open", "\"$file\"")) || runCommand(arrayOf("gnome-open", "\"$file\""))
             }
-            isMac -> runCommand("open \"$file\"")
-            isWindows -> runCommand("explorer \"$file\"")
+            isMac -> runCommand(arrayOf("bash", "-c", "open \"$file\""))
+            isWindows -> runCommand(arrayOf("explorer", "\"$file\""))
             else -> false
         }
     }
@@ -87,10 +87,10 @@ object UDesktop {
             if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 if (isLinux) {
                     return when {
-                        isXdg -> runCommand("xdg-open $uri")
-                        isKde -> runCommand("kde-open $uri")
-                        isGnome -> runCommand("gnome-open $uri")
-                        else -> runCommand("kde-open $uri") || runCommand("gnome-open $uri")
+                        isXdg -> runCommand(arrayOf("xdg-open", uri.toString()))
+                        isKde -> runCommand(arrayOf("kde-open", uri.toString()))
+                        isGnome -> runCommand(arrayOf("gnome-open", uri.toString()))
+                        else -> runCommand(arrayOf("kde-open", uri.toString())) || runCommand(arrayOf("gnome-open", uri.toString()))
                     }
 
                 }
@@ -127,6 +127,16 @@ object UDesktop {
     }
 
     private fun runCommand(command: String): Boolean {
+        return try {
+            Runtime.getRuntime().exec(command).let {
+                it != null && it.isAlive
+            }
+        } catch (e: IOException) {
+            false
+        }
+    }
+
+    private fun runCommand(command: Array<String>): Boolean {
         return try {
             Runtime.getRuntime().exec(command).let {
                 it != null && it.isAlive
