@@ -15,7 +15,8 @@ import java.io.IOException
 
 abstract class UScreen @JvmOverloads constructor(
     val restoreCurrentGuiOnClose: Boolean = false,
-    open var newGuiScale: Int = -1
+    open var newGuiScale: Int = -1,
+    open var name: String? = null
 ) :
 //#if MC>=11502
 //$$     Screen(StringTextComponent(""))
