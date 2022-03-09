@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiScreen
 //$$ import gg.essential.universal.UKeyboard.toInt
 //$$ import gg.essential.universal.UKeyboard.toModifiers
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
-//$$ import net.minecraft.util.text.StringTextComponent
+//$$ import net.minecraft.util.text.TranslationTextComponent
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
@@ -17,9 +17,10 @@ abstract class UScreen @JvmOverloads constructor(
     val restoreCurrentGuiOnClose: Boolean = false,
     open var newGuiScale: Int = -1,
     open var name: String? = null
+
 ) :
 //#if MC>=11502
-//$$     Screen(StringTextComponent(name ?: ""))
+//$$     Screen(TranslationTextComponent(name ?: ""))
 //#else
     GuiScreen()
 //#endif
