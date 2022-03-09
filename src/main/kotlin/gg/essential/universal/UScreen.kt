@@ -19,7 +19,7 @@ abstract class UScreen @JvmOverloads constructor(
     open var name: String? = null
 ) :
 //#if MC>=11502
-//$$     Screen(StringTextComponent(""))
+//$$     Screen(StringTextComponent(name ?: ""))
 //#else
     GuiScreen()
 //#endif
