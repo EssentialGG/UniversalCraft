@@ -13,7 +13,7 @@ import java.io.IOException
 
 //#endif
 
-abstract class UScreen @JvmOverloads constructor(
+abstract class UScreen(
     val restoreCurrentGuiOnClose: Boolean = false,
     open var newGuiScale: Int = -1,
     open var name: String? = null
@@ -24,6 +24,12 @@ abstract class UScreen @JvmOverloads constructor(
     GuiScreen()
 //#endif
 {
+    @JvmOverloads
+    constructor(
+        restoreCurrentGuiOnClose: Boolean = false,
+        newGuiScale: Int = -1,
+    ) : this(restoreCurrentGuiOnClose, newGuiScale, null)
+
     private var guiScaleToRestore = -1
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
