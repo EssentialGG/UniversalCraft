@@ -6,24 +6,31 @@ import net.minecraft.client.gui.GuiScreen
 //$$ import gg.essential.universal.UKeyboard.toInt
 //$$ import gg.essential.universal.UKeyboard.toModifiers
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
-//$$ import net.minecraft.util.text.StringTextComponent
+//$$ import net.minecraft.util.text.ITextComponent
+//$$ import net.minecraft.util.text.TranslationTextComponent
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
 
 //#endif
 
-abstract class UScreen @JvmOverloads constructor(
+abstract class UScreen(
     val restoreCurrentGuiOnClose: Boolean = false,
     open var newGuiScale: Int = -1,
-    open var name: String? = null
+    open var unlocalizedName: String? = null
 ) :
 //#if MC>=11502
-//$$     Screen(StringTextComponent(""))
+//$$     Screen(TranslationTextComponent(unlocalizedName))
 //#else
     GuiScreen()
 //#endif
 {
+    @JvmOverloads
+    constructor(
+        restoreCurrentGuiOnClose: Boolean = false,
+        newGuiScale: Int = -1,
+    ) : this(restoreCurrentGuiOnClose, newGuiScale, null)
+
     private var guiScaleToRestore = -1
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
@@ -38,6 +45,8 @@ abstract class UScreen @JvmOverloads constructor(
     //$$     updateGuiScale()
     //$$     initScreen(width, height)
     //$$ }
+    //$$
+    //$$ override fun getTitle(): ITextComponent = TranslationTextComponent(unlocalizedName)
     //$$
     //#if MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
