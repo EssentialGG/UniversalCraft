@@ -142,5 +142,5 @@ private val printChatMessageWithOptionalDeletion: MethodHandle? = try {
 }
 
 internal fun printChatMessageWithOptionalDeletion(textComponent: UTextComponent, lineID: Int) {
-    printChatMessageWithOptionalDeletion?.invokeExact(UMinecraft.getChatGUI(), textComponent as MCITextComponent, lineID)
+    printChatMessageWithOptionalDeletion?.apply { invokeExact(UMinecraft.getChatGUI(), textComponent as MCITextComponent, lineID) }
 }
