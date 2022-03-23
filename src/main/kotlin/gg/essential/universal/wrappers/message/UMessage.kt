@@ -1,5 +1,6 @@
 package gg.essential.universal.wrappers.message
 
+import gg.essential.universal.UMinecraft
 import gg.essential.universal.UPacket
 import gg.essential.universal.utils.MCITextComponent
 import gg.essential.universal.wrappers.UPlayer
@@ -141,5 +142,7 @@ private val printChatMessageWithOptionalDeletion: MethodHandle? = try {
 }
 
 internal fun printChatMessageWithOptionalDeletion(textComponent: UTextComponent, lineID: Int) {
-    printChatMessageWithOptionalDeletion?.invokeExact(textComponent, lineID)
+    // The `apply` wrapper appears to be necessary when using the IR compiler backend for it to generate the return type
+    // as `V`, otherwise it'll infer `Ljava/lang/Object;` which does not match our target method.
+    printChatMessageWithOptionalDeletion?.apply { invokeExact(UMinecraft.getChatGUI(), textComponent as MCITextComponent, lineID) }
 }
