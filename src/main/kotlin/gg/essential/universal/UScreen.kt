@@ -20,7 +20,7 @@ abstract class UScreen(
     open var unlocalizedName: String? = null
 ) :
 //#if MC>=11502
-//$$     Screen(TranslationTextComponent(unlocalizedName))
+//$$     Screen(TranslationTextComponent(unlocalizedName ?: ""))
 //#else
     GuiScreen()
 //#endif
@@ -46,7 +46,7 @@ abstract class UScreen(
     //$$     initScreen(width, height)
     //$$ }
     //$$
-    //$$ override fun getTitle(): ITextComponent = TranslationTextComponent(unlocalizedName)
+    //$$ override fun getTitle(): ITextComponent = TranslationTextComponent(unlocalizedName ?: "")
     //$$
     //#if MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
