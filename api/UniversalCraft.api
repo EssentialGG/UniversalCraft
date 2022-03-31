@@ -1,0 +1,1389 @@
+public final class gg/essential/universal/ChatColor : java/lang/Enum {
+	public static final field AQUA Lgg/essential/universal/ChatColor;
+	public static final field BLACK Lgg/essential/universal/ChatColor;
+	public static final field BLUE Lgg/essential/universal/ChatColor;
+	public static final field BOLD Lgg/essential/universal/ChatColor;
+	public static final field COLOR_CHAR C
+	public static final field Companion Lgg/essential/universal/ChatColor$Companion;
+	public static final field DARK_AQUA Lgg/essential/universal/ChatColor;
+	public static final field DARK_BLUE Lgg/essential/universal/ChatColor;
+	public static final field DARK_GRAY Lgg/essential/universal/ChatColor;
+	public static final field DARK_GREEN Lgg/essential/universal/ChatColor;
+	public static final field DARK_PURPLE Lgg/essential/universal/ChatColor;
+	public static final field DARK_RED Lgg/essential/universal/ChatColor;
+	public static final field GOLD Lgg/essential/universal/ChatColor;
+	public static final field GRAY Lgg/essential/universal/ChatColor;
+	public static final field GREEN Lgg/essential/universal/ChatColor;
+	public static final field ITALIC Lgg/essential/universal/ChatColor;
+	public static final field LIGHT_PURPLE Lgg/essential/universal/ChatColor;
+	public static final field MAGIC Lgg/essential/universal/ChatColor;
+	public static final field RED Lgg/essential/universal/ChatColor;
+	public static final field RESET Lgg/essential/universal/ChatColor;
+	public static final field STRIKETHROUGH Lgg/essential/universal/ChatColor;
+	public static final field UNDERLINE Lgg/essential/universal/ChatColor;
+	public static final field WHITE Lgg/essential/universal/ChatColor;
+	public static final field YELLOW Lgg/essential/universal/ChatColor;
+	public final fun getChar ()C
+	public final fun getColor ()Ljava/awt/Color;
+	public final fun isColor ()Z
+	public final fun isFormat ()Z
+	public final fun plus (Ljava/lang/String;)Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/ChatColor;
+	public static fun values ()[Lgg/essential/universal/ChatColor;
+}
+
+public final class gg/essential/universal/ChatColor$Companion {
+	public final fun getFORMATTING_CODE_PATTERN ()Lkotlin/text/Regex;
+	public final fun stripControlCodes (Ljava/lang/String;)Ljava/lang/String;
+	public final fun translateAlternateColorCodes (CLjava/lang/String;)Ljava/lang/String;
+}
+
+public final class gg/essential/universal/GuiScale : java/lang/Enum {
+	public static final field Auto Lgg/essential/universal/GuiScale;
+	public static final field Companion Lgg/essential/universal/GuiScale$Companion;
+	public static final field Large Lgg/essential/universal/GuiScale;
+	public static final field Medium Lgg/essential/universal/GuiScale;
+	public static final field Small Lgg/essential/universal/GuiScale;
+	public static final field VeryLarge Lgg/essential/universal/GuiScale;
+	public static final fun fromNumber (I)Lgg/essential/universal/GuiScale;
+	public static final fun scaleForScreenSize ()Lgg/essential/universal/GuiScale;
+	public static final fun scaleForScreenSize (I)Lgg/essential/universal/GuiScale;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/GuiScale;
+	public static fun values ()[Lgg/essential/universal/GuiScale;
+}
+
+public final class gg/essential/universal/GuiScale$Companion {
+	public final fun fromNumber (I)Lgg/essential/universal/GuiScale;
+	public final fun scaleForScreenSize ()Lgg/essential/universal/GuiScale;
+	public final fun scaleForScreenSize (I)Lgg/essential/universal/GuiScale;
+	public static synthetic fun scaleForScreenSize$default (Lgg/essential/universal/GuiScale$Companion;IILjava/lang/Object;)Lgg/essential/universal/GuiScale;
+}
+
+public final class gg/essential/universal/UChat {
+	public static final field INSTANCE Lgg/essential/universal/UChat;
+	public static final fun actionBar (Ljava/lang/Object;)V
+	public static final fun addColor (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun chat (Ljava/lang/Object;)V
+	public static final fun say (Ljava/lang/String;)V
+}
+
+public final class gg/essential/universal/UDesktop {
+	public static final field INSTANCE Lgg/essential/universal/UDesktop;
+	public static final fun browse (Ljava/net/URI;)Z
+	public static final fun edit (Ljava/io/File;)Z
+	public static final fun getClipboardString ()Ljava/lang/String;
+	public static final fun isGnome ()Z
+	public static final fun isKde ()Z
+	public static final fun isLinux ()Z
+	public static final fun isMac ()Z
+	public static final fun isWindows ()Z
+	public static final fun isXdg ()Z
+	public static final fun open (Ljava/io/File;)Z
+	public static final fun setClipboardString (Ljava/lang/String;)V
+}
+
+public class gg/essential/universal/UGraphics {
+	@1.17.1-forge,1.18.1-forge
+	public static field EMPTY_WITH_FONT_ID Lnet/minecraft/network/chat/Style;
+	@1.16.2-forge
+	public static field EMPTY_WITH_FONT_ID Lnet/minecraft/util/text/Style;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static field EMPTY_WITH_FONT_ID Lnet/minecraft/text/Style;
+	public static field ZERO_TEXT_ALPHA I
+	@1.8.9-forge
+	public fun <init> (Lnet/minecraft/client/renderer/WorldRenderer;)V
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/blaze3d/vertex/BufferBuilder;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun <init> (Lnet/minecraft/client/render/BufferBuilder;)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge
+	public fun <init> (Lnet/minecraft/client/renderer/BufferBuilder;)V
+	public static fun activeTexture (I)V
+	public static fun areShadersSupported ()Z
+	public fun asUVertexConsumer ()Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.17.1-forge,1.18.1-forge
+	public fun begin (ILcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun begin (ILnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun beginRenderLayer (Lnet/minecraft/client/render/RenderLayer;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public fun begin (ILnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.16.2-forge,1.17.1-forge,1.18.1-forge
+	public fun beginRenderLayer (Lnet/minecraft/client/renderer/RenderType;)Lgg/essential/universal/UGraphics;
+	@1.17.1-forge,1.18.1-forge
+	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.17.1-forge,1.18.1-forge
+	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	public static fun bindTexture (I)V
+	public static fun bindTexture (II)V
+	@1.17.1-forge,1.18.1-forge
+	public static fun bindTexture (ILnet/minecraft/resources/ResourceLocation;)V
+	@1.17.1-forge,1.18.1-forge
+	public static fun bindTexture (Lnet/minecraft/resources/ResourceLocation;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static fun bindTexture (ILnet/minecraft/util/Identifier;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static fun bindTexture (Lnet/minecraft/util/Identifier;)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public static fun bindTexture (ILnet/minecraft/util/ResourceLocation;)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public static fun bindTexture (Lnet/minecraft/util/ResourceLocation;)V
+	public static fun blendEquation (I)V
+	public fun color (FFFF)Lgg/essential/universal/UGraphics;
+	public fun color (IIII)Lgg/essential/universal/UGraphics;
+	public fun color (Ljava/awt/Color;)Lgg/essential/universal/UGraphics;
+	public static fun color4f (FFFF)V
+	public static fun configureTexture (ILjava/lang/Runnable;)V
+	public static fun configureTextureUnit (ILjava/lang/Runnable;)V
+	public static fun cullFace (I)V
+	public static fun deleteTexture (I)V
+	public static fun depthFunc (I)V
+	public static fun depthMask (Z)V
+	public static fun directColor3f (FFF)V
+	public static fun disableAlpha ()V
+	public static fun disableBlend ()V
+	public static fun disableDepth ()V
+	public static fun disableLight (I)V
+	public static fun disableLighting ()V
+	public static fun disableTexture2D ()V
+	public static fun draw ()V
+	public fun drawDirect ()V
+	public fun drawSorted (III)V
+	public static fun drawString (Lgg/essential/universal/UMatrixStack;Ljava/lang/String;FFII)V
+	public static fun drawString (Lgg/essential/universal/UMatrixStack;Ljava/lang/String;FFIZ)V
+	public static fun drawString (Ljava/lang/String;FFII)V
+	public static fun drawString (Ljava/lang/String;FFIZ)V
+	public static fun enableAlpha ()V
+	public static fun enableBlend ()V
+	public static fun enableDepth ()V
+	public static fun enableLight (I)V
+	public static fun enableLighting ()V
+	public static fun enableTexture2D ()V
+	public fun endVertex ()Lgg/essential/universal/UGraphics;
+	public static fun getActiveTexture ()I
+	public static fun getCharWidth (C)F
+	public static fun getEmptyTexture ()Lgg/essential/universal/utils/ReleasedDynamicTexture;
+	public static fun getFromTessellator ()Lgg/essential/universal/UGraphics;
+	public static fun getStringWidth (Ljava/lang/String;)I
+	@1.17.1-forge,1.18.1-forge
+	public static fun getTessellator ()Lcom/mojang/blaze3d/vertex/Tesselator;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static fun getTessellator ()Lnet/minecraft/client/render/Tessellator;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public static fun getTessellator ()Lnet/minecraft/client/renderer/Tessellator;
+	public static fun getTexture (Ljava/awt/image/BufferedImage;)Lgg/essential/universal/utils/ReleasedDynamicTexture;
+	public static fun getTexture (Ljava/io/InputStream;)Lgg/essential/universal/utils/ReleasedDynamicTexture;
+	public static fun glAttachShader (II)V
+	public static fun glClear (I)V
+	public static fun glClearStencil (I)V
+	public static fun glCompileShader (I)V
+	public static fun glCreateProgram ()I
+	public static fun glCreateShader (I)I
+	public static fun glGetProgramInfoLog (II)Ljava/lang/String;
+	public static fun glGetProgrami (II)I
+	public static fun glGetShaderInfoLog (II)Ljava/lang/String;
+	public static fun glGetShaderi (II)I
+	public static fun glLinkProgram (I)V
+	public static fun glUseProgram (I)V
+	public static fun isOpenGl21Supported ()Z
+	public fun light (II)Lgg/essential/universal/UGraphics;
+	public static fun listFormattedStringToWidth (Ljava/lang/String;I)Ljava/util/List;
+	public static fun listFormattedStringToWidth (Ljava/lang/String;IZ)Ljava/util/List;
+	public fun norm (FFF)Lgg/essential/universal/UGraphics;
+	public fun norm (Lgg/essential/universal/UMatrixStack;FFF)Lgg/essential/universal/UGraphics;
+	public fun overlay (II)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun popMatrix ()V
+	public fun pos (DDD)Lgg/essential/universal/UGraphics;
+	public fun pos (Lgg/essential/universal/UMatrixStack;DDD)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun pushMatrix ()V
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun rotate (FFFF)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun scale (DDD)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun scale (FFF)V
+	public static fun setActiveTexture (I)V
+	@1.17.1-fabric,1.17.1-forge,1.18.1-fabric,1.18.1-forge
+	public static fun setShader (Ljava/util/function/Supplier;)V
+	public static fun shadeModel (I)V
+	public fun tex (DD)Lgg/essential/universal/UGraphics;
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun translate (DDD)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+	public static fun translate (FFF)V
+	public static fun tryBlendFuncSeparate (IIII)V
+}
+
+public final class gg/essential/universal/UGraphics$DrawMode : java/lang/Enum {
+	public static final field LINES Lgg/essential/universal/UGraphics$DrawMode;
+	public static final field LINE_STRIP Lgg/essential/universal/UGraphics$DrawMode;
+	public static final field QUADS Lgg/essential/universal/UGraphics$DrawMode;
+	public static final field TRIANGLES Lgg/essential/universal/UGraphics$DrawMode;
+	public static final field TRIANGLE_FAN Lgg/essential/universal/UGraphics$DrawMode;
+	public static final field TRIANGLE_STRIP Lgg/essential/universal/UGraphics$DrawMode;
+	public static fun fromGl (I)Lgg/essential/universal/UGraphics$DrawMode;
+	@1.16.2-forge,1.17.1-forge,1.18.1-forge
+	public static fun fromRenderLayer (Lnet/minecraft/client/renderer/RenderType;)Lgg/essential/universal/UGraphics$DrawMode;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static fun fromRenderLayer (Lnet/minecraft/client/render/RenderLayer;)Lgg/essential/universal/UGraphics$DrawMode;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/UGraphics$DrawMode;
+	public static fun values ()[Lgg/essential/universal/UGraphics$DrawMode;
+}
+
+@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
+public class gg/essential/universal/UGraphics$GL {
+	public fun <init> ()V
+	public static fun popMatrix ()V
+	public static fun pushMatrix ()V
+	public static fun rotate (FFFF)V
+	public static fun scale (DDD)V
+	public static fun scale (FFF)V
+	public static fun translate (DDD)V
+	public static fun translate (FFF)V
+}
+
+public final class gg/essential/universal/UGuiButton {
+	public static final field INSTANCE Lgg/essential/universal/UGuiButton;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getX (Lnet/minecraft/client/gui/components/AbstractWidget;)I
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getY (Lnet/minecraft/client/gui/components/AbstractWidget;)I
+	@1.17.1-fabric,1.18.1-fabric
+	public static final fun getX (Lnet/minecraft/client/gui/widget/ClickableWidget;)I
+	@1.17.1-fabric,1.18.1-fabric
+	public static final fun getY (Lnet/minecraft/client/gui/widget/ClickableWidget;)I
+	@1.16.2-fabric
+	public static final fun getX (Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)I
+	@1.16.2-fabric
+	public static final fun getY (Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)I
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getX (Lnet/minecraft/client/gui/widget/Widget;)I
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getY (Lnet/minecraft/client/gui/widget/Widget;)I
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getX (Lnet/minecraft/client/gui/GuiButton;)I
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getY (Lnet/minecraft/client/gui/GuiButton;)I
+}
+
+public final class gg/essential/universal/UKeyboard {
+	public static final field INSTANCE Lgg/essential/universal/UKeyboard;
+	public static final field KEY_0 I
+	public static final field KEY_1 I
+	public static final field KEY_2 I
+	public static final field KEY_3 I
+	public static final field KEY_4 I
+	public static final field KEY_5 I
+	public static final field KEY_6 I
+	public static final field KEY_7 I
+	public static final field KEY_8 I
+	public static final field KEY_9 I
+	public static final field KEY_A I
+	public static final field KEY_ADD I
+	public static final field KEY_APOSTROPHE I
+	public static final field KEY_B I
+	public static final field KEY_BACKSLASH I
+	public static final field KEY_BACKSPACE I
+	public static final field KEY_C I
+	public static final field KEY_CAPITAL I
+	public static final field KEY_COMMA I
+	public static final field KEY_D I
+	public static final field KEY_DECIMAL I
+	public static final field KEY_DELETE I
+	public static final field KEY_DIVIDE I
+	public static final field KEY_DOWN I
+	public static final field KEY_E I
+	public static final field KEY_END I
+	public static final field KEY_ENTER I
+	public static final field KEY_EQUALS I
+	public static final field KEY_ESCAPE I
+	public static final field KEY_F I
+	public static final field KEY_F1 I
+	public static final field KEY_F10 I
+	public static final field KEY_F11 I
+	public static final field KEY_F12 I
+	public static final field KEY_F13 I
+	public static final field KEY_F14 I
+	public static final field KEY_F15 I
+	public static final field KEY_F16 I
+	public static final field KEY_F17 I
+	public static final field KEY_F18 I
+	public static final field KEY_F19 I
+	public static final field KEY_F2 I
+	public static final field KEY_F3 I
+	public static final field KEY_F4 I
+	public static final field KEY_F5 I
+	public static final field KEY_F6 I
+	public static final field KEY_F7 I
+	public static final field KEY_F8 I
+	public static final field KEY_F9 I
+	public static final field KEY_G I
+	public static final field KEY_GRAVE I
+	public static final field KEY_H I
+	public static final field KEY_HOME I
+	public static final field KEY_I I
+	public static final field KEY_J I
+	public static final field KEY_K I
+	public static final field KEY_L I
+	public static final field KEY_LBRACKET I
+	public static final field KEY_LCONTROL I
+	public static final field KEY_LEFT I
+	public static final field KEY_LMENU I
+	public static final field KEY_LMETA I
+	public static final field KEY_LSHIFT I
+	public static final field KEY_M I
+	public static final field KEY_MINUS I
+	public static final field KEY_MULTIPLY I
+	public static final field KEY_N I
+	public static final field KEY_NONE I
+	public static final field KEY_NUMLOCK I
+	public static final field KEY_NUMPAD0 I
+	public static final field KEY_NUMPAD1 I
+	public static final field KEY_NUMPAD2 I
+	public static final field KEY_NUMPAD3 I
+	public static final field KEY_NUMPAD4 I
+	public static final field KEY_NUMPAD5 I
+	public static final field KEY_NUMPAD6 I
+	public static final field KEY_NUMPAD7 I
+	public static final field KEY_NUMPAD8 I
+	public static final field KEY_NUMPAD9 I
+	public static final field KEY_O I
+	public static final field KEY_P I
+	public static final field KEY_PERIOD I
+	public static final field KEY_Q I
+	public static final field KEY_R I
+	public static final field KEY_RBRACKET I
+	public static final field KEY_RCONTROL I
+	public static final field KEY_RIGHT I
+	public static final field KEY_RMENU I
+	public static final field KEY_RMETA I
+	public static final field KEY_RSHIFT I
+	public static final field KEY_S I
+	public static final field KEY_SCROLL I
+	public static final field KEY_SEMICOLON I
+	public static final field KEY_SLASH I
+	public static final field KEY_SPACE I
+	public static final field KEY_SUBTRACT I
+	public static final field KEY_T I
+	public static final field KEY_TAB I
+	public static final field KEY_U I
+	public static final field KEY_UP I
+	public static final field KEY_V I
+	public static final field KEY_W I
+	public static final field KEY_X I
+	public static final field KEY_Y I
+	public static final field KEY_Z I
+	public static final fun allowRepeatEvents (Z)V
+	public static final fun getKeyName (I)Ljava/lang/String;
+	public static final fun getKeyName (II)Ljava/lang/String;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getKeyName (Lnet/minecraft/client/KeyMapping;)Ljava/lang/String;
+	@1.17.1-fabric,1.18.1-fabric
+	public static final fun getKeyName (Lnet/minecraft/client/option/KeyBinding;)Ljava/lang/String;
+	@1.16.2-fabric
+	public static final fun getKeyName (Lnet/minecraft/client/options/KeyBinding;)Ljava/lang/String;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public static final fun getKeyName (Lnet/minecraft/client/settings/KeyBinding;)Ljava/lang/String;
+	public static final fun getModifiers ()Lgg/essential/universal/UKeyboard$Modifiers;
+	public static final fun isAltKeyDown ()Z
+	public static final fun isCtrlKeyDown ()Z
+	public static final fun isKeyComboCtrlA (I)Z
+	public static final fun isKeyComboCtrlC (I)Z
+	public static final fun isKeyComboCtrlShiftZ (I)Z
+	public static final fun isKeyComboCtrlV (I)Z
+	public static final fun isKeyComboCtrlX (I)Z
+	public static final fun isKeyComboCtrlY (I)Z
+	public static final fun isKeyComboCtrlZ (I)Z
+	public static final fun isKeyDown (I)Z
+	public static final fun isShiftKeyDown ()Z
+}
+
+public final class gg/essential/universal/UKeyboard$Modifiers {
+	public fun <init> (ZZZ)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (ZZZ)Lgg/essential/universal/UKeyboard$Modifiers;
+	public static synthetic fun copy$default (Lgg/essential/universal/UKeyboard$Modifiers;ZZZILjava/lang/Object;)Lgg/essential/universal/UKeyboard$Modifiers;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun isAlt ()Z
+	public final fun isCtrl ()Z
+	public final fun isShift ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class gg/essential/universal/UMath {
+	public static final field INSTANCE Lgg/essential/universal/UMath;
+	public static final fun clampFloat (FFF)F
+	public static final fun clampInt (III)I
+	public static final fun sqrtDouble (D)F
+	public static final fun wrapAngleTo180 (D)D
+}
+
+public final class gg/essential/universal/UMatrixStack {
+	public static final field Companion Lgg/essential/universal/UMatrixStack$Companion;
+	public fun <init> ()V
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/blaze3d/vertex/PoseStack$Pose;)V
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/blaze3d/vertex/PoseStack;)V
+	@1.16.2-forge
+	public fun <init> (Lcom/mojang/blaze3d/matrix/MatrixStack$Entry;)V
+	@1.16.2-forge
+	public fun <init> (Lcom/mojang/blaze3d/matrix/MatrixStack;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun <init> (Lnet/minecraft/client/util/math/MatrixStack$Entry;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun <init> (Lnet/minecraft/client/util/math/MatrixStack;)V
+	public final fun applyToGlobalState ()V
+	public final fun fork ()Lgg/essential/universal/UMatrixStack;
+	public final fun isEmpty ()Z
+	@1.17.1-forge,1.18.1-forge
+	public final fun multiply (Lcom/mojang/math/Quaternion;)V
+	@1.16.2-forge
+	public final fun multiply (Lnet/minecraft/util/math/vector/Quaternion;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun multiply (Lnet/minecraft/util/math/Quaternion;)V
+	@1.15.2-forge
+	public final fun multiply (Lnet/minecraft/client/renderer/Quaternion;)V
+	@1.12.2-forge,1.8.9-forge
+	public final fun multiply (Lorg/lwjgl/util/vector/Quaternion;)V
+	public final fun peek ()Lgg/essential/universal/UMatrixStack$Entry;
+	public final fun pop ()V
+	public final fun push ()V
+	public final fun replaceGlobalState ()V
+	public final fun rotate (FFFF)V
+	public final fun rotate (FFFFZ)V
+	public static synthetic fun rotate$default (Lgg/essential/universal/UMatrixStack;FFFFZILjava/lang/Object;)V
+	public final fun runReplacingGlobalState (Ljava/lang/Runnable;)V
+	public final fun runReplacingGlobalState (Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun runWithGlobalState (Ljava/lang/Runnable;)V
+	public final fun runWithGlobalState (Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun scale (DDD)V
+	public final fun scale (FFF)V
+	@1.17.1-forge,1.18.1-forge
+	public final fun toMC ()Lcom/mojang/blaze3d/vertex/PoseStack;
+	@1.16.2-forge
+	public final fun toMC ()Lcom/mojang/blaze3d/matrix/MatrixStack;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun toMC ()Lnet/minecraft/client/util/math/MatrixStack;
+	public final fun translate (DDD)V
+	public final fun translate (FFF)V
+}
+
+public final class gg/essential/universal/UMatrixStack$Companion {
+}
+
+public final class gg/essential/universal/UMatrixStack$Compat {
+	public static final field DEPRECATED Ljava/lang/String;
+	public static final field INSTANCE Lgg/essential/universal/UMatrixStack$Compat;
+	public final fun get ()Lgg/essential/universal/UMatrixStack;
+	public final fun runLegacyMethod (Lgg/essential/universal/UMatrixStack;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class gg/essential/universal/UMatrixStack$Entry {
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;)V
+	@1.17.1-forge,1.18.1-forge
+	public final fun component1 ()Lcom/mojang/math/Matrix4f;
+	@1.17.1-forge,1.18.1-forge
+	public final fun component2 ()Lcom/mojang/math/Matrix3f;
+	@1.17.1-forge,1.18.1-forge
+	public final fun copy (Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.17.1-forge,1.18.1-forge
+	public static synthetic fun copy$default (Lgg/essential/universal/UMatrixStack$Entry;Lcom/mojang/math/Matrix4f;Lcom/mojang/math/Matrix3f;ILjava/lang/Object;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.16.2-forge
+	public fun <init> (Lnet/minecraft/util/math/vector/Matrix4f;Lnet/minecraft/util/math/vector/Matrix3f;)V
+	@1.16.2-forge
+	public final fun component1 ()Lnet/minecraft/util/math/vector/Matrix4f;
+	@1.16.2-forge
+	public final fun component2 ()Lnet/minecraft/util/math/vector/Matrix3f;
+	@1.16.2-forge
+	public final fun copy (Lnet/minecraft/util/math/vector/Matrix4f;Lnet/minecraft/util/math/vector/Matrix3f;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.16.2-forge
+	public static synthetic fun copy$default (Lgg/essential/universal/UMatrixStack$Entry;Lnet/minecraft/util/math/vector/Matrix4f;Lnet/minecraft/util/math/vector/Matrix3f;ILjava/lang/Object;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun <init> (Lnet/minecraft/util/math/Matrix4f;Lnet/minecraft/util/math/Matrix3f;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun component1 ()Lnet/minecraft/util/math/Matrix4f;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun component2 ()Lnet/minecraft/util/math/Matrix3f;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun copy (Lnet/minecraft/util/math/Matrix4f;Lnet/minecraft/util/math/Matrix3f;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static synthetic fun copy$default (Lgg/essential/universal/UMatrixStack$Entry;Lnet/minecraft/util/math/Matrix4f;Lnet/minecraft/util/math/Matrix3f;ILjava/lang/Object;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.15.2-forge
+	public fun <init> (Lnet/minecraft/client/renderer/Matrix4f;Lnet/minecraft/client/renderer/Matrix3f;)V
+	@1.15.2-forge
+	public final fun component1 ()Lnet/minecraft/client/renderer/Matrix4f;
+	@1.15.2-forge
+	public final fun component2 ()Lnet/minecraft/client/renderer/Matrix3f;
+	@1.15.2-forge
+	public final fun copy (Lnet/minecraft/client/renderer/Matrix4f;Lnet/minecraft/client/renderer/Matrix3f;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.15.2-forge
+	public static synthetic fun copy$default (Lgg/essential/universal/UMatrixStack$Entry;Lnet/minecraft/client/renderer/Matrix4f;Lnet/minecraft/client/renderer/Matrix3f;ILjava/lang/Object;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.12.2-forge,1.8.9-forge
+	public fun <init> (Lorg/lwjgl/util/vector/Matrix4f;Lorg/lwjgl/util/vector/Matrix3f;)V
+	@1.12.2-forge,1.8.9-forge
+	public final fun component1 ()Lorg/lwjgl/util/vector/Matrix4f;
+	@1.12.2-forge,1.8.9-forge
+	public final fun component2 ()Lorg/lwjgl/util/vector/Matrix3f;
+	@1.12.2-forge,1.8.9-forge
+	public final fun copy (Lorg/lwjgl/util/vector/Matrix4f;Lorg/lwjgl/util/vector/Matrix3f;)Lgg/essential/universal/UMatrixStack$Entry;
+	@1.12.2-forge,1.8.9-forge
+	public static synthetic fun copy$default (Lgg/essential/universal/UMatrixStack$Entry;Lorg/lwjgl/util/vector/Matrix4f;Lorg/lwjgl/util/vector/Matrix3f;ILjava/lang/Object;)Lgg/essential/universal/UMatrixStack$Entry;
+	public final fun deepCopy ()Lgg/essential/universal/UMatrixStack$Entry;
+	public fun equals (Ljava/lang/Object;)Z
+	@1.17.1-forge,1.18.1-forge
+	public final fun getModel ()Lcom/mojang/math/Matrix4f;
+	@1.17.1-forge,1.18.1-forge
+	public final fun getNormal ()Lcom/mojang/math/Matrix3f;
+	@1.16.2-forge
+	public final fun getModel ()Lnet/minecraft/util/math/vector/Matrix4f;
+	@1.16.2-forge
+	public final fun getNormal ()Lnet/minecraft/util/math/vector/Matrix3f;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun getModel ()Lnet/minecraft/util/math/Matrix4f;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun getNormal ()Lnet/minecraft/util/math/Matrix3f;
+	@1.15.2-forge
+	public final fun getModel ()Lnet/minecraft/client/renderer/Matrix4f;
+	@1.15.2-forge
+	public final fun getNormal ()Lnet/minecraft/client/renderer/Matrix3f;
+	@1.12.2-forge,1.8.9-forge
+	public final fun getModel ()Lorg/lwjgl/util/vector/Matrix4f;
+	@1.12.2-forge,1.8.9-forge
+	public final fun getNormal ()Lorg/lwjgl/util/vector/Matrix3f;
+	public fun hashCode ()I
+	@1.17.1-forge,1.18.1-forge
+	public final fun toMCStack ()Lcom/mojang/blaze3d/vertex/PoseStack;
+	@1.16.2-forge
+	public final fun toMCStack ()Lcom/mojang/blaze3d/matrix/MatrixStack;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun toMCStack ()Lnet/minecraft/client/util/math/MatrixStack;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class gg/essential/universal/UMinecraft {
+	public static final field INSTANCE Lgg/essential/universal/UMinecraft;
+	public static final field isRunningOnMac Z
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getChatGUI ()Lnet/minecraft/client/gui/components/ChatComponent;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getFontRenderer ()Lnet/minecraft/client/gui/Font;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getChatGUI ()Lnet/minecraft/client/gui/hud/ChatHud;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getFontRenderer ()Lnet/minecraft/client/font/TextRenderer;
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getChatGUI ()Lnet/minecraft/client/gui/NewChatGui;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getChatGUI ()Lnet/minecraft/client/gui/GuiNewChat;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
+	public static final fun getFontRenderer ()Lnet/minecraft/client/gui/FontRenderer;
+	public static final fun getGuiScale ()I
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getMinecraft ()Lnet/minecraft/client/MinecraftClient;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getNetHandler ()Lnet/minecraft/client/network/ClientPlayNetworkHandler;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getPlayer ()Lnet/minecraft/client/network/ClientPlayerEntity;
+	@1.17.1-fabric,1.18.1-fabric
+	public static final fun getSettings ()Lnet/minecraft/client/option/GameOptions;
+	@1.16.2-fabric
+	public static final fun getSettings ()Lnet/minecraft/client/options/GameOptions;
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.17.1-forge,1.18.1-forge,1.8.9-forge
+	public static final fun getMinecraft ()Lnet/minecraft/client/Minecraft;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getNetHandler ()Lnet/minecraft/client/multiplayer/ClientPacketListener;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/player/LocalPlayer;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getSettings ()Lnet/minecraft/client/Options;
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getNetHandler ()Lnet/minecraft/client/network/play/ClientPlayNetHandler;
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/entity/player/ClientPlayerEntity;
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getSettings ()Lnet/minecraft/client/GameSettings;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getNetHandler ()Lnet/minecraft/client/network/NetHandlerPlayClient;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/entity/EntityPlayerSP;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getSettings ()Lnet/minecraft/client/settings/GameSettings;
+	public static final fun getTime ()J
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getWorld ()Lnet/minecraft/client/multiplayer/ClientLevel;
+	@1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.17.1-fabric,1.18.1-fabric
+	public static final fun getWorld ()Lnet/minecraft/client/world/ClientWorld;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getWorld ()Lnet/minecraft/client/multiplayer/WorldClient;
+	public static final fun setGuiScale (I)V
+}
+
+public final class gg/essential/universal/UMouse {
+	public static final field INSTANCE Lgg/essential/universal/UMouse;
+	public static final fun getScaledX ()D
+	public static final fun getScaledY ()D
+	public static final fun getTrueX ()D
+	public static final fun getTrueY ()D
+}
+
+public final class gg/essential/universal/UMouse$Raw {
+	public static final field INSTANCE Lgg/essential/universal/UMouse$Raw;
+	public static final fun getX ()D
+	public static final fun getY ()D
+}
+
+public final class gg/essential/universal/UMouse$Scaled {
+	public static final field INSTANCE Lgg/essential/universal/UMouse$Scaled;
+	public static final fun getX ()D
+	public static final fun getY ()D
+}
+
+public final class gg/essential/universal/UPacket {
+	public static final field INSTANCE Lgg/essential/universal/UPacket;
+	public static final fun sendActionBarMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+	public static final fun sendChatMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+}
+
+public final class gg/essential/universal/UResolution {
+	public static final field INSTANCE Lgg/essential/universal/UResolution;
+	public static final fun getScaleFactor ()D
+	public static final fun getScaledHeight ()I
+	public static final fun getScaledWidth ()I
+	public static final fun getViewportHeight ()I
+	public static final fun getViewportWidth ()I
+	public static final fun getWindowHeight ()I
+	public static final fun getWindowWidth ()I
+}
+
+@1.17.1-forge,1.18.1-forge
+public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/screens/Screen {
+	public static final field Companion Lgg/essential/universal/UScreen$Companion;
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public fun <init> (ZI)V
+	public synthetic fun <init> (ZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZILjava/lang/String;)V
+	public synthetic fun <init> (ZILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLgg/essential/universal/GuiScale;)V
+	public final fun charTyped (CI)Z
+	public static final fun displayScreen (Lnet/minecraft/client/gui/screens/Screen;)V
+	public static final fun getCurrentScreen ()Lnet/minecraft/client/gui/screens/Screen;
+	public fun getNewGuiScale ()I
+	public final fun getRestoreCurrentGuiOnClose ()Z
+	public fun getTitle ()Lnet/minecraft/network/chat/Component;
+	public fun getUnlocalizedName ()Ljava/lang/String;
+	protected final fun init ()V
+	public fun initScreen (II)V
+	public final fun keyPressed (III)Z
+	public final fun keyReleased (III)Z
+	public final fun mouseClicked (DDI)Z
+	public final fun mouseDragged (DDIDD)Z
+	public final fun mouseReleased (DDI)Z
+	public final fun mouseScrolled (DDD)Z
+	public fun onDrawBackground (I)V
+	public fun onDrawBackground (Lgg/essential/universal/UMatrixStack;I)V
+	public final fun onDrawBackgroundCompat (Lgg/essential/universal/UMatrixStack;I)V
+	public fun onDrawScreen (IIF)V
+	public fun onDrawScreen (Lgg/essential/universal/UMatrixStack;IIF)V
+	public fun onKeyPressed (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onKeyReleased (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onMouseClicked (DDI)V
+	public fun onMouseDragged (DDIJ)V
+	public fun onMouseReleased (DDI)V
+	public fun onMouseScrolled (D)V
+	public fun onScreenClose ()V
+	public fun onTick ()V
+	public final fun removed ()V
+	public final fun render (Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V
+	public final fun renderBackground (Lcom/mojang/blaze3d/vertex/PoseStack;I)V
+	public final fun restorePreviousScreen ()V
+	public fun setNewGuiScale (I)V
+	public fun setUnlocalizedName (Ljava/lang/String;)V
+	public final fun tick ()V
+	public fun updateGuiScale ()V
+}
+
+@1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.17.1-fabric,1.18.1-fabric
+public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/screen/Screen {
+	public static final field Companion Lgg/essential/universal/UScreen$Companion;
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public fun <init> (ZI)V
+	public synthetic fun <init> (ZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZILjava/lang/String;)V
+	public synthetic fun <init> (ZILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLgg/essential/universal/GuiScale;)V
+	public final fun charTyped (CI)Z
+	public static final fun displayScreen (Lnet/minecraft/client/gui/screen/Screen;)V
+	public static final fun getCurrentScreen ()Lnet/minecraft/client/gui/screen/Screen;
+	public fun getNewGuiScale ()I
+	public final fun getRestoreCurrentGuiOnClose ()Z
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun getTitle ()Lnet/minecraft/text/Text;
+	@1.15.2-forge,1.16.2-forge
+	public fun getTitle ()Lnet/minecraft/util/text/ITextComponent;
+	public fun getUnlocalizedName ()Ljava/lang/String;
+	protected final fun init ()V
+	public fun initScreen (II)V
+	public final fun keyPressed (III)Z
+	public final fun keyReleased (III)Z
+	public final fun mouseClicked (DDI)Z
+	public final fun mouseDragged (DDIDD)Z
+	public final fun mouseReleased (DDI)Z
+	public final fun mouseScrolled (DDD)Z
+	@1.15.2-forge,1.16.2-forge
+	public final fun onClose ()V
+	public fun onDrawBackground (I)V
+	public fun onDrawBackground (Lgg/essential/universal/UMatrixStack;I)V
+	public final fun onDrawBackgroundCompat (Lgg/essential/universal/UMatrixStack;I)V
+	public fun onDrawScreen (IIF)V
+	public fun onDrawScreen (Lgg/essential/universal/UMatrixStack;IIF)V
+	public fun onKeyPressed (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onKeyReleased (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onMouseClicked (DDI)V
+	public fun onMouseDragged (DDIJ)V
+	public fun onMouseReleased (DDI)V
+	public fun onMouseScrolled (D)V
+	public fun onScreenClose ()V
+	public fun onTick ()V
+	@1.16.2-forge
+	public final fun render (Lcom/mojang/blaze3d/matrix/MatrixStack;IIF)V
+	@1.16.2-forge
+	public final fun renderBackground (Lcom/mojang/blaze3d/matrix/MatrixStack;I)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun removed ()V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun render (Lnet/minecraft/client/util/math/MatrixStack;IIF)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun renderBackground (Lnet/minecraft/client/util/math/MatrixStack;I)V
+	@1.15.2-forge
+	public final fun render (IIF)V
+	@1.15.2-forge
+	public final fun renderBackground (I)V
+	public final fun restorePreviousScreen ()V
+	public fun setNewGuiScale (I)V
+	public fun setUnlocalizedName (Ljava/lang/String;)V
+	public final fun tick ()V
+	public fun updateGuiScale ()V
+}
+
+@1.12.2-forge,1.8.9-forge
+public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/GuiScreen {
+	public static final field Companion Lgg/essential/universal/UScreen$Companion;
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public fun <init> (ZI)V
+	public synthetic fun <init> (ZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZILjava/lang/String;)V
+	public synthetic fun <init> (ZILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLgg/essential/universal/GuiScale;)V
+	public static final fun displayScreen (Lnet/minecraft/client/gui/GuiScreen;)V
+	public final fun drawScreen (IIF)V
+	public final fun drawWorldBackground (I)V
+	public static final fun getCurrentScreen ()Lnet/minecraft/client/gui/GuiScreen;
+	public fun getNewGuiScale ()I
+	public final fun getRestoreCurrentGuiOnClose ()Z
+	public fun getUnlocalizedName ()Ljava/lang/String;
+	public final fun handleMouseInput ()V
+	public final fun initGui ()V
+	public fun initScreen (II)V
+	protected final fun keyTyped (CI)V
+	protected final fun mouseClickMove (IIIJ)V
+	protected final fun mouseClicked (III)V
+	protected final fun mouseReleased (III)V
+	public fun onDrawBackground (I)V
+	public fun onDrawBackground (Lgg/essential/universal/UMatrixStack;I)V
+	public final fun onDrawBackgroundCompat (Lgg/essential/universal/UMatrixStack;I)V
+	public fun onDrawScreen (IIF)V
+	public fun onDrawScreen (Lgg/essential/universal/UMatrixStack;IIF)V
+	public final fun onGuiClosed ()V
+	public fun onKeyPressed (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onKeyReleased (ICLgg/essential/universal/UKeyboard$Modifiers;)V
+	public fun onMouseClicked (DDI)V
+	public fun onMouseDragged (DDIJ)V
+	public fun onMouseReleased (DDI)V
+	public fun onMouseScrolled (D)V
+	public fun onScreenClose ()V
+	public fun onTick ()V
+	public final fun restorePreviousScreen ()V
+	public fun setNewGuiScale (I)V
+	public fun setUnlocalizedName (Ljava/lang/String;)V
+	public fun updateGuiScale ()V
+	public final fun updateScreen ()V
+}
+
+public final class gg/essential/universal/UScreen$Companion {
+	@1.17.1-forge,1.18.1-forge
+	public final fun displayScreen (Lnet/minecraft/client/gui/screens/Screen;)V
+	@1.17.1-forge,1.18.1-forge
+	public final fun getCurrentScreen ()Lnet/minecraft/client/gui/screens/Screen;
+	@1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.17.1-fabric,1.18.1-fabric
+	public final fun displayScreen (Lnet/minecraft/client/gui/screen/Screen;)V
+	@1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.17.1-fabric,1.18.1-fabric
+	public final fun getCurrentScreen ()Lnet/minecraft/client/gui/screen/Screen;
+	@1.12.2-forge,1.8.9-forge
+	public final fun displayScreen (Lnet/minecraft/client/gui/GuiScreen;)V
+	@1.12.2-forge,1.8.9-forge
+	public final fun getCurrentScreen ()Lnet/minecraft/client/gui/GuiScreen;
+}
+
+public final class gg/essential/universal/USound {
+	public static final field INSTANCE Lgg/essential/universal/USound;
+	public final fun playButtonPress ()V
+	public final fun playButtonPress (F)V
+	public static synthetic fun playButtonPress$default (Lgg/essential/universal/USound;FILjava/lang/Object;)V
+	public final fun playExpSound ()V
+	public final fun playLevelupSound ()V
+	public final fun playPlingSound ()V
+	@1.8.9-forge
+	public final fun playSoundStatic (Lnet/minecraft/util/ResourceLocation;FF)V
+	@1.17.1-forge,1.18.1-forge
+	public final fun playSoundStatic (Lnet/minecraft/sounds/SoundEvent;FF)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun playSoundStatic (Lnet/minecraft/sound/SoundEvent;FF)V
+	@1.12.2-forge,1.15.2-forge,1.16.2-forge
+	public final fun playSoundStatic (Lnet/minecraft/util/SoundEvent;FF)V
+}
+
+public final class gg/essential/universal/shader/BlendState {
+	public static final field Companion Lgg/essential/universal/shader/BlendState$Companion;
+	public static final field DISABLED Lgg/essential/universal/shader/BlendState;
+	public static final field NORMAL Lgg/essential/universal/shader/BlendState;
+	public fun <init> (Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Z)V
+	public synthetic fun <init> (Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun activate ()V
+	public static final fun active ()Lgg/essential/universal/shader/BlendState;
+	public final fun component1 ()Lgg/essential/universal/shader/BlendState$Equation;
+	public final fun component2 ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun component3 ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun component4 ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun component5 ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun component6 ()Z
+	public final fun copy (Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Z)Lgg/essential/universal/shader/BlendState;
+	public static synthetic fun copy$default (Lgg/essential/universal/shader/BlendState;Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;ZILjava/lang/Object;)Lgg/essential/universal/shader/BlendState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDstAlpha ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun getDstRgb ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun getEnabled ()Z
+	public final fun getEquation ()Lgg/essential/universal/shader/BlendState$Equation;
+	@1.17.1-forge,1.18.1-forge
+	public final fun getMc ()Lcom/mojang/blaze3d/shaders/BlendMode;
+	@1.17.1-fabric,1.18.1-fabric
+	public final fun getMc ()Lnet/minecraft/client/gl/GlBlendState;
+	public final fun getSeparate ()Z
+	public final fun getSrcAlpha ()Lgg/essential/universal/shader/BlendState$Param;
+	public final fun getSrcRgb ()Lgg/essential/universal/shader/BlendState$Param;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class gg/essential/universal/shader/BlendState$Companion {
+	public final fun active ()Lgg/essential/universal/shader/BlendState;
+}
+
+public final class gg/essential/universal/shader/BlendState$Equation : java/lang/Enum {
+	public static final field ADD Lgg/essential/universal/shader/BlendState$Equation;
+	public static final field Companion Lgg/essential/universal/shader/BlendState$Equation$Companion;
+	public static final field MAX Lgg/essential/universal/shader/BlendState$Equation;
+	public static final field MIN Lgg/essential/universal/shader/BlendState$Equation;
+	public static final field REVERSE_SUBTRACT Lgg/essential/universal/shader/BlendState$Equation;
+	public static final field SUBTRACT Lgg/essential/universal/shader/BlendState$Equation;
+	public static final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Equation;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/shader/BlendState$Equation;
+	public static fun values ()[Lgg/essential/universal/shader/BlendState$Equation;
+}
+
+public final class gg/essential/universal/shader/BlendState$Equation$Companion {
+	public final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Equation;
+}
+
+public final class gg/essential/universal/shader/BlendState$Param : java/lang/Enum {
+	public static final field Companion Lgg/essential/universal/shader/BlendState$Param$Companion;
+	public static final field DST_ALPHA Lgg/essential/universal/shader/BlendState$Param;
+	public static final field DST_COLOR Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ONE Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ONE_MINUS_DST_ALPHA Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ONE_MINUS_DST_COLOR Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ONE_MINUS_SRC_ALPHA Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ONE_MINUS_SRC_COLOR Lgg/essential/universal/shader/BlendState$Param;
+	public static final field SRC_ALPHA Lgg/essential/universal/shader/BlendState$Param;
+	public static final field SRC_COLOR Lgg/essential/universal/shader/BlendState$Param;
+	public static final field ZERO Lgg/essential/universal/shader/BlendState$Param;
+	public static final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Param;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/shader/BlendState$Param;
+	public static fun values ()[Lgg/essential/universal/shader/BlendState$Param;
+}
+
+public final class gg/essential/universal/shader/BlendState$Param$Companion {
+	public final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Param;
+}
+
+public abstract interface class gg/essential/universal/shader/Float2Uniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (FF)V
+}
+
+public abstract interface class gg/essential/universal/shader/Float3Uniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (FFF)V
+}
+
+public abstract interface class gg/essential/universal/shader/Float4Uniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (FFFF)V
+}
+
+public abstract interface class gg/essential/universal/shader/FloatMatrixUniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue ([F)V
+}
+
+public abstract interface class gg/essential/universal/shader/FloatUniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (F)V
+}
+
+public abstract interface class gg/essential/universal/shader/IntUniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (I)V
+}
+
+public abstract interface class gg/essential/universal/shader/SamplerUniform : gg/essential/universal/shader/ShaderUniform {
+	public abstract fun setValue (I)V
+}
+
+public abstract interface class gg/essential/universal/shader/ShaderUniform {
+	public abstract fun getLocation ()I
+}
+
+public abstract interface class gg/essential/universal/shader/UShader {
+	public static final field Companion Lgg/essential/universal/shader/UShader$Companion;
+	public abstract fun bind ()V
+	public fun getFloat2Uniform (Ljava/lang/String;)Lgg/essential/universal/shader/Float2Uniform;
+	public abstract fun getFloat2UniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/Float2Uniform;
+	public fun getFloat3Uniform (Ljava/lang/String;)Lgg/essential/universal/shader/Float3Uniform;
+	public abstract fun getFloat3UniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/Float3Uniform;
+	public fun getFloat4Uniform (Ljava/lang/String;)Lgg/essential/universal/shader/Float4Uniform;
+	public abstract fun getFloat4UniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/Float4Uniform;
+	public fun getFloatMatrixUniform (Ljava/lang/String;)Lgg/essential/universal/shader/FloatMatrixUniform;
+	public abstract fun getFloatMatrixUniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/FloatMatrixUniform;
+	public fun getFloatUniform (Ljava/lang/String;)Lgg/essential/universal/shader/FloatUniform;
+	public abstract fun getFloatUniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/FloatUniform;
+	public fun getIntUniform (Ljava/lang/String;)Lgg/essential/universal/shader/IntUniform;
+	public abstract fun getIntUniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/IntUniform;
+	public fun getSamplerUniform (Ljava/lang/String;)Lgg/essential/universal/shader/SamplerUniform;
+	public abstract fun getSamplerUniformOrNull (Ljava/lang/String;)Lgg/essential/universal/shader/SamplerUniform;
+	public abstract fun getUsable ()Z
+	public abstract fun unbind ()V
+}
+
+public final class gg/essential/universal/shader/UShader$Companion {
+	public final fun fromLegacyShader (Ljava/lang/String;Ljava/lang/String;Lgg/essential/universal/shader/BlendState;)Lgg/essential/universal/shader/UShader;
+	@1.17.1-forge,1.18.1-forge
+	public final fun fromMcShader (Lnet/minecraft/client/renderer/ShaderInstance;Lgg/essential/universal/shader/BlendState;)Lgg/essential/universal/shader/UShader;
+	@1.17.1-fabric,1.18.1-fabric
+	public final fun fromMcShader (Lnet/minecraft/client/render/Shader;Lgg/essential/universal/shader/BlendState;)Lgg/essential/universal/shader/UShader;
+}
+
+@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/minecraft/client/texture/AbstractTexture {
+	public fun <init> (II)V
+	public fun <init> (Lnet/minecraft/client/texture/NativeImage;)V
+	public fun close ()V
+	public fun getGlId ()I
+	public final fun getHeight ()I
+	public final fun getUploaded ()Z
+	public final fun getWidth ()I
+	public fun load (Lnet/minecraft/resource/ResourceManager;)V
+	public final fun setUploaded (Z)V
+	public final fun updateDynamicTexture ()V
+	public final fun uploadTexture ()V
+}
+
+@1.15.2-forge,1.16.2-forge
+public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/minecraft/client/renderer/texture/Texture {
+	public fun <init> (II)V
+	public fun <init> (Lnet/minecraft/client/renderer/texture/NativeImage;)V
+	@1.16.2-forge
+	public fun close ()V
+	public fun getGlTextureId ()I
+	public final fun getHeight ()I
+	public final fun getUploaded ()Z
+	public final fun getWidth ()I
+	public fun loadTexture (Lnet/minecraft/resources/IResourceManager;)V
+	public final fun setUploaded (Z)V
+	public final fun updateDynamicTexture ()V
+	public final fun uploadTexture ()V
+}
+
+@1.12.2-forge,1.8.9-forge
+public final class gg/essential/universal/shader/UShader$DefaultImpls {
+	public static fun getFloat2Uniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/Float2Uniform;
+	public static fun getFloat3Uniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/Float3Uniform;
+	public static fun getFloat4Uniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/Float4Uniform;
+	public static fun getFloatMatrixUniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/FloatMatrixUniform;
+	public static fun getFloatUniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/FloatUniform;
+	public static fun getIntUniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/IntUniform;
+	public static fun getSamplerUniform (Lgg/essential/universal/shader/UShader;Ljava/lang/String;)Lgg/essential/universal/shader/SamplerUniform;
+}
+
+@1.12.2-forge,1.17.1-forge,1.18.1-forge,1.8.9-forge
+public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/minecraft/client/renderer/texture/AbstractTexture {
+	public fun <init> (II)V
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/blaze3d/platform/NativeImage;)V
+	@1.17.1-forge,1.18.1-forge
+	public fun close ()V
+	@1.12.2-forge,1.8.9-forge
+	public fun <init> (Ljava/awt/image/BufferedImage;)V
+	@1.12.2-forge,1.8.9-forge
+	public fun getGlTextureId ()I
+	public final fun getHeight ()I
+	@1.17.1-forge,1.18.1-forge
+	public fun getId ()I
+	@1.12.2-forge,1.8.9-forge
+	public final fun getTextureData ()[I
+	public final fun getUploaded ()Z
+	public final fun getWidth ()I
+	@1.17.1-forge,1.18.1-forge
+	public fun load (Lnet/minecraft/server/packs/resources/ResourceManager;)V
+	@1.12.2-forge,1.8.9-forge
+	public fun loadTexture (Lnet/minecraft/client/resources/IResourceManager;)V
+	@1.12.2-forge,1.8.9-forge
+	public final fun setTextureData ([I)V
+	public final fun setUploaded (Z)V
+	public final fun updateDynamicTexture ()V
+	public final fun uploadTexture ()V
+}
+
+public abstract interface class gg/essential/universal/vertex/UVertexConsumer {
+	public static final field Companion Lgg/essential/universal/vertex/UVertexConsumer$Companion;
+	public fun color (FFFF)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun color (IIII)Lgg/essential/universal/vertex/UVertexConsumer;
+	public fun color (Ljava/awt/Color;)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun endVertex ()Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun light (II)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun norm (Lgg/essential/universal/UMatrixStack;FFF)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.8.9-forge
+	public static fun of (Lnet/minecraft/client/renderer/WorldRenderer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.17.1-forge,1.18.1-forge
+	public static fun of (Lcom/mojang/blaze3d/vertex/VertexConsumer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.16.2-forge
+	public static fun of (Lcom/mojang/blaze3d/vertex/IVertexBuilder;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static fun of (Lnet/minecraft/client/render/VertexConsumer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.12.2-forge,1.15.2-forge
+	public static fun of (Lnet/minecraft/client/renderer/BufferBuilder;)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun overlay (II)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun pos (Lgg/essential/universal/UMatrixStack;DDD)Lgg/essential/universal/vertex/UVertexConsumer;
+	public abstract fun tex (DD)Lgg/essential/universal/vertex/UVertexConsumer;
+}
+
+public final class gg/essential/universal/vertex/UVertexConsumer$Companion {
+	@1.8.9-forge
+	public final fun of (Lnet/minecraft/client/renderer/WorldRenderer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.17.1-forge,1.18.1-forge
+	public final fun of (Lcom/mojang/blaze3d/vertex/VertexConsumer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.16.2-forge
+	public final fun of (Lcom/mojang/blaze3d/vertex/IVertexBuilder;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun of (Lnet/minecraft/client/render/VertexConsumer;)Lgg/essential/universal/vertex/UVertexConsumer;
+	@1.12.2-forge,1.15.2-forge
+	public final fun of (Lnet/minecraft/client/renderer/BufferBuilder;)Lgg/essential/universal/vertex/UVertexConsumer;
+}
+
+@1.12.2-forge,1.8.9-forge
+public final class gg/essential/universal/vertex/UVertexConsumer$DefaultImpls {
+	public static fun color (Lgg/essential/universal/vertex/UVertexConsumer;FFFF)Lgg/essential/universal/vertex/UVertexConsumer;
+	public static fun color (Lgg/essential/universal/vertex/UVertexConsumer;Ljava/awt/Color;)Lgg/essential/universal/vertex/UVertexConsumer;
+}
+
+public final class gg/essential/universal/wrappers/UPlayer {
+	public static final field INSTANCE Lgg/essential/universal/wrappers/UPlayer;
+	@1.17.1-forge,1.18.1-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/player/LocalPlayer;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public static final fun getPlayer ()Lnet/minecraft/client/network/ClientPlayerEntity;
+	@1.15.2-forge,1.16.2-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/entity/player/ClientPlayerEntity;
+	@1.12.2-forge,1.8.9-forge
+	public static final fun getPlayer ()Lnet/minecraft/client/entity/EntityPlayerSP;
+	public static final fun getPosX ()D
+	public static final fun getPosY ()D
+	public static final fun getPosZ ()D
+	public static final fun getPrevPosX ()D
+	public static final fun getPrevPosY ()D
+	public static final fun getPrevPosZ ()D
+	public static final fun getUUID ()Ljava/util/UUID;
+	public static final fun hasPlayer ()Z
+	public static final fun sendClientSideMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+}
+
+public final class gg/essential/universal/wrappers/message/UMessage {
+	public fun <init> (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+	public fun <init> ([Ljava/lang/Object;)V
+	public final fun actionBar ()V
+	public final fun addTextComponent (ILjava/lang/Object;)Lgg/essential/universal/wrappers/message/UMessage;
+	public final fun addTextComponent (Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UMessage;
+	public final fun chat ()V
+	public final fun edit ([Ljava/lang/Object;)V
+	public final fun getChatLineId ()I
+	public final fun getChatMessage ()Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun getFormattedText ()Ljava/lang/String;
+	public final fun getMessageParts ()Ljava/util/List;
+	public final fun getUnformattedText ()Ljava/lang/String;
+	public final fun isFormatted ()Z
+	public final fun isRecursive ()Z
+	public final fun mutable ()Lgg/essential/universal/wrappers/message/UMessage;
+	public final fun setChatLineId (I)V
+	public final fun setFormatted (Z)V
+	public final fun setRecursive (Z)V
+	public final fun setTextComponent (ILjava/lang/Object;)Lgg/essential/universal/wrappers/message/UMessage;
+}
+
+@1.8.9-forge
+public final class gg/essential/universal/wrappers/message/UTextComponent : net/minecraft/util/IChatComponent {
+	public static final field Companion Lgg/essential/universal/wrappers/message/UTextComponent$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Lnet/minecraft/util/IChatComponent;)V
+	public final fun actionBar ()V
+	public fun appendSibling (Lnet/minecraft/util/IChatComponent;)Lnet/minecraft/util/IChatComponent;
+	public fun appendText (Ljava/lang/String;)Lnet/minecraft/util/IChatComponent;
+	public final fun chat ()V
+	public fun createCopy ()Lnet/minecraft/util/IChatComponent;
+	public fun getChatStyle ()Lnet/minecraft/util/ChatStyle;
+	public final fun getClickAction ()Lnet/minecraft/event/ClickEvent$Action;
+	public final fun getClickValue ()Ljava/lang/String;
+	public final fun getComponent ()Lnet/minecraft/util/IChatComponent;
+	public final fun getFormatted ()Z
+	public fun getFormattedText ()Ljava/lang/String;
+	public final fun getHoverAction ()Lnet/minecraft/event/HoverEvent$Action;
+	public final fun getHoverValue ()Ljava/lang/Object;
+	public fun getSiblings ()Ljava/util/List;
+	public final fun getText ()Ljava/lang/String;
+	public fun getUnformattedText ()Ljava/lang/String;
+	public fun getUnformattedTextForChat ()Ljava/lang/String;
+	public fun iterator ()Ljava/util/Iterator;
+	public fun setChatStyle (Lnet/minecraft/util/ChatStyle;)Lnet/minecraft/util/IChatComponent;
+	public final fun setClick (Lnet/minecraft/event/ClickEvent$Action;Ljava/lang/String;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setClickAction (Lnet/minecraft/event/ClickEvent$Action;)V
+	public final fun setClickValue (Ljava/lang/String;)V
+	public final fun setFormatted (Z)V
+	public final fun setHover (Lnet/minecraft/event/HoverEvent$Action;Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setHoverAction (Lnet/minecraft/event/HoverEvent$Action;)V
+	public final fun setHoverValue (Ljava/lang/Object;)V
+	public final fun setText (Ljava/lang/String;)V
+}
+
+@1.17.1-forge,1.18.1-forge
+public final class gg/essential/universal/wrappers/message/UTextComponent : net/minecraft/network/chat/MutableComponent {
+	public static final field Companion Lgg/essential/universal/wrappers/message/UTextComponent$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Lnet/minecraft/network/chat/Component;)V
+	public fun <init> (Lnet/minecraft/network/chat/MutableComponent;)V
+	public final fun actionBar ()V
+	public fun append (Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;
+	public fun append (Lnet/minecraft/network/chat/Component;)Lnet/minecraft/network/chat/MutableComponent;
+	public final fun appendSibling (Lnet/minecraft/network/chat/Component;)Lnet/minecraft/network/chat/MutableComponent;
+	public final fun chat ()V
+	public fun copy ()Lnet/minecraft/network/chat/MutableComponent;
+	public final fun getClickAction ()Lnet/minecraft/network/chat/ClickEvent$Action;
+	public final fun getClickValue ()Ljava/lang/String;
+	public final fun getComponent ()Lnet/minecraft/network/chat/MutableComponent;
+	public fun getContents ()Ljava/lang/String;
+	public final fun getFormatted ()Z
+	public final fun getFormattedText ()Ljava/lang/String;
+	public final fun getHoverAction ()Lnet/minecraft/network/chat/HoverEvent$Action;
+	public final fun getHoverValue ()Ljava/lang/Object;
+	public fun getSiblings ()Ljava/util/List;
+	public fun getString ()Ljava/lang/String;
+	public fun getString (I)Ljava/lang/String;
+	public fun getStyle ()Lnet/minecraft/network/chat/Style;
+	public final fun getText ()Ljava/lang/String;
+	public final fun getUnformattedText ()Ljava/lang/String;
+	public fun getVisualOrderText ()Lnet/minecraft/util/FormattedCharSequence;
+	public fun plainCopy ()Lnet/minecraft/network/chat/MutableComponent;
+	public final fun setClick (Lnet/minecraft/network/chat/ClickEvent$Action;Ljava/lang/String;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setClickAction (Lnet/minecraft/network/chat/ClickEvent$Action;)V
+	public final fun setClickValue (Ljava/lang/String;)V
+	public final fun setFormatted (Z)V
+	public final fun setHover (Lnet/minecraft/network/chat/HoverEvent$Action;Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setHoverAction (Lnet/minecraft/network/chat/HoverEvent$Action;)V
+	public final fun setHoverValue (Ljava/lang/Object;)V
+	public fun setStyle (Lnet/minecraft/network/chat/Style;)Lnet/minecraft/network/chat/MutableComponent;
+	public final fun setText (Ljava/lang/String;)V
+	public fun visit (Lnet/minecraft/network/chat/FormattedText$ContentConsumer;)Ljava/util/Optional;
+	public fun visit (Lnet/minecraft/network/chat/FormattedText$StyledContentConsumer;Lnet/minecraft/network/chat/Style;)Ljava/util/Optional;
+	public fun visitSelf (Lnet/minecraft/network/chat/FormattedText$ContentConsumer;)Ljava/util/Optional;
+	public fun visitSelf (Lnet/minecraft/network/chat/FormattedText$StyledContentConsumer;Lnet/minecraft/network/chat/Style;)Ljava/util/Optional;
+	public fun withStyle (Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;
+	public fun withStyle (Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;
+	public fun withStyle (Lnet/minecraft/network/chat/Style;)Lnet/minecraft/network/chat/MutableComponent;
+	public fun withStyle ([Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;
+}
+
+@1.16.2-forge
+public final class gg/essential/universal/wrappers/message/UTextComponent : net/minecraft/util/text/IFormattableTextComponent {
+	public static final field Companion Lgg/essential/universal/wrappers/message/UTextComponent$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Lnet/minecraft/util/text/IFormattableTextComponent;)V
+	public fun <init> (Lnet/minecraft/util/text/ITextComponent;)V
+	public final fun actionBar ()V
+	public fun append (Lnet/minecraft/util/text/ITextComponent;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public final fun appendSibling (Lnet/minecraft/util/text/ITextComponent;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun appendString (Ljava/lang/String;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public final fun chat ()V
+	public fun copyRaw ()Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun deepCopy ()Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun func_230533_b_ (Lnet/minecraft/util/text/ITextProperties$ITextAcceptor;)Ljava/util/Optional;
+	public fun func_230534_b_ (Lnet/minecraft/util/text/ITextProperties$IStyledTextAcceptor;Lnet/minecraft/util/text/Style;)Ljava/util/Optional;
+	public fun func_241878_f ()Lnet/minecraft/util/IReorderingProcessor;
+	public final fun getClickAction ()Lnet/minecraft/util/text/event/ClickEvent$Action;
+	public final fun getClickValue ()Ljava/lang/String;
+	public final fun getComponent ()Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun getComponent (Lnet/minecraft/util/text/ITextProperties$ITextAcceptor;)Ljava/util/Optional;
+	public fun getComponentWithStyle (Lnet/minecraft/util/text/ITextProperties$IStyledTextAcceptor;Lnet/minecraft/util/text/Style;)Ljava/util/Optional;
+	public final fun getFormatted ()Z
+	public final fun getFormattedText ()Ljava/lang/String;
+	public final fun getHoverAction ()Lnet/minecraft/util/text/event/HoverEvent$Action;
+	public final fun getHoverValue ()Ljava/lang/Object;
+	public fun getSiblings ()Ljava/util/List;
+	public fun getString ()Ljava/lang/String;
+	public fun getStringTruncated (I)Ljava/lang/String;
+	public fun getStyle ()Lnet/minecraft/util/text/Style;
+	public final fun getText ()Ljava/lang/String;
+	public fun getUnformattedComponentText ()Ljava/lang/String;
+	public final fun getUnformattedText ()Ljava/lang/String;
+	public fun mergeStyle (Lnet/minecraft/util/text/Style;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun mergeStyle (Lnet/minecraft/util/text/TextFormatting;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun mergeStyle ([Lnet/minecraft/util/text/TextFormatting;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public fun modifyStyle (Ljava/util/function/UnaryOperator;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public final fun setClick (Lnet/minecraft/util/text/event/ClickEvent$Action;Ljava/lang/String;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setClickAction (Lnet/minecraft/util/text/event/ClickEvent$Action;)V
+	public final fun setClickValue (Ljava/lang/String;)V
+	public final fun setFormatted (Z)V
+	public final fun setHover (Lnet/minecraft/util/text/event/HoverEvent$Action;Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setHoverAction (Lnet/minecraft/util/text/event/HoverEvent$Action;)V
+	public final fun setHoverValue (Ljava/lang/Object;)V
+	public fun setStyle (Lnet/minecraft/util/text/Style;)Lnet/minecraft/util/text/IFormattableTextComponent;
+	public final fun setText (Ljava/lang/String;)V
+}
+
+@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+public final class gg/essential/universal/wrappers/message/UTextComponent : net/minecraft/text/MutableText {
+	public static final field Companion Lgg/essential/universal/wrappers/message/UTextComponent$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Lnet/minecraft/text/MutableText;)V
+	public fun <init> (Lnet/minecraft/text/Text;)V
+	public final fun actionBar ()V
+	public fun append (Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+	public fun append (Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;
+	public final fun appendSibling (Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;
+	public fun asOrderedText ()Lnet/minecraft/text/OrderedText;
+	public fun asString ()Ljava/lang/String;
+	public fun asTruncatedString (I)Ljava/lang/String;
+	public final fun chat ()V
+	public fun copy ()Lnet/minecraft/text/MutableText;
+	public fun fillStyle (Lnet/minecraft/text/Style;)Lnet/minecraft/text/MutableText;
+	public fun formatted (Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/MutableText;
+	public fun formatted ([Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/MutableText;
+	public final fun getClickAction ()Lnet/minecraft/text/ClickEvent$Action;
+	public final fun getClickValue ()Ljava/lang/String;
+	public final fun getComponent ()Lnet/minecraft/text/MutableText;
+	public final fun getFormatted ()Z
+	public final fun getFormattedText ()Ljava/lang/String;
+	public final fun getHoverAction ()Lnet/minecraft/text/HoverEvent$Action;
+	public final fun getHoverValue ()Ljava/lang/Object;
+	public fun getSiblings ()Ljava/util/List;
+	public fun getString ()Ljava/lang/String;
+	public fun getStyle ()Lnet/minecraft/text/Style;
+	public final fun getText ()Ljava/lang/String;
+	public final fun getUnformattedText ()Ljava/lang/String;
+	public final fun setClick (Lnet/minecraft/text/ClickEvent$Action;Ljava/lang/String;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setClickAction (Lnet/minecraft/text/ClickEvent$Action;)V
+	public final fun setClickValue (Ljava/lang/String;)V
+	public final fun setFormatted (Z)V
+	public final fun setHover (Lnet/minecraft/text/HoverEvent$Action;Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setHoverAction (Lnet/minecraft/text/HoverEvent$Action;)V
+	public final fun setHoverValue (Ljava/lang/Object;)V
+	public fun setStyle (Lnet/minecraft/text/Style;)Lnet/minecraft/text/MutableText;
+	public final fun setText (Ljava/lang/String;)V
+	public fun shallowCopy ()Lnet/minecraft/text/MutableText;
+	public fun styled (Ljava/util/function/UnaryOperator;)Lnet/minecraft/text/MutableText;
+	public fun visit (Lnet/minecraft/text/StringVisitable$StyledVisitor;Lnet/minecraft/text/Style;)Ljava/util/Optional;
+	public fun visit (Lnet/minecraft/text/StringVisitable$Visitor;)Ljava/util/Optional;
+	public fun visitSelf (Lnet/minecraft/text/StringVisitable$StyledVisitor;Lnet/minecraft/text/Style;)Ljava/util/Optional;
+	public fun visitSelf (Lnet/minecraft/text/StringVisitable$Visitor;)Ljava/util/Optional;
+}
+
+@1.12.2-forge,1.15.2-forge
+public final class gg/essential/universal/wrappers/message/UTextComponent : net/minecraft/util/text/ITextComponent {
+	public static final field Companion Lgg/essential/universal/wrappers/message/UTextComponent$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public fun <init> (Lnet/minecraft/util/text/ITextComponent;)V
+	public final fun actionBar ()V
+	public fun appendSibling (Lnet/minecraft/util/text/ITextComponent;)Lnet/minecraft/util/text/ITextComponent;
+	public fun appendText (Ljava/lang/String;)Lnet/minecraft/util/text/ITextComponent;
+	@1.15.2-forge
+	public fun applyTextStyle (Ljava/util/function/Consumer;)Lnet/minecraft/util/text/ITextComponent;
+	@1.15.2-forge
+	public fun applyTextStyle (Lnet/minecraft/util/text/TextFormatting;)Lnet/minecraft/util/text/ITextComponent;
+	@1.15.2-forge
+	public fun applyTextStyles ([Lnet/minecraft/util/text/TextFormatting;)Lnet/minecraft/util/text/ITextComponent;
+	public final fun chat ()V
+	@1.15.2-forge
+	public fun deepCopy ()Lnet/minecraft/util/text/ITextComponent;
+	@1.15.2-forge
+	public fun func_212637_f ()Ljava/util/stream/Stream;
+	@1.12.2-forge
+	public fun createCopy ()Lnet/minecraft/util/text/ITextComponent;
+	public final fun getClickAction ()Lnet/minecraft/util/text/event/ClickEvent$Action;
+	public final fun getClickValue ()Ljava/lang/String;
+	public final fun getComponent ()Lnet/minecraft/util/text/ITextComponent;
+	public final fun getFormatted ()Z
+	public fun getFormattedText ()Ljava/lang/String;
+	public final fun getHoverAction ()Lnet/minecraft/util/text/event/HoverEvent$Action;
+	public final fun getHoverValue ()Ljava/lang/Object;
+	public fun getSiblings ()Ljava/util/List;
+	@1.15.2-forge
+	public fun getString ()Ljava/lang/String;
+	@1.15.2-forge
+	public fun getStringTruncated (I)Ljava/lang/String;
+	public fun getStyle ()Lnet/minecraft/util/text/Style;
+	public final fun getText ()Ljava/lang/String;
+	public fun getUnformattedComponentText ()Ljava/lang/String;
+	@1.15.2-forge
+	public final fun getUnformattedText ()Ljava/lang/String;
+	@1.12.2-forge
+	public fun getUnformattedText ()Ljava/lang/String;
+	public fun iterator ()Ljava/util/Iterator;
+	public final fun setClick (Lnet/minecraft/util/text/event/ClickEvent$Action;Ljava/lang/String;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setClickAction (Lnet/minecraft/util/text/event/ClickEvent$Action;)V
+	public final fun setClickValue (Ljava/lang/String;)V
+	public final fun setFormatted (Z)V
+	public final fun setHover (Lnet/minecraft/util/text/event/HoverEvent$Action;Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun setHoverAction (Lnet/minecraft/util/text/event/HoverEvent$Action;)V
+	public final fun setHoverValue (Ljava/lang/Object;)V
+	public fun setStyle (Lnet/minecraft/util/text/Style;)Lnet/minecraft/util/text/ITextComponent;
+	public final fun setText (Ljava/lang/String;)V
+	@1.15.2-forge
+	public fun shallowCopy ()Lnet/minecraft/util/text/ITextComponent;
+	@1.15.2-forge
+	public fun stream ()Ljava/util/stream/Stream;
+}
+
+public final class gg/essential/universal/wrappers/message/UTextComponent$Companion {
+	public final fun from (Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
+	public final fun stripFormatting (Ljava/lang/String;)Ljava/lang/String;
+}

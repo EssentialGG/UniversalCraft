@@ -3,6 +3,7 @@ import gg.essential.gradle.util.*
 plugins {
     kotlin("jvm") version "1.6.10" apply false
     id("gg.essential.multi-version.root")
+    id("gg.essential.multi-version.api-validation")
 }
 
 version = versionFromBuildIdAndBranch()
