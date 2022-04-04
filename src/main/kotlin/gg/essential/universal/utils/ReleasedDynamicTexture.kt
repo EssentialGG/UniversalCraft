@@ -12,7 +12,12 @@ import java.awt.image.BufferedImage
 //#endif
 
 
+import java.io.Closeable
 import java.io.IOException
+import java.lang.ref.PhantomReference
+import java.lang.ref.ReferenceQueue
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 
 class ReleasedDynamicTexture private constructor(
@@ -25,12 +30,13 @@ class ReleasedDynamicTexture private constructor(
     //#endif
 ) : AbstractTexture() {
 
+    private var resources = Resources(this)
+
     //#if MC>=11400
-    //$$ private var textureData: NativeImage? = textureData ?: NativeImage(width, height, true)
-    //$$    set(value) {
-    //$$        field?.close()
-    //$$        field = value
-    //$$    }
+    //$$ init {
+    //$$     resources.textureData = textureData ?: NativeImage(width, height, true)
+    //$$ }
+    //$$ private var textureData by resources::textureData
     //#else
     var textureData: IntArray = textureData ?: IntArray(width * height)
     //#endif
@@ -71,6 +77,9 @@ class ReleasedDynamicTexture private constructor(
             textureData = IntArray(0)
             //#endif
             uploaded = true
+
+            resources.glId = allocGlId()
+            Resources.drainCleanupQueue()
         }
     }
 
@@ -81,18 +90,54 @@ class ReleasedDynamicTexture private constructor(
         return super.getGlTextureId()
     }
 
-    protected fun finalize() {
-        UGraphics.deleteTexture(glTextureId)
-        //#if MC>=11400
-        //$$ textureData = null
-        //#endif
+    override fun deleteGlTexture() {
+        super.deleteGlTexture()
+        resources.glId = -1
     }
 
     //#if MC>=11600
     //$$ override fun close() {
-    //$$     textureData = null
     //$$     deleteGlTexture()
+    //$$     resources.close()
     //$$ }
     //#endif
 
+    private class Resources(referent: ReleasedDynamicTexture) : PhantomReference<ReleasedDynamicTexture>(referent, referenceQueue), Closeable {
+        var glId: Int = -1
+        //#if MC>=11400
+        //$$ var textureData: NativeImage? = null
+        //$$    set(value) {
+        //$$        field?.close()
+        //$$        field = value
+        //$$    }
+        //#endif
+
+        init {
+            toBeCleanedUp.add(this)
+        }
+
+        override fun close() {
+            toBeCleanedUp.remove(this)
+
+            if (glId != -1) {
+                UGraphics.deleteTexture(glId)
+                glId = -1
+            }
+
+            //#if MC>=11400
+            //$$ textureData = null
+            //#endif
+        }
+
+        companion object {
+            val referenceQueue: ReferenceQueue<ReleasedDynamicTexture> = ReferenceQueue()
+            val toBeCleanedUp: MutableSet<Resources> = Collections.newSetFromMap(ConcurrentHashMap())
+
+            fun drainCleanupQueue() {
+                while (true) {
+                    ((referenceQueue.poll() ?: break) as Resources).close()
+                }
+            }
+        }
+    }
 }
