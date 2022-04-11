@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "universalcraft",
   "name": "UniversalCraft",
-  "version": "1.0.0",
+  "version": "${version}",
   "environment": "*",
   "authors": [
     "Sk1erLLC"
