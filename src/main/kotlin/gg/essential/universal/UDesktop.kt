@@ -71,13 +71,14 @@ object UDesktop {
     private fun openSystemSpecific(file: String): Boolean {
         return when {
             isLinux -> when {
-                isXdg -> runCommand("xdg-open \"$file\"")
-                isKde -> runCommand("kde-open \"$file\"")
-                isGnome -> runCommand("gnome-open \"$file\"")
-                else -> runCommand("kde-open \"$file\"") || runCommand("gnome-open \"$file\"")
+                isXdg -> runCommand("xdg-open", file)
+                isKde -> runCommand("kde-open", file)
+                isGnome -> runCommand("gnome-open", file)
+                else -> runCommand("kde-open", file) || runCommand("gnome-open", file)
             }
-            isMac -> runCommand("open \"$file\"")
-            isWindows -> runCommand("explorer \"$file\"")
+            isMac -> runCommand("open", file)
+            // Windows breaks with spaces in a path if we don't have quotes around it
+            isWindows -> runCommand("explorer", "\"$file\"")
             else -> false
         }
     }
@@ -87,10 +88,10 @@ object UDesktop {
             if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 if (isLinux) {
                     return when {
-                        isXdg -> runCommand("xdg-open $uri")
-                        isKde -> runCommand("kde-open $uri")
-                        isGnome -> runCommand("gnome-open $uri")
-                        else -> runCommand("kde-open $uri") || runCommand("gnome-open $uri")
+                        isXdg -> runCommand("xdg-open", "$uri")
+                        isKde -> runCommand("kde-open", "$uri")
+                        isGnome -> runCommand("gnome-open", "$uri")
+                        else -> runCommand("kde-open", "$uri") || runCommand("gnome-open", "$uri")
                     }
 
                 }
@@ -126,7 +127,7 @@ object UDesktop {
         }
     }
 
-    private fun runCommand(command: String): Boolean {
+    private fun runCommand(vararg command: String): Boolean {
         return try {
             Runtime.getRuntime().exec(command).let {
                 it != null && it.isAlive
