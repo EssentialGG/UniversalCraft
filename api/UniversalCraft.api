@@ -173,6 +173,7 @@ public class gg/essential/universal/UGraphics {
 	public static fun getActiveTexture ()I
 	public static fun getCharWidth (C)F
 	public static fun getEmptyTexture ()Lgg/essential/universal/utils/ReleasedDynamicTexture;
+	public static fun getFontHeight ()I
 	public static fun getFromTessellator ()Lgg/essential/universal/UGraphics;
 	public static fun getStringWidth (Ljava/lang/String;)I
 	@1.17.1-forge,1.18.1-forge
