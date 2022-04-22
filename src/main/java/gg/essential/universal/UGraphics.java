@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,6 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#if MC>=11700
 //$$ import net.minecraft.client.render.GameRenderer;
 //$$ import net.minecraft.client.render.Shader;
-//$$ import net.minecraft.client.render.VertexFormats;
 //$$ import java.util.HashMap;
 //$$ import java.util.Map;
 //$$ import java.util.function.Supplier;
@@ -717,6 +717,28 @@ public class UGraphics {
         //#endif
     }
 
+    public enum CommonVertexFormats {
+        POSITION(DefaultVertexFormats.POSITION),
+        POSITION_COLOR(DefaultVertexFormats.POSITION_COLOR),
+        POSITION_TEXTURE(DefaultVertexFormats.POSITION_TEX),
+        POSITION_TEXTURE_COLOR(DefaultVertexFormats.POSITION_TEX_COLOR),
+        POSITION_COLOR_TEXTURE_LIGHT(DefaultVertexFormats.BLOCK),
+        POSITION_TEXTURE_LIGHT_COLOR(DefaultVertexFormats.POSITION_TEX_LMAP_COLOR),
+        POSITION_TEXTURE_COLOR_LIGHT(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
+        POSITION_TEXTURE_COLOR_NORMAL(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
+        ;
+
+        private final VertexFormat mc;
+
+        CommonVertexFormats(VertexFormat mc) {
+            this.mc = mc;
+        }
+    }
+
+    public UGraphics beginWithActiveShader(DrawMode mode, CommonVertexFormats format) {
+        return beginWithActiveShader(mode, format.mc);
+    }
+
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
         vertexFormat = format;
         instance.begin(mode.mcMode, format);
@@ -740,6 +762,10 @@ public class UGraphics {
     //$$ }
     //#endif
 
+    public UGraphics beginWithDefaultShader(DrawMode mode, CommonVertexFormats format) {
+        return beginWithDefaultShader(mode, format.mc);
+    }
+
     public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
         //#if MC>=11700
         //$$ Supplier<Shader> supplier = DEFAULT_SHADERS.get(format);
@@ -759,6 +785,11 @@ public class UGraphics {
     //$$     return this;
     //$$ }
     //#endif
+
+    @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` or `beginRenderLayer` instead
+    public UGraphics begin(int glMode, CommonVertexFormats format) {
+        return begin(glMode, format.mc);
+    }
 
     @Deprecated // use `beginWithDefaultShader` or `beginWithActiveShader` or `beginRenderLayer` instead
     public UGraphics begin(int glMode, VertexFormat format) {

@@ -104,24 +104,27 @@ public class gg/essential/universal/UGraphics {
 	public fun asUVertexConsumer ()Lgg/essential/universal/vertex/UVertexConsumer;
 	@1.17.1-forge,1.18.1-forge
 	public fun begin (ILcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	public fun begin (ILgg/essential/universal/UGraphics$CommonVertexFormats;)Lgg/essential/universal/UGraphics;
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
 	public fun begin (ILnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
 	public fun beginRenderLayer (Lnet/minecraft/client/render/RenderLayer;)Lgg/essential/universal/UGraphics;
-	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
-	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
-	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
-	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
 	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
 	public fun begin (ILnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
 	@1.16.2-forge,1.17.1-forge,1.18.1-forge
 	public fun beginRenderLayer (Lnet/minecraft/client/renderer/RenderType;)Lgg/essential/universal/UGraphics;
 	@1.17.1-forge,1.18.1-forge
 	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lgg/essential/universal/UGraphics$CommonVertexFormats;)Lgg/essential/universal/UGraphics;
 	@1.17.1-forge,1.18.1-forge
 	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lcom/mojang/blaze3d/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
 	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
 	public fun beginWithActiveShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
+	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lgg/essential/universal/UGraphics$CommonVertexFormats;)Lgg/essential/universal/UGraphics;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lgg/essential/universal/UGraphics;
 	@1.12.2-forge,1.15.2-forge,1.16.2-forge,1.8.9-forge
 	public fun beginWithDefaultShader (Lgg/essential/universal/UGraphics$DrawMode;Lnet/minecraft/client/renderer/vertex/VertexFormat;)Lgg/essential/universal/UGraphics;
 	public static fun bindTexture (I)V
@@ -225,6 +228,19 @@ public class gg/essential/universal/UGraphics {
 	@1.12.2-forge,1.15.2-forge,1.16.2-fabric,1.16.2-forge,1.8.9-forge
 	public static fun translate (FFF)V
 	public static fun tryBlendFuncSeparate (IIII)V
+}
+
+public final class gg/essential/universal/UGraphics$CommonVertexFormats : java/lang/Enum {
+	public static final field POSITION Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_COLOR Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_COLOR_TEXTURE_LIGHT Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_TEXTURE Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_TEXTURE_COLOR Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_TEXTURE_COLOR_LIGHT Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_TEXTURE_COLOR_NORMAL Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static final field POSITION_TEXTURE_LIGHT_COLOR Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/UGraphics$CommonVertexFormats;
+	public static fun values ()[Lgg/essential/universal/UGraphics$CommonVertexFormats;
 }
 
 public final class gg/essential/universal/UGraphics$DrawMode : java/lang/Enum {

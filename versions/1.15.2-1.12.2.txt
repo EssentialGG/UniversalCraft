@@ -21,6 +21,7 @@ com.mojang.blaze3d.systems.RenderSystem enableTexture() net.minecraft.client.ren
 com.mojang.blaze3d.systems.RenderSystem disableTexture() net.minecraft.client.renderer.GlStateManager disableTexture2D()
 net.minecraft.client.renderer.vertex.VertexFormat hasUV() hasUvOffset()
 net.minecraft.client.renderer.vertex.VertexFormatElement$Usage net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage
+net.minecraft.client.renderer.vertex.DefaultVertexFormats POSITION_TEX_LIGHTMAP_COLOR POSITION_TEX_LMAP_COLOR
 net.minecraft.client.renderer.entity.PlayerRenderer net.minecraft.client.renderer.entity.RenderPlayer
 net.minecraft.client.world.ClientWorld net.minecraft.client.multiplayer.WorldClient
 net.minecraft.client.entity.player.ClientPlayerEntity net.minecraft.client.entity.EntityPlayerSP
