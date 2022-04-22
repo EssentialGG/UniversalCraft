@@ -83,6 +83,9 @@ class ReleasedDynamicTexture private constructor(
 
     private fun allocGlId() = super.getGlTextureId()
 
+    val dynamicGlId: Int
+        get() = getGlTextureId()
+
     override fun getGlTextureId(): Int {
         uploadTexture()
         return super.getGlTextureId()

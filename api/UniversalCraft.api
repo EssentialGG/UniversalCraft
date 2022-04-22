@@ -1002,6 +1002,7 @@ public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/min
 	public fun <init> (II)V
 	public fun <init> (Lnet/minecraft/client/texture/NativeImage;)V
 	public fun close ()V
+	public final fun getDynamicGlId ()I
 	public fun getGlId ()I
 	public final fun getHeight ()I
 	public final fun getUploaded ()Z
@@ -1018,6 +1019,7 @@ public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/min
 	public fun <init> (Lnet/minecraft/client/renderer/texture/NativeImage;)V
 	@1.16.2-forge
 	public fun close ()V
+	public final fun getDynamicGlId ()I
 	public fun getGlTextureId ()I
 	public final fun getHeight ()I
 	public final fun getUploaded ()Z
@@ -1048,6 +1050,7 @@ public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/min
 	public fun close ()V
 	@1.12.2-forge,1.8.9-forge
 	public fun <init> (Ljava/awt/image/BufferedImage;)V
+	public final fun getDynamicGlId ()I
 	@1.12.2-forge,1.8.9-forge
 	public fun getGlTextureId ()I
 	public final fun getHeight ()I
