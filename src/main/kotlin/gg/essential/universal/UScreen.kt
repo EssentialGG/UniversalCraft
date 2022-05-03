@@ -1,5 +1,6 @@
 package gg.essential.universal
 
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 
 //#if MC>=11502
@@ -31,6 +32,9 @@ abstract class UScreen(
         newGuiScale: Int = -1,
     ) : this(restoreCurrentGuiOnClose, newGuiScale, null)
 
+    private var eventButton = 0
+    private var lastMouseEvent: Long = 0
+    private var touchValue = 0
     private var guiScaleToRestore = -1
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
@@ -142,7 +146,26 @@ abstract class UScreen(
     }
 
     final override fun handleMouseInput() {
-        super.handleMouseInput()
+        val i = Mouse.getEventX() * width / mc.displayWidth.toDouble()
+        val j = height - Mouse.getEventY() * height / mc.displayHeight.toDouble() - 1
+        val k = Mouse.getEventButton()
+        if (Mouse.getEventButtonState()) {
+            if (mc.gameSettings.touchscreen && touchValue++ > 0) {
+                return
+            }
+            eventButton = k
+            lastMouseEvent = Minecraft.getSystemTime()
+            onMouseClicked(i, j, eventButton)
+        } else if (k != -1) {
+            if (mc.gameSettings.touchscreen && --touchValue > 0) {
+                return
+            }
+            eventButton = -1
+            onMouseReleased(i, j, k)
+        } else if (eventButton != -1 && lastMouseEvent > 0L) {
+            val l = Minecraft.getSystemTime() - lastMouseEvent
+            onMouseDragged(i, j, eventButton, l)
+        }
         val scrollDelta = Mouse.getEventDWheel()
         if (scrollDelta != 0)
             onMouseScrolled(scrollDelta.toDouble())
