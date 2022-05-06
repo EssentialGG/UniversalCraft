@@ -305,18 +305,22 @@ public final class gg/essential/universal/UImage {
 	public fun <init> (Lnet/minecraft/client/texture/NativeImage;)V
 	@1.12.2-forge,1.15.2-forge,1.8.9-forge
 	public fun <init> (Ljava/awt/image/BufferedImage;)V
+	public final fun copy ()Lgg/essential/universal/UImage;
 	public final fun copyFrom (Lgg/essential/universal/UImage;)V
+	public final fun getHeight ()I
 	@1.17.1-forge,1.18.1-forge
-	public final fun getNative ()Lcom/mojang/blaze3d/platform/NativeImage;
+	public final fun getNativeImage ()Lcom/mojang/blaze3d/platform/NativeImage;
 	@1.16.2-forge
-	public final fun getNative ()Lnet/minecraft/client/renderer/texture/NativeImage;
+	public final fun getNativeImage ()Lnet/minecraft/client/renderer/texture/NativeImage;
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
-	public final fun getNative ()Lnet/minecraft/client/texture/NativeImage;
+	public final fun getNativeImage ()Lnet/minecraft/client/texture/NativeImage;
 	@1.12.2-forge,1.15.2-forge,1.8.9-forge
-	public final fun getNative ()Ljava/awt/image/BufferedImage;
+	public final fun getNativeImage ()Ljava/awt/image/BufferedImage;
+	public final fun getPixelRGB (II)I
+	public final fun getWidth ()I
 	public static final fun ofSize (II)Lgg/essential/universal/UImage;
 	public static final fun ofSize (IIZ)Lgg/essential/universal/UImage;
-	public final fun set (III)V
+	public final fun setPixelRGB (III)V
 }
 
 public final class gg/essential/universal/UImage$Companion {
@@ -1443,3 +1447,4 @@ public final class gg/essential/universal/wrappers/message/UTextComponent$Compan
 	public final fun from (Ljava/lang/Object;)Lgg/essential/universal/wrappers/message/UTextComponent;
 	public final fun stripFormatting (Ljava/lang/String;)Ljava/lang/String;
 }
+

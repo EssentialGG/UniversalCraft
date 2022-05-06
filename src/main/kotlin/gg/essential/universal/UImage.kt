@@ -7,27 +7,47 @@ import java.awt.image.BufferedImage
 //#endif
 
 //#if MC>=11600
-//$$ class UImage(val native: NativeImage) {
+//$$ class UImage(val nativeImage: NativeImage) {
 //#else
-class UImage(val native: BufferedImage) {
+class UImage(val nativeImage: BufferedImage) {
 //#endif
 
     fun copyFrom(other: UImage) {
-        val otherNative = other.native
+        val otherNative = other.nativeImage
         //#if MC>=11600
-        //$$ native.copyImageData(otherNative);
+        //$$ nativeImage.copyImageData(otherNative)
         //#else
-        native.graphics.drawImage(otherNative, 0, 0, otherNative.width, otherNative.height, null)
+        nativeImage.graphics.drawImage(otherNative, 0, 0, otherNative.width, otherNative.height, null)
         //#endif
     }
 
-    fun set(x: Int, y: Int, color: Int) {
+    fun copy(): UImage {
         //#if MC>=11600
-        //$$ native.setPixelRGBA(x, y, color);
+        //$$ return UImage(NativeImage(getWidth(), getHeight(), nativeImage.format.hasAlpha()))
         //#else
-        native.setRGB(x, y, color)
+        return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type))
         //#endif
     }
+
+    fun getPixelRGB(x: Int, y: Int): Int {
+        //#if MC>=11600
+        //$$ return nativeImage.getPixelRGBA(x, y)
+        //#else
+        return nativeImage.getRGB(x, y)
+        //#endif
+    }
+
+    fun setPixelRGB(x: Int, y: Int, color: Int) {
+        //#if MC>=11600
+        //$$ nativeImage.setPixelRGBA(x, y, color)
+        //#else
+        nativeImage.setRGB(x, y, color)
+        //#endif
+    }
+
+    fun getWidth() = nativeImage.width
+
+    fun getHeight() = nativeImage.height
 
     companion object {
         @JvmStatic
