@@ -1,8 +1,16 @@
 package gg.essential.universal
 
-import gg.essential.universal.utils.NImage
+//#if MC<11600
+import java.awt.image.BufferedImage
+//#else
+//$$ import net.minecraft.client.renderer.texture.NativeImage
+//#endif
 
-class UImage(val native: NImage) {
+//#if MC>=11600
+//$$ class UImage(val native: NativeImage) {
+//#else
+class UImage(val native: BufferedImage) {
+//#endif
 
     fun copyFrom(other: UImage) {
         val otherNative = other.native
@@ -26,9 +34,9 @@ class UImage(val native: NImage) {
         @JvmOverloads
         fun ofSize(width: Int, height: Int, clear: Boolean = true): UImage {
             //#if MC>=11600
-            //$$ return UImage(NImage(width, height, clear))
+            //$$ return UImage(NativeImage(width, height, clear))
             //#else
-            return UImage(NImage(width, height, NImage.TYPE_INT_ARGB))
+            return UImage(BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB))
             //#endif
         }
     }
