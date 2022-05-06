@@ -34,3 +34,9 @@ typealias MCButton = net.minecraft.client.gui.GuiButton
 
 typealias MCStringTextComponent = net.minecraft.util.ChatComponentText
 typealias MCSChatPacket = net.minecraft.network.play.server.S02PacketChat
+
+//#if MC>=11600
+//$$ typealias NImage = net.minecraft.client.renderer.texture.NativeImage
+//#else
+typealias NImage = java.awt.image.BufferedImage
+//#endif

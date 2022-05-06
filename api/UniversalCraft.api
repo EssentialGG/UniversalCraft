@@ -295,6 +295,36 @@ public final class gg/essential/universal/UGuiButton {
 	public static final fun getY (Lnet/minecraft/client/gui/GuiButton;)I
 }
 
+public final class gg/essential/universal/UImage {
+	public static final field Companion Lgg/essential/universal/UImage$Companion;
+	@1.17.1-forge,1.18.1-forge
+	public fun <init> (Lcom/mojang/blaze3d/platform/NativeImage;)V
+	@1.16.2-forge
+	public fun <init> (Lnet/minecraft/client/renderer/texture/NativeImage;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public fun <init> (Lnet/minecraft/client/texture/NativeImage;)V
+	@1.12.2-forge,1.15.2-forge,1.8.9-forge
+	public fun <init> (Ljava/awt/image/BufferedImage;)V
+	public final fun copyFrom (Lgg/essential/universal/UImage;)V
+	@1.17.1-forge,1.18.1-forge
+	public final fun getNative ()Lcom/mojang/blaze3d/platform/NativeImage;
+	@1.16.2-forge
+	public final fun getNative ()Lnet/minecraft/client/renderer/texture/NativeImage;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric
+	public final fun getNative ()Lnet/minecraft/client/texture/NativeImage;
+	@1.12.2-forge,1.15.2-forge,1.8.9-forge
+	public final fun getNative ()Ljava/awt/image/BufferedImage;
+	public static final fun ofSize (II)Lgg/essential/universal/UImage;
+	public static final fun ofSize (IIZ)Lgg/essential/universal/UImage;
+	public final fun set (III)V
+}
+
+public final class gg/essential/universal/UImage$Companion {
+	public final fun ofSize (II)Lgg/essential/universal/UImage;
+	public final fun ofSize (IIZ)Lgg/essential/universal/UImage;
+	public static synthetic fun ofSize$default (Lgg/essential/universal/UImage$Companion;IIZILjava/lang/Object;)Lgg/essential/universal/UImage;
+}
+
 public final class gg/essential/universal/UKeyboard {
 	public static final field INSTANCE Lgg/essential/universal/UKeyboard;
 	public static final field KEY_0 I
