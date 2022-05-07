@@ -77,8 +77,7 @@ object UDesktop {
                 else -> runCommand("kde-open", file) || runCommand("gnome-open", file)
             }
             isMac -> runCommand("open", file)
-            // Windows breaks with spaces in a path if we don't have quotes around it
-            isWindows -> runCommand("explorer", "\"$file\"")
+            isWindows -> runCommand("explorer", file)
             else -> false
         }
     }
