@@ -29,19 +29,19 @@ class UImage(val nativeImage: BufferedImage) {
         //#endif
     }
 
-    fun getPixelRGB(x: Int, y: Int): Int {
+    fun getPixelRGBA(x: Int, y: Int): Int {
         //#if MC>=11600
         //$$ return nativeImage.getPixelRGBA(x, y)
         //#else
-        return nativeImage.getRGB(x, y)
+        return Integer.rotateLeft(nativeImage.getRGB(x, y), 8) // Convert ARGB to RGBA
         //#endif
     }
 
-    fun setPixelRGB(x: Int, y: Int, color: Int) {
+    fun setPixelRGBA(x: Int, y: Int, color: Int) {
         //#if MC>=11600
         //$$ nativeImage.setPixelRGBA(x, y, color)
         //#else
-        nativeImage.setRGB(x, y, color)
+        nativeImage.setRGB(x, y, Integer.rotateRight(color, 8)) // Convert RGBA to ARGB
         //#endif
     }
 
