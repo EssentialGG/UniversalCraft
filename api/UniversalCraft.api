@@ -316,11 +316,11 @@ public final class gg/essential/universal/UImage {
 	public final fun getNativeImage ()Lnet/minecraft/client/texture/NativeImage;
 	@1.12.2-forge,1.15.2-forge,1.8.9-forge
 	public final fun getNativeImage ()Ljava/awt/image/BufferedImage;
-	public final fun getPixelRGB (II)I
+	public final fun getPixelRGBA (II)I
 	public final fun getWidth ()I
 	public static final fun ofSize (II)Lgg/essential/universal/UImage;
 	public static final fun ofSize (IIZ)Lgg/essential/universal/UImage;
-	public final fun setPixelRGB (III)V
+	public final fun setPixelRGBA (III)V
 }
 
 public final class gg/essential/universal/UImage$Companion {
