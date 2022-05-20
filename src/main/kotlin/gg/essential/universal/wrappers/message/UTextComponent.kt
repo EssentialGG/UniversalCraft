@@ -5,10 +5,15 @@ import gg.essential.universal.UChat
 import gg.essential.universal.utils.*
 import net.minecraft.event.ClickEvent
 import net.minecraft.event.HoverEvent
-import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraft.util.ChatStyle
+
+//#if MC>=11900
+//$$ import net.minecraft.text.TextContent
+//#else
+import net.minecraft.util.ChatComponentText
+//#endif
 
 //#if MC>=11602
 //$$ import net.minecraft.util.IReorderingProcessor
@@ -18,7 +23,9 @@ import net.minecraft.util.ChatStyle
 //$$ import net.minecraft.util.text.ITextProperties.IStyledTextAcceptor
 //$$ import net.minecraft.util.text.ITextProperties.ITextAcceptor
 //$$ import java.util.Optional
+//#if MC<11900
 //$$ import java.util.function.UnaryOperator
+//#endif
 //#endif
 
 //#if MC==11502
@@ -27,7 +34,10 @@ import net.minecraft.util.ChatStyle
 //#endif
 
 @Suppress("MemberVisibilityCanBePrivate")
-//#if MC>=11600
+//#if MC>=11900
+//$$ class UTextComponent : Text {
+//$$     lateinit var component: MutableText
+//#elseif MC>=11600
 //$$ class UTextComponent : IFormattableTextComponent {
 //$$     lateinit var component: IFormattableTextComponent
 //#else
@@ -135,7 +145,11 @@ class UTextComponent : IChatComponent {
     }
 
     private fun reInstance() {
+        //#if MC>=11900
+        //$$ component = Text.literal(text.formatIf(formatted))
+        //#else
         component = ChatComponentText(text.formatIf(formatted))
+        //#endif
 
         reInstanceClick()
         reInstanceHover()
@@ -235,6 +249,9 @@ class UTextComponent : IChatComponent {
     // * METHOD DELEGATIONS *
     // **********************
 
+    //#if MC>=11900
+    //$$ override fun getContent(): TextContent = component.content
+    //#endif
 
     //#if MC>=11602
     //$$ val unformattedText: String get() {
@@ -249,8 +266,9 @@ class UTextComponent : IChatComponent {
     //$$     return builder.getString()
     //$$ }
     //$$
-    //$$ fun appendSibling(text: ITextComponent): IFormattableTextComponent = append(text)
+    //$$ fun appendSibling(text: ITextComponent): IFormattableTextComponent = component.append(text)
     //$$
+    //#if MC<11900
     //$$ override fun setStyle(style: Style): IFormattableTextComponent = component.setStyle(style)
     //$$
     //$$ override fun append(sibling: ITextComponent): IFormattableTextComponent = component.append(sibling)
@@ -264,6 +282,7 @@ class UTextComponent : IChatComponent {
     //$$ override fun mergeStyle(vararg formats: TextFormatting): IFormattableTextComponent = component.mergeStyle(*formats)
     //$$
     //$$ override fun mergeStyle(format: TextFormatting): IFormattableTextComponent = component.mergeStyle(format)
+    //#endif
     //$$
     //$$ override fun getString(): String = component.string
     //$$
@@ -277,6 +296,7 @@ class UTextComponent : IChatComponent {
     //$$     return component.getComponent(p_230438_1_)
     //$$ }
     //$$
+    //#if MC<11900
     //$$ override fun <T> func_230534_b_(p_230534_1_: IStyledTextAcceptor<T>, p_230534_2_: Style): Optional<T> {
     //$$     return component.func_230534_b_(p_230534_1_, p_230534_2_)
     //$$ }
@@ -284,10 +304,13 @@ class UTextComponent : IChatComponent {
     //$$ override fun <T> func_230533_b_(p_230533_1_: ITextAcceptor<T>): Optional<T> {
     //$$     return component.func_230533_b_(p_230533_1_)
     //$$ }
+    //#endif
     //$$
     //$$ override fun getStyle(): Style = component.style
     //$$
+    //#if MC<11900
     //$$ override fun getUnformattedComponentText(): String = component.unformattedComponentText
+    //#endif
     //$$
     //$$ override fun getSiblings(): MutableList<ITextComponent> = component.siblings
     //$$

@@ -7,7 +7,22 @@ import net.minecraft.network.play.server.S02PacketChat
 //$$ import gg.essential.universal.wrappers.UPlayer
 //#endif
 
-//#if MC>=11202
+//#if MC>=11900
+//$$ import net.minecraft.network.MessageType as MCMessageType
+//$$ import net.minecraft.util.registry.Registry
+//$$ import net.minecraft.util.registry.RegistryKey
+//$$
+//$$ private object MessageType {
+//$$     private fun get(key: RegistryKey<MCMessageType>): Int {
+//$$         val registry = UMinecraft.getNetHandler()!!.registryManager.get(Registry.MESSAGE_TYPE_KEY)
+//$$         return registry.getRawId(registry.get(key))
+//$$     }
+//$$     val CHAT: Int
+//$$         get() = get(MCMessageType.CHAT)
+//$$     val GAME_INFO: Int
+//$$         get() = get(MCMessageType.GAME_INFO)
+//$$ }
+//#elseif MC>=11202
 //$$ import net.minecraft.util.text.ChatType
 //$$
 private object ChatType {
@@ -22,7 +37,7 @@ object UPacket {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
             ChatType.CHAT,
-            //#if MC>=11600
+            //#if MC>=11600 && MC<11900
             //$$ UPlayer.getUUID(),
             //#endif
         ))
@@ -33,7 +48,7 @@ object UPacket {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
             ChatType.GAME_INFO,
-            //#if MC>=11600
+            //#if MC>=11600 && MC<11900
             //$$ UPlayer.getUUID(),
             //#endif
         ))

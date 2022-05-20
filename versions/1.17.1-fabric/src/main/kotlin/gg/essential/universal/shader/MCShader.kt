@@ -7,10 +7,17 @@ import net.minecraft.client.gl.GlUniform
 import net.minecraft.client.render.Shader
 import net.minecraft.client.render.VertexFormat
 import net.minecraft.client.render.VertexFormats
-import net.minecraft.resource.ResourceImpl
 import net.minecraft.util.Identifier
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.FileNotFoundException
+import kotlin.NoSuchElementException
+
+//#if MC>=11900
+//$$ import net.minecraft.resource.Resource
+//$$ import java.util.Optional
+//#else
+import net.minecraft.resource.ResourceImpl
+//#endif
 
 internal class MCShader(
     private val mc: Shader,
@@ -87,7 +94,11 @@ internal class MCShader(
                     id.path.endsWith(".fsh") -> transformedFragSource
                     else -> throw FileNotFoundException(id.toString())
                 }
+                //#if MC>=11900
+                //$$ Optional.of(Resource("__generated__", content::byteInputStream))
+                //#else
                 ResourceImpl("__generated__", id, content.byteInputStream(), null)
+                //#endif
             }
 
             // The actual element doesn't matter here, Shader only cares about the names

@@ -7,7 +7,9 @@ import net.minecraft.client.gui.GuiScreen
 //$$ import gg.essential.universal.UKeyboard.toModifiers
 //$$ import com.mojang.blaze3d.matrix.MatrixStack
 //$$ import net.minecraft.util.text.ITextComponent
+//#if MC<11900
 //$$ import net.minecraft.util.text.TranslationTextComponent
+//#endif
 //#else
 import org.lwjgl.input.Mouse
 import java.io.IOException
@@ -19,7 +21,9 @@ abstract class UScreen(
     open var newGuiScale: Int = -1,
     open var unlocalizedName: String? = null
 ) :
-//#if MC>=11502
+//#if MC>=11900
+//$$     Screen(Text.translatable(unlocalizedName ?: ""))
+//#elseif MC>=11502
 //$$     Screen(TranslationTextComponent(unlocalizedName ?: ""))
 //#else
     GuiScreen()
@@ -46,7 +50,11 @@ abstract class UScreen(
     //$$     initScreen(width, height)
     //$$ }
     //$$
+    //#if MC>=11900
+    //$$ override fun getTitle(): Text = Text.translatable(unlocalizedName ?: "")
+    //#else
     //$$ override fun getTitle(): ITextComponent = TranslationTextComponent(unlocalizedName ?: "")
+    //#endif
     //$$
     //#if MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {

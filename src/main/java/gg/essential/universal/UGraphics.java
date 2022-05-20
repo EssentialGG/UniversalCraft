@@ -25,6 +25,10 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=11900
+//$$ import net.minecraft.text.Text;
+//#endif
+
 //#if MC>=11700
 //$$ import net.minecraft.client.render.GameRenderer;
 //$$ import net.minecraft.client.render.Shader;
@@ -437,7 +441,11 @@ public class UGraphics {
         //$$ List<String> strings = new ArrayList<>();
         //$$
         //$$ CharacterManager charManager = UMinecraft.getFontRenderer().getCharacterManager();
+        //#if MC>=11900
+        //$$ StringVisitable properties = charManager.trimToWidth(Text.literal(str).fillStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
+        //#else
         //$$ ITextProperties properties = charManager.func_238358_a_(new StringTextComponent(str).mergeStyle(EMPTY_WITH_FONT_ID), wrapWidth, Style.EMPTY);
+        //#endif
         //$$ // From net.minecraft.util.text.ITextProperties line 88
         //$$ properties.getComponent(string -> {
         //$$     strings.add(string);
