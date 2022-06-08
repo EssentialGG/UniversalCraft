@@ -13,11 +13,21 @@ import net.minecraft.client.settings.GameSettings
 //#endif
 
 object UMinecraft {
+    //#if MC>=11900
+    //$$ private var guiScaleValue: Int
+    //$$     get() = getSettings().guiScale.value
+    //$$     set(value) { getSettings().guiScale.value = value }
+    //#else
+    private var guiScaleValue: Int
+        get() = getSettings().guiScale
+        set(value) { getSettings().guiScale = value }
+    //#endif
+
     @JvmStatic
     var guiScale: Int
-        get() = getSettings().guiScale
+        get() = guiScaleValue
         set(value) {
-            getSettings().guiScale = value
+            guiScaleValue = value
             //#if MC>=11502
             //$$ val mc = getMinecraft()
             //$$ val window = mc.mainWindow
