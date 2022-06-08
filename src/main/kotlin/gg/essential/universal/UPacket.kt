@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.S02PacketChat
 //#endif
 
 //#if MC>=11900
-//$$ import net.minecraft.network.MessageType as MCMessageType
+//$$ import net.minecraft.network.message.MessageType as MCMessageType
 //$$ import net.minecraft.util.registry.Registry
 //$$ import net.minecraft.util.registry.RegistryKey
 //$$

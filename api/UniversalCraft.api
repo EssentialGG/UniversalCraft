@@ -1258,6 +1258,7 @@ public final class gg/essential/universal/wrappers/message/UTextComponent : net/
 	public fun asTruncatedString (I)Ljava/lang/String;
 	public final fun chat ()V
 	public fun copy ()Lnet/minecraft/text/MutableText;
+	public fun copyContentOnly ()Lnet/minecraft/text/MutableText;
 	public final fun getClickAction ()Lnet/minecraft/text/ClickEvent$Action;
 	public final fun getClickValue ()Ljava/lang/String;
 	public final fun getComponent ()Lnet/minecraft/text/MutableText;
@@ -1279,7 +1280,6 @@ public final class gg/essential/universal/wrappers/message/UTextComponent : net/
 	public final fun setHoverAction (Lnet/minecraft/text/HoverEvent$Action;)V
 	public final fun setHoverValue (Ljava/lang/Object;)V
 	public final fun setText (Ljava/lang/String;)V
-	public fun shallowCopy ()Lnet/minecraft/text/MutableText;
 	public fun visit (Lnet/minecraft/text/StringVisitable$StyledVisitor;Lnet/minecraft/text/Style;)Ljava/util/Optional;
 	public fun visit (Lnet/minecraft/text/StringVisitable$Visitor;)Ljava/util/Optional;
 }
