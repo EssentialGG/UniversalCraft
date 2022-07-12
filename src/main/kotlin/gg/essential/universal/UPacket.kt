@@ -8,7 +8,12 @@ import net.minecraft.network.play.server.S02PacketChat
 //#endif
 
 //#if MC>=11900
+//$$ // FIXME preprocessor bug: remaps alias references in code to remapped type, so we can't keep the alias
+//#if FABRIC
 //$$ import net.minecraft.network.message.MessageType as MCMessageType
+//#else
+//$$ import net.minecraft.network.chat.ChatType
+//#endif
 //$$ import net.minecraft.util.registry.Registry
 //$$ import net.minecraft.util.registry.RegistryKey
 //$$

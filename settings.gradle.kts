@@ -8,7 +8,7 @@ pluginManagement {
         maven("https://repo.essential.gg/repository/maven-public")
     }
     plugins {
-        val egtVersion = "0.1.10"
+        val egtVersion = "0.1.11"
         id("gg.essential.multi-version.root") version egtVersion
         id("gg.essential.multi-version.api-validation") version egtVersion
     }
@@ -28,6 +28,7 @@ listOf(
     "1.18.1-fabric",
     "1.18.1-forge",
     "1.19-fabric",
+    "1.19-forge",
 ).forEach { version ->
     include(":$version")
     project(":$version").apply {
