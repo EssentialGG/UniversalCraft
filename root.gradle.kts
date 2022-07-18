@@ -9,6 +9,7 @@ plugins {
 version = versionFromBuildIdAndBranch()
 
 preprocess {
+    val fabric11901 = createNode("1.19.1-fabric", 11901, "yarn")
     val forge11900 = createNode("1.19-forge", 11900, "srg")
     val fabric11900 = createNode("1.19-fabric", 11900, "yarn")
     val forge11801 = createNode("1.18.1-forge", 11801, "srg")
@@ -21,6 +22,7 @@ preprocess {
     val forge11202 = createNode("1.12.2-forge", 11202, "srg")
     val forge10809 = createNode("1.8.9-forge", 10809, "srg")
 
+    fabric11901.link(fabric11900)
     forge11900.link(fabric11900)
     fabric11900.link(fabric11801)
     forge11801.link(fabric11801)
