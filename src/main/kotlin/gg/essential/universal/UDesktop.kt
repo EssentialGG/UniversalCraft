@@ -85,15 +85,6 @@ object UDesktop {
     private fun browseDesktop(uri: URI): Boolean {
         return if (!Desktop.isDesktopSupported()) false else try {
             if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                if (isLinux) {
-                    return when {
-                        isXdg -> runCommand("xdg-open", "$uri")
-                        isKde -> runCommand("kde-open", "$uri")
-                        isGnome -> runCommand("gnome-open", "$uri")
-                        else -> runCommand("kde-open", "$uri") || runCommand("gnome-open", "$uri")
-                    }
-
-                }
                 return false
             }
 
