@@ -291,7 +291,13 @@ object UKeyboard {
         //$$ val state = if (key < 20) GLFW.glfwGetMouseButton(window, key) else GLFW.glfwGetKey(window, key)
         //$$ return state == GLFW.GLFW_PRESS
         //#else
-        return if (key < 0) Mouse.isButtonDown(key + 100) else Keyboard.isKeyDown(key)
+        return if (key < 0) {
+            Mouse.isButtonDown(key + 100)
+        } else if (key < Keyboard.KEYBOARD_SIZE) {
+            Keyboard.isKeyDown(key)
+        } else {
+            false
+        }
         //#endif
     }
 
