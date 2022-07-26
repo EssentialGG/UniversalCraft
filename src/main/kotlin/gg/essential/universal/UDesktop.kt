@@ -4,6 +4,7 @@ import java.awt.Desktop
 import java.io.File
 import java.io.IOException
 import java.net.URI
+import java.util.concurrent.TimeUnit
 
 //#if MC>=11400
 //#else
@@ -70,12 +71,7 @@ object UDesktop {
 
     private fun openSystemSpecific(file: String): Boolean {
         return when {
-            isLinux -> when {
-                isXdg -> runCommand("xdg-open", file)
-                isKde -> runCommand("kde-open", file)
-                isGnome -> runCommand("gnome-open", file)
-                else -> runCommand("kde-open", file) || runCommand("gnome-open", file)
-            }
+            isLinux -> listOf("xdg-open", "kde-open", "gnome-open").any { runCommand(it, file, checkExitStatus = true) }
             isMac -> runCommand("open", file)
             isWindows -> runCommand("explorer", file)
             else -> false
@@ -85,15 +81,6 @@ object UDesktop {
     private fun browseDesktop(uri: URI): Boolean {
         return if (!Desktop.isDesktopSupported()) false else try {
             if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                if (isLinux) {
-                    return when {
-                        isXdg -> runCommand("xdg-open", "$uri")
-                        isKde -> runCommand("kde-open", "$uri")
-                        isGnome -> runCommand("gnome-open", "$uri")
-                        else -> runCommand("kde-open", "$uri") || runCommand("gnome-open", "$uri")
-                    }
-
-                }
                 return false
             }
 
@@ -126,10 +113,23 @@ object UDesktop {
         }
     }
 
-    private fun runCommand(vararg command: String): Boolean {
+    /**
+     * Runs the given command with arguments via [Runtime.exec].
+     *
+     * If [checkExitStatus] is true, the method will wait for the process to exit (but at most a few seconds) and then
+     * return `false` if the process exit code is non-zero (`true` if the process did not exit in time).
+     */
+    private fun runCommand(vararg command: String, checkExitStatus: Boolean = false): Boolean {
         return try {
-            Runtime.getRuntime().exec(command).let {
-                it != null && it.isAlive
+            val process = Runtime.getRuntime().exec(command) ?: return false
+            if (checkExitStatus) {
+                if (process.waitFor(3, TimeUnit.SECONDS)) {
+                    process.exitValue() == 0
+                } else {
+                    true // still running, assume success
+                }
+            } else {
+                process.isAlive
             }
         } catch (e: IOException) {
             false
