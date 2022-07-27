@@ -7,6 +7,8 @@ import net.minecraft.network.play.server.S02PacketChat
 //$$ import gg.essential.universal.wrappers.UPlayer
 //#endif
 
+//#if MC>=11901
+//#else
 //#if MC>=11900
 //$$ // FIXME preprocessor bug: remaps alias references in code to remapped type, so we can't keep the alias
 //#if FABRIC
@@ -35,13 +37,18 @@ private object ChatType {
     const val GAME_INFO: Byte = 2
 }
 //#endif
+//#endif
 
 object UPacket {
     @JvmStatic
     fun sendChatMessage(message: UTextComponent) {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
+            //#if MC>=11901
+            //$$ false,
+            //#else
             ChatType.CHAT,
+            //#endif
             //#if MC>=11600 && MC<11900
             //$$ UPlayer.getUUID(),
             //#endif
@@ -52,7 +59,11 @@ object UPacket {
     fun sendActionBarMessage(message: UTextComponent) {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
+            //#if MC>=11901
+            //$$ true,
+            //#else
             ChatType.GAME_INFO,
+            //#endif
             //#if MC>=11600 && MC<11900
             //$$ UPlayer.getUUID(),
             //#endif

@@ -55,7 +55,11 @@ object UChat {
      */
     @JvmStatic
     fun say(text: String) {
+        //#if MC>=11901
+        //$$ UPlayer.getPlayer()!!.sendChatMessage(text, null)
+        //#else
         UPlayer.getPlayer()!!.sendChatMessage(text)
+        //#endif
     }
 
     /**
