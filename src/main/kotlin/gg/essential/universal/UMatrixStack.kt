@@ -241,6 +241,23 @@ class UMatrixStack private constructor(
             //#else
             Entry(Matrix4f.load(model, null), Matrix3f.load(normal, null))
             //#endif
+
+        /**
+         * Returns the model matrix in row-major order.
+         */
+        val modelAsArray: FloatArray
+            get() = with(model) {
+                //#if MC>=11400
+                //$$ FloatArray(16).also { write(FloatBuffer.wrap(it)) }
+                //#else
+                floatArrayOf(
+                    m00, m10, m20, m30,
+                    m01, m11, m21, m31,
+                    m02, m12, m22, m32,
+                    m03, m13, m23, m33,
+                )
+                //#endif
+            }
     }
 
     object Compat {
