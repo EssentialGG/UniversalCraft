@@ -600,22 +600,23 @@ public final class gg/essential/universal/UMatrixStack$Entry {
 	public fun equals (Ljava/lang/Object;)Z
 	@1.17.1-forge,1.18.1-forge,1.19-forge
 	public final fun getModel ()Lcom/mojang/math/Matrix4f;
+	@1.16.2-forge
+	public final fun getModel ()Lnet/minecraft/util/math/vector/Matrix4f;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric
+	public final fun getModel ()Lnet/minecraft/util/math/Matrix4f;
+	@1.15.2-forge
+	public final fun getModel ()Lnet/minecraft/client/renderer/Matrix4f;
+	@1.12.2-forge,1.8.9-forge
+	public final fun getModel ()Lorg/lwjgl/util/vector/Matrix4f;
+	public final fun getModelAsArray ()[F
 	@1.17.1-forge,1.18.1-forge,1.19-forge
 	public final fun getNormal ()Lcom/mojang/math/Matrix3f;
 	@1.16.2-forge
-	public final fun getModel ()Lnet/minecraft/util/math/vector/Matrix4f;
-	@1.16.2-forge
 	public final fun getNormal ()Lnet/minecraft/util/math/vector/Matrix3f;
-	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric
-	public final fun getModel ()Lnet/minecraft/util/math/Matrix4f;
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric
 	public final fun getNormal ()Lnet/minecraft/util/math/Matrix3f;
 	@1.15.2-forge
-	public final fun getModel ()Lnet/minecraft/client/renderer/Matrix4f;
-	@1.15.2-forge
 	public final fun getNormal ()Lnet/minecraft/client/renderer/Matrix3f;
-	@1.12.2-forge,1.8.9-forge
-	public final fun getModel ()Lorg/lwjgl/util/vector/Matrix4f;
 	@1.12.2-forge,1.8.9-forge
 	public final fun getNormal ()Lorg/lwjgl/util/vector/Matrix3f;
 	public fun hashCode ()I
