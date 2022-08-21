@@ -8,7 +8,7 @@ pluginManagement {
         maven("https://repo.essential.gg/repository/maven-public")
     }
     plugins {
-        val egtVersion = "0.1.11"
+        val egtVersion = "0.1.13"
         id("gg.essential.multi-version.root") version egtVersion
         id("gg.essential.multi-version.api-validation") version egtVersion
     }
@@ -19,6 +19,8 @@ rootProject.buildFileName = "root.gradle.kts"
 
 listOf(
     "1.8.9-forge",
+    "1.8.9-fabric",
+    "1.12.2-fabric",
     "1.12.2-forge",
     "1.15.2-forge",
     "1.16.2-forge",

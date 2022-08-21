@@ -31,7 +31,7 @@ import net.minecraft.network.play.server.S02PacketChat
 //$$ }
 //#elseif MC>=11202
 //$$ import net.minecraft.util.text.ChatType
-//$$
+//#else
 private object ChatType {
     const val CHAT: Byte = 0
     const val GAME_INFO: Byte = 2
@@ -54,7 +54,7 @@ object UPacket {
             //#endif
         ))
     }
-    
+
     @JvmStatic
     fun sendActionBarMessage(message: UTextComponent) {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(

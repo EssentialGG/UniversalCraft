@@ -321,10 +321,15 @@ object UKeyboard {
         //$$     if (it.length == 1) it.uppercase() else it
         //$$ }
         //#else
-        //#if MC>=11200
+        //#if MC==11202 && FORGE==1 || MC>=11300
         //$$ return keyBinding.getDisplayName()
         //#else
+        //todo preprocessor bug, doesnt remap this automatically
+        //#if FABRIC==1
+        //$$ return net.minecraft.client.options.GameOptions.getFormattedNameForKeyCode(keyBinding.code)
+        //#else
         return net.minecraft.client.settings.GameSettings.getKeyDisplayString(keyBinding.keyCode)
+        //#endif
         //#endif
         //#endif
     }
