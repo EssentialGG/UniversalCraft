@@ -13,6 +13,7 @@ net.minecraft.client.renderer.Vector3f org.lwjgl.util.vector.Vector3f
 net.minecraft.client.renderer.Vector4f org.lwjgl.util.vector.Vector4f
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton
+net.minecraft.client.gui.widget.Widget func_212934_y net.minecraft.client.gui.GuiButton y
 net.minecraft.client.renderer.entity.RenderPlayer net.minecraft.client.renderer.entity.PlayerRenderer
 net.minecraft.entity.player.PlayerEntity net.minecraft.entity.player.EntityPlayer
 com.mojang.blaze3d.systems.RenderSystem net.minecraft.client.renderer.GlStateManager
