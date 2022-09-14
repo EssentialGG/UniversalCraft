@@ -486,6 +486,7 @@ public final class gg/essential/universal/UMath {
 
 public final class gg/essential/universal/UMatrixStack {
 	public static final field Companion Lgg/essential/universal/UMatrixStack$Companion;
+	public static final field UNIT Lgg/essential/universal/UMatrixStack;
 	public fun <init> ()V
 	@1.17.1-forge,1.18.1-forge,1.19.2-forge
 	public fun <init> (Lcom/mojang/blaze3d/vertex/PoseStack$Pose;)V

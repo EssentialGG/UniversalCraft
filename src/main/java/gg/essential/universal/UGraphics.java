@@ -80,7 +80,7 @@ public class UGraphics {
     //#if MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
-    private static UMatrixStack UNIT_STACK = new UMatrixStack();
+    private static UMatrixStack UNIT_STACK = UMatrixStack.UNIT;
     public static int ZERO_TEXT_ALPHA = 10;
     private WorldRenderer instance;
     private VertexFormat vertexFormat;
@@ -898,12 +898,12 @@ public class UGraphics {
     }
 
     public UGraphics pos(UMatrixStack stack, double x, double y, double z) {
-        //#if MC>=11602
-        //$$ instance.pos(stack.peek().getModel(), (float) x, (float) y, (float) z);
-        //#else
         if (stack == UNIT_STACK) {
             instance.pos(x, y, z);
         } else {
+            //#if MC>=11602
+            //$$ instance.pos(stack.peek().getModel(), (float) x, (float) y, (float) z);
+            //#else
             Vector4f vec = new Vector4f((float) x, (float) y, (float) z, 1f);
             //#if MC>=11400
             //$$ vec.transform(stack.peek().getModel());
@@ -911,8 +911,8 @@ public class UGraphics {
             Matrix4f.transform(stack.peek().getModel(), vec, vec);
             //#endif
             instance.pos(vec.getX(), vec.getY(), vec.getZ());
+            //#endif
         }
-        //#endif
         return this;
     }
 
@@ -922,12 +922,12 @@ public class UGraphics {
     }
 
     public UGraphics norm(UMatrixStack stack, float x, float y, float z) {
-        //#if MC>=11602
-        //$$ instance.normal(stack.peek().getNormal(), x, y, z);
-        //#else
         if (stack == UNIT_STACK) {
             instance.normal(x, y, z);
         } else {
+            //#if MC>=11602
+            //$$ instance.normal(stack.peek().getNormal(), x, y, z);
+            //#else
             Vector3f vec = new Vector3f(x, y, z);
             //#if MC>=11400
             //$$ vec.transform(stack.peek().getNormal());
@@ -935,8 +935,8 @@ public class UGraphics {
             Matrix3f.transform(stack.peek().getNormal(), vec, vec);
             //#endif
             instance.normal(vec.getX(), vec.getY(), vec.getZ());
+            //#endif
         }
-        //#endif
         return this;
     }
 

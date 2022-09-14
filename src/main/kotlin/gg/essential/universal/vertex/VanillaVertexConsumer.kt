@@ -22,6 +22,10 @@ internal class VanillaVertexConsumer(
 ) : UVertexConsumer {
 
     override fun pos(stack: UMatrixStack, x: Double, y: Double, z: Double): UVertexConsumer = apply {
+        if (stack === UMatrixStack.UNIT) {
+            inner.pos(x, y, z)
+            return@apply
+        }
         //#if MC>=11602
         //$$ inner.pos(stack.peek().model, x.toFloat(), y.toFloat(), z.toFloat())
         //#else
@@ -60,6 +64,10 @@ internal class VanillaVertexConsumer(
     }
 
     override fun norm(stack: UMatrixStack, x: Float, y: Float, z: Float): UVertexConsumer = apply {
+        if (stack === UMatrixStack.UNIT) {
+            inner.normal(x, y, z)
+            return@apply
+        }
         //#if MC>=11602
         //$$ inner.normal(stack.peek().normal, x, y, z);
         //#else
