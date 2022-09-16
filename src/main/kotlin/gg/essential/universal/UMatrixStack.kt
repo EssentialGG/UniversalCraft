@@ -169,11 +169,14 @@ class UMatrixStack private constructor(
     fun isEmpty(): Boolean = stack.size == 1
 
     fun applyToGlobalState() {
+        //#if MC>=11700
         //#if MC>=11800
         //$$ // FIXME preprocessor bug: should remap the intermediary name to yarn no problem
         //$$ RenderSystem.getModelViewStack().multiplyPositionMatrix(stack.last.model)
-        //#elseif MC>=11700
+        //#else
         //$$ RenderSystem.getModelViewStack().method_34425(stack.last.model)
+        //#endif
+        //$$ RenderSystem.applyModelViewMatrix()
         //#else
         stack.last.model.store(MATRIX_BUFFER)
         // Explicit cast to Buffer required so we do not use the JDK9+ override in FloatBuffer
@@ -213,7 +216,6 @@ class UMatrixStack private constructor(
         //#if MC>=11700
         //$$ val stack = RenderSystem.getModelViewStack()
         //$$ stack.push()
-        //$$ RenderSystem.applyModelViewMatrix()
         //#else
         UGraphics.GL.pushMatrix()
         //#endif
