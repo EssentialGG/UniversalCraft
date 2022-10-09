@@ -1,0 +1,8 @@
+{
+  "minVersion": "0.7",
+  "package": "gg.essential.universal.mixin",
+  "verbose": true,
+  "client": [
+    "MouseAccessor"
+  ]
+}
