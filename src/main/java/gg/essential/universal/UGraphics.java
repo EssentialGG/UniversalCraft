@@ -416,7 +416,7 @@ public class UGraphics {
         //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
         //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //#else
-        UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor, false);
+        UMinecraft.getFontRenderer().drawString(ChatColor.Companion.stripColorCodes(text), x + 1f, y + 1f, shadowColor, false);
         UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
         //#endif
         if (stack != UNIT_STACK) GL.popMatrix();
