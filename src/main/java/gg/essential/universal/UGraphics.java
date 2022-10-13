@@ -404,19 +404,20 @@ public class UGraphics {
 
     public static void drawString(UMatrixStack stack, String text, float x, float y, int color, int shadowColor) {
         if ((color >> 24 & 255) <= 10) return;
+        String shadowText = ChatColor.Companion.stripColorCodes(text);
         //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(shadowText, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#else
         if (stack != UNIT_STACK) GL.pushMatrix();
         if (stack != UNIT_STACK) stack.applyToGlobalState();
         //#if MC>=11502
-        //$$ UMinecraft.getFontRenderer().drawString(text, x + 1f, y + 1f, shadowColor);
+        //$$ UMinecraft.getFontRenderer().drawString(shadowText, x + 1f, y + 1f, shadowColor);
         //$$ UMinecraft.getFontRenderer().drawString(text, x, y, color);
         //#else
-        UMinecraft.getFontRenderer().drawString(ChatColor.Companion.stripColorCodes(text), x + 1f, y + 1f, shadowColor, false);
+        UMinecraft.getFontRenderer().drawString(shadowText, x + 1f, y + 1f, shadowColor, false);
         UMinecraft.getFontRenderer().drawString(text, x, y, color, false);
         //#endif
         if (stack != UNIT_STACK) GL.popMatrix();
