@@ -35,6 +35,7 @@ enum class ChatColor(val char: Char, val color: Color? = null, val isFormat: Boo
     companion object {
         const val COLOR_CHAR: Char = '\u00a7'
         val FORMATTING_CODE_PATTERN = Regex("§[0-9a-fk-or]", RegexOption.IGNORE_CASE)
+        val COLOR_CODE_PATTERN = Regex("§[0-9a-f]", RegexOption.IGNORE_CASE)
 
         fun translateAlternateColorCodes(altColorChar: Char, textToTranslate: String): String {
             val b = textToTranslate.toCharArray()
@@ -49,5 +50,8 @@ enum class ChatColor(val char: Char, val color: Color? = null, val isFormat: Boo
 
         fun stripControlCodes(text: String?) =
             text?.let { FORMATTING_CODE_PATTERN.replace(it, "") }
+
+        fun stripColorCodes(text: String?) =
+            text?.let { COLOR_CODE_PATTERN.replace(it, "") }
     }
 }
