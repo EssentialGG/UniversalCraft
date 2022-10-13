@@ -34,7 +34,9 @@ public final class gg/essential/universal/ChatColor : java/lang/Enum {
 }
 
 public final class gg/essential/universal/ChatColor$Companion {
+	public final fun getCOLOR_CODE_PATTERN ()Lkotlin/text/Regex;
 	public final fun getFORMATTING_CODE_PATTERN ()Lkotlin/text/Regex;
+	public final fun stripColorCodes (Ljava/lang/String;)Ljava/lang/String;
 	public final fun stripControlCodes (Ljava/lang/String;)Ljava/lang/String;
 	public final fun translateAlternateColorCodes (CLjava/lang/String;)Ljava/lang/String;
 }
