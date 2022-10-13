@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D
 import org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE
 import org.lwjgl.opengl.GL13.GL_TEXTURE0
 import org.lwjgl.opengl.GL20
+import org.lwjgl.opengl.GL20.GL_CURRENT_PROGRAM
 import org.lwjgl.opengl.GL20.glGetUniformLocation
 import org.lwjgl.opengl.GL20.glShaderSource
 import org.lwjgl.opengl.GL20.glValidateProgram
@@ -67,6 +68,20 @@ internal class GlShader(
 
         UGraphics.glUseProgram(0)
         bound = false
+    }
+
+    internal inline fun withProgramBound(block: () -> Unit) {
+        if (bound) {
+            block()
+        } else {
+            val prevProgram = GL11.glGetInteger(GL_CURRENT_PROGRAM)
+            try {
+                UGraphics.glUseProgram(program)
+                block()
+            } finally {
+                UGraphics.glUseProgram(prevProgram)
+            }
+        }
     }
 
     private fun getUniformLocation(uniformName: String): Int? {
@@ -211,6 +226,12 @@ internal class DirectSamplerUniform(
     private val shader: GlShader,
 ) : DirectShaderUniform(location), SamplerUniform {
     var textureId: Int = 0
+
+    init {
+        shader.withProgramBound {
+            DirectIntUniform(location).setValue(textureUnit)
+        }
+    }
 
     override fun setValue(textureId: Int) {
         this.textureId = textureId
