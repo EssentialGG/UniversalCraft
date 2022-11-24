@@ -73,7 +73,7 @@ object UDesktop {
         return when {
             isLinux -> listOf("xdg-open", "kde-open", "gnome-open").any { runCommand(it, file, checkExitStatus = true) }
             isMac -> runCommand("open", file)
-            isWindows -> runCommand("explorer", file)
+            isWindows -> runCommand("rundll32", "url.dll,FileProtocolHandler", file)
             else -> false
         }
     }
