@@ -40,8 +40,6 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#if MC>=11602
 //$$ import net.minecraft.util.ResourceLocation;
 //$$ import net.minecraft.util.text.Style;
-//$$ import net.minecraft.util.math.vector.Quaternion;
-//$$ import net.minecraft.util.math.vector.Vector3f;
 //$$ import net.minecraft.util.text.CharacterManager;
 //$$ import net.minecraft.util.text.StringTextComponent;
 //$$ import net.minecraft.util.text.ITextProperties;

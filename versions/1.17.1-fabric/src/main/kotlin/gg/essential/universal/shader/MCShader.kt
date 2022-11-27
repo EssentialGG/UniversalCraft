@@ -12,6 +12,10 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.FileNotFoundException
 import kotlin.NoSuchElementException
 
+//#if MC>=11903
+//$$ import gg.essential.universal.DummyPack
+//#endif
+
 //#if MC>=11900
 //$$ import net.minecraft.resource.Resource
 //$$ import java.util.Optional
@@ -94,7 +98,9 @@ internal class MCShader(
                     id.path.endsWith(".fsh") -> transformedFragSource
                     else -> throw FileNotFoundException(id.toString())
                 }
-                //#if MC>=11900
+                //#if MC>=11903
+                //$$ Optional.of(Resource(DummyPack, content::byteInputStream))
+                //#elseif MC>=11900
                 //$$ Optional.of(Resource("__generated__", content::byteInputStream))
                 //#else
                 ResourceImpl("__generated__", id, content.byteInputStream(), null)

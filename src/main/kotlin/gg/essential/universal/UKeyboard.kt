@@ -241,7 +241,9 @@ object UKeyboard {
 
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
-        //#if MC>=11502
+        //#if MC>=11903
+        //$$ // TODO: should this be no-op?
+        //#elseif MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
         Keyboard.enableRepeatEvents(enabled)
