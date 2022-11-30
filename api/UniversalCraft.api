@@ -925,6 +925,8 @@ public final class gg/essential/universal/USound {
 	public final fun playPlingSound ()V
 	@1.8.9-forge
 	public final fun playSoundStatic (Lnet/minecraft/util/ResourceLocation;FF)V
+	@1.19.3-fabric
+	public final fun playSoundStatic (Lnet/minecraft/registry/entry/RegistryEntry;FF)V
 	@1.17.1-forge,1.18.1-forge,1.19.2-forge
 	public final fun playSoundStatic (Lnet/minecraft/sounds/SoundEvent;FF)V
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric

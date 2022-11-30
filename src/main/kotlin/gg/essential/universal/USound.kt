@@ -1,5 +1,9 @@
 package gg.essential.universal
 
+//#if MC>=11903
+//$$ import net.minecraft.registry.entry.RegistryEntry
+//#endif
+
 //#if MC>10809
 //$$ import net.minecraft.init.SoundEvents
 //$$ import net.minecraft.util.SoundCategory
@@ -21,6 +25,12 @@ object USound {
 
         PositionedSoundRecordFactory.makeRecord(event, volume, pitch)?.let { soundHandler.playSound(it) }
     }
+
+    //#if MC>=11903
+    //$$ fun playSoundStatic(registryEntry: RegistryEntry<SoundEvent>, volume: Float, pitch: Float) {
+    //$$     playSoundStatic(registryEntry.value(), volume, pitch)
+    //$$ }
+    //#endif
 
     @JvmOverloads
     fun playButtonPress(volume: Float = 0.25f) {
