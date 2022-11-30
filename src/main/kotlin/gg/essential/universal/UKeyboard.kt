@@ -242,7 +242,7 @@ object UKeyboard {
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
         //#if MC>=11903
-        //$$ // TODO: should this be no-op?
+        //$$ // Minecraft removed this function in 1.19.3, repeat events are now always enabled.
         //#elseif MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
