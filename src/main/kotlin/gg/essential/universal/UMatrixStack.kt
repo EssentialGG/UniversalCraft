@@ -56,7 +56,9 @@ class UMatrixStack private constructor(
     fun translate(x: Float, y: Float, z: Float) {
         if (x == 0f && y == 0f && z == 0f) return
         stack.last.run {
-            //#if MC>=11400
+            //#if MC>=11903
+            //$$ model.translate(x, y, z)
+            //#elseif MC>=11400
             //$$ model.mul(Matrix4f.makeTranslate(x, y, z))
             //#else
             Matrix4f.translate(Vector3f(x, y, z), model, model)
@@ -69,14 +71,18 @@ class UMatrixStack private constructor(
     fun scale(x: Float, y: Float, z: Float) {
         if (x == 1f && y == 1f && z == 1f) return
         return stack.last.run {
-            //#if MC>=11400
+            //#if MC>=11903
+            //$$ model.scale(x, y, z)
+            //#elseif MC>=11400
             //$$ model.mul(Matrix4f.makeScale(x, y, z))
             //#else
             Matrix4f.scale(Vector3f(x, y, z), model, model)
             //#endif
             if (x == y && y == z) {
                 if (x < 0f) {
-                    //#if MC>=11400
+                    //#if MC>=11903
+                    //$$ normal.scale(-1f)
+                    //#elseif MC>=11400
                     //$$ normal.mul(-1f)
                     //#else
                     Matrix3f.negate(normal, normal)
@@ -91,7 +97,9 @@ class UMatrixStack private constructor(
                 //#else
                 val rt = Math.cbrt((ix * iy * iz).toDouble()).toFloat()
                 //#endif
-                //#if MC>=11400
+                //#if MC>=11903
+                //$$ normal.scale(rt * ix, rt * iy, rt * iz)
+                //#elseif MC>=11400
                 //$$ normal.mul(Matrix3f.makeScaleMatrix(rt * ix, rt * iy, rt * iz))
                 //#else
                 val scale = Matrix3f()
@@ -108,7 +116,10 @@ class UMatrixStack private constructor(
     fun rotate(angle: Float, x: Float, y: Float, z: Float, degrees: Boolean = true) {
         if (angle == 0f) return
         stack.last.run {
-            //#if MC>=11400
+            //#if MC>=11903
+            //$$ val angleRadians = if (degrees) Math.toRadians(angle.toDouble()).toFloat() else angle
+            //$$ multiply(Quaternionf().rotateAxis(angleRadians, x, y, z))
+            //#elseif MC>=11400
             //$$ multiply(Quaternion(Vector3f(x, y, z), angle, degrees));
             //#else
             val angleRadians = if (degrees) Math.toRadians(angle.toDouble()).toFloat() else angle
@@ -146,7 +157,10 @@ class UMatrixStack private constructor(
     }
 
     fun multiply(quaternion: Quaternion): Unit = stack.last.run {
-        //#if MC>=11400
+        //#if MC>=11903
+        //$$ model.rotate(quaternion)
+        //$$ normal.rotate(quaternion)
+        //#elseif MC>=11400
         //$$ model.mul(quaternion)
         //$$ normal.mul(quaternion)
         //#else
@@ -238,7 +252,9 @@ class UMatrixStack private constructor(
         //#endif
 
         fun deepCopy() =
-            //#if MC>=11400
+            //#if MC>=11903
+            //$$ Entry(Matrix4f(model), Matrix3f(normal))
+            //#elseif MC>=11400
             //$$ Entry(model.copy(), normal.copy())
             //#else
             Entry(Matrix4f.load(model, null), Matrix3f.load(normal, null))

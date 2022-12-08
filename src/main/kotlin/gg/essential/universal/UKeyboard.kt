@@ -239,9 +239,16 @@ object UKeyboard {
     // into the static initializer, not into the field itself.
     private inline fun <T> noInline(init: () -> T): T = init()
 
+    /**
+     * Note: Minecraft removed the ability to control repeat events in 1.19.3,
+     * so on 1.19.3+ this method has no effect and repeat events are always
+     * enabled.
+     */
     @JvmStatic
     fun allowRepeatEvents(enabled: Boolean) {
-        //#if MC>=11502
+        //#if MC>=11903
+        //$$ // Minecraft removed this function in 1.19.3, repeat events are now always enabled.
+        //#elseif MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
         Keyboard.enableRepeatEvents(enabled)

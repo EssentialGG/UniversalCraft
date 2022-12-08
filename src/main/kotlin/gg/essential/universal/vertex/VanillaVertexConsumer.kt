@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.WorldRenderer
 
 //#if MC>=11602
 //$$ import com.mojang.blaze3d.vertex.IVertexBuilder
-//$$ import net.minecraft.util.math.vector.Vector3f
 //#else
 import org.lwjgl.util.vector.Matrix3f
 import org.lwjgl.util.vector.Matrix4f
