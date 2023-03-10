@@ -25,6 +25,10 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=11904
+//$$ import net.minecraft.client.font.TextRenderer;
+//#endif
+
 //#if MC>=11900
 //$$ import net.minecraft.text.Text;
 //#endif
@@ -82,6 +86,12 @@ public class UGraphics {
     public static int ZERO_TEXT_ALPHA = 10;
     private WorldRenderer instance;
     private VertexFormat vertexFormat;
+
+    //#if MC>=11904
+    //$$ private static final TextRenderer.TextLayerType TEXT_LAYER_TYPE = TextRenderer.TextLayerType.NORMAL;
+    //#elseif MC>=11602
+    //$$ private static final boolean TEXT_LAYER_TYPE = false;
+    //#endif
 
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
@@ -192,7 +202,9 @@ public class UGraphics {
      */
     @Deprecated
     public static void disableTexture2D() {
-        //#if MC>=11502
+        //#if MC>=11904
+        //$$ // no-op
+        //#elseif MC>=11502
         //$$ RenderSystem.disableTexture();
         //#else
         GlStateManager.disableTexture2D();
@@ -242,7 +254,9 @@ public class UGraphics {
      */
     @Deprecated
     public static void enableTexture2D() {
-        //#if MC>=11502
+        //#if MC>=11904
+        //$$ // no-op
+        //#elseif MC>=11502
         //$$ RenderSystem.enableTexture();
         //#else
         GlStateManager.enableTexture2D();
@@ -377,7 +391,7 @@ public class UGraphics {
         if ((color >> 24 & 255) <= 10) return;
         //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#else
         if (stack != UNIT_STACK) GL.pushMatrix();
@@ -405,8 +419,8 @@ public class UGraphics {
         String shadowText = ChatColor.Companion.stripColorCodes(text);
         //#if MC>=11602
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        //$$ UMinecraft.getFontRenderer().renderString(shadowText, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
-        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, false, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(shadowText, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
+        //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#else
         if (stack != UNIT_STACK) GL.pushMatrix();
