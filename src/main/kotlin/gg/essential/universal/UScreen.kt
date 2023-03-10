@@ -114,7 +114,11 @@ abstract class UScreen(
     //$$         UMinecraft.guiScale = guiScaleToRestore
     //$$ }
     //$$
-    //#if MC>=11602
+    //#if MC>=11904
+    //$$ final override fun renderBackground(matrixStack: MatrixStack) {
+    //$$     onDrawBackgroundCompat(UMatrixStack(matrixStack), 0)
+    //$$ }
+    //#elseif MC>=11602
     //$$ final override fun renderBackground(matrixStack: MatrixStack, vOffset: Int) {
     //$$     onDrawBackgroundCompat(UMatrixStack(matrixStack), vOffset)
     //$$ }
@@ -304,7 +308,9 @@ abstract class UScreen(
     }
 
     open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
-        //#if MC>=11602
+        //#if MC>=11904
+        //$$ super.renderBackground(matrixStack.toMC())
+        //#elseif MC>=11602
         //$$ super.renderBackground(matrixStack.toMC(), tint)
         //#else
         matrixStack.runWithGlobalState {
