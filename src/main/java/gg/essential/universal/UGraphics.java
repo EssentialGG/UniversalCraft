@@ -36,7 +36,7 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#if MC>=11700
 //$$ import net.minecraft.client.render.GameRenderer;
 //$$ import net.minecraft.client.render.Shader;
-//$$ import java.util.HashMap;
+//$$ import java.util.IdentityHashMap;
 //$$ import java.util.Map;
 //$$ import java.util.function.Supplier;
 //#endif
@@ -767,7 +767,9 @@ public class UGraphics {
     }
 
     //#if MC>=11700
-    //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new HashMap<>();
+    //$$ // Note: Needs to be an Identity hash map because VertexFormat's equals method is broken (compares via its
+    //$$ //       component Map but order very much matters for VertexFormat) as of 1.17
+    //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new IdentityHashMap<>();
     //$$ static {
     //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, GameRenderer::getRenderTypeLinesShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, GameRenderer::getParticleShader);
