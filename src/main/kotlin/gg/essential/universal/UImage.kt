@@ -23,9 +23,9 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun copy(): UImage {
         //#if MC>=11600
-        //$$ return UImage(NativeImage(getWidth(), getHeight(), nativeImage.format.hasAlpha()))
+        //$$ return UImage(NativeImage(getWidth(), getHeight(), false)).also { it.copyFrom(this) }
         //#else
-        return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type))
+        return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type)).also { it.copyFrom(this) }
         //#endif
     }
 
