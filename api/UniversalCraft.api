@@ -397,6 +397,7 @@ public final class gg/essential/universal/UKeyboard {
 	public static final field KEY_LMETA I
 	public static final field KEY_LSHIFT I
 	public static final field KEY_M I
+	public static final field KEY_MENU I
 	public static final field KEY_MINUS I
 	public static final field KEY_MULTIPLY I
 	public static final field KEY_N I
