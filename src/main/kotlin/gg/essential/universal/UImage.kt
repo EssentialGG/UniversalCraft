@@ -23,15 +23,21 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun copy(): UImage {
         //#if MC>=11600
-        //$$ return UImage(NativeImage(getWidth(), getHeight(), nativeImage.format.hasAlpha()))
+        //$$ return UImage(NativeImage(getWidth(), getHeight(), false)).also { it.copyFrom(this) }
         //#else
-        return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type))
+        return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type)).also { it.copyFrom(this) }
         //#endif
     }
 
     fun getPixelRGBA(x: Int, y: Int): Int {
         //#if MC>=11600
-        //$$ return nativeImage.getPixelRGBA(x, y)
+        //$$ // Convert ABGR to RGBA
+        //$$ val abgr = nativeImage.getPixelRGBA(x, y) // mappings are incorrect, this returns ABGR
+        //$$ val a = abgr shr 24 and 0xFF
+        //$$ val b = abgr shr 16 and 0xFF
+        //$$ val g = abgr shr 8 and 0xFF
+        //$$ val r = abgr and 0xFF
+        //$$ return (r shl 24) or (g shl 16) or (b shl 8) or a
         //#else
         return Integer.rotateLeft(nativeImage.getRGB(x, y), 8) // Convert ARGB to RGBA
         //#endif
@@ -39,7 +45,12 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun setPixelRGBA(x: Int, y: Int, color: Int) {
         //#if MC>=11600
-        //$$ nativeImage.setPixelRGBA(x, y, color)
+        //$$ // Convert RGBA to ABGR
+        //$$ val r = color shr 24 and 0xFF
+        //$$ val g = color shr 16 and 0xFF
+        //$$ val b = color shr 8 and 0xFF
+        //$$ val a = color and 0xFF
+        //$$ nativeImage.setPixelRGBA(x, y, (a shl 24) or (b shl 16) or (g shl 8) or r) // mappings are incorrect, this takes ABGR
         //#else
         nativeImage.setRGB(x, y, Integer.rotateRight(color, 8)) // Convert RGBA to ARGB
         //#endif
