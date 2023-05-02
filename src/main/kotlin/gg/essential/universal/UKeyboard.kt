@@ -28,6 +28,7 @@ object UKeyboard {
     //$$ @JvmField val KEY_RSHIFT: Int = noInline { GLFW.GLFW_KEY_RIGHT_SHIFT }
     //$$ @JvmField val KEY_LMENU: Int = noInline { GLFW.GLFW_KEY_LEFT_ALT }
     //$$ @JvmField val KEY_RMENU: Int = noInline { GLFW.GLFW_KEY_RIGHT_ALT }
+    //$$ @JvmField val KEY_MENU: Int = noInline { GLFW.GLFW_KEY_MENU }
     //$$ @JvmField val KEY_MINUS: Int = noInline { GLFW.GLFW_KEY_MINUS }
     //$$ @JvmField val KEY_EQUALS: Int = noInline { GLFW.GLFW_KEY_EQUAL }
     //$$ @JvmField val KEY_BACKSPACE: Int = noInline { GLFW.GLFW_KEY_BACKSPACE }
@@ -134,6 +135,7 @@ object UKeyboard {
     @JvmField val KEY_RSHIFT: Int = noInline { Keyboard.KEY_RSHIFT }
     @JvmField val KEY_LMENU: Int = noInline { Keyboard.KEY_LMENU }
     @JvmField val KEY_RMENU: Int = noInline { Keyboard.KEY_RMENU }
+    @JvmField val KEY_MENU: Int = noInline { Keyboard.KEY_APPS }
     @JvmField val KEY_MINUS: Int = noInline { Keyboard.KEY_MINUS }
     @JvmField val KEY_EQUALS: Int = noInline { Keyboard.KEY_EQUALS }
     @JvmField val KEY_BACKSPACE: Int = noInline { Keyboard.KEY_BACK }
