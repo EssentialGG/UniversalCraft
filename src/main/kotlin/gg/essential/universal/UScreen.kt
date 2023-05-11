@@ -2,6 +2,10 @@ package gg.essential.universal
 
 import net.minecraft.client.gui.GuiScreen
 
+//#if MC>=12000
+//$$ import net.minecraft.client.gui.DrawContext
+//#endif
+
 //#if MC>=11502
 //$$ import gg.essential.universal.UKeyboard.toInt
 //$$ import gg.essential.universal.UKeyboard.toModifiers
@@ -38,6 +42,22 @@ abstract class UScreen(
     private var guiScaleToRestore = -1
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
 
+    //#if MC>=12000
+    //$$ private var drawContexts = mutableListOf<DrawContext>()
+    //$$ private inline fun <R> withDrawContext(matrixStack: UMatrixStack, block: (DrawContext) -> R) {
+    //$$     val client = this.client!!
+    //$$     val context = drawContexts.lastOrNull()
+    //$$         ?: DrawContext(client, client.bufferBuilders.entityVertexConsumers)
+    //$$     context.matrices.push()
+    //$$     val mc = context.matrices.peek()
+    //$$     val uc = matrixStack.peek()
+    //$$     mc.positionMatrix.set(uc.model)
+    //$$     mc.normalMatrix.set(uc.normal)
+    //$$     block(context)
+    //$$     context.matrices.pop()
+    //$$ }
+    //#endif
+
     //#if MC>=11502
     //$$ private var lastClick = 0L
     //$$ private var lastDraggedDx = -1.0
@@ -56,7 +76,12 @@ abstract class UScreen(
     //$$ override fun getTitle(): ITextComponent = TranslationTextComponent(unlocalizedName ?: "")
     //#endif
     //$$
-    //#if MC>=11602
+    //#if MC>=12000
+    //$$ final override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    //$$     drawContexts.add(context)
+    //$$     onDrawScreenCompat(UMatrixStack(context.matrices), mouseX, mouseY, delta)
+    //$$     drawContexts.removeLast()
+    //#elseif MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
     //$$     onDrawScreenCompat(UMatrixStack(matrixStack), mouseX, mouseY, partialTicks)
     //#else
@@ -114,7 +139,13 @@ abstract class UScreen(
     //$$         UMinecraft.guiScale = guiScaleToRestore
     //$$ }
     //$$
-    //#if MC>=11904
+    //#if MC>=12000
+    //$$ final override fun renderBackground(context: DrawContext) {
+    //$$     drawContexts.add(context)
+    //$$     onDrawBackgroundCompat(UMatrixStack(context.matrices), 0)
+    //$$     drawContexts.removeLast()
+    //$$ }
+    //#elseif MC>=11904
     //$$ final override fun renderBackground(matrixStack: MatrixStack) {
     //$$     onDrawBackgroundCompat(UMatrixStack(matrixStack), 0)
     //$$ }
@@ -203,7 +234,11 @@ abstract class UScreen(
     }
 
     open fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        //#if MC>=11602
+        //#if MC>=12000
+        //$$ withDrawContext(matrixStack) { drawContext ->
+        //$$     super.render(drawContext, mouseX, mouseY, partialTicks)
+        //$$ }
+        //#elseif MC>=11602
         //$$ super.render(matrixStack.toMC(), mouseX, mouseY, partialTicks)
         //#else
         matrixStack.runWithGlobalState {
@@ -308,7 +343,11 @@ abstract class UScreen(
     }
 
     open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
-        //#if MC>=11904
+        //#if MC>=12000
+        //$$ withDrawContext(matrixStack) { drawContext ->
+        //$$     super.renderBackground(drawContext)
+        //$$ }
+        //#elseif MC>=11904
         //$$ super.renderBackground(matrixStack.toMC())
         //#elseif MC>=11602
         //$$ super.renderBackground(matrixStack.toMC(), tint)

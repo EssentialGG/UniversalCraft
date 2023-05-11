@@ -827,7 +827,11 @@ public class UGraphics {
     public void drawDirect() {
         //#if MC>=11600
         //$$ if (renderLayer != null) {
-        //$$     renderLayer.finish(instance, 0, 0, 0);
+            //#if MC>=12000
+            //$$ renderLayer.draw(instance, RenderSystem.getVertexSorting());
+            //#else
+            //$$ renderLayer.finish(instance, 0, 0, 0);
+            //#endif
         //$$     return;
         //$$ }
         //#endif
@@ -837,11 +841,17 @@ public class UGraphics {
     public void drawSorted(int cameraX, int cameraY, int cameraZ) {
         //#if MC>=11600
         //$$ if (renderLayer != null) {
-        //$$     renderLayer.finish(instance, cameraX, cameraY, cameraZ);
+            //#if MC>=12000
+            //$$ renderLayer.draw(instance, RenderSystem.getVertexSorting());
+            //#else
+            //$$ renderLayer.finish(instance, cameraX, cameraY, cameraZ);
+            //#endif
         //$$     return;
         //$$ }
         //#endif
-        //#if MC>=11700
+        //#if MC>=12000
+        //$$ instance.setSorter(RenderSystem.getVertexSorting());
+        //#elseif MC>=11700
         //$$ instance.setCameraPosition(cameraX, cameraY, cameraZ);
         //#else
         instance.sortVertexData(cameraX, cameraY, cameraZ);
