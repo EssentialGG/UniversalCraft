@@ -63,13 +63,7 @@ class ReleasedDynamicTexture private constructor(
 
     fun uploadTexture() {
         if (!uploaded) {
-
-            // FIXME archloom bug: https://github.com/architectury/architectury-loom/issues/55
-            //#if FORGE && MC>=11700
-            //$$ TextureUtil.m_85283_(allocGlId(), width, height)
-            //#else
             TextureUtil.allocateTexture(allocGlId(), width, height)
-            //#endif
 
             //#if MC>=11400
             //$$ UGraphics.configureTexture(allocGlId()) {
