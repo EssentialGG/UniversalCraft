@@ -797,6 +797,13 @@ public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/
 	public fun setNewGuiScale (I)V
 	public fun setUnlocalizedName (Ljava/lang/String;)V
 	public final fun tick ()V
+	public fun uCharTyped (CLgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyPressed (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyReleased (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uMouseClicked (DDI)Z
+	public fun uMouseDragged (DDIJ)Z
+	public fun uMouseReleased (DDI)Z
+	public fun uMouseScrolled (D)Z
 	public fun updateGuiScale ()V
 }
 
@@ -867,6 +874,13 @@ public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/
 	public fun setNewGuiScale (I)V
 	public fun setUnlocalizedName (Ljava/lang/String;)V
 	public final fun tick ()V
+	public fun uCharTyped (CLgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyPressed (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyReleased (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uMouseClicked (DDI)Z
+	public fun uMouseDragged (DDIJ)Z
+	public fun uMouseReleased (DDI)Z
+	public fun uMouseScrolled (D)Z
 	public fun updateGuiScale ()V
 }
 
@@ -911,6 +925,13 @@ public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/
 	public final fun restorePreviousScreen ()V
 	public fun setNewGuiScale (I)V
 	public fun setUnlocalizedName (Ljava/lang/String;)V
+	public fun uCharTyped (CLgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyPressed (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uKeyReleased (IILgg/essential/universal/UKeyboard$Modifiers;)Z
+	public fun uMouseClicked (DDI)Z
+	public fun uMouseDragged (DDIJ)Z
+	public fun uMouseReleased (DDI)Z
+	public fun uMouseScrolled (D)Z
 	public fun updateGuiScale ()V
 	public final fun updateScreen ()V
 }
