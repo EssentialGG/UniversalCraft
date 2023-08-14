@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiScreen
 //$$ import net.minecraft.util.text.TranslationTextComponent
 //#endif
 //#else
+import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import java.io.IOException
 
@@ -177,6 +178,15 @@ abstract class UScreen(
         }
         if (typedChar != 0.toChar()) {
             uCharTyped(typedChar, UKeyboard.getModifiers())
+        }
+    }
+
+    // Handles key release events on legacy versions
+    // Not final since that would be a breaking change
+    override fun handleKeyboardInput() {
+        super.handleKeyboardInput()
+        if (!Keyboard.getEventKeyState()) {
+            uKeyReleased(Keyboard.getEventKey(), 0, UKeyboard.getModifiers())
         }
     }
 
@@ -359,10 +369,10 @@ abstract class UScreen(
     }
 
     /**
-     * Called when a key is released. Only called on versions that use LWJGL3.
+     * Called when a key is released.
      *
      * @param keyCode the key code of the key. See [UKeyboard].
-     * @param scanCode the platform specific scanCode of the key.
+     * @param scanCode the platform specific scanCode of the key. Always 0 on versions that use LWJGL2.
      * @param modifiers the modifiers of the event.
      * @return `true` if the input has been handled, `false` otherwise.
      */
