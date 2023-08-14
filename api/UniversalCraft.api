@@ -901,6 +901,7 @@ public abstract class gg/essential/universal/UScreen : net/minecraft/client/gui/
 	public fun getNewGuiScale ()I
 	public final fun getRestoreCurrentGuiOnClose ()Z
 	public fun getUnlocalizedName ()Ljava/lang/String;
+	public fun handleKeyboardInput ()V
 	public final fun handleMouseInput ()V
 	public final fun initGui ()V
 	public fun initScreen (II)V
