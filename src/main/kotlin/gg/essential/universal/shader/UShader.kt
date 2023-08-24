@@ -1,5 +1,7 @@
 package gg.essential.universal.shader
 
+import gg.essential.universal.UGraphics
+
 //#if MC>=11700
 //$$ import net.minecraft.client.render.Shader
 //#endif
@@ -27,9 +29,21 @@ interface UShader {
     fun getSamplerUniform(name: String): SamplerUniform = getSamplerUniformOrNull(name) ?: throw NoSuchElementException(name)
 
     companion object {
+        @Deprecated(
+            "Use the overload which takes a vertex format to ensure proper operation on all versions.",
+            replaceWith = ReplaceWith("UShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)")
+        )
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState): UShader {
             //#if MC>=11700
-            //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState)
+            //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, null)
+            //#else
+            return GlShader(vertSource, fragSource, blendState)
+            //#endif
+        }
+
+        fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: UGraphics.CommonVertexFormats): UShader {
+            //#if MC>=11700
+            //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)
             //#else
             return GlShader(vertSource, fragSource, blendState)
             //#endif

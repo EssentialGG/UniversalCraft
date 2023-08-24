@@ -749,7 +749,7 @@ public class UGraphics {
         POSITION_TEXTURE_COLOR_NORMAL(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
         ;
 
-        private final VertexFormat mc;
+        public final VertexFormat mc;
 
         CommonVertexFormats(VertexFormat mc) {
             this.mc = mc;
