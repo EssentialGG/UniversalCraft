@@ -144,7 +144,7 @@ internal class MCSamplerUniform(val mc: Shader, val name: String) : SamplerUnifo
 }
 
 internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?) {
-    val attributes = mutableSetOf<String>()
+    val attributes = mutableListOf<String>()
     val samplers = mutableSetOf<String>()
     val uniforms = mutableMapOf<String, UniformType>()
 
@@ -178,10 +178,7 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?)
         fun replaceAttribute(newAttributes: MutableList<Pair<String, String>>, needle: String, type: String, replacementName: String = "uc_" + needle.substringAfter("_"), replacement: String = replacementName) {
             if (needle in source) {
                 replacements[needle] = replacement
-                if (replacementName !in attributes) {
-                    attributes.add(replacementName)
-                    newAttributes.add(replacementName to "in $type $replacementName;")
-                }
+                newAttributes.add(replacementName to "in $type $replacementName;")
             }
         }
         if (vert) {
@@ -194,9 +191,15 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?)
 
             if (vertexFormat != null) {
                 newAttributes.sortedBy { vertexFormat.mc.shaderAttributes.indexOf(it.first.removePrefix("uc_")) }
-                    .forEach { transformed.add(it.second) }
+                    .forEach {
+                        attributes.add(it.first)
+                        transformed.add(it.second)
+                    }
             } else {
-                newAttributes.forEach { transformed.add(it.second) }
+                newAttributes.forEach {
+                    attributes.add(it.first)
+                    transformed.add(it.second)
+                }
             }
         }
 
