@@ -186,7 +186,7 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?)
         }
         if (vert) {
             val newAttributes = mutableListOf<Pair<String, String>>()
-            replaceAttribute(newAttributes, "gl_Vertex", "vec3", replacement = "vec4(uc_Vertex, 1.0)")
+            replaceAttribute(newAttributes, "gl_Vertex", "vec3", "uc_Position", replacement = "vec4(uc_Position, 1.0)")
             replaceAttribute(newAttributes, "gl_Color", "vec4")
             replaceAttribute(newAttributes, "gl_MultiTexCoord0.st", "vec2", "uc_UV0")
             replaceAttribute(newAttributes, "gl_MultiTexCoord1.st", "vec2", "uc_UV1")
