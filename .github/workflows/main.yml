@@ -1,0 +1,42 @@
+name: Build & Publish
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            16
+            17
+          cache: gradle
+
+      - name: Setup environment
+        run: |
+          echo "ORG_GRADLE_PROJECT_BUILD_ID=$(expr ${{ github.run_number }} + 290)" >> "$GITHUB_ENV"
+          # GitHub runners are limited to 7GB of RAM, so we'll limit our Gradle Daemon process to about half of that
+          # which is enough so long as parallel task execution is limited.
+          # We also pin the amount of workers, so it doesn't break should GitHub increase the default available vCPUs.
+          # We write these to GRADLE_USER_HOME to overrule the local "gradle.properties" of the project.
+          mkdir -p "${GRADLE_USER_HOME:=~/.gradle}"
+          echo "org.gradle.jvmargs=-Xmx4G" >> "$GRADLE_USER_HOME/gradle.properties"
+          echo "org.gradle.workers.max=2" >> "$GRADLE_USER_HOME/gradle.properties"
+
+      - name: Build
+        run: ./gradlew build --stacktrace
+
+      - name: Publish
+        run: echo ./gradlew publish --stacktrace
+        if: env.NEXUS_USER != null
+        env:
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}

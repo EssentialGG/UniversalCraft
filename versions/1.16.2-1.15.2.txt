@@ -1,4 +1,0 @@
-net.minecraft.util.math.vector.Matrix3f net.minecraft.client.renderer.Matrix3f
-net.minecraft.util.math.vector.Matrix4f net.minecraft.client.renderer.Matrix4f
-net.minecraft.util.math.vector.Quaternion net.minecraft.client.renderer.Quaternion
-net.minecraft.util.math.vector.Vector3f net.minecraft.client.renderer.Vector3f
