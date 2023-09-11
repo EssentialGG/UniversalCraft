@@ -36,7 +36,7 @@ jobs:
 
       - name: Publish
         run: echo ./gradlew publish --stacktrace
-        if: env.NEXUS_USER != null
+        if: env.ORG_GRADLE_PROJECT_nexus_user != null
         env:
-          NEXUS_USER: ${{ secrets.NEXUS_USER }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          ORG_GRADLE_PROJECT_nexus_user: ${{ secrets.NEXUS_USER }}
+          ORG_GRADLE_PROJECT_nexus_password: ${{ secrets.NEXUS_PASSWORD }}
