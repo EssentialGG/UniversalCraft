@@ -45,7 +45,7 @@ jobs:
           echo "org.gradle.workers.max=2" >> "$GRADLE_USER_HOME/gradle.properties"
 
       - name: Build
-        run: ./gradlew clean --stacktrace
+        run: ./gradlew build --stacktrace
 
       - name: Publish
         run: echo ./gradlew publish --stacktrace
