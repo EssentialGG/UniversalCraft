@@ -38,14 +38,20 @@ jobs:
           echo "ORG_GRADLE_PROJECT_BUILD_ID=$(expr ${{ github.run_number }} + 290)" >> "$GITHUB_ENV"
           # GitHub runners are limited to 7GB of RAM, so we'll limit our Gradle Daemon process to about half of that
           # which is enough so long as parallel task execution is limited.
+          # We also need to limit the Kotlin Compiler Daemon to its default value (which it seems to be perfectly
+          # fine with) as otherwise it inherits the Gradle Daemon's jvmargs putting us above the runner limit.
           # We also pin the amount of workers, so it doesn't break should GitHub increase the default available vCPUs.
           # We write these to GRADLE_USER_HOME to overrule the local "gradle.properties" of the project.
           mkdir -p "${GRADLE_USER_HOME:=~/.gradle}"
-          echo "org.gradle.jvmargs=-Xmx4G" >> "$GRADLE_USER_HOME/gradle.properties"
+          echo "org.gradle.jvmargs=-Xmx3G -Dkotlin.daemon.jvm.options=-Xmx512M" >> "$GRADLE_USER_HOME/gradle.properties"
           echo "org.gradle.workers.max=2" >> "$GRADLE_USER_HOME/gradle.properties"
 
       - name: Build
-        run: ./gradlew build --stacktrace
+        # Split into two Gradle invocations because Loom's remapJar task (specifically the BuildSharedServiceManager)
+        # will not release any memory until all scheduled remapJar tasks have complete.
+        run: |
+          ./gradlew :{1.{8.9,12.2}-forge,1.{19,19.1}-fabric,1.{16.2,17.1,18.1}-{forge,fabric}}:build --stacktrace
+          ./gradlew build --stacktrace
 
       - name: Publish
         run: echo ./gradlew publish --stacktrace
