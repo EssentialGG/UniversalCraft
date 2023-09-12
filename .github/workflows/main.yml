@@ -43,13 +43,14 @@ jobs:
           # We also pin the amount of workers, so it doesn't break should GitHub increase the default available vCPUs.
           # We write these to GRADLE_USER_HOME to overrule the local "gradle.properties" of the project.
           mkdir -p "${GRADLE_USER_HOME:=~/.gradle}"
-          echo "org.gradle.jvmargs=-Xmx3G -Dkotlin.daemon.jvm.options=-Xmx512M" >> "$GRADLE_USER_HOME/gradle.properties"
+          echo "org.gradle.jvmargs=-Xmx2G -Dkotlin.daemon.jvm.options=-Xmx512M" >> "$GRADLE_USER_HOME/gradle.properties"
           echo "org.gradle.workers.max=2" >> "$GRADLE_USER_HOME/gradle.properties"
 
       - name: Build
-        # Split into two Gradle invocations because Loom's remapJar task (specifically the BuildSharedServiceManager)
-        # will not release any memory until all scheduled remapJar tasks have complete.
+        # Split into multiple Gradle invocations because Loom's remapJar task (specifically the
+        # BuildSharedServiceManager) will not release any memory until all scheduled remapJar tasks have complete.
         run: |
+          ./gradlew jar --stacktrace
           ./gradlew :{1.{8.9,12.2}-forge,1.{19,19.1}-fabric,1.{16.2,17.1,18.1}-{forge,fabric}}:build --stacktrace
           ./gradlew build --stacktrace
 
