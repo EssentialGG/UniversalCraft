@@ -55,7 +55,7 @@ jobs:
           ./gradlew build --stacktrace
 
       - name: Publish
-        run: echo ./gradlew publish --stacktrace
+        run: ./gradlew publish --stacktrace
         if: env.ORG_GRADLE_PROJECT_nexus_user != null
         env:
           ORG_GRADLE_PROJECT_nexus_user: ${{ secrets.NEXUS_USER }}
