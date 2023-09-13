@@ -27,7 +27,9 @@ jobs:
           key: gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
       - uses: actions/cache@v3
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            **/loom-cache
           key: gradle-caches-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle.properties', 'gradle/*.versions.toml') }}
           restore-keys: |
             gradle-caches-${{ hashFiles('**/*.gradle*') }}
