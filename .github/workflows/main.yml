@@ -54,6 +54,7 @@ jobs:
         # Split into multiple Gradle invocations because Loom's remapJar task (specifically the
         # BuildSharedServiceManager) will not release any memory until all scheduled remapJar tasks have complete.
         run: |
+          ./gradlew clean --stacktrace
           ./gradlew jar --stacktrace
           ./gradlew :{1.{8.9,12.2}-forge,1.{19,19.1}-fabric,1.{16.2,17.1,18.1}-{forge,fabric}}:build --stacktrace
           ./gradlew build --stacktrace
