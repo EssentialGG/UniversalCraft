@@ -5,12 +5,12 @@ net.minecraft.util.SoundEvents net.minecraft.init.SoundEvents
 net.minecraft.client.renderer.texture.Texture net.minecraft.client.renderer.texture.AbstractTexture
 net.minecraft.resources.IResourceManager net.minecraft.client.resources.IResourceManager
 net.minecraft.client.renderer.texture.TextureUtil prepareImage() allocateTexture()
-net.minecraft.client.renderer.Matrix3f org.lwjgl.util.vector.Matrix3f
-net.minecraft.client.renderer.Matrix4f org.lwjgl.util.vector.Matrix4f
-net.minecraft.client.renderer.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
-net.minecraft.client.renderer.Quaternion org.lwjgl.util.vector.Quaternion
-net.minecraft.client.renderer.Vector3f org.lwjgl.util.vector.Vector3f
-net.minecraft.client.renderer.Vector4f org.lwjgl.util.vector.Vector4f
+net.minecraft.util.math.vector.Matrix3f org.lwjgl.util.vector.Matrix3f
+net.minecraft.util.math.vector.Matrix4f org.lwjgl.util.vector.Matrix4f
+net.minecraft.util.math.vector.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
+net.minecraft.util.math.vector.Quaternion org.lwjgl.util.vector.Quaternion
+net.minecraft.util.math.vector.Vector3f org.lwjgl.util.vector.Vector3f
+net.minecraft.util.math.vector.Vector4f org.lwjgl.util.vector.Vector4f
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton
 net.minecraft.client.renderer.entity.RenderPlayer net.minecraft.client.renderer.entity.PlayerRenderer
@@ -32,8 +32,3 @@ net.minecraft.client.GameSettings net.minecraft.client.settings.GameSettings
 net.minecraft.client.gui.NewChatGui net.minecraft.client.gui.GuiNewChat
 net.minecraft.client.gui.screen.MainMenuScreen net.minecraft.client.gui.GuiMainMenu
 net.minecraft.network.play.server.SChatPacket net.minecraft.network.play.server.SPacketChat
-
-
-
-
-

@@ -20,7 +20,6 @@ rootProject.buildFileName = "root.gradle.kts"
 listOf(
     "1.8.9-forge",
     "1.12.2-forge",
-    "1.15.2-forge",
     "1.16.2-forge",
     "1.16.2-fabric",
     "1.17.1-fabric",
