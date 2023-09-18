@@ -57,6 +57,7 @@ jobs:
           ./gradlew clean --stacktrace
           ./gradlew jar --stacktrace
           ./gradlew :{1.{8.9,12.2}-forge,1.{19,19.1}-fabric,1.{16.2,17.1,18.1}-{forge,fabric}}:build --stacktrace
+          ./gradlew :{1.20-fabric,1.{19.2,19.3,19.4,20.1}-{forge,fabric}}:build --stacktrace
           ./gradlew build --stacktrace
 
       - name: Publish
