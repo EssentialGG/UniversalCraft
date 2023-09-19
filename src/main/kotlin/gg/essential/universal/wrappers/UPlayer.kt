@@ -29,7 +29,11 @@ object UPlayer {
 
     @JvmStatic
     fun getUUID(): UUID {
+        //#if MC>=12002
+        //$$ return UMinecraft.getMinecraft().session.uuidOrNull!!
+        //#else
         return UMinecraft.getMinecraft().session.profile.id
+        //#endif
     }
 
     @JvmStatic

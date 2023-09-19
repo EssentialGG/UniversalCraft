@@ -64,6 +64,7 @@ abstract class UScreen(
     //$$ private var lastDraggedDy = -1.0
     //$$ private var lastScrolledX = -1.0
     //$$ private var lastScrolledY = -1.0
+    //$$ private var lastScrolledDX = 0.0
     //$$
     //$$ final override fun init() {
     //$$     updateGuiScale()
@@ -124,7 +125,12 @@ abstract class UScreen(
     //$$     return false
     //$$ }
     //$$
+    //#if MC>=12002
+    //$$ override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, delta: Double): Boolean {
+    //$$     lastScrolledDX = horizontalAmount
+    //#else
     //$$ final override fun mouseScrolled(mouseX: Double, mouseY: Double, delta: Double): Boolean {
+    //#endif
     //$$     lastScrolledX = mouseX
     //$$     lastScrolledY = mouseY
     //$$     onMouseScrolled(delta)
@@ -140,7 +146,17 @@ abstract class UScreen(
     //$$ }
     //$$
     //#if MC>=12000
+    //#if MC>=12002
+    //$$ private var lastBackgroundMouseX = 0
+    //$$ private var lastBackgroundMouseY = 0
+    //$$ private var lastBackgroundDelta = 0f
+    //$$ final override fun renderBackground(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    //$$     lastBackgroundMouseX = mouseX
+    //$$     lastBackgroundMouseY = mouseY
+    //$$     lastBackgroundDelta = delta
+    //#else
     //$$ final override fun renderBackground(context: DrawContext) {
+    //#endif
     //$$     drawContexts.add(context)
     //$$     onDrawBackgroundCompat(UMatrixStack(context.matrices), 0)
     //$$     drawContexts.removeLast()
@@ -321,7 +337,9 @@ abstract class UScreen(
     }
 
     open fun onMouseScrolled(delta: Double) {
-        //#if MC>=11502
+        //#if MC>=12002
+        //$$ super.mouseScrolled(lastScrolledX, lastScrolledY, lastScrolledDX, delta)
+        //#elseif MC>=11502
         //$$ super.mouseScrolled(lastScrolledX, lastScrolledY, delta)
         //#endif
     }
@@ -345,7 +363,11 @@ abstract class UScreen(
     open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
         //#if MC>=12000
         //$$ withDrawContext(matrixStack) { drawContext ->
-        //$$     super.renderBackground(drawContext)
+            //#if MC>=12002
+            //$$ super.renderBackground(drawContext, lastBackgroundMouseX, lastBackgroundMouseY, lastBackgroundDelta)
+            //#else
+            //$$ super.renderBackground(drawContext)
+            //#endif
         //$$ }
         //#elseif MC>=11904
         //$$ super.renderBackground(matrixStack.toMC())
