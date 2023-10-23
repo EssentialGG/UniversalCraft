@@ -108,9 +108,17 @@ internal class MCShader(
                 //#endif
             }
 
-            val shaderVertexFormat = vertexFormat?.mc
+            val shaderVertexFormat = if (vertexFormat != null) {
+                // Shader calls glBindAttribLocation using the names in the VertexFormat, not the shader json...
+                // Easiest way to work around this is to construct a custom VertexFormat with our prefixed names.
+                VertexFormat(ImmutableMap.copyOf(
+                    transformer.attributes.withIndex()
+                        .associate { it.value to vertexFormat.mc.elements[it.index] }))
+            } else {
                 // Legacy fallback: The actual element doesn't matter here, Shader only cares about the names
-                ?: VertexFormat(ImmutableMap.copyOf(transformer.attributes.associateWith { VertexFormats.POSITION_ELEMENT }))
+                VertexFormat(ImmutableMap.copyOf(transformer.attributes.associateWith { VertexFormats.POSITION_ELEMENT }))
+            }
+
 
             val name = DigestUtils.sha1Hex(json).lowercase()
             return MCShader(Shader(factory, name, shaderVertexFormat), blendState)
