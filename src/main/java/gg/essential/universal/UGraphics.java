@@ -25,6 +25,10 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12005
+//$$ import org.joml.Vector3f;
+//#endif
+
 //#if MC>=11904
 //$$ import net.minecraft.client.font.TextRenderer;
 //#endif
@@ -744,7 +748,17 @@ public class UGraphics {
         POSITION_TEXTURE(DefaultVertexFormats.POSITION_TEX),
         POSITION_TEXTURE_COLOR(DefaultVertexFormats.POSITION_TEX_COLOR),
         POSITION_COLOR_TEXTURE_LIGHT(DefaultVertexFormats.BLOCK),
+        /**
+         * @deprecated Minecraft removed the built-in shader for this vertex format in 1.20.5, so it is no
+         * longer universal across all versions.
+         */
+        @Deprecated
         POSITION_TEXTURE_LIGHT_COLOR(DefaultVertexFormats.POSITION_TEX_LMAP_COLOR),
+        /**
+         * @deprecated Minecraft removed the built-in shader for this vertex format in 1.20.5, so it is no
+         * longer universal across all versions.
+         */
+        @Deprecated
         POSITION_TEXTURE_COLOR_LIGHT(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
         POSITION_TEXTURE_COLOR_NORMAL(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
         ;
@@ -780,8 +794,12 @@ public class UGraphics {
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE, GameRenderer::getPositionColorTexShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, GameRenderer::getPositionTexColorShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, GameRenderer::getPositionColorTexLightmapShader);
+    //#if MC>=12005
+    //$$     // Shaders for these formats are no longer provided.
+    //#else
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_LIGHT_COLOR, GameRenderer::getPositionTexLightmapColorShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_NORMAL, GameRenderer::getPositionTexColorNormalShader);
+    //#endif
     //$$ }
     //#endif
 
@@ -950,7 +968,10 @@ public class UGraphics {
         if (stack == UNIT_STACK) {
             instance.normal(x, y, z);
         } else {
-            //#if MC>=11602
+            //#if MC>=12005
+            //$$ Vector3f normal = stack.peek().getNormal().transform(x, y, z, new Vector3f());
+            //$$ instance.normal(normal.x(), normal.y(), normal.z());
+            //#elseif MC>=11602
             //$$ instance.normal(stack.peek().getNormal(), x, y, z);
             //#else
             Vector3f vec = new Vector3f(x, y, z);

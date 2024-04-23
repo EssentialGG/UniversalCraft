@@ -184,7 +184,9 @@ class UMatrixStack private constructor(
 
     fun applyToGlobalState() {
         //#if MC>=11700
-        //#if MC>=11800
+        //#if MC>=12005
+        //$$ RenderSystem.getModelViewStack().mul(stack.last.model)
+        //#elseif MC>=11800
         //$$ // FIXME preprocessor bug: should remap the intermediary name to yarn no problem
         //$$ RenderSystem.getModelViewStack().multiplyPositionMatrix(stack.last.model)
         //#else
@@ -204,7 +206,9 @@ class UMatrixStack private constructor(
     }
 
     fun replaceGlobalState() {
-        //#if MC>=11700
+        //#if MC>=12005
+        //$$ RenderSystem.getModelViewStack().identity()
+        //#elseif MC>=11700
         //$$ RenderSystem.getModelViewStack().loadIdentity()
         //#else
         GL11.glLoadIdentity()
@@ -229,13 +233,21 @@ class UMatrixStack private constructor(
     private inline fun <R> withGlobalStackPushed(block: () -> R) : R {
         //#if MC>=11700
         //$$ val stack = RenderSystem.getModelViewStack()
+        //#if MC>=12005
+        //$$ stack.pushMatrix()
+        //#else
         //$$ stack.push()
+        //#endif
         //#else
         UGraphics.GL.pushMatrix()
         //#endif
         return block().also {
             //#if MC>=11700
+            //#if MC>=12005
+            //$$ stack.popMatrix()
+            //#else
             //$$ stack.pop()
+            //#endif
             //$$ RenderSystem.applyModelViewMatrix()
             //#else
             UGraphics.GL.popMatrix()
