@@ -141,8 +141,7 @@ abstract class UScreen(
     //$$
     //$$ final override fun onClose() {
     //$$     onScreenClose()
-    //$$     if (guiScaleToRestore != -1)
-    //$$         UMinecraft.guiScale = guiScaleToRestore
+    //$$     restoreGuiScale()
     //$$ }
     //$$
     //#if MC>=12000
@@ -213,8 +212,7 @@ abstract class UScreen(
 
     final override fun onGuiClosed() {
         onScreenClose()
-        if (guiScaleToRestore != -1)
-            UMinecraft.guiScale = guiScaleToRestore
+        restoreGuiScale()
     }
 
     final override fun drawWorldBackground(tint: Int) {
@@ -232,12 +230,22 @@ abstract class UScreen(
     }
 
     open fun updateGuiScale() {
-        if (newGuiScale != -1) {
-            if (guiScaleToRestore == -1)
-                guiScaleToRestore = UMinecraft.guiScale
+        if (newGuiScale != -1 && guiScaleToRestore == -1) {
+            guiScaleToRestore = UMinecraft.guiScale
             UMinecraft.guiScale = newGuiScale
             width = UResolution.scaledWidth
             height = UResolution.scaledHeight
+        }
+    }
+
+    private fun restoreGuiScale() {
+        if (guiScaleToRestore != -1) {
+            UMinecraft.guiScale = guiScaleToRestore
+            // We reset this after setting the gui scale, since on 1.20.5 and above, setting the gui scale causes
+            // the screen to be resized due to an option change callback. This resize causes the screen to
+            // reinitialize, which calls updateGuiScale. To prevent that method for changing the gui scale back,
+            // we only set the gui scale from that method when guiScaleToRestore is -1.
+            guiScaleToRestore = -1
         }
     }
 
