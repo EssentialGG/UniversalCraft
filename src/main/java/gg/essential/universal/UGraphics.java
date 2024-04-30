@@ -754,12 +754,12 @@ public class UGraphics {
          */
         @Deprecated
         POSITION_TEXTURE_LIGHT_COLOR(DefaultVertexFormats.POSITION_TEX_LMAP_COLOR),
+        POSITION_TEXTURE_COLOR_LIGHT(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
         /**
          * @deprecated Minecraft removed the built-in shader for this vertex format in 1.20.5, so it is no
          * longer universal across all versions.
          */
         @Deprecated
-        POSITION_TEXTURE_COLOR_LIGHT(DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP),
         POSITION_TEXTURE_COLOR_NORMAL(DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL),
         ;
 
