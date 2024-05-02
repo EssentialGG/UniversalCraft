@@ -28,7 +28,7 @@ object UMinecraft {
         get() = guiScaleValue
         set(value) {
             guiScaleValue = value
-            //#if MC>=11502
+            //#if MC>=11502 && MC<12005
             //$$ val mc = getMinecraft()
             //$$ val window = mc.mainWindow
             //$$ val scaleFactor = window.calcGuiScale(value, mc.forceUnicodeFont)

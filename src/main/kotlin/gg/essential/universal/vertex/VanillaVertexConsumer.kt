@@ -3,6 +3,10 @@ package gg.essential.universal.vertex
 import gg.essential.universal.UMatrixStack
 import net.minecraft.client.renderer.WorldRenderer
 
+//#if MC>=12005
+//$$ import org.joml.Vector3f
+//#endif
+
 //#if MC>=11602
 //$$ import com.mojang.blaze3d.vertex.IVertexBuilder
 //#else
@@ -67,7 +71,10 @@ internal class VanillaVertexConsumer(
             inner.normal(x, y, z)
             return@apply
         }
-        //#if MC>=11602
+        //#if MC>=12005
+        //$$ val normal = stack.peek().normal.transform(x, y, z, Vector3f())
+        //$$ inner.normal(normal.x, normal.y, normal.z)
+        //#elseif MC>=11602
         //$$ inner.normal(stack.peek().normal, x, y, z);
         //#else
         val vec = Vector3f(x, y, z)

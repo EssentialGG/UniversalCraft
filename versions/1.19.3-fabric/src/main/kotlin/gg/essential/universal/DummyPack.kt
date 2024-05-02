@@ -39,4 +39,10 @@ internal object DummyPack : ResourcePack {
     override fun <T : Any?> parseMetadata(metaReader: ResourceMetadataReader<T>?): T? {
         throw UnsupportedOperationException()
     }
+
+    //#if MC>=12005
+    //$$ override fun getInfo(): net.minecraft.resource.ResourcePackInfo {
+    //$$     throw UnsupportedOperationException()
+    //$$ }
+    //#endif
 }
