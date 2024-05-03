@@ -42,6 +42,7 @@ abstract class UScreen(
     private var guiScaleToRestore = -1
     private var restoringGuiScale = false
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
+    private var suppressBackground = false
 
     //#if MC>=12000
     //$$ private var drawContexts = mutableListOf<DrawContext>()
@@ -154,6 +155,7 @@ abstract class UScreen(
     //$$     lastBackgroundMouseX = mouseX
     //$$     lastBackgroundMouseY = mouseY
     //$$     lastBackgroundDelta = delta
+    //$$     if (suppressBackground) return
     //#else
     //$$ final override fun renderBackground(context: DrawContext) {
     //#endif
@@ -262,6 +264,7 @@ abstract class UScreen(
     }
 
     open fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        suppressBackground = true
         //#if MC>=12000
         //$$ withDrawContext(matrixStack) { drawContext ->
         //$$     super.render(drawContext, mouseX, mouseY, partialTicks)
@@ -277,6 +280,7 @@ abstract class UScreen(
             //#endif
         }
         //#endif
+        suppressBackground = false
     }
 
     @Deprecated(
