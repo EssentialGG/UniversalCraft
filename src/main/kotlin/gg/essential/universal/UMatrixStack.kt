@@ -160,11 +160,9 @@ class UMatrixStack private constructor(
         //#if MC>=11903
         //$$ model.rotate(quaternion)
         //$$ normal.rotate(quaternion)
-        //#elseif MC>=11400
-        //$$ model.mul(quaternion)
-        //$$ normal.mul(quaternion)
         //#else
-        TODO("lwjgl quaternion multiply") // there seems to be no existing methods to do this
+        model.mul(quaternion)
+        normal.mul(quaternion)
         //#endif
     }
 
