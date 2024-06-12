@@ -26,7 +26,11 @@ internal class VanillaVertexConsumer(
 
     override fun pos(stack: UMatrixStack, x: Double, y: Double, z: Double): UVertexConsumer = apply {
         if (stack === UMatrixStack.UNIT) {
+            //#if MC>=12100
+            //$$ inner.vertex(x.toFloat(), y.toFloat(), z.toFloat())
+            //#else
             inner.pos(x, y, z)
+            //#endif
             return@apply
         }
         //#if MC>=11602
@@ -88,6 +92,8 @@ internal class VanillaVertexConsumer(
     }
 
     override fun endVertex(): UVertexConsumer = apply {
+        //#if MC<12100
         inner.endVertex()
+        //#endif
     }
 }

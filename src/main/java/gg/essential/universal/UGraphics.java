@@ -25,6 +25,12 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12100
+//$$ import net.minecraft.client.render.BufferRenderer;
+//$$ import net.minecraft.client.render.BuiltBuffer;
+//$$ import net.minecraft.client.util.BufferAllocator;
+//#endif
+
 //#if MC>=12005
 //$$ import org.joml.Vector3f;
 //#endif
@@ -83,7 +89,9 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 public class UGraphics {
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
 
-    //#if MC>=11602
+    //#if MC>=12100
+    //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.withFont(Identifier.of("minecraft", "alt"));
+    //#elseif MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
     private static UMatrixStack UNIT_STACK = UMatrixStack.UNIT;
@@ -97,6 +105,14 @@ public class UGraphics {
     //$$ private static final boolean TEXT_LAYER_TYPE = false;
     //#endif
 
+    //#if MC>=12100
+    //$$ /**
+    //$$  * A buffer to use for storing sorted quad vertex indices. The buffer will automatically grow as needed,
+    //$$  * the specified size is not a hard cap.
+    //$$  */
+    //$$ private static final BufferAllocator SORTED_QUADS_ALLOCATOR = new BufferAllocator(65536);
+    //#endif
+
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
     }
@@ -106,7 +122,11 @@ public class UGraphics {
     }
 
     public static UGraphics getFromTessellator() {
+        //#if MC>=12100
+        //$$ return new UGraphics(null);
+        //#else
         return new UGraphics(getTessellator().getWorldRenderer());
+        //#endif
     }
 
     //#if MC<11700
@@ -150,10 +170,14 @@ public class UGraphics {
         return Tessellator.getInstance();
     }
 
+    //#if MC>=12100
+    //$$ // No possible alternative on 1.21. A compile time error here is better than a run time one.
+    //#else
     @Deprecated // Use the non-static methods for 1.17+ compatibility or call UGraphics.getTessellator().draw() directly
     public static void draw() {
         getTessellator().draw();
     }
+    //#endif
 
     public static void cullFace(int mode) {
         //#if MC>=11502
@@ -394,7 +418,11 @@ public class UGraphics {
     public static void drawString(UMatrixStack stack, String text, float x, float y, int color, boolean shadow) {
         if ((color >> 24 & 255) <= 10) return;
         //#if MC>=11602
+        //#if MC>=12100
+        //$$ VertexConsumerProvider.Immediate irendertypebuffer$impl = UMinecraft.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
+        //#else
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //#endif
         //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, shadow, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
         //#else
@@ -422,7 +450,11 @@ public class UGraphics {
         if ((color >> 24 & 255) <= 10) return;
         String shadowText = ChatColor.Companion.stripColorCodes(text);
         //#if MC>=11602
+        //#if MC>=12100
+        //$$ VertexConsumerProvider.Immediate irendertypebuffer$impl = UMinecraft.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
+        //#else
         //$$ IRenderTypeBuffer.Impl irendertypebuffer$impl = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+        //#endif
         //$$ UMinecraft.getFontRenderer().renderString(shadowText, x + 1f, y + 1f, shadowColor, false, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
         //$$ UMinecraft.getFontRenderer().renderString(text, x, y, color, false, stack.peek().getModel(), irendertypebuffer$impl, TEXT_LAYER_TYPE, 0, 15728880);
         //$$ irendertypebuffer$impl.finish();
@@ -776,7 +808,11 @@ public class UGraphics {
 
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
         vertexFormat = format;
+        //#if MC>=12100
+        //$$ instance = getTessellator().begin(mode.mcMode, format);
+        //#else
         instance.begin(mode.mcMode, format);
+        //#endif
         return this;
     }
 
@@ -791,7 +827,11 @@ public class UGraphics {
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, GameRenderer::getPositionColorShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_LIGHT, GameRenderer::getPositionColorLightmapShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE, GameRenderer::getPositionTexShader);
+    //#if MC>=12100
+    //$$     // Shader for this format is no longer provided.
+    //#else
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE, GameRenderer::getPositionColorTexShader);
+    //#endif
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, GameRenderer::getPositionTexColorShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, GameRenderer::getPositionColorTexLightmapShader);
     //#if MC>=12005
@@ -843,9 +883,14 @@ public class UGraphics {
     }
 
     public void drawDirect() {
+        //#if MC>=12100
+        //$$ BuiltBuffer builtBuffer = instance.end();
+        //#endif
         //#if MC>=11600
         //$$ if (renderLayer != null) {
-            //#if MC>=12000
+            //#if MC>=12100
+            //$$ renderLayer.draw(builtBuffer);
+            //#elseif MC>=12000
             //$$ renderLayer.draw(instance, RenderSystem.getVertexSorting());
             //#else
             //$$ renderLayer.finish(instance, 0, 0, 0);
@@ -853,13 +898,23 @@ public class UGraphics {
         //$$     return;
         //$$ }
         //#endif
-        doDraw();
+        doDraw(
+            //#if MC>=12100
+            //$$ builtBuffer
+            //#endif
+        );
     }
 
     public void drawSorted(int cameraX, int cameraY, int cameraZ) {
+        //#if MC>=12100
+        //$$ BuiltBuffer builtBuffer = instance.end();
+        //$$ builtBuffer.sortQuads(SORTED_QUADS_ALLOCATOR, RenderSystem.getVertexSorting());
+        //#endif
         //#if MC>=11600
         //$$ if (renderLayer != null) {
-            //#if MC>=12000
+            //#if MC>=12100
+            //$$ renderLayer.draw(builtBuffer);
+            //#elseif MC>=12000
             //$$ renderLayer.draw(instance, RenderSystem.getVertexSorting());
             //#else
             //$$ renderLayer.finish(instance, cameraX, cameraY, cameraZ);
@@ -867,16 +922,23 @@ public class UGraphics {
         //$$     return;
         //$$ }
         //#endif
-        //#if MC>=12000
+        //#if MC>=12100
+        //$$ // Sorting handled above.
+        //#elseif MC>=12000
         //$$ instance.setSorter(RenderSystem.getVertexSorting());
         //#elseif MC>=11700
         //$$ instance.setCameraPosition(cameraX, cameraY, cameraZ);
         //#else
         instance.sortVertexData(cameraX, cameraY, cameraZ);
         //#endif
-        doDraw();
+        doDraw(
+            //#if MC>=12100
+            //$$ builtBuffer
+            //#endif
+        );
     }
 
+    //#if MC<11700
     private static boolean[] getDesiredTextureUnitState(VertexFormat vertexFormat) {
         // Vanilla only ever has two UV elements, so we can assume the remainder to be disabled by default and don't
         // need to check them unless we want them enabled.
@@ -892,11 +954,20 @@ public class UGraphics {
         }
         return wantEnabled;
     }
+    //#endif
 
-    private void doDraw() {
+    private void doDraw(
+        //#if MC>=12100
+        //$$ BuiltBuffer builtBuffer
+        //#endif
+    ) {
         VertexFormat vertexFormat = this.vertexFormat;
         if (vertexFormat == null) {
+            //#if MC>=12100
+            //$$ BufferRenderer.drawWithGlobalProgram(builtBuffer);
+            //#else
             getTessellator().draw();
+            //#endif
             return;
         }
 
@@ -919,7 +990,11 @@ public class UGraphics {
         }
         //#endif
 
+        //#if MC>=12100
+        //$$ BufferRenderer.drawWithGlobalProgram(builtBuffer);
+        //#else
         getTessellator().draw();
+        //#endif
 
         //#if MC<11700
         for (int i = 0; i < wasEnabledStates.length; i++) {
@@ -942,7 +1017,11 @@ public class UGraphics {
 
     public UGraphics pos(UMatrixStack stack, double x, double y, double z) {
         if (stack == UNIT_STACK) {
+            //#if MC>=12100
+            //$$ instance.vertex((float) x, (float) y, (float) z);
+            //#else
             instance.pos(x, y, z);
+            //#endif
         } else {
             //#if MC>=11602
             //$$ instance.pos(stack.peek().getModel(), (float) x, (float) y, (float) z);
@@ -1000,7 +1079,9 @@ public class UGraphics {
     }
 
     public UGraphics endVertex() {
+        //#if MC<12100
         instance.endVertex();
+        //#endif
         return this;
     }
 

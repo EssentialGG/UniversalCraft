@@ -7,6 +7,7 @@ import gg.essential.universal.UGraphics.CommonVertexFormats
 import net.minecraft.client.gl.GlUniform
 import net.minecraft.client.render.Shader
 import net.minecraft.client.render.VertexFormat
+import net.minecraft.client.render.VertexFormatElement
 import net.minecraft.client.render.VertexFormats
 import net.minecraft.util.Identifier
 import org.apache.commons.codec.digest.DigestUtils
@@ -108,15 +109,30 @@ internal class MCShader(
                 //#endif
             }
 
+            fun buildVertexFormat(elements: Map<String, VertexFormatElement>): VertexFormat {
+                //#if MC>=12100
+                //$$ val builder = VertexFormat.builder()
+                //$$ elements.forEach { (name, element) -> builder.add(name, element) }
+                //$$ return builder.build()
+                //#else
+                return VertexFormat(ImmutableMap.copyOf(elements))
+                //#endif
+            }
+
             val shaderVertexFormat = if (vertexFormat != null) {
                 // Shader calls glBindAttribLocation using the names in the VertexFormat, not the shader json...
                 // Easiest way to work around this is to construct a custom VertexFormat with our prefixed names.
-                VertexFormat(ImmutableMap.copyOf(
-                    transformer.attributes.withIndex()
-                        .associate { it.value to vertexFormat.mc.elements[it.index] }))
+                buildVertexFormat(transformer.attributes.withIndex()
+                        .associate { it.value to vertexFormat.mc.elements[it.index] })
             } else {
                 // Legacy fallback: The actual element doesn't matter here, Shader only cares about the names
-                VertexFormat(ImmutableMap.copyOf(transformer.attributes.associateWith { VertexFormats.POSITION_ELEMENT }))
+                buildVertexFormat(transformer.attributes.associateWith {
+                    //#if MC>=12100
+                    //$$ VertexFormatElement.POSITION
+                    //#else
+                    VertexFormats.POSITION_ELEMENT
+                    //#endif
+                })
             }
 
 

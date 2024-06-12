@@ -1,6 +1,5 @@
 package gg.essential.universal
 
-import net.minecraft.client.renderer.GLAllocation
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Matrix3f
 import org.lwjgl.util.vector.Matrix4f
@@ -14,6 +13,8 @@ import kotlin.math.sin
 
 //#if MC>=11700
 //$$ import com.mojang.blaze3d.systems.RenderSystem
+//#else
+import net.minecraft.client.renderer.GLAllocation
 //#endif
 
 //#if MC>=11600
