@@ -24,11 +24,3 @@ tasks.withType<KotlinCompile> {
         apiVersion = "1.6"
     }
 }
-
-tasks.jar {
-    manifest {
-        if (platform.isModLauncher) {
-            attributes(mapOf("FMLModType" to "GAMELIBRARY"))
-        }
-    }
-}
