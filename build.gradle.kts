@@ -24,9 +24,3 @@ tasks.withType<KotlinCompile> {
         apiVersion = "1.6"
     }
 }
-
-tasks.jar {
-    manifest {
-        attributes(mapOf("FMLModType" to "LIBRARY"))
-    }
-}
