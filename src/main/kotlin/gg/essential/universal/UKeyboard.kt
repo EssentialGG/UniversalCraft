@@ -76,6 +76,7 @@ object UKeyboard {
     //$$ @JvmField val KEY_NUMPAD7: Int = noInline { GLFW.GLFW_KEY_KP_7 }
     //$$ @JvmField val KEY_NUMPAD8: Int = noInline { GLFW.GLFW_KEY_KP_8 }
     //$$ @JvmField val KEY_NUMPAD9: Int = noInline { GLFW.GLFW_KEY_KP_9 }
+    //$$ @JvmField val KEY_NUMPADENTER: Int = noInline { GLFW.GLFW_KEY_KP_ENTER }
     //$$ @JvmField val KEY_A: Int = noInline { GLFW.GLFW_KEY_A }
     //$$ @JvmField val KEY_B: Int = noInline { GLFW.GLFW_KEY_B }
     //$$ @JvmField val KEY_C: Int = noInline { GLFW.GLFW_KEY_C }
@@ -183,6 +184,7 @@ object UKeyboard {
     @JvmField val KEY_NUMPAD7: Int = noInline { Keyboard.KEY_NUMPAD7 }
     @JvmField val KEY_NUMPAD8: Int = noInline { Keyboard.KEY_NUMPAD8 }
     @JvmField val KEY_NUMPAD9: Int = noInline { Keyboard.KEY_NUMPAD9 }
+    @JvmField val KEY_NUMPADENTER: Int = noInline { Keyboard.KEY_NUMPADENTER }
     @JvmField val KEY_A: Int = noInline { Keyboard.KEY_A }
     @JvmField val KEY_B: Int = noInline { Keyboard.KEY_B }
     @JvmField val KEY_C: Int = noInline { Keyboard.KEY_C }
@@ -311,6 +313,9 @@ object UKeyboard {
     //$$     return key in keysDown
     //$$ }
     //#else
+    @JvmStatic
+    fun isEnterKey(key: Int) = key == KEY_ENTER || key == KEY_NUMPADENTER
+
     @JvmStatic
     fun isKeyDown(key: Int): Boolean {
         if (key == KEY_NONE) return false
