@@ -1,5 +1,6 @@
 com.mojang.blaze3d.platform.TextureUtil net.minecraft.client.texture.TextureUtil
 com.mojang.blaze3d.platform.TextureUtil prepareImage() net.minecraft.client.texture.TextureUtil allocate()
+com.mojang.blaze3d.platform.GlStateManager com.mojang.blaze3d.platform.GlStateManager
 com.mojang.blaze3d.platform.GlStateManager glCreateProgram() createProgram()
 com.mojang.blaze3d.platform.GlStateManager _glUseProgram() useProgram()
 com.mojang.blaze3d.platform.GlStateManager glCreateShader() createShader()

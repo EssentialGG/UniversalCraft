@@ -7,7 +7,7 @@ net.minecraft.resources.IResourceManager net.minecraft.client.resources.IResourc
 net.minecraft.client.renderer.texture.TextureUtil prepareImage() allocateTexture()
 net.minecraft.util.math.vector.Matrix3f org.lwjgl.util.vector.Matrix3f
 net.minecraft.util.math.vector.Matrix4f org.lwjgl.util.vector.Matrix4f
-net.minecraft.util.math.vector.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
+net.minecraft.util.math.vector.Matrix4f write(Ljava/nio/FloatBuffer;)V store(Ljava/nio/FloatBuffer;)Lorg/lwjgl/util/vector/Matrix;
 net.minecraft.util.math.vector.Quaternion org.lwjgl.util.vector.Quaternion
 net.minecraft.util.math.vector.Vector3f org.lwjgl.util.vector.Vector3f
 net.minecraft.util.math.vector.Vector4f org.lwjgl.util.vector.Vector4f

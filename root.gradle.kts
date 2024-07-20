@@ -9,6 +9,8 @@ plugins {
 version = versionFromBuildIdAndBranch()
 
 preprocess {
+    strictExtraMappings.set(true)
+
     val fabric12100 = createNode("1.21-fabric", 12100, "srg")
     val fabric12006 = createNode("1.20.6-fabric", 12006, "srg")
     val forge12004 = createNode("1.20.4-forge", 12004, "srg")
