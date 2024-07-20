@@ -8,6 +8,19 @@ net.minecraft.util.math.vector.Vector3f org.lwjgl.util.vector.Vector3f
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton
 com.mojang.blaze3d.systems.RenderSystem net.minecraft.client.renderer.GlStateManager
+com.mojang.blaze3d.systems.RenderSystem translated() translate(DDD)V
+com.mojang.blaze3d.systems.RenderSystem translatef() translate(FFF)V
+com.mojang.blaze3d.systems.RenderSystem rotatef() rotate(FFFF)V
+com.mojang.blaze3d.systems.RenderSystem scalef() scale(FFF)V
+com.mojang.blaze3d.systems.RenderSystem scaled() scale(DDD)V
+com.mojang.blaze3d.systems.RenderSystem color3f() color(FFF)V
+com.mojang.blaze3d.systems.RenderSystem color4f() color(FFFF)V
+com.mojang.blaze3d.systems.RenderSystem enableDepthTest() enableDepth()
+com.mojang.blaze3d.systems.RenderSystem disableDepthTest() disableDepth()
+com.mojang.blaze3d.systems.RenderSystem enableAlphaTest() enableAlpha()
+com.mojang.blaze3d.systems.RenderSystem disableAlphaTest() disableAlpha()
+com.mojang.blaze3d.systems.RenderSystem blendEquation() glBlendEquation()
+com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate()
 com.mojang.blaze3d.systems.RenderSystem activeTexture() net.minecraft.client.renderer.GlStateManager setActiveTexture()
 com.mojang.blaze3d.systems.RenderSystem enableTexture() net.minecraft.client.renderer.GlStateManager enableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem disableTexture() net.minecraft.client.renderer.GlStateManager disableTexture2D()

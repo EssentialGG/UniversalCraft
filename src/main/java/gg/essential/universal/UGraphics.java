@@ -13,6 +13,7 @@ import gg.essential.universal.utils.ReleasedDynamicTexture;
 import gg.essential.universal.vertex.UVertexConsumer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -70,19 +71,15 @@ import org.lwjgl.util.vector.Vector4f;
 
 //#if MC>=11502
 //$$ import com.mojang.blaze3d.platform.GlStateManager;
-//$$ import net.minecraft.client.renderer.BufferBuilder;
 //$$ import net.minecraft.client.renderer.texture.NativeImage;
 //$$ import java.io.ByteArrayInputStream;
 //$$ import java.io.ByteArrayOutputStream;
-//#else
-import static org.lwjgl.opengl.GL14.glBlendEquation;
 //#endif
 
 //#if MC>=11400
 //$$ import net.minecraft.client.renderer.texture.Texture;
 //#else
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.ITextureObject;
 //#endif
 
@@ -232,8 +229,6 @@ public class UGraphics {
     public static void disableTexture2D() {
         //#if MC>=11904
         //$$ // no-op
-        //#elseif MC>=11502
-        //$$ RenderSystem.disableTexture();
         //#else
         GlStateManager.disableTexture2D();
         //#endif
@@ -242,11 +237,7 @@ public class UGraphics {
 
     public static void disableAlpha() {
         //#if MC<11700
-        //#if MC>=11502
-        //$$ RenderSystem.disableAlphaTest();
-        //#else
         GlStateManager.disableAlpha();
-        //#endif
         //#endif
     }
 
@@ -257,19 +248,15 @@ public class UGraphics {
     }
 
     public static void blendEquation(int equation) {
-        //#if MC>=11500
-        //$$ RenderSystem.blendEquation(equation);
+        //#if MC>=10900
+        //$$ GlStateManager.glBlendEquation(equation);
         //#else
-        glBlendEquation(equation);
+        org.lwjgl.opengl.GL14.glBlendEquation(equation);
         //#endif
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
-        //#if MC>=11502
-        //$$ RenderSystem.blendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
-        //#else
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
-        //#endif
     }
 
     /**
@@ -284,8 +271,6 @@ public class UGraphics {
     public static void enableTexture2D() {
         //#if MC>=11904
         //$$ // no-op
-        //#elseif MC>=11502
-        //$$ RenderSystem.enableTexture();
         //#else
         GlStateManager.enableTexture2D();
         //#endif
@@ -301,11 +286,7 @@ public class UGraphics {
 
     public static void enableAlpha() {
         //#if MC<11700
-        //#if MC>=11502
-        //$$ RenderSystem.enableAlphaTest();
-        //#else
         GlStateManager.enableAlpha();
-        //#endif
         //#endif
     }
 
@@ -651,31 +632,19 @@ public class UGraphics {
     }
 
     public static void color4f(float red, float green, float blue, float alpha) {
-        //#if MC<11502
         GlStateManager.color(red, green, blue, alpha);
-        //#else
-        //$$ RenderSystem.color4f(red, green, blue, alpha);
-        //#endif
     }
 
     public static void directColor3f(float red, float green, float blue) {
         //#if MC>=11700
         //$$ color4f(red, green, blue, 1f);
         //#else
-        //#if MC<11502
         GlStateManager.color(red, green, blue);
-        //#else
-        //$$ RenderSystem.color3f(red, green, blue);
-        //#endif
         //#endif
     }
 
     public static void enableDepth() {
-        //#if MC<11502
         GlStateManager.enableDepth();
-        //#else
-        //$$ RenderSystem.enableDepthTest();
-        //#endif
     }
 
     public static void depthFunc(int mode) {
@@ -687,11 +656,7 @@ public class UGraphics {
     }
 
     public static void disableDepth() {
-        //#if MC<11502
         GlStateManager.disableDepth();
-        //#else
-        //$$ RenderSystem.disableDepthTest();
-        //#endif
     }
 
     //#if MC>=11700
@@ -1125,43 +1090,23 @@ public class UGraphics {
         }
 
         public static void translate(float x, float y, float z) {
-            //#if MC>=11502
-            //$$ RenderSystem.translatef(x, y, z);
-            //#else
-            translate(x, y, (double) z);
-            //#endif
+            GlStateManager.translate(x, y, z);
         }
 
         public static void translate(double x, double y, double z) {
-            //#if MC>=11502
-            //$$ RenderSystem.translated(x, y, z);
-            //#else
             GlStateManager.translate(x, y, z);
-            //#endif
         }
 
         public static void rotate(float angle, float x, float y, float z) {
-            //#if MC>=11502
-            //$$ RenderSystem.rotatef(angle, x, y, z);
-            //#else
             GlStateManager.rotate(angle, x, y, z);
-            //#endif
         }
 
         public static void scale(float x, float y, float z) {
-            //#if MC>=11502
-            //$$ RenderSystem.scalef(x, y, z);
-            //#else
-            scale(x, y, (double) z);
-            //#endif
+            GlStateManager.scale(x, y, z);
         }
 
         public static void scale(double x, double y, double z) {
-            //#if MC>=11502
-            //$$ RenderSystem.scaled(x, y, z);
-            //#else
             GlStateManager.scale(x, y, z);
-            //#endif
         }
     }
     //#endif
