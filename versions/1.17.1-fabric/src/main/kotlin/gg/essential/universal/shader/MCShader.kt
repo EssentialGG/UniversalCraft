@@ -59,7 +59,7 @@ internal class MCShader(
         private val DEBUG_LEGACY = System.getProperty("universalcraft.shader.legacy.debug", "") == "true"
 
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: CommonVertexFormats?): MCShader {
-            val transformer = ShaderTransformer(vertexFormat)
+            val transformer = ShaderTransformer(vertexFormat, 150)
 
             val transformedVertSource = transformer.transform(vertSource)
             val transformedFragSource = transformer.transform(fragSource)

@@ -2,7 +2,11 @@ package gg.essential.universal.shader
 
 import gg.essential.universal.UGraphics.CommonVertexFormats
 
-internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?) {
+internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?, private val targetVersion: Int) {
+    init {
+        check(targetVersion in listOf(110, 130, 150))
+    }
+
     val attributes = mutableListOf<String>()
     val samplers = mutableSetOf<String>()
     val uniforms = mutableMapOf<String, UniformType>()
@@ -11,33 +15,39 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?)
         var source = originalSource
 
         source = source.replace("gl_ModelViewProjectionMatrix", "gl_ProjectionMatrix * gl_ModelViewMatrix")
-        source = source.replace("texture2D", "texture")
+        if (targetVersion >= 130) {
+            source = source.replace("texture2D", "texture")
+        }
 
         val replacements = mutableMapOf<String, String>()
         val transformed = mutableListOf<String>()
-        transformed.add("#version 150")
+        transformed.add("#version $targetVersion")
 
         val frag = "gl_FragColor" in source
         val vert = !frag
 
-        if (frag) {
-            transformed.add("out vec4 uc_FragColor;")
+        val attributeIn = if (targetVersion >= 130) "in" else "attribute"
+        val varyingIn = if (targetVersion >= 130) "in" else "varying"
+        val varyingOut = if (targetVersion >= 130) "out" else "varying"
+
+        if (frag && targetVersion >= 130) {
+            transformed.add("$varyingOut vec4 uc_FragColor;")
             replacements["gl_FragColor"] = "uc_FragColor"
         }
 
         if (vert && "gl_FrontColor" in source) {
-            transformed.add("out vec4 uc_FrontColor;")
+            transformed.add("$varyingOut vec4 uc_FrontColor;")
             replacements["gl_FrontColor"] = "uc_FrontColor"
         }
         if (frag && "gl_Color" in source) {
-            transformed.add("in vec4 uc_FrontColor;")
+            transformed.add("$varyingIn vec4 uc_FrontColor;")
             replacements["gl_Color"] = "uc_FrontColor"
         }
 
         fun replaceAttribute(newAttributes: MutableList<Pair<String, String>>, needle: String, type: String, replacementName: String = "uc_" + needle.substringAfter("_"), replacement: String = replacementName) {
             if (needle in source) {
                 replacements[needle] = replacement
-                newAttributes.add(replacementName to "in $type $replacementName;")
+                newAttributes.add(replacementName to "$attributeIn $type $replacementName;")
             }
         }
         if (vert) {
@@ -85,7 +95,7 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?)
         for (line in source.lines()) {
             transformed.add(when {
                 line.startsWith("#version") -> continue
-                line.startsWith("varying ") -> (if (frag) "in " else "out ") + line.substringAfter("varying ")
+                line.startsWith("varying ") && targetVersion >= 130 -> (if (frag) "in " else "out ") + line.substringAfter("varying ")
                 line.startsWith("uniform ") -> {
                     val (_, glslType, name) = line.trimEnd(';').split(" ")
                     if (glslType == "sampler2D") {
