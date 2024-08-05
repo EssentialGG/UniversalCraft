@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import gg.essential.universal.utils.ReleasedDynamicTexture;
 import gg.essential.universal.vertex.UVertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -179,6 +181,24 @@ public class UGraphics {
     }
     //#endif
 
+    public static boolean isCoreProfile() {
+        //#if MC>=11700
+        //$$ return true;
+        //#else
+        return false;
+        //#endif
+    }
+
+    @Deprecated // only works on Forge 1.12.2 and below (relies on a Forge patch)
+    public static void enableStencil() {
+        //#if MC<11400
+        Framebuffer framebuffer = Minecraft.getMinecraft().getFramebuffer();
+        if (!framebuffer.isStencilEnabled()) {
+            framebuffer.enableStencil();
+        }
+        //#endif
+    }
+
     public static void cullFace(int mode) {
         //#if MC>=11502
         //$$ GL11.glCullFace(mode);
@@ -247,6 +267,12 @@ public class UGraphics {
         //#else
         GlStateManager.disableAlpha();
         //#endif
+        //#endif
+    }
+
+    public static void alphaFunc(int func, float ref) {
+        //#if MC<11700
+        GlStateManager.alphaFunc(func, ref);
         //#endif
     }
 
