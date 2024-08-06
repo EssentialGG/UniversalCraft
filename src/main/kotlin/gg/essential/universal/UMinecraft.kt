@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.gui.GuiNewChat
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.client.network.NetHandlerPlayClient
 import net.minecraft.client.settings.GameSettings
@@ -79,4 +80,23 @@ object UMinecraft {
 
     @JvmStatic
     fun getSettings(): GameSettings = getMinecraft().gameSettings
+
+    @JvmStatic
+    var currentScreenObj: Any?
+        get() = getMinecraft().currentScreen
+        set(value) {
+            //#if MC<11200
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            //#endif
+            getMinecraft().displayGuiScreen(value as GuiScreen?)
+        }
+
+    @JvmStatic
+    fun isCallingFromMinecraftThread(): Boolean {
+        //#if MC>=11400
+        //$$ return Minecraft.getInstance().isOnExecutionThread
+        //#else
+        return Minecraft.getMinecraft().isCallingFromMinecraftThread
+        //#endif
+    }
 }

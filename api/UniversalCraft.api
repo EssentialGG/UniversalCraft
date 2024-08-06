@@ -102,6 +102,7 @@ public class gg/essential/universal/UGraphics {
 	@1.12.2-forge,1.16.2-forge
 	public fun <init> (Lnet/minecraft/client/renderer/BufferBuilder;)V
 	public static fun activeTexture (I)V
+	public static fun alphaFunc (IF)V
 	public static fun areShadersSupported ()Z
 	public fun asUVertexConsumer ()Lgg/essential/universal/vertex/UVertexConsumer;
 	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge
@@ -174,6 +175,7 @@ public class gg/essential/universal/UGraphics {
 	public static fun enableDepth ()V
 	public static fun enableLight (I)V
 	public static fun enableLighting ()V
+	public static fun enableStencil ()V
 	public static fun enableTexture2D ()V
 	public fun endVertex ()Lgg/essential/universal/UGraphics;
 	public static fun getActiveTexture ()I
@@ -202,6 +204,7 @@ public class gg/essential/universal/UGraphics {
 	public static fun glGetShaderi (II)I
 	public static fun glLinkProgram (I)V
 	public static fun glUseProgram (I)V
+	public static fun isCoreProfile ()Z
 	public static fun isOpenGl21Supported ()Z
 	public fun light (II)Lgg/essential/universal/UGraphics;
 	public static fun listFormattedStringToWidth (Ljava/lang/String;I)Ljava/util/List;
@@ -302,6 +305,11 @@ public final class gg/essential/universal/UGuiButton {
 	public static final fun getX (Lnet/minecraft/client/gui/GuiButton;)I
 	@1.12.2-forge,1.8.9-forge
 	public static final fun getY (Lnet/minecraft/client/gui/GuiButton;)I
+}
+
+public final class gg/essential/universal/UI18n {
+	public static final field INSTANCE Lgg/essential/universal/UI18n;
+	public final fun i18n (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 }
 
 public final class gg/essential/universal/UImage {
@@ -645,16 +653,17 @@ public final class gg/essential/universal/UMinecraft {
 	public static final field isRunningOnMac Z
 	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge
 	public static final fun getChatGUI ()Lnet/minecraft/client/gui/components/ChatComponent;
-	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge
-	public static final fun getFontRenderer ()Lnet/minecraft/client/gui/Font;
 	@1.16.2-forge
 	public static final fun getChatGUI ()Lnet/minecraft/client/gui/NewChatGui;
 	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric
 	public static final fun getChatGUI ()Lnet/minecraft/client/gui/hud/ChatHud;
-	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric
-	public static final fun getFontRenderer ()Lnet/minecraft/client/font/TextRenderer;
 	@1.12.2-forge,1.8.9-forge
 	public static final fun getChatGUI ()Lnet/minecraft/client/gui/GuiNewChat;
+	public static final fun getCurrentScreenObj ()Ljava/lang/Object;
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge
+	public static final fun getFontRenderer ()Lnet/minecraft/client/gui/Font;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric
+	public static final fun getFontRenderer ()Lnet/minecraft/client/font/TextRenderer;
 	@1.12.2-forge,1.16.2-forge,1.8.9-forge
 	public static final fun getFontRenderer ()Lnet/minecraft/client/gui/FontRenderer;
 	public static final fun getGuiScale ()I
@@ -695,6 +704,8 @@ public final class gg/essential/universal/UMinecraft {
 	public static final fun getWorld ()Lnet/minecraft/client/world/ClientWorld;
 	@1.12.2-forge,1.8.9-forge
 	public static final fun getWorld ()Lnet/minecraft/client/multiplayer/WorldClient;
+	public static final fun isCallingFromMinecraftThread ()Z
+	public static final fun setCurrentScreenObj (Ljava/lang/Object;)V
 	public static final fun setGuiScale (I)V
 }
 
