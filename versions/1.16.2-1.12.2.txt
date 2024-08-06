@@ -1,34 +1,27 @@
-net.minecraft.client.audio.SimpleSound net.minecraft.client.audio.PositionedSoundRecord
-net.minecraft.client.audio.SimpleSound master() func_194007_a()
-net.minecraft.util.SoundEvents BLOCK_NOTE_BLOCK_PLING net.minecraft.init.SoundEvents BLOCK_NOTE_PLING
-net.minecraft.util.SoundEvents net.minecraft.init.SoundEvents
-net.minecraft.client.renderer.texture.Texture net.minecraft.client.renderer.texture.AbstractTexture
 net.minecraft.resources.IResourceManager net.minecraft.client.resources.IResourceManager
 net.minecraft.client.renderer.texture.TextureUtil prepareImage() allocateTexture()
 net.minecraft.util.math.vector.Matrix3f org.lwjgl.util.vector.Matrix3f
 net.minecraft.util.math.vector.Matrix4f org.lwjgl.util.vector.Matrix4f
-net.minecraft.util.math.vector.Matrix4f write() org.lwjgl.util.vector.Matrix4f store()
+net.minecraft.util.math.vector.Matrix4f write(Ljava/nio/FloatBuffer;)V store(Ljava/nio/FloatBuffer;)Lorg/lwjgl/util/vector/Matrix;
 net.minecraft.util.math.vector.Quaternion org.lwjgl.util.vector.Quaternion
 net.minecraft.util.math.vector.Vector3f org.lwjgl.util.vector.Vector3f
-net.minecraft.util.math.vector.Vector4f org.lwjgl.util.vector.Vector4f
 net.minecraft.client.gui.screen.Screen net.minecraft.client.gui.GuiScreen
 net.minecraft.client.gui.widget.Widget net.minecraft.client.gui.GuiButton
-net.minecraft.client.renderer.entity.RenderPlayer net.minecraft.client.renderer.entity.PlayerRenderer
-net.minecraft.entity.player.PlayerEntity net.minecraft.entity.player.EntityPlayer
 com.mojang.blaze3d.systems.RenderSystem net.minecraft.client.renderer.GlStateManager
+com.mojang.blaze3d.systems.RenderSystem translated() translate(DDD)V
+com.mojang.blaze3d.systems.RenderSystem translatef() translate(FFF)V
+com.mojang.blaze3d.systems.RenderSystem rotatef() rotate(FFFF)V
+com.mojang.blaze3d.systems.RenderSystem scalef() scale(FFF)V
+com.mojang.blaze3d.systems.RenderSystem scaled() scale(DDD)V
+com.mojang.blaze3d.systems.RenderSystem color3f() color(FFF)V
+com.mojang.blaze3d.systems.RenderSystem color4f() color(FFFF)V
+com.mojang.blaze3d.systems.RenderSystem enableDepthTest() enableDepth()
+com.mojang.blaze3d.systems.RenderSystem disableDepthTest() disableDepth()
+com.mojang.blaze3d.systems.RenderSystem enableAlphaTest() enableAlpha()
+com.mojang.blaze3d.systems.RenderSystem disableAlphaTest() disableAlpha()
+com.mojang.blaze3d.systems.RenderSystem blendEquation() glBlendEquation()
+com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate()
 com.mojang.blaze3d.systems.RenderSystem activeTexture() net.minecraft.client.renderer.GlStateManager setActiveTexture()
 com.mojang.blaze3d.systems.RenderSystem enableTexture() net.minecraft.client.renderer.GlStateManager enableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem disableTexture() net.minecraft.client.renderer.GlStateManager disableTexture2D()
-net.minecraft.client.renderer.vertex.VertexFormat hasUV() hasUvOffset()
-net.minecraft.client.renderer.vertex.VertexFormatElement$Usage net.minecraft.client.renderer.vertex.VertexFormatElement$EnumUsage
 net.minecraft.client.renderer.vertex.DefaultVertexFormats POSITION_TEX_LIGHTMAP_COLOR POSITION_TEX_LMAP_COLOR
-net.minecraft.client.renderer.entity.PlayerRenderer net.minecraft.client.renderer.entity.RenderPlayer
-net.minecraft.client.world.ClientWorld net.minecraft.client.multiplayer.WorldClient
-net.minecraft.client.entity.player.ClientPlayerEntity net.minecraft.client.entity.EntityPlayerSP
-net.minecraft.client.network.play.ClientPlayNetHandler net.minecraft.client.network.NetHandlerPlayClient
-net.minecraft.potion.EffectInstance net.minecraft.potion.PotionEffect
-net.minecraft.util.text.StringTextComponent net.minecraft.util.text.TextComponentString
-net.minecraft.client.GameSettings net.minecraft.client.settings.GameSettings
-net.minecraft.client.gui.NewChatGui net.minecraft.client.gui.GuiNewChat
-net.minecraft.client.gui.screen.MainMenuScreen net.minecraft.client.gui.GuiMainMenu
-net.minecraft.network.play.server.SChatPacket net.minecraft.network.play.server.SPacketChat
