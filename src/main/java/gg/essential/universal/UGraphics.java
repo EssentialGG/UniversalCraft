@@ -85,6 +85,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
 //#endif
 
+@SuppressWarnings("deprecation") // lots of MC methods are deprecated on some versions but only replaced on the next one
 public class UGraphics {
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
 

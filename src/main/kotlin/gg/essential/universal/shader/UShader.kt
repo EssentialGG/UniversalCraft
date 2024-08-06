@@ -45,6 +45,7 @@ interface UShader {
             //#if MC>=11700
             //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)
             //#else
+            @Suppress("UNUSED_EXPRESSION") vertexFormat // only relevant to MCShader
             return GlShader(vertSource, fragSource, blendState)
             //#endif
         }

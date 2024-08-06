@@ -19,6 +19,9 @@ object UPlayer {
         //#if MC>=11900
         //$$ getPlayer()!!.sendMessage(message)
         //#elseif MC>=11602
+        //#if FORGE
+        //$$ @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS") // Forge adds inappropriate NonNullByDefault
+        //#endif
         //$$ getPlayer()!!.sendMessage(message, null)
         //#elseif MC>=11202
         //$$ getPlayer()!!.sendMessage(message)
@@ -30,7 +33,7 @@ object UPlayer {
     @JvmStatic
     fun getUUID(): UUID {
         //#if MC>=12002
-        //$$ return UMinecraft.getMinecraft().session.uuidOrNull!!
+        //$$ return UMinecraft.getMinecraft().session.uuidOrNull // misnamed, should not actually ever be null
         //#else
         return UMinecraft.getMinecraft().session.profile.id
         //#endif

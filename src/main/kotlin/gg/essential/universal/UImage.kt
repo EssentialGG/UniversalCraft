@@ -67,6 +67,7 @@ class UImage(val nativeImage: BufferedImage) {
             //#if MC>=11600
             //$$ return UImage(NativeImage(width, height, clear))
             //#else
+            @Suppress("UNUSED_EXPRESSION") clear // not yet using native memory, so it'll be cleared by the jvm
             return UImage(BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB))
             //#endif
         }

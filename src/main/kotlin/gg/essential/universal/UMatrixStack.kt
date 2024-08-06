@@ -165,6 +165,7 @@ class UMatrixStack private constructor(
         //$$ model.mul(quaternion)
         //$$ normal.mul(quaternion)
         //#else
+        @Suppress("UNUSED_EXPRESSION") quaternion
         TODO("lwjgl quaternion multiply") // there seems to be no existing methods to do this
         //#endif
     }
