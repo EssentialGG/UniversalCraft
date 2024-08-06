@@ -250,6 +250,7 @@ object UKeyboard {
     fun allowRepeatEvents(enabled: Boolean) {
         //#if MC>=11903
         //$$ // Minecraft removed this function in 1.19.3, repeat events are now always enabled.
+        //$$ @Suppress("UNUSED_EXPRESSION") enabled
         //#elseif MC>=11502
         //$$ UMinecraft.getMinecraft().keyboardListener.enableRepeatEvents(enabled)
         //#else
@@ -348,10 +349,12 @@ object UKeyboard {
         //$$     if (it.length == 1) it.uppercase() else it
         //$$ }
         //#else
+        @Suppress("UNUSED_EXPRESSION") scanCode
         return Keyboard.getKeyName(keyCode)
         //#endif
     }
 
+    @Suppress("DEPRECATION")
     @Deprecated("Does not work for mouse or scanCode-type bindings", replaceWith = ReplaceWith("getKeyName(keyCode, -1)"))
     @JvmStatic
     fun getKeyName(keyCode: Int): String? = getKeyName(keyCode, -1)

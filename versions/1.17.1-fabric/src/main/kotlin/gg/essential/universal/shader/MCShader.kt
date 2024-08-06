@@ -137,6 +137,9 @@ internal class MCShader(
 
 
             val name = DigestUtils.sha1Hex(json).lowercase()
+            //#if FORGE
+            //$$ @Suppress("DEPRECATION") // Forge wants us to use its overload, but we don't care
+            //#endif
             return MCShader(Shader(factory, name, shaderVertexFormat), blendState)
         }
     }

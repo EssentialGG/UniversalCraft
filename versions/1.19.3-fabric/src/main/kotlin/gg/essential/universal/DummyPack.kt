@@ -24,19 +24,19 @@ internal object DummyPack : ResourcePack {
         throw UnsupportedOperationException()
     }
 
-    override fun open(type: ResourceType?, id: Identifier?): InputSupplier<InputStream>? {
+    override fun open(type: ResourceType, id: Identifier): InputSupplier<InputStream>? {
         throw UnsupportedOperationException()
     }
 
-    override fun findResources(type: ResourceType?, namespace: String?, prefix: String?, consumer: ResourcePack.ResultConsumer?) {
+    override fun findResources(type: ResourceType, namespace: String, prefix: String, consumer: ResourcePack.ResultConsumer) {
         throw UnsupportedOperationException()
     }
 
-    override fun getNamespaces(type: ResourceType?): MutableSet<String> {
+    override fun getNamespaces(type: ResourceType): MutableSet<String> {
         throw UnsupportedOperationException()
     }
 
-    override fun <T : Any?> parseMetadata(metaReader: ResourceMetadataReader<T>?): T? {
+    override fun <T : Any?> parseMetadata(metaReader: ResourceMetadataReader<T>): T? {
         throw UnsupportedOperationException()
     }
 

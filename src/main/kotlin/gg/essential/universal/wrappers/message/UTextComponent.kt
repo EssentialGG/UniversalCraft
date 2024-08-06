@@ -45,7 +45,7 @@ class UTextComponent : IChatComponent {
     lateinit var component: IChatComponent
 //#endif
         private set
-    var text: String
+    var text: String = ""
         set(value) {
             field = value
             reInstance()
@@ -156,10 +156,12 @@ class UTextComponent : IChatComponent {
     }
 
     private fun reInstanceClick() {
+        val clickAction = clickAction
+        val clickValue = clickValue
         if (clickAction == null || clickValue == null)
             return
 
-        val event = ClickEvent(clickAction, clickValue!!.formatIf(formatted))
+        val event = ClickEvent(clickAction, clickValue.formatIf(formatted))
 
         //#if MC>=11600
         //$$ component.style = component.style.setClickEvent(event)
@@ -171,17 +173,20 @@ class UTextComponent : IChatComponent {
     }
 
     private fun reInstanceHover() {
+        val hoverAction = hoverAction
+        val hoverValue = hoverValue
         if (hoverAction == null || hoverValue == null)
             return
 
         //#if MC>=11602
-        //$$ val event = HoverEvent<Any>(hoverAction as HoverEvent.Action<Any>, hoverValue!!)
+        //$$ @Suppress("UNCHECKED_CAST")
+        //$$ val event = HoverEvent(hoverAction as HoverEvent.Action<Any>, hoverValue)
         //$$ setHoverEventHelper(event)
         //#else
         val value: IChatComponent = when (hoverValue) {
-            is String -> ChatComponentText(hoverValue as String)
-            is UTextComponent -> (hoverValue as UTextComponent).component
-            is IChatComponent -> hoverValue as IChatComponent
+            is String -> ChatComponentText(hoverValue)
+            is UTextComponent -> hoverValue.component
+            is IChatComponent -> hoverValue
             else -> ChatComponentText(hoverValue.toString())
         }
         setHoverEventHelper(HoverEvent(
