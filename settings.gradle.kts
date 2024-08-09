@@ -17,6 +17,9 @@ pluginManagement {
 rootProject.name = "UniversalCraft"
 rootProject.buildFileName = "root.gradle.kts"
 
+include(":standalone")
+include(":standalone:example")
+
 listOf(
     "1.8.9-forge",
     "1.12.2-forge",

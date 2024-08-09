@@ -59,7 +59,7 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?,
             replaceAttribute(newAttributes, "gl_MultiTexCoord2.st", "vec2", "uc_UV2")
 
             if (vertexFormat != null) {
-                //#if MC>=11700
+                //#if MC>=11700 && !STANDALONE
                 //$$ newAttributes.sortedBy { vertexFormat.mc.shaderAttributes.indexOf(it.first.removePrefix("uc_")) }
                 //$$     .forEach {
                 //$$         attributes.add(it.first)

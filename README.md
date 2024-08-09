@@ -2,6 +2,15 @@
 
 A full Java interop library that wraps Minecraft classes which allows you to write code for multiple versions at the same time. Built using ReplayMod's [Preprocessor](https://github.com/ReplayMod/preprocessor).
 
+
+It also features a "standalone" edition, which can run GUIs without Minecraft so long as they only depend on
+UniversalCraft and not Minecraft directly.
+This can allow for a faster development loop (no need to wait a minute for Minecraft to start),
+automated testing without having to bootstrap a full Minecraft environment,
+and even development of completely standalone applications using the same toolkit (e.g. [Elementa]) as one is already
+familiar with from Minecraft development.
+See the `standalone/example/` folder for a fully functional example.
+
 ## Dependency
 
 It's recommended that you include [Essential](link eventually) instead of adding it yourself.
@@ -57,6 +66,13 @@ done
           <th>mcVersion</th>
           <th>mcPlatform</th>
           <th>buildNumber</th>
+        </tr>
+        <tr>
+          <td>standalone</td>
+          <td>N/A</td>
+          <td>
+            <img alt="standalone" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-standalone/maven-metadata.xml">
+          </td>
         </tr>
         <tr><td>1.21</td><td>fabric</td><td><img alt="1.21-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.21-fabric/maven-metadata.xml"></td></tr>
         <tr><td>1.20.6</td><td>fabric</td><td><img alt="1.20.6-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.20.6-fabric/maven-metadata.xml"></td></tr>
@@ -155,3 +171,5 @@ tasks.reobfJar { dependsOn(tasks.shadowJar) }
 ```
 
 </details>
+
+[Elementa]: https://github.com/EssentialGG/Elementa

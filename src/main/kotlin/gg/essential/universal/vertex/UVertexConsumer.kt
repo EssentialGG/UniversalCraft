@@ -27,6 +27,7 @@ interface UVertexConsumer {
     fun endVertex(): UVertexConsumer
 
     companion object {
+        //#if !STANDALONE
         @JvmStatic
         fun of(
             //#if MC>=11600
@@ -35,5 +36,6 @@ interface UVertexConsumer {
             wrapped: net.minecraft.client.renderer.WorldRenderer,
             //#endif
         ): UVertexConsumer = VanillaVertexConsumer(wrapped)
+        //#endif
     }
 }

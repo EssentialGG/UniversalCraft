@@ -2,7 +2,11 @@ package gg.essential.universal.shader
 
 import gg.essential.universal.UGraphics
 
-//#if MC>=11700
+//#if STANDALONE
+//$$ import gg.essential.universal.standalone.render.VertexFormat.Part
+//$$ import org.lwjgl.opengl.GL
+//$$ import org.lwjgl.opengl.GL20C
+//#elseif MC>=11700
 //$$ import net.minecraft.client.render.Shader
 //#endif
 
@@ -34,23 +38,48 @@ interface UShader {
             replaceWith = ReplaceWith("UShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)")
         )
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState): UShader {
-            //#if MC>=11700
+            //#if STANDALONE
+            //$$ return fromLegacyShader(vertSource, fragSource, blendState, UGraphics.CommonVertexFormats.POSITION_COLOR)
+            //#elseif MC>=11700
             //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, null)
             //#else
-            return GlShader(vertSource, fragSource, blendState)
+            return GlShader(vertSource, fragSource, blendState) {}
             //#endif
         }
 
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: UGraphics.CommonVertexFormats): UShader {
-            //#if MC>=11700
+            //#if STANDALONE
+            //$$ return fromLegacyShader(vertSource, fragSource, blendState, vertexFormat.mc.parts)
+            //#elseif MC>=11700
             //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)
             //#else
             @Suppress("UNUSED_EXPRESSION") vertexFormat // only relevant to MCShader
-            return GlShader(vertSource, fragSource, blendState)
+            return GlShader(vertSource, fragSource, blendState) {}
             //#endif
         }
 
-        //#if MC>=11700
+        //#if STANDALONE
+        //$$ internal fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, attributes: List<Part>): UShader {
+        //$$     val caps = GL.getCapabilities()
+        //$$     val targetGlslVersion = when {
+        //$$         caps.OpenGL32 -> 150
+        //$$         caps.OpenGL30 -> 130
+        //$$         else -> 110
+        //$$     }
+        //$$     val transformer = ShaderTransformer(null, targetGlslVersion)
+        //$$     return GlShader(transformer.transform(vertSource), transformer.transform(fragSource), blendState) { program ->
+        //$$         for ((index, attribute) in attributes.withIndex()) {
+        //$$             GL20C.glBindAttribLocation(program, index, when (attribute) {
+        //$$                 Part.POSITION -> "uc_Position"
+        //$$                 Part.TEXTURE -> "uc_UV0"
+        //$$                 Part.COLOR -> "uc_Color"
+        //$$                 Part.LIGHT -> "uc_UV1"
+        //$$                 Part.NORMAL -> "uc_Normal"
+        //$$             })
+        //$$         }
+        //$$     }
+        //$$ }
+        //#elseif MC>=11700
         //$$ fun fromMcShader(shader: Shader, blendState: BlendState): UShader {
         //$$     return MCShader(shader, blendState)
         //$$ }

@@ -62,3 +62,7 @@ preprocess {
     forge11602.link(forge11202, file("versions/1.16.2-1.12.2.txt"))
     forge11202.link(forge10809)
 }
+
+apiValidation {
+    ignoredProjects += listOf("standalone", "example")
+}

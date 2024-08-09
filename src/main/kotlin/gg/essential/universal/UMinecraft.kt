@@ -1,5 +1,10 @@
 package gg.essential.universal
 
+//#if STANDALONE
+//$$ import kotlin.coroutines.EmptyCoroutineContext
+//$$ import kotlinx.coroutines.Dispatchers
+//$$ import org.lwjgl.glfw.GLFW
+//#else
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.FontRenderer
@@ -12,8 +17,13 @@ import net.minecraft.client.settings.GameSettings
 //#if MC>=11502
 //$$ import net.minecraft.client.util.NativeUtil
 //#endif
+//#endif
 
 object UMinecraft {
+    //#if STANDALONE
+    //$$ @JvmStatic
+    //$$ var guiScale: Int = 1
+    //#else
     //#if MC>=11900
     //$$ private var guiScaleValue: Int
     //$$     get() = getSettings().guiScale.value
@@ -36,11 +46,17 @@ object UMinecraft {
             //$$ window.setGuiScale(scaleFactor.toDouble())
             //#endif
         }
+    //#endif
 
     @JvmField
     val isRunningOnMac: Boolean =
+        //#if STANDALONE
+        //$$ UDesktop.isMac
+        //#else
         Minecraft.isRunningOnMac
+        //#endif
 
+    //#if !STANDALONE
     @JvmStatic
     fun getMinecraft(): Minecraft {
         return Minecraft.getMinecraft()
@@ -65,16 +81,20 @@ object UMinecraft {
     fun getFontRenderer(): FontRenderer {
         return getMinecraft().fontRendererObj
     }
+    //#endif
 
     @JvmStatic
     fun getTime(): Long {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return (GLFW.glfwGetTime() * 1000).toLong()
+        //#elseif MC>=11502
         //$$ return (NativeUtil.getTime() * 1000).toLong()
         //#else
         return Minecraft.getSystemTime()
         //#endif
     }
 
+    //#if !STANDALONE
     @JvmStatic
     //#if FORGE
     @Suppress("UNNECESSARY_SAFE_CALL") // Forge adds inappropriate NonNullByDefault
@@ -83,9 +103,14 @@ object UMinecraft {
 
     @JvmStatic
     fun getSettings(): GameSettings = getMinecraft().gameSettings
+    //#endif
 
     @JvmStatic
     var currentScreenObj: Any?
+        //#if STANDALONE
+        //$$ get() = UScreen.currentScreen
+        //$$ set(value) = UScreen.displayScreen(value as UScreen?)
+        //#else
         get() = getMinecraft().currentScreen
         set(value) {
             //#if MC<11200
@@ -93,10 +118,14 @@ object UMinecraft {
             //#endif
             getMinecraft().displayGuiScreen(value as GuiScreen?)
         }
+        //#endif
+
 
     @JvmStatic
     fun isCallingFromMinecraftThread(): Boolean {
-        //#if MC>=11400
+        //#if STANDALONE
+        //$$ return !Dispatchers.Main.immediate.isDispatchNeeded(EmptyCoroutineContext)
+        //#elseif MC>=11400
         //$$ return Minecraft.getInstance().isOnExecutionThread
         //#else
         return Minecraft.getMinecraft().isCallingFromMinecraftThread

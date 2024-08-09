@@ -8,6 +8,14 @@ import kotlin.math.max
 
 object UMouse {
     object Raw {
+        //#if STANDALONE
+        //$$ @JvmStatic
+        //$$ var x: Double = 0.0
+        //$$     internal set
+        //$$ @JvmStatic
+        //$$ var y: Double = 0.0
+        //$$     internal set
+        //#else
         @JvmStatic
         val x: Double
             get() {
@@ -27,6 +35,7 @@ object UMouse {
                 return UResolution.windowHeight - Mouse.getY().toDouble() - 1
                 //#endif
             }
+        //#endif
     }
 
     object Scaled {
@@ -43,7 +52,7 @@ object UMouse {
     @Deprecated("Orientation is different between Minecraft versions.", replaceWith = ReplaceWith("UMouse.Raw.x"))
     fun getTrueX(): Double {
         //#if MC>=11502
-        //$$ return UMinecraft.getMinecraft().mouseHelper.mouseX
+        //$$ return Raw.x
         //#else
         return Mouse.getX().toDouble()
         //#endif
@@ -60,7 +69,7 @@ object UMouse {
     @Deprecated("Orientation is different between Minecraft versions.", replaceWith = ReplaceWith("UMouse.Raw.y"))
     fun getTrueY(): Double {
         //#if MC>=11502
-        //$$ return UMinecraft.getMinecraft().mouseHelper.mouseY
+        //$$ return Raw.y
         //#else
         return Mouse.getY().toDouble()
         //#endif

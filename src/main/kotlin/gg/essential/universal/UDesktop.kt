@@ -6,7 +6,16 @@ import java.io.IOException
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
-//#if MC>=11400
+//#if STANDALONE
+//$$ import gg.essential.universal.standalone.glfw.Glfw
+//$$ import gg.essential.universal.standalone.glfw.GlfwWindow
+//$$ import kotlinx.coroutines.Dispatchers
+//$$ import kotlinx.coroutines.runBlocking
+//$$ import kotlinx.coroutines.withContext
+//$$ import org.lwjgl.glfw.GLFW
+//$$ import org.lwjgl.glfw.GLFWErrorCallback
+//$$ import org.lwjgl.system.MemoryUtil
+//#elseif MC>=11400
 //#else
 import net.minecraft.client.gui.GuiScreen
 //#endif
@@ -136,6 +145,43 @@ object UDesktop {
         }
     }
 
+    //#if STANDALONE
+    //$$ internal lateinit var glfwWindow: GlfwWindow
+    //$$
+    //$$ @JvmStatic
+    //$$ fun getClipboardString(): String = runBlocking {
+    //$$     withContext(Dispatchers.Glfw.immediate) {
+    //$$         var oldCallback: GLFWErrorCallback? = null
+    //$$         oldCallback = GLFW.glfwSetErrorCallback { error, description ->
+    //$$             if (error == GLFW.GLFW_FORMAT_UNAVAILABLE) return@glfwSetErrorCallback
+    //$$             oldCallback?.invoke(error, description)
+    //$$         }
+    //$$         try {
+    //$$             GLFW.glfwGetClipboardString(glfwWindow.glfwId) ?: ""
+    //$$         } finally {
+    //$$             GLFW.glfwSetErrorCallback(oldCallback)?.free()
+    //$$         }
+    //$$     }
+    //$$ }
+    //$$
+    //$$ @JvmStatic
+    //$$ fun setClipboardString(str: String) = runBlocking {
+    //$$     withContext(Dispatchers.Glfw.immediate) {
+    //$$         // If we pass a string, LWJGL allocates a temporary buffer for it on the stack, which is small by default (64kb).
+    //$$         // So for large strings, we need to explicitly allocate it on the heap.
+    //$$         if (str.length < 512) {
+    //$$             GLFW.glfwSetClipboardString(glfwWindow.glfwId, str)
+    //$$         } else {
+    //$$             val buffer = MemoryUtil.memUTF8(str)
+    //$$             try {
+    //$$                 GLFW.glfwSetClipboardString(glfwWindow.glfwId, buffer)
+    //$$             } finally {
+    //$$                 MemoryUtil.memFree(buffer)
+    //$$             }
+    //$$         }
+    //$$     }
+    //$$ }
+    //#else
     @JvmStatic
     fun getClipboardString(): String =
         //#if MC>=11400
@@ -152,4 +198,5 @@ object UDesktop {
         GuiScreen.setClipboardString(str)
         //#endif
     }
+    //#endif
 }

@@ -1,11 +1,18 @@
 package gg.essential.universal.utils
 
 import gg.essential.universal.UGraphics
+
+//#if STANDALONE
+//$$ import org.lwjgl.BufferUtils
+//$$ import org.lwjgl.opengl.GL20C
+//$$ import java.nio.Buffer
+//#else
 import net.minecraft.client.renderer.texture.AbstractTexture
 import net.minecraft.client.renderer.texture.TextureUtil
 import net.minecraft.client.resources.IResourceManager
+//#endif
 
-//#if MC<11502
+//#if MC<11502 || STANDALONE
 import java.awt.image.BufferedImage
 //#else
 //$$ import net.minecraft.client.renderer.texture.NativeImage
@@ -23,16 +30,20 @@ import java.util.concurrent.ConcurrentHashMap
 class ReleasedDynamicTexture private constructor(
     val width: Int,
     val height: Int,
-    //#if MC>=11400
+    //#if MC>=11400 && !STANDALONE
     //$$ textureData: NativeImage?,
     //#else
     textureData: IntArray?,
     //#endif
+//#if STANDALONE
+//$$ ) {
+//#else
 ) : AbstractTexture() {
+//#endif
 
     private var resources = Resources(this)
 
-    //#if MC>=11400
+    //#if MC>=11400 && !STANDALONE
     //$$ init {
     //$$     resources.textureData = textureData ?: NativeImage(width, height, true)
     //$$ }
@@ -45,7 +56,7 @@ class ReleasedDynamicTexture private constructor(
 
     constructor(width: Int, height: Int) : this(width, height, null)
 
-    //#if MC>=11400
+    //#if MC>=11400 && !STANDALONE
     //$$ constructor(nativeImage: NativeImage) : this(nativeImage.width, nativeImage.height, nativeImage)
     //#else
     constructor(bufferedImage: BufferedImage) : this(bufferedImage.width, bufferedImage.height) {
@@ -53,9 +64,11 @@ class ReleasedDynamicTexture private constructor(
     }
     //#endif
 
+    //#if !STANDALONE
     @Throws(IOException::class)
     override fun loadTexture(resourceManager: IResourceManager) {
     }
+    //#endif
 
     fun updateDynamicTexture() {
         uploadTexture()
@@ -63,6 +76,35 @@ class ReleasedDynamicTexture private constructor(
 
     fun uploadTexture() {
         if (!uploaded) {
+            //#if STANDALONE
+            //$$ val glId = GL20C.glGenTextures()
+            //$$
+            //$$ GL20C.glBindTexture(GL20C.GL_TEXTURE_2D, glId)
+            //$$
+            //$$ GL20C.glTexParameteri(GL20C.GL_TEXTURE_2D, GL20C.GL_TEXTURE_MIN_FILTER, GL20C.GL_LINEAR)
+            //$$ GL20C.glTexParameteri(GL20C.GL_TEXTURE_2D, GL20C.GL_TEXTURE_MAG_FILTER, GL20C.GL_NEAREST)
+            //$$ GL20C.glTexParameteri(GL20C.GL_TEXTURE_2D, GL20C.GL_TEXTURE_WRAP_S, GL20C.GL_CLAMP_TO_EDGE)
+            //$$ GL20C.glTexParameteri(GL20C.GL_TEXTURE_2D, GL20C.GL_TEXTURE_WRAP_T, GL20C.GL_CLAMP_TO_EDGE)
+            //$$
+            //$$ val nativeBuffer = BufferUtils.createIntBuffer(textureData.size)
+            //$$ nativeBuffer.put(textureData)
+            //$$ (nativeBuffer as Buffer).rewind()
+            //$$ GL20C.glTexImage2D(
+            //$$     GL20C.GL_TEXTURE_2D,
+            //$$     0,
+            //$$     GL20C.GL_RGBA,
+            //$$     width,
+            //$$     height,
+            //$$     0,
+            //$$     GL20C.GL_BGRA,
+            //$$     GL20C.GL_UNSIGNED_BYTE,
+            //$$     nativeBuffer
+            //$$ )
+            //$$ textureData = IntArray(0)
+            //$$
+            //$$ uploaded = true
+            //$$ resources.glId = glId
+            //#else
             TextureUtil.allocateTexture(allocGlId(), width, height)
 
             //#if MC>=11400
@@ -80,15 +122,29 @@ class ReleasedDynamicTexture private constructor(
             uploaded = true
 
             resources.glId = allocGlId()
+            //#endif
             Resources.drainCleanupQueue()
         }
     }
 
+    //#if !STANDALONE
     private fun allocGlId() = super.getGlTextureId()
+    //#endif
 
     val dynamicGlId: Int
         get() = getGlTextureId()
 
+    //#if STANDALONE
+    //$$ fun getGlTextureId(): Int {
+    //$$     uploadTexture()
+    //$$     return resources.glId
+    //$$ }
+    //$$
+    //$$ fun deleteGlTexture() {
+    //$$     UGraphics.deleteTexture(resources.glId)
+    //$$     resources.glId = -1
+    //$$ }
+    //#else
     override fun getGlTextureId(): Int {
         uploadTexture()
         return super.getGlTextureId()
@@ -105,10 +161,11 @@ class ReleasedDynamicTexture private constructor(
     //$$     resources.close()
     //$$ }
     //#endif
+    //#endif
 
     private class Resources(referent: ReleasedDynamicTexture) : PhantomReference<ReleasedDynamicTexture>(referent, referenceQueue), Closeable {
         var glId: Int = -1
-        //#if MC>=11400
+        //#if MC>=11400 && !STANDALONE
         //$$ var textureData: NativeImage? = null
         //$$    set(value) {
         //$$        field?.close()
@@ -128,7 +185,7 @@ class ReleasedDynamicTexture private constructor(
                 glId = -1
             }
 
-            //#if MC>=11400
+            //#if MC>=11400 && !STANDALONE
             //$$ textureData = null
             //#endif
         }

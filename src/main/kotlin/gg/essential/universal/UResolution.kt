@@ -11,6 +11,20 @@ object UResolution {
     private var cachedScaledResolutionInputs: ScaledResolutionInputs? = null
     //#endif
 
+    //#if STANDALONE
+    //$$ @JvmStatic
+    //$$ var windowWidth: Int = 1
+    //$$     internal set
+    //$$ @JvmStatic
+    //$$ var windowHeight: Int = 1
+    //$$     internal set
+    //$$ @JvmStatic
+    //$$ var viewportWidth: Int = 1
+    //$$     internal set
+    //$$ @JvmStatic
+    //$$ var viewportHeight: Int = 1
+    //$$     internal set
+    //#else
     @JvmStatic
     val windowWidth: Int
         get() {
@@ -50,6 +64,7 @@ object UResolution {
             return UMinecraft.getMinecraft().displayHeight
             //#endif
         }
+    //#endif
 
     //#if MC<=11202
     private fun get(): ScaledResolution {
@@ -66,7 +81,9 @@ object UResolution {
     @JvmStatic
     val scaledWidth: Int
         get() {
-            //#if MC>=11502
+            //#if STANDALONE
+            //$$ return (viewportWidth / scaleFactor).toInt()
+            //#elseif MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.scaledWidth
             //#else
             return get().scaledWidth
@@ -76,7 +93,9 @@ object UResolution {
     @JvmStatic
     val scaledHeight: Int
         get() {
-            //#if MC>=11502
+            //#if STANDALONE
+            //$$ return (viewportHeight / scaleFactor).toInt()
+            //#elseif MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.scaledHeight
             //#else
             return get().scaledHeight
@@ -86,7 +105,9 @@ object UResolution {
     @JvmStatic
     val scaleFactor: Double
         get() {
-            //#if MC>=11502
+            //#if STANDALONE
+            //$$ return UMinecraft.guiScale.toDouble()
+            //#elseif MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.guiScaleFactor
             //#else
             return get().scaleFactor.toDouble()

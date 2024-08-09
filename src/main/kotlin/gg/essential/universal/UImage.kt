@@ -1,12 +1,12 @@
 package gg.essential.universal
 
-//#if MC<11600
+//#if MC<11600 || STANDALONE
 import java.awt.image.BufferedImage
 //#else
 //$$ import net.minecraft.client.renderer.texture.NativeImage
 //#endif
 
-//#if MC>=11600
+//#if MC>=11600 && !STANDALONE
 //$$ class UImage(val nativeImage: NativeImage) {
 //#else
 class UImage(val nativeImage: BufferedImage) {
@@ -14,7 +14,7 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun copyFrom(other: UImage) {
         val otherNative = other.nativeImage
-        //#if MC>=11600
+        //#if MC>=11600 && !STANDALONE
         //$$ nativeImage.copyImageData(otherNative)
         //#else
         nativeImage.graphics.drawImage(otherNative, 0, 0, otherNative.width, otherNative.height, null)
@@ -22,7 +22,7 @@ class UImage(val nativeImage: BufferedImage) {
     }
 
     fun copy(): UImage {
-        //#if MC>=11600
+        //#if MC>=11600 && !STANDALONE
         //$$ return UImage(NativeImage(getWidth(), getHeight(), false)).also { it.copyFrom(this) }
         //#else
         return UImage(BufferedImage(getWidth(), getHeight(), nativeImage.type)).also { it.copyFrom(this) }
@@ -30,7 +30,7 @@ class UImage(val nativeImage: BufferedImage) {
     }
 
     fun getPixelRGBA(x: Int, y: Int): Int {
-        //#if MC>=11600
+        //#if MC>=11600 && !STANDALONE
         //$$ // Convert ABGR to RGBA
         //$$ val abgr = nativeImage.getPixelRGBA(x, y) // mappings are incorrect, this returns ABGR
         //$$ val a = abgr shr 24 and 0xFF
@@ -44,7 +44,7 @@ class UImage(val nativeImage: BufferedImage) {
     }
 
     fun setPixelRGBA(x: Int, y: Int, color: Int) {
-        //#if MC>=11600
+        //#if MC>=11600 && !STANDALONE
         //$$ // Convert RGBA to ABGR
         //$$ val r = color shr 24 and 0xFF
         //$$ val g = color shr 16 and 0xFF
@@ -64,7 +64,7 @@ class UImage(val nativeImage: BufferedImage) {
         @JvmStatic
         @JvmOverloads
         fun ofSize(width: Int, height: Int, clear: Boolean = true): UImage {
-            //#if MC>=11600
+            //#if MC>=11600 && !STANDALONE
             //$$ return UImage(NativeImage(width, height, clear))
             //#else
             @Suppress("UNUSED_EXPRESSION") clear // not yet using native memory, so it'll be cleared by the jvm
