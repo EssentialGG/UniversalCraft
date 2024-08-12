@@ -22,14 +22,13 @@ dependencies {
 
     implementation("dev.folomeev.kotgl:kotgl-matrix:0.0.1-beta")
 
-    val lwjglVersion = "3.3.3"
     val lwjglModules = listOf("lwjgl", "lwjgl-glfw", "lwjgl-opengl", "lwjgl-stb", "lwjgl-nanovg")
     val lwjglNatives = listOf("linux", "macos", "macos-arm64", "windows")
-    api(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+    api(platform("org.lwjgl:lwjgl-bom:3.3.3"))
     for (module in lwjglModules) {
-        api("org.lwjgl:$module:$lwjglVersion")
+        api("org.lwjgl", module)
         for (native in lwjglNatives) {
-            api("org.lwjgl:$module:$lwjglVersion:natives-$native")
+            api("org.lwjgl", module, classifier = "natives-$native")
         }
     }
 
