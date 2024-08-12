@@ -28,7 +28,7 @@ fun main() = runUniversalCraft("Example", 1000, 600) { window ->
 
 fun LayoutScope.exampleScreen(extraFontsLoaded: State<Boolean>) {
     column(Arrangement.spacedBy(10f)) {
-        image("/essential.png", Modifier.width(186f).height(16f))
+        image("/100px-Tabby_cat_with_blue_eyes-3336579.jpg", Modifier.width(50f).height(60f))
         row(Arrangement.spacedBy(5f)) {
             box(Modifier.width(100f).height(20f).color(Color.CYAN).hoverColor(Color.BLUE).hoverScope())
             UIRoundedRectangle(10f)(Modifier.width(100f).height(20f).color(Color.RED))
