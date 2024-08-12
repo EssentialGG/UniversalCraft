@@ -4,7 +4,7 @@ import gg.essential.universal.UGraphics
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL14
 
-//#if MC>=11700
+//#if MC>=11700 && !STANDALONE
 //$$ import net.minecraft.client.gl.GlBlendState
 //#endif
 
@@ -22,7 +22,7 @@ data class BlendState(
 ) {
     val separate = srcRgb != srcAlpha || dstRgb != dstAlpha
 
-    //#if MC>=11700
+    //#if MC>=11700 && !STANDALONE
     //$$ private inner class McBlendState : GlBlendState {
     //$$     constructor() : super()
     //$$     constructor(srcRgb: Int, dstRgb: Int, func: Int) : super(srcRgb, dstRgb, func)

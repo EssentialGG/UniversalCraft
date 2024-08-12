@@ -1,7 +1,6 @@
 package gg.essential.universal.shader
 
 import gg.essential.universal.UGraphics
-import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.opengl.ARBShaderObjects
 import org.lwjgl.opengl.ARBShaderObjects.glGetUniformLocationARB
 import org.lwjgl.opengl.ARBShaderObjects.glShaderSourceARB
@@ -18,10 +17,19 @@ import org.lwjgl.opengl.GL20.glValidateProgram
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+//#if STANDALONE
+//$$ import gg.essential.universal.standalone.render.createOrthoProjectionMatrix
+//$$ import gg.essential.universal.UMatrixStack
+//$$ import gg.essential.universal.standalone.utils.toColumnMajor
+//$$ import org.lwjgl.opengl.GL
+//$$ import org.lwjgl.opengl.GL30C
+//#endif
+
 internal class GlShader(
     private val vertSource: String,
     private val fragSource: String,
     private val blendState: BlendState,
+    preLink: (program: Int) -> Unit,
 ) : UShader {
     private var program: Int = UGraphics.glCreateProgram()
     private var vertShader: Int = UGraphics.glCreateShader(GL20.GL_VERTEX_SHADER)
@@ -36,8 +44,13 @@ internal class GlShader(
     private var prevBlendState: BlendState? = null
 
     init {
-        createShader()
+        createShader(preLink)
     }
+
+    //#if STANDALONE
+    //$$ private val projectionMatrixUniform = getFloatMatrixUniformOrNull("ProjMat")
+    //$$ private val modelViewMatrixUniform = getFloatMatrixUniformOrNull("ModelViewMat")
+    //#endif
 
     override fun bind() {
         prevActiveTexture = GL11.glGetInteger(GL_ACTIVE_TEXTURE)
@@ -48,22 +61,28 @@ internal class GlShader(
         blendState.activate()
 
         UGraphics.glUseProgram(program)
+        //#if STANDALONE
+        //$$ projectionMatrixUniform?.setValue(createOrthoProjectionMatrix().toColumnMajor())
+        //$$ modelViewMatrixUniform?.setValue(UMatrixStack.GLOBAL_STACK.peek().model.toColumnMajor())
+        //#endif
         bound = true
     }
 
     internal fun doBindTexture(textureUnit: Int, textureId: Int) {
-        GlStateManager.setActiveTexture(GL_TEXTURE0 + textureUnit)
+        UGraphics.setActiveTexture(GL_TEXTURE0 + textureUnit)
         prevTextureBindings.computeIfAbsent(textureUnit) { GL11.glGetInteger(GL_TEXTURE_BINDING_2D) }
-        GlStateManager.bindTexture(textureId)
+        @Suppress("DEPRECATION") // we actively manage the active texture unit, so this is fine
+        UGraphics.bindTexture(textureId)
     }
 
     override fun unbind() {
         for ((textureUnit, textureId) in prevTextureBindings) {
-            GlStateManager.setActiveTexture(GL_TEXTURE0 + textureUnit)
-            GlStateManager.bindTexture(textureId)
+            UGraphics.setActiveTexture(GL_TEXTURE0 + textureUnit)
+            @Suppress("DEPRECATION") // we actively manage the active texture unit, so this is fine
+            UGraphics.bindTexture(textureId)
         }
         prevTextureBindings.clear()
-        GlStateManager.setActiveTexture(prevActiveTexture)
+        UGraphics.setActiveTexture(prevActiveTexture)
         prevBlendState?.activate()
 
         UGraphics.glUseProgram(0)
@@ -107,7 +126,7 @@ internal class GlShader(
         return uniform
     }
 
-    private fun createShader() {
+    private fun createShader(preLink: (program: Int) -> Unit) {
         for ((shader, source) in listOf(vertShader to vertSource, fragShader to fragSource)) {
             if (CORE) glShaderSource(shader, source) else glShaderSourceARB(shader, source)
             UGraphics.glCompileShader(shader)
@@ -119,6 +138,8 @@ internal class GlShader(
 
             UGraphics.glAttachShader(program, shader)
         }
+
+        preLink(program)
 
         UGraphics.glLinkProgram(program)
 
@@ -139,7 +160,19 @@ internal class GlShader(
             return
         }
 
+        //#if STANDALONE
+        //$$ if (GL.getCapabilities().OpenGL30) {
+        //$$     val vao = GL30C.glGenVertexArrays()
+        //$$     GL30C.glBindVertexArray(vao)
+        //$$     glValidateProgram(program)
+        //$$     GL30C.glBindVertexArray(0)
+        //$$     GL30C.glDeleteVertexArrays(vao)
+        //$$ } else {
+        //$$     if (CORE) glValidateProgram(program) else glValidateProgramARB(program)
+        //$$ }
+        //#else
         if (CORE) glValidateProgram(program) else glValidateProgramARB(program)
+        //#endif
 
         if (UGraphics.glGetProgrami(program, GL20.GL_VALIDATE_STATUS) != 1) {
             println(UGraphics.glGetProgramInfoLog(program, 32768))

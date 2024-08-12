@@ -1,5 +1,8 @@
 package gg.essential.universal;
 
+import gg.essential.universal.utils.ReleasedDynamicTexture;
+import gg.essential.universal.vertex.UVertexConsumer;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,8 +12,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import gg.essential.universal.utils.ReleasedDynamicTexture;
-import gg.essential.universal.vertex.UVertexConsumer;
+//#if STANDALONE
+//$$ import gg.essential.universal.standalone.nanovg.NvgContext;
+//$$ import gg.essential.universal.standalone.nanovg.NvgFont;
+//$$ import gg.essential.universal.standalone.nanovg.NvgFontFace;
+//$$ import gg.essential.universal.standalone.render.BufferBuilder;
+//$$ import gg.essential.universal.standalone.render.DefaultShader;
+//$$ import gg.essential.universal.standalone.render.DefaultVertexFormats;
+//$$ import gg.essential.universal.standalone.render.Gl2Renderer;
+//$$ import gg.essential.universal.standalone.render.VertexFormat;
+//$$ import org.lwjgl.opengl.GL11;
+//$$ import org.lwjgl.opengl.GL20;
+//$$ import java.net.URL;
+//$$ import static kotlin.io.TextStreamsKt.readBytes;
+//$$ import static org.lwjgl.opengl.GL14.*;
+//#else
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -85,16 +101,43 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
 //#endif
 
+//#endif
+
 @SuppressWarnings("deprecation") // lots of MC methods are deprecated on some versions but only replaced on the next one
 public class UGraphics {
     private static final Pattern formattingCodePattern = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
+
+    private static UMatrixStack UNIT_STACK = UMatrixStack.UNIT;
+
+    //#if STANDALONE
+    //$$ public static void init() { /* triggers static initializer */ }
+    //$$ private static final Gl2Renderer RENDERER = new Gl2Renderer();
+    //$$ private static final NvgFont MC_FONT;
+    //$$ static {
+    //$$     URL fontUrl = UGraphics.class.getResource("/fonts/Minecraft-Regular.otf");
+    //$$     assert fontUrl != null;
+    //$$     MC_FONT = new NvgFont(new NvgFontFace(new NvgContext(), readBytes(fontUrl)), 10, 7f, 1f);
+    //$$
+    //$$     // TODO should probably put this in a unit test, but lwjgl makes those a bit tricky to set up
+    //$$     assert UGraphics.getStringWidth("a") == 6;
+    //$$     assert UGraphics.getStringWidth("aa") == 12;
+    //$$     assert UGraphics.getStringWidth(" ") == 4;
+    //$$     assert UGraphics.getStringWidth("  ") == 8;
+    //$$     assert UGraphics.getStringWidth("a ") == 10;
+    //$$     assert UGraphics.getStringWidth("a  ") == 14;
+    //$$ }
+    //$$
+    //$$ private BufferBuilder instance;
+    //$$ private DrawMode drawMode;
+    //$$ private CommonVertexFormats vertexFormat;
+    //$$ private DefaultShader shader;
+    //#else
 
     //#if MC>=12100
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.withFont(Identifier.of("minecraft", "alt"));
     //#elseif MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
     //#endif
-    private static UMatrixStack UNIT_STACK = UMatrixStack.UNIT;
     public static int ZERO_TEXT_ALPHA = 10;
     private WorldRenderer instance;
     private VertexFormat vertexFormat;
@@ -116,13 +159,20 @@ public class UGraphics {
     public UGraphics(WorldRenderer instance) {
         this.instance = instance;
     }
+    //#endif
 
     public UVertexConsumer asUVertexConsumer() {
+        //#if STANDALONE
+        //$$ return instance;
+        //#else
         return UVertexConsumer.of(instance);
+        //#endif
     }
 
     public static UGraphics getFromTessellator() {
-        //#if MC>=12100
+        //#if STANDALONE
+        //$$ return new UGraphics();
+        //#elseif MC>=12100
         //$$ return new UGraphics(null);
         //#else
         return new UGraphics(getTessellator().getWorldRenderer());
@@ -166,9 +216,11 @@ public class UGraphics {
     }
     //#endif
 
+    //#if !STANDALONE
     public static Tessellator getTessellator() {
         return Tessellator.getInstance();
     }
+    //#endif
 
     //#if MC>=12100
     //$$ // No possible alternative on 1.21. A compile time error here is better than a run time one.
@@ -240,7 +292,11 @@ public class UGraphics {
     }
 
     public static void enableBlend() {
+        //#if STANDALONE
+        //$$ glEnable(GL_BLEND);
+        //#else
         GlStateManager.enableBlend();
+        //#endif
     }
 
     /**
@@ -275,7 +331,7 @@ public class UGraphics {
     }
 
     public static void blendEquation(int equation) {
-        //#if MC>=10900
+        //#if MC>=10900 && !STANDALONE
         //$$ GlStateManager.glBlendEquation(equation);
         //#else
         org.lwjgl.opengl.GL14.glBlendEquation(equation);
@@ -283,14 +339,18 @@ public class UGraphics {
     }
 
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
+        //#if STANDALONE
+        //$$ glBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //#else
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        //#endif
     }
 
     /**
      * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
      *     Instead of manually managing TEXTURE_2D state, prefer using
-     *     {@link #beginWithDefaultShader(DrawMode, VertexFormat)} or any of the other non-deprecated begin methods as
-     *     these will set (and restore) the appropriate state for the given {@link VertexFormat} right before/after
+     *     {@link #beginWithDefaultShader(DrawMode, CommonVertexFormats)} or any of the other non-deprecated begin methods as
+     *     these will set (and restore) the appropriate state for the given {@link CommonVertexFormats} right before/after
      *     rendering.<br>
      *     Also incompatible with OpenGL Core / MC 1.17.
      */
@@ -304,11 +364,19 @@ public class UGraphics {
     }
 
     public static void disableBlend() {
+        //#if STANDALONE
+        //$$ glDisable(GL_BLEND);
+        //#else
         GlStateManager.disableBlend();
+        //#endif
     }
 
     public static void deleteTexture(int glTextureId) {
+        //#if STANDALONE
+        //$$ glDeleteTextures(GL_BLEND);
+        //#else
         GlStateManager.deleteTexture(glTextureId);
+        //#endif
     }
 
     public static void enableAlpha() {
@@ -319,11 +387,11 @@ public class UGraphics {
 
     public static void configureTexture(int glTextureId, Runnable block) {
         int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
-        GlStateManager.bindTexture(glTextureId);
+        bindTexture(glTextureId);
 
         block.run();
 
-        GlStateManager.bindTexture(prevTextureBinding);
+        bindTexture(prevTextureBinding);
     }
 
     public static void configureTextureUnit(int index, Runnable block) {
@@ -353,7 +421,9 @@ public class UGraphics {
     }
 
     public static void setActiveTexture(int glId) {
-        //#if MC>=11700
+        //#if STANDALONE
+        //$$ glActiveTexture(glId);
+        //#elseif MC>=11700
         //$$ GlStateManager._activeTexture(glId);
         //#elseif MC>=11400
         //$$ GlStateManager.activeTexture(glId);
@@ -368,13 +438,16 @@ public class UGraphics {
      */
     @Deprecated
     public static void bindTexture(int glTextureId) {
-        //#if MC>=11700
+        //#if STANDALONE
+        //$$ glBindTexture(GL_TEXTURE_2D, glTextureId);
+        //#elseif MC>=11700
         //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
         //#else
         GlStateManager.bindTexture(glTextureId);
         //#endif
     }
 
+    //#if !STANDALONE
     /**
      * @deprecated Relies on the global {@link #setActiveTexture(int) activeTexture} state.<br>
      * Prefer {@link #bindTexture(int, ResourceLocation)} instead.
@@ -383,15 +456,19 @@ public class UGraphics {
     public static void bindTexture(ResourceLocation resourceLocation) {
         bindTexture(getOrLoadTextureId(resourceLocation));
     }
+    //#endif
 
     public static void bindTexture(int index, int glTextureId) {
-        //#if MC>=11700
+        //#if STANDALONE
+        //$$ configureTextureUnit(index, () -> glBindTexture(GL_TEXTURE_2D, glTextureId));
+        //#elseif MC>=11700
         //$$ RenderSystem.setShaderTexture(index, glTextureId);
         //#else
         configureTextureUnit(index, () -> GlStateManager.bindTexture(glTextureId));
         //#endif
     }
 
+    //#if !STANDALONE
     public static void bindTexture(int index, ResourceLocation resourceLocation) {
         bindTexture(index, getOrLoadTextureId(resourceLocation));
     }
@@ -409,13 +486,22 @@ public class UGraphics {
         }
         return texture.getGlTextureId();
     }
+    //#endif
 
     public static int getStringWidth(String in) {
+        //#if STANDALONE
+        //$$ return (int) MC_FONT.getStringWidth(in, 10f);
+        //#else
         return UMinecraft.getFontRenderer().getStringWidth(in);
+        //#endif
     }
 
     public static int getFontHeight() {
+        //#if STANDALONE
+        //$$ return 9;
+        //#else
         return UMinecraft.getFontRenderer().FONT_HEIGHT;
+        //#endif
     }
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
@@ -425,6 +511,9 @@ public class UGraphics {
 
     public static void drawString(UMatrixStack stack, String text, float x, float y, int color, boolean shadow) {
         if ((color >> 24 & 255) <= 10) return;
+        //#if STANDALONE
+        //$$ MC_FONT.drawString(stack, text, new Color(color), x, y, 10f, 1f, shadow, null);
+        //#else
         //#if MC>=11602
         //#if MC>=12100
         //$$ VertexConsumerProvider.Immediate irendertypebuffer$impl = UMinecraft.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
@@ -447,6 +536,7 @@ public class UGraphics {
         //#endif
         if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
+        //#endif
     }
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
@@ -457,6 +547,10 @@ public class UGraphics {
     public static void drawString(UMatrixStack stack, String text, float x, float y, int color, int shadowColor) {
         if ((color >> 24 & 255) <= 10) return;
         String shadowText = ChatColor.Companion.stripColorCodes(text);
+        //#if STANDALONE
+        //$$ MC_FONT.drawString(stack, shadowText, new Color(shadowColor), x + 1f, y + 1f, 10f, 1f, false, null);
+        //$$ MC_FONT.drawString(stack, text, new Color(color), x, y, 10f, 1f, false, null);
+        //#else
         //#if MC>=11602
         //#if MC>=12100
         //$$ VertexConsumerProvider.Immediate irendertypebuffer$impl = UMinecraft.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
@@ -478,6 +572,7 @@ public class UGraphics {
         //#endif
         if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
+        //#endif
     }
 
     public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
@@ -493,6 +588,9 @@ public class UGraphics {
             wrapWidth = Math.max(max, wrapWidth);
         }
 
+        //#if STANDALONE
+        //$$ throw new UnsupportedOperationException("not implemented");
+        //#else
         //#if MC>=11602
         //$$ // TODO: Validate this code
         //$$ List<String> strings = new ArrayList<>();
@@ -512,10 +610,13 @@ public class UGraphics {
         //#else
         return UMinecraft.getFontRenderer().listFormattedStringToWidth(str, wrapWidth);
         //#endif
+        //#endif
     }
 
     public static float getCharWidth(char character) {
-        //#if MC>=11602
+        //#if STANDALONE
+        //$$ return MC_FONT.getStringWidth(String.valueOf(character), 10f);
+        //#elseif MC>=11602
         //$$ return getStringWidth(String.valueOf(character));
         //#else
         return UMinecraft.getFontRenderer().getCharWidth(character); // float because its a float in 1.15+
@@ -532,7 +633,7 @@ public class UGraphics {
 
     public static ReleasedDynamicTexture getTexture(InputStream stream) {
         try {
-            //#if MC>=11502
+            //#if MC>=11502 && !STANDALONE
             //$$ return new ReleasedDynamicTexture(NativeImage.read(stream));
             //#else
             return new ReleasedDynamicTexture(ImageIO.read(stream));
@@ -544,7 +645,7 @@ public class UGraphics {
     }
 
     public static ReleasedDynamicTexture getTexture(BufferedImage img) {
-        //#if MC>=11502
+        //#if MC>=11502 && !STANDALONE
         //$$ try {
         //$$     ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //$$     ImageIO.write(img, "png", baos );
@@ -563,7 +664,9 @@ public class UGraphics {
     }
 
     public static void glUseProgram(int program) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ GL20.glUseProgram(program);
+        //#elseif MC>=11502
         //$$ GlStateManager.useProgram(program);
         //#else
         OpenGlHelper.glUseProgram(program);
@@ -587,7 +690,9 @@ public class UGraphics {
     }
 
     public static int glCreateProgram() {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glCreateProgram();
+        //#elseif MC>=11502
         //$$ return GlStateManager.createProgram();
         //#else
         return OpenGlHelper.glCreateProgram();
@@ -595,7 +700,9 @@ public class UGraphics {
     }
 
     public static int glCreateShader(int type) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glCreateShader(type);
+        //#elseif MC>=11502
         //$$ return GlStateManager.createShader(type);
         //#else
         return OpenGlHelper.glCreateShader(type);
@@ -603,7 +710,9 @@ public class UGraphics {
     }
 
     public static void glCompileShader(int shaderIn) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ GL20.glCompileShader(shaderIn);
+        //#elseif MC>=11502
         //$$ GlStateManager.compileShader(shaderIn);
         //#else
         OpenGlHelper.glCompileShader(shaderIn);
@@ -611,7 +720,9 @@ public class UGraphics {
     }
 
     public static int glGetShaderi(int shaderIn, int pname) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glGetShaderi(shaderIn, pname);
+        //#elseif MC>=11502
         //$$ return GlStateManager.getShader(shaderIn,pname);
         //#else
         return OpenGlHelper.glGetShaderi(shaderIn, pname);
@@ -619,7 +730,9 @@ public class UGraphics {
     }
 
     public static String glGetShaderInfoLog(int shader, int maxLen) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glGetShaderInfoLog(shader, maxLen);
+        //#elseif MC>=11502
         //$$ return GlStateManager.getShaderInfoLog( shader,maxLen);
         //#else
         return OpenGlHelper.glGetShaderInfoLog(shader, maxLen);
@@ -627,7 +740,9 @@ public class UGraphics {
     }
 
     public static void glAttachShader(int program, int shaderIn) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ GL20.glAttachShader(program, shaderIn);
+        //#elseif MC>=11502
         //$$ GlStateManager.attachShader(program,shaderIn);
         //#else
         OpenGlHelper.glAttachShader(program, shaderIn);
@@ -635,7 +750,9 @@ public class UGraphics {
     }
 
     public static void glLinkProgram(int program) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ GL20.glLinkProgram(program);
+        //#elseif MC>=11502
         //$$ GlStateManager.linkProgram(program);
         //#else
         OpenGlHelper.glLinkProgram(program);
@@ -643,7 +760,9 @@ public class UGraphics {
     }
 
     public static int glGetProgrami(int program, int pname) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glGetProgrami(program, pname);
+        //#elseif MC>=11502
         //$$ return GlStateManager.getProgram(program,pname);
         //#else
         return OpenGlHelper.glGetProgrami(program, pname);
@@ -651,7 +770,9 @@ public class UGraphics {
     }
 
     public static String glGetProgramInfoLog(int program, int maxLen) {
-        //#if MC>=11502
+        //#if STANDALONE
+        //$$ return GL20.glGetProgramInfoLog(program, maxLen);
+        //#elseif MC>=11502
         //$$ return GlStateManager.getProgramInfoLog(program, maxLen);
         //#else
         return OpenGlHelper.glGetProgramInfoLog(program, maxLen);
@@ -659,7 +780,11 @@ public class UGraphics {
     }
 
     public static void color4f(float red, float green, float blue, float alpha) {
+        //#if STANDALONE
+        //$$ throw new UnsupportedOperationException();
+        //#else
         GlStateManager.color(red, green, blue, alpha);
+        //#endif
     }
 
     public static void directColor3f(float red, float green, float blue) {
@@ -671,22 +796,38 @@ public class UGraphics {
     }
 
     public static void enableDepth() {
+        //#if STANDALONE
+        //$$ glEnable(GL_DEPTH_TEST);
+        //#else
         GlStateManager.enableDepth();
+        //#endif
     }
 
     public static void depthFunc(int mode) {
+        //#if STANDALONE
+        //$$ glDepthFunc(mode);
+        //#else
         GlStateManager.depthFunc(mode);
+        //#endif
     }
 
     public static void depthMask(boolean flag) {
+        //#if STANDALONE
+        //$$ glDepthMask(flag);
+        //#else
         GlStateManager.depthMask(flag);
+        //#endif
     }
 
     public static void disableDepth() {
+        //#if STANDALONE
+        //$$ glDisable(GL_DEPTH_TEST);
+        //#else
         GlStateManager.disableDepth();
+        //#endif
     }
 
-    //#if MC>=11700
+    //#if MC>=11700 && !STANDALONE
     //$$ public static void setShader(Supplier<Shader> shader) {
     //$$     RenderSystem.setShader(shader);
     //$$ }
@@ -702,22 +843,26 @@ public class UGraphics {
         ;
 
         private final int glMode;
+        //#if !STANDALONE
         //#if MC>=11700
         //$$ private final VertexFormat.DrawMode mcMode;
         //#else
         private final int mcMode;
         //#endif
+        //#endif
 
         DrawMode(int glMode) {
             this.glMode = glMode;
+            //#if !STANDALONE
             //#if MC>=11700
             //$$ this.mcMode = glToMcDrawMode(glMode);
             //#else
             this.mcMode = glMode;
             //#endif
+            //#endif
         }
 
-        //#if MC>=11700
+        //#if MC>=11700 && !STANDALONE
         //$$ private static VertexFormat.DrawMode glToMcDrawMode(int glMode) {
         //$$     switch (glMode) {
         //$$         case GL11.GL_LINES: return VertexFormat.DrawMode.LINES;
@@ -755,7 +900,7 @@ public class UGraphics {
             }
         }
 
-        //#if MC>=11600
+        //#if MC>=11600 && !STANDALONE
         //$$ public static DrawMode fromRenderLayer(RenderType renderLayer) {
             //#if MC>=11700
             //$$ return fromMc(renderLayer.getDrawMode());
@@ -795,9 +940,18 @@ public class UGraphics {
     }
 
     public UGraphics beginWithActiveShader(DrawMode mode, CommonVertexFormats format) {
+        //#if STANDALONE
+        //$$ vertexFormat = format;
+        //$$ drawMode = mode;
+        //$$ instance = new BufferBuilder(format.mc.getParts());
+        //$$ shader = null;
+        //$$ return this;
+        //#else
         return beginWithActiveShader(mode, format.mc);
+        //#endif
     }
 
+    //#if !STANDALONE
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
         vertexFormat = format;
         //#if MC>=12100
@@ -807,8 +961,9 @@ public class UGraphics {
         //#endif
         return this;
     }
+    //#endif
 
-    //#if MC>=11700
+    //#if MC>=11700 && !STANDALONE
     //$$ // Note: Needs to be an Identity hash map because VertexFormat's equals method is broken (compares via its
     //$$ //       component Map but order very much matters for VertexFormat) as of 1.17
     //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new IdentityHashMap<>();
@@ -836,9 +991,16 @@ public class UGraphics {
     //#endif
 
     public UGraphics beginWithDefaultShader(DrawMode mode, CommonVertexFormats format) {
+        //#if STANDALONE
+        //$$ beginWithActiveShader(mode, format);
+        //$$ shader = DefaultShader.Companion.get(format.mc.getParts());
+        //$$ return this;
+        //#else
         return beginWithDefaultShader(mode, format.mc);
+        //#endif
     }
 
+    //#if !STANDALONE
     public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
         //#if MC>=11700
         //$$ Supplier<Shader> supplier = DEFAULT_SHADERS.get(format);
@@ -873,8 +1035,12 @@ public class UGraphics {
         //#endif
         return this;
     }
+    //#endif
 
     public void drawDirect() {
+        //#if STANDALONE
+        //$$ doDraw();
+        //#else
         //#if MC>=12100
         //$$ BuiltBuffer builtBuffer = instance.end();
         //#endif
@@ -895,9 +1061,14 @@ public class UGraphics {
             //$$ builtBuffer
             //#endif
         );
+        //#endif
     }
 
     public void drawSorted(int cameraX, int cameraY, int cameraZ) {
+        //#if STANDALONE
+        //$$ // TODO sorting, if we ever need it
+        //$$ doDraw();
+        //#else
         //#if MC>=12100
         //$$ BuiltBuffer builtBuffer = instance.end();
         //$$ builtBuffer.sortQuads(SORTED_QUADS_ALLOCATOR, RenderSystem.getVertexSorting());
@@ -928,6 +1099,7 @@ public class UGraphics {
             //$$ builtBuffer
             //#endif
         );
+        //#endif
     }
 
     //#if MC<11700
@@ -948,6 +1120,15 @@ public class UGraphics {
     }
     //#endif
 
+    //#if STANDALONE
+    //$$ private void doDraw() {
+    //$$     CommonVertexFormats vertexFormat = this.vertexFormat;
+    //$$     if (vertexFormat == null) {
+    //$$         throw new IllegalStateException("Must call `begin` before `draw`.");
+    //$$     }
+    //$$     RENDERER.draw(instance, drawMode, shader);
+    //$$ }
+    //#else
     private void doDraw(
         //#if MC>=12100
         //$$ BuiltBuffer builtBuffer
@@ -1001,6 +1182,7 @@ public class UGraphics {
         }
         //#endif
     }
+    //#endif
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
     public UGraphics pos(double x, double y, double z) {
@@ -1008,6 +1190,9 @@ public class UGraphics {
     }
 
     public UGraphics pos(UMatrixStack stack, double x, double y, double z) {
+        //#if STANDALONE
+        //$$ asUVertexConsumer().pos(stack, x, y, z);
+        //#else
         if (stack == UNIT_STACK) {
             //#if MC>=12100
             //$$ instance.vertex((float) x, (float) y, (float) z);
@@ -1027,6 +1212,7 @@ public class UGraphics {
             instance.pos(vec.getX(), vec.getY(), vec.getZ());
             //#endif
         }
+        //#endif
         return this;
     }
 
@@ -1036,6 +1222,9 @@ public class UGraphics {
     }
 
     public UGraphics norm(UMatrixStack stack, float x, float y, float z) {
+        //#if STANDALONE
+        //$$ asUVertexConsumer().norm(stack, x, y, z);
+        //#else
         if (stack == UNIT_STACK) {
             instance.normal(x, y, z);
         } else {
@@ -1054,6 +1243,7 @@ public class UGraphics {
             instance.normal(vec.getX(), vec.getY(), vec.getZ());
             //#endif
         }
+        //#endif
         return this;
     }
 
@@ -1062,7 +1252,11 @@ public class UGraphics {
     }
 
     public UGraphics color(float red, float green, float blue, float alpha) {
+        //#if STANDALONE
+        //$$ asUVertexConsumer().color(red, green, blue, alpha);
+        //#else
         instance.color(red, green, blue, alpha);
+        //#endif
         return this;
     }
 
@@ -1071,14 +1265,16 @@ public class UGraphics {
     }
 
     public UGraphics endVertex() {
-        //#if MC<12100
+        //#if STANDALONE
+        //$$ instance.endVertex();
+        //#elseif MC<12100
         instance.endVertex();
         //#endif
         return this;
     }
 
     public UGraphics tex(double u, double v) {
-        //#if MC>=11502
+        //#if MC>=11502 && !STANDALONE
         //$$ instance.tex((float)u,(float)v);
         //#else
         instance.tex(u, v);
@@ -1087,7 +1283,7 @@ public class UGraphics {
     }
 
     public UGraphics overlay(int u, int v) {
-        //#if MC>=11502
+        //#if MC>=11502 && !STANDALONE
         //$$ instance.overlay(u, v);
         //#else
         instance.tex(u, v);
@@ -1096,7 +1292,11 @@ public class UGraphics {
     }
 
     public UGraphics light(int u, int v) {
+        //#if STANDALONE
+        //$$ asUVertexConsumer().light(u, v);
+        //#else
         instance.lightmap(u, v);
+        //#endif
         return this;
     }
 

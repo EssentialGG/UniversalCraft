@@ -1,8 +1,10 @@
 package gg.essential.universal
 
+//#if !STANDALONE
 import gg.essential.universal.wrappers.UPlayer
 import gg.essential.universal.wrappers.message.UMessage
 import gg.essential.universal.wrappers.message.UTextComponent
+//#endif
 import java.util.regex.Pattern
 
 object UChat {
@@ -17,6 +19,9 @@ object UChat {
      */
     @JvmStatic
     fun chat(obj: Any) {
+        //#if STANDALONE
+        //$$ println(obj)
+        //#else
         if (obj is String || obj is UTextComponent) {
             UMessage(obj).chat()
         } else {
@@ -27,6 +32,7 @@ object UChat {
                 UMessage(obj.toString()).chat()
             }
         }
+        //#endif
     }
 
     /**
@@ -38,6 +44,9 @@ object UChat {
      */
     @JvmStatic
     fun actionBar(obj: Any) {
+        //#if STANDALONE
+        //$$ throw UnsupportedOperationException("actionBar($obj)")
+        //#else
         if (obj is String || obj is UTextComponent) {
             UMessage(obj).actionBar()
         } else {
@@ -48,6 +57,7 @@ object UChat {
                 UMessage(obj.toString()).actionBar()
             }
         }
+        //#endif
     }
 
     /**
@@ -55,12 +65,16 @@ object UChat {
      */
     @JvmStatic
     fun say(text: String) {
+        //#if STANDALONE
+        //$$ throw UnsupportedOperationException("say($text)")
+        //#else
         //#if MC>=11903
         //$$ UPlayer.getPlayer()!!.networkHandler.sendChatMessage(text)
         //#elseif MC>=11901
         //$$ UPlayer.getPlayer()!!.sendChatMessage(text, null)
         //#else
         UPlayer.getPlayer()!!.sendChatMessage(text)
+        //#endif
         //#endif
     }
 
