@@ -387,11 +387,19 @@ public class UGraphics {
 
     public static void configureTexture(int glTextureId, Runnable block) {
         int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
-        bindTexture(glTextureId);
+        //#if STANDALONE
+        //$$ glBindTexture(GL_TEXTURE_2D, glTextureId);
+        //#else
+        GlStateManager.bindTexture(glTextureId);
+        //#endif
 
         block.run();
 
-        bindTexture(prevTextureBinding);
+        //#if STANDALONE
+        //$$ glBindTexture(GL_TEXTURE_2D, prevTextureBinding);
+        //#else
+        GlStateManager.bindTexture(prevTextureBinding);
+        //#endif
     }
 
     public static void configureTextureUnit(int index, Runnable block) {
