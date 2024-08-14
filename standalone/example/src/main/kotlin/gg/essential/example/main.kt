@@ -11,7 +11,10 @@ import gg.essential.universal.standalone.runUniversalCraft
 import gg.essential.universal.UResolution
 import gg.essential.universal.UScreen
 import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
 import java.awt.Color
+
+private val LOGGER = LoggerFactory.getLogger("Example")
 
 fun main() = runUniversalCraft("Example", 1000, 600) { window ->
     val extraFontsLoaded = mutableStateOf(false)
@@ -22,6 +25,8 @@ fun main() = runUniversalCraft("Example", 1000, 600) { window ->
 
     UMinecraft.guiScale = 2 * (UResolution.viewportWidth / UResolution.windowWidth)
     UScreen.displayScreen(LayoutDslScreen { exampleScreen(extraFontsLoaded) })
+
+    LOGGER.info("All ready!")
 
     window.renderScreenUntilClosed()
 }
