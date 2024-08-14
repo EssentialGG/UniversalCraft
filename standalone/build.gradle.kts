@@ -37,10 +37,12 @@ dependencies {
     // Same as above but we do not want to expose them to our downstream so we can eventually remove them
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
     implementation("org.apache.logging.log4j:log4j-core:2.23.1")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.1")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("commons-codec:commons-codec:1.17.1")
     implementation("org.apache.httpcomponents:httpclient:4.5.14")
+    // Pretty colors in Console logs
+    implementation("net.minecrell:terminalconsoleappender:1.3.0")
 }
 
 tasks.processResources {
