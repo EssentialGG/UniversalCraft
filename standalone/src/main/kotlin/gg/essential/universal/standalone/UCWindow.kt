@@ -72,7 +72,7 @@ class UCWindow(val glfwWindow: GlfwWindow, val uiScope: CoroutineScope) {
         GLFW.glfwSetKeyCallback(glfwWindow.glfwId) { _, key, _, action, modifiers ->
             uiScope.launch {
                 when (action) {
-                    GLFW.GLFW_PRESS -> {
+                    GLFW.GLFW_PRESS, GLFW.GLFW_REPEAT -> {
                         UKeyboard.keysDown.add(key)
                         UScreen.currentScreen?.onKeyPressed(key, 0.toChar(), modifiers.toModifiers())
                     }
