@@ -1,7 +1,9 @@
 package gg.essential.example
 
 import gg.essential.elementa.components.UIRoundedRectangle
+import gg.essential.elementa.components.input.UITextInput
 import gg.essential.elementa.dsl.constrain
+import gg.essential.elementa.dsl.pixels
 import gg.essential.elementa.font.DefaultFonts
 import gg.essential.elementa.layoutdsl.*
 import gg.essential.elementa.state.v2.State
@@ -80,6 +82,14 @@ fun LayoutScope.exampleScreen(extraFontsLoaded: State<Boolean>) {
                 text("Loading extra fonts...")
             }
             row(Modifier.height(17f)) {}
+        }
+        box(Modifier.childBasedSize(padding = 1f).color(Color.GRAY)) {
+            val textInput = UITextInput("Text Input")
+            textInput.setMinWidth(100.pixels)
+            textInput.setMaxWidth(100.pixels)
+            box(Modifier.childBasedSize(padding = 2f).color(Color.DARK_GRAY)) {
+                textInput()
+            }.onMouseClick { textInput.grabWindowFocus() }
         }
         box(Modifier.childBasedSize(5f).color(Color.GRAY).hoverColor(Color.LIGHT_GRAY).hoverScope()) {
             geistText("Quit")
