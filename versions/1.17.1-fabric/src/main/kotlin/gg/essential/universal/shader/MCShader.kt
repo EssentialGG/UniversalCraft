@@ -14,6 +14,11 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.FileNotFoundException
 import kotlin.NoSuchElementException
 
+//#if MC>=12102
+//$$ import net.minecraft.client.gl.CompiledShader
+//$$ import net.minecraft.client.gl.ShaderProgramDefinition
+//#endif
+
 //#if MC>=11903
 //$$ import gg.essential.universal.DummyPack
 //#endif
@@ -93,6 +98,7 @@ internal class MCShader(
                 println(json)
             }
 
+            //#if MC<12102
             val factory = { id: Identifier ->
                 val content = when {
                     id.path.endsWith(".json") -> json
@@ -108,6 +114,7 @@ internal class MCShader(
                 ResourceImpl("__generated__", id, content.byteInputStream(), null)
                 //#endif
             }
+            //#endif
 
             fun buildVertexFormat(elements: Map<String, VertexFormatElement>): VertexFormat {
                 //#if MC>=12100
@@ -136,11 +143,29 @@ internal class MCShader(
             }
 
 
+            //#if MC>=12102
+            //$$ val shaderProgram = ShaderProgram.create(
+            //$$     CompiledShader.compile(
+            //$$         Identifier.of("universalcraft", DigestUtils.sha1Hex(transformedVertSource).lowercase()),
+            //$$         CompiledShader.Type.VERTEX, transformedVertSource
+            //$$     ),
+            //$$     CompiledShader.compile(
+            //$$         Identifier.of("universalcraft", DigestUtils.sha1Hex(transformedFragSource).lowercase()),
+            //$$         CompiledShader.Type.FRAGMENT, transformedFragSource
+            //$$     ),
+            //$$     shaderVertexFormat,
+            //$$ )
+            //$$ shaderProgram.set(transformer.uniforms.map { (name, type) ->
+            //$$     ShaderProgramDefinition.Uniform(name, type.typeName, type.default.size, type.default.map { it.toFloat() })
+            //$$ }, transformer.samplers.map { name -> ShaderProgramDefinition.Sampler(name) })
+            //$$ return MCShader(shaderProgram, blendState)
+            //#else
             val name = DigestUtils.sha1Hex(json).lowercase()
             //#if FORGE
             //$$ @Suppress("DEPRECATION") // Forge wants us to use its overload, but we don't care
             //#endif
             return MCShader(Shader(factory, name, shaderVertexFormat), blendState)
+            //#endif
         }
     }
 }
@@ -166,6 +191,10 @@ internal class MCSamplerUniform(val mc: Shader, val name: String) : SamplerUnifo
     override val location: Int = 0
 
     override fun setValue(textureId: Int) {
+        //#if MC>=12102
+        //$$ mc.addSamplerTexture(name, textureId)
+        //#else
         mc.addSampler(name, textureId)
+        //#endif
     }
 }

@@ -191,7 +191,9 @@ class UMatrixStack private constructor(
         //#else
         //$$ RenderSystem.getModelViewStack().method_34425(stack.last.model)
         //#endif
+        //#if MC<12102
         //$$ RenderSystem.applyModelViewMatrix()
+        //#endif
         //#else
         stack.last.model.store(MATRIX_BUFFER)
         // Explicit cast to Buffer required so we do not use the JDK9+ override in FloatBuffer
@@ -247,7 +249,9 @@ class UMatrixStack private constructor(
             //#else
             //$$ stack.pop()
             //#endif
+            //#if MC<12102
             //$$ RenderSystem.applyModelViewMatrix()
+            //#endif
             //#else
             UGraphics.GL.popMatrix()
             //#endif

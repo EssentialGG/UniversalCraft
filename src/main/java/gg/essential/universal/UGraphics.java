@@ -44,6 +44,12 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12102
+//$$ import net.minecraft.client.gl.ShaderProgramKey;
+//$$ import net.minecraft.client.gl.ShaderProgramKeys;
+//$$ import java.util.HashMap;
+//#endif
+
 //#if MC>=12100
 //$$ import net.minecraft.client.render.BufferRenderer;
 //$$ import net.minecraft.client.render.BuiltBuffer;
@@ -837,7 +843,11 @@ public class UGraphics {
 
     //#if MC>=11700 && !STANDALONE
     //$$ public static void setShader(Supplier<Shader> shader) {
-    //$$     RenderSystem.setShader(shader);
+        //#if MC>=12102
+        //$$ RenderSystem.setShader(shader.get());
+        //#else
+        //$$ RenderSystem.setShader(shader);
+        //#endif
     //$$ }
     //#endif
 
@@ -971,7 +981,20 @@ public class UGraphics {
     }
     //#endif
 
-    //#if MC>=11700 && !STANDALONE
+    //#if STANDALONE
+    //#elseif MC>=12102
+    //$$ private static final Map<VertexFormat, ShaderProgramKey> DEFAULT_SHADERS = new HashMap<>();
+    //$$ static {
+    //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, ShaderProgramKeys.RENDERTYPE_LINES);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, ShaderProgramKeys.PARTICLE);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION, ShaderProgramKeys.POSITION);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, ShaderProgramKeys.POSITION_COLOR);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_LIGHT, ShaderProgramKeys.POSITION_COLOR_LIGHTMAP);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE, ShaderProgramKeys.POSITION_TEX);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, ShaderProgramKeys.POSITION_TEX_COLOR);
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, ShaderProgramKeys.POSITION_COLOR_TEX_LIGHTMAP);
+    //$$ }
+    //#elseif MC>=11700
     //$$ // Note: Needs to be an Identity hash map because VertexFormat's equals method is broken (compares via its
     //$$ //       component Map but order very much matters for VertexFormat) as of 1.17
     //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new IdentityHashMap<>();
@@ -1011,11 +1034,16 @@ public class UGraphics {
     //#if !STANDALONE
     public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
         //#if MC>=11700
-        //$$ Supplier<Shader> supplier = DEFAULT_SHADERS.get(format);
-        //$$ if (supplier == null) {
+        //#if MC>=12102
+        //$$ ShaderProgramKey shader = DEFAULT_SHADERS.get(format);
+        //#else
+        //$$ Supplier<Shader> shader = DEFAULT_SHADERS.get(format);
+        //#endif
+        //$$ if (shader == null) {
         //$$     throw new IllegalArgumentException("No default shader for " + format + ". Bind your own and use beginWithActiveShader instead.");
         //$$ }
-        //$$ setShader(supplier);
+        //$$
+        //$$ RenderSystem.setShader(shader);
         //#endif
         return beginWithActiveShader(mode, format);
     }
@@ -1079,7 +1107,11 @@ public class UGraphics {
         //#else
         //#if MC>=12100
         //$$ BuiltBuffer builtBuffer = instance.end();
+        //#if MC>=12102
+        //$$ builtBuffer.sortQuads(SORTED_QUADS_ALLOCATOR, RenderSystem.getProjectionType().getVertexSorter());
+        //#else
         //$$ builtBuffer.sortQuads(SORTED_QUADS_ALLOCATOR, RenderSystem.getVertexSorting());
+        //#endif
         //#endif
         //#if MC>=11600
         //$$ if (renderLayer != null) {

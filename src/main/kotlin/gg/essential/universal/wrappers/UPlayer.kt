@@ -16,7 +16,9 @@ object UPlayer {
 
     @JvmStatic
     fun sendClientSideMessage(message: UTextComponent) {
-        //#if MC>=11900
+        //#if MC>=12102
+        //$$ getPlayer()!!.sendMessage(message, false)
+        //#elseif MC>=11900
         //$$ getPlayer()!!.sendMessage(message)
         //#elseif MC>=11602
         //#if FORGE
