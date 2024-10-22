@@ -31,6 +31,9 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun getPixelRGBA(x: Int, y: Int): Int {
         //#if MC>=11600 && !STANDALONE
+        //#if MC>=12102
+        //$$ return Integer.rotateLeft(nativeImage.getColorArgb(x, y), 8) // Convert ARGB to RGBA
+        //#else
         //$$ // Convert ABGR to RGBA
         //$$ val abgr = nativeImage.getPixelRGBA(x, y) // mappings are incorrect, this returns ABGR
         //$$ val a = abgr shr 24 and 0xFF
@@ -38,6 +41,7 @@ class UImage(val nativeImage: BufferedImage) {
         //$$ val g = abgr shr 8 and 0xFF
         //$$ val r = abgr and 0xFF
         //$$ return (r shl 24) or (g shl 16) or (b shl 8) or a
+        //#endif
         //#else
         return Integer.rotateLeft(nativeImage.getRGB(x, y), 8) // Convert ARGB to RGBA
         //#endif
@@ -45,12 +49,16 @@ class UImage(val nativeImage: BufferedImage) {
 
     fun setPixelRGBA(x: Int, y: Int, color: Int) {
         //#if MC>=11600 && !STANDALONE
+        //#if MC>=12102
+        //$$ nativeImage.setColorArgb(x, y, Integer.rotateRight(color, 8)) // Convert RGBA to ARGB
+        //#else
         //$$ // Convert RGBA to ABGR
         //$$ val r = color shr 24 and 0xFF
         //$$ val g = color shr 16 and 0xFF
         //$$ val b = color shr 8 and 0xFF
         //$$ val a = color and 0xFF
         //$$ nativeImage.setPixelRGBA(x, y, (a shl 24) or (b shl 16) or (g shl 8) or r) // mappings are incorrect, this takes ABGR
+        //#endif
         //#else
         nativeImage.setRGB(x, y, Integer.rotateRight(color, 8)) // Convert RGBA to ARGB
         //#endif
