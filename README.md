@@ -13,7 +13,7 @@ See the `standalone/example/` folder for a fully functional example.
 
 ## Dependency
 
-It's recommended that you include [Essential](https://essential.gg/) instead of adding it yourself.
+It's recommended that you include [Essential](link soon™) instead of adding it yourself.
 
 In your repository block, add:
 
