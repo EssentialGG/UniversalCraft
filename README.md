@@ -13,7 +13,7 @@ See the `standalone/example/` folder for a fully functional example.
 
 ## Dependency
 
-It's recommended that you include [Essential](link eventually) instead of adding it yourself.
+It's recommended that you include [Essential](https://essential.gg/) instead of adding it yourself.
 
 In your repository block, add:
 
@@ -74,6 +74,8 @@ done
             <img alt="standalone" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-standalone/maven-metadata.xml">
           </td>
         </tr>
+        <tr><td>1.21.2</td><td>fabric</td><td><img alt="1.21.2-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.21.2-fabric/maven-metadata.xml"></td></tr>
+        <tr><td>1.21.1</td><td>fabric</td><td><img alt="1.21.1-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.21.1-fabric/maven-metadata.xml"></td></tr>
         <tr><td>1.21</td><td>fabric</td><td><img alt="1.21-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.21-fabric/maven-metadata.xml"></td></tr>
         <tr><td>1.20.6</td><td>fabric</td><td><img alt="1.20.6-fabric" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.20.6-fabric/maven-metadata.xml"></td></tr>
         <tr><td>1.20.4</td><td>forge</td><td><img alt="1.20.4-forge" src="https://img.shields.io/badge/dynamic/xml?color=A97BFF&label=%20&query=/metadata/versioning/versions/version[not(contains(text(),'%2B'))][last()]&url=https://repo.essential.gg/repository/maven-releases/gg/essential/universalcraft-1.20.4-forge/maven-metadata.xml"></td></tr>
