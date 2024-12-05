@@ -15,7 +15,9 @@ import net.minecraft.client.resources.IResourceManager
 //#if MC<11502 || STANDALONE
 import java.awt.image.BufferedImage
 //#else
+//$$ import com.mojang.blaze3d.platform.GlStateManager
 //$$ import net.minecraft.client.renderer.texture.NativeImage
+//$$ import org.lwjgl.opengl.GL11
 //#endif
 
 
@@ -110,6 +112,8 @@ class ReleasedDynamicTexture private constructor(
             //#if MC>=11400
             //$$ UGraphics.configureTexture(allocGlId()) {
             //$$     textureData?.uploadTextureSub(0, 0, 0, false)
+            //$$     GlStateManager.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST)
+            //$$     GlStateManager.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST)
             //$$ }
             //$$ textureData = null
             //#else
