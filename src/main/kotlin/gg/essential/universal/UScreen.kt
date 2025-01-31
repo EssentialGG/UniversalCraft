@@ -56,6 +56,9 @@ abstract class UScreen(
     //$$     mc.positionMatrix.set(uc.model)
     //$$     mc.normalMatrix.set(uc.normal)
     //$$     block(context)
+        //#if MC>=12102
+        //$$ context.draw()
+        //#endif
     //$$     context.matrices.pop()
     //$$ }
     //#endif
