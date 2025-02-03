@@ -1,3 +1,4 @@
+//#if MC<12102
 package gg.essential.universal
 
 import gg.essential.universal.shader.MCShader
@@ -46,3 +47,4 @@ internal object DummyPack : ResourcePack {
     //$$ }
     //#endif
 }
+//#endif

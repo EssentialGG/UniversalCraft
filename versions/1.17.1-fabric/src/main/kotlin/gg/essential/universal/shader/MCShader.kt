@@ -19,7 +19,7 @@ import kotlin.NoSuchElementException
 //$$ import net.minecraft.client.gl.ShaderProgramDefinition
 //#endif
 
-//#if MC>=11903
+//#if MC>=11903 && MC<12102
 //$$ import gg.essential.universal.DummyPack
 //#endif
 
