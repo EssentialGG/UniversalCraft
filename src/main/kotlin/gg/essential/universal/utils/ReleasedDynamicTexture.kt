@@ -66,7 +66,7 @@ class ReleasedDynamicTexture private constructor(
     }
     //#endif
 
-    //#if !STANDALONE
+    //#if MC<12104 && !STANDALONE
     @Throws(IOException::class)
     override fun loadTexture(resourceManager: IResourceManager) {
     }
