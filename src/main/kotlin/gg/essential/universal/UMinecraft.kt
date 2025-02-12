@@ -96,7 +96,7 @@ object UMinecraft {
 
     //#if !STANDALONE
     @JvmStatic
-    //#if FORGE
+    //#if FORGELIKE
     @Suppress("UNNECESSARY_SAFE_CALL") // Forge adds inappropriate NonNullByDefault
     //#endif
     fun getChatGUI(): GuiNewChat? = getMinecraft().ingameGUI?.chatGUI
