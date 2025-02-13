@@ -19,7 +19,7 @@ import kotlin.NoSuchElementException
 //$$ import net.minecraft.client.gl.ShaderProgramDefinition
 //#endif
 
-//#if MC>=11903
+//#if MC>=11903 && MC<12102
 //$$ import gg.essential.universal.DummyPack
 //#endif
 
@@ -161,7 +161,7 @@ internal class MCShader(
             //$$ return MCShader(shaderProgram, blendState)
             //#else
             val name = DigestUtils.sha1Hex(json).lowercase()
-            //#if FORGE
+            //#if FORGELIKE
             //$$ @Suppress("DEPRECATION") // Forge wants us to use its overload, but we don't care
             //#endif
             return MCShader(Shader(factory, name, shaderVertexFormat), blendState)

@@ -2,6 +2,7 @@ import gg.essential.gradle.util.*
 
 plugins {
     kotlin("jvm") version "1.9.23" apply false
+    id("gg.essential.loom") version "1.7.23" apply false
     id("gg.essential.multi-version.root")
     id("gg.essential.multi-version.api-validation")
 }
@@ -11,9 +12,19 @@ version = versionFromBuildIdAndBranch()
 preprocess {
     strictExtraMappings.set(true)
 
-    val fabric12102 = createNode("1.21.2-fabric", 12102, "srg")
+    val neoForge12104 = createNode("1.21.4-neoforge", 12104, "srg")
+    val forge12104 = createNode("1.21.4-forge", 12104, "srg")
+    val fabric12104 = createNode("1.21.4-fabric", 12104, "srg")
+    val neoForge12103 = createNode("1.21.3-neoforge", 12103, "srg")
+    val forge12103 = createNode("1.21.3-forge", 12103, "srg")
+    val fabric12103 = createNode("1.21.3-fabric", 12103, "srg")
+    val neoForge12100 = createNode("1.21-neoforge", 12100, "srg")
+    val forge12100 = createNode("1.21-forge", 12100, "srg")
     val fabric12100 = createNode("1.21-fabric", 12100, "srg")
+    val neoForge12006 = createNode("1.20.6-neoforge", 12006, "srg")
+    val forge12006 = createNode("1.20.6-forge", 12006, "srg")
     val fabric12006 = createNode("1.20.6-fabric", 12006, "srg")
+    val neoForge12004 = createNode("1.20.4-neoforge", 12004, "srg")
     val forge12004 = createNode("1.20.4-forge", 12004, "srg")
     val fabric12004 = createNode("1.20.4-fabric", 12004, "yarn")
     val forge12002 = createNode("1.20.2-forge", 12002, "srg")
@@ -38,9 +49,19 @@ preprocess {
     val forge11202 = createNode("1.12.2-forge", 11202, "srg")
     val forge10809 = createNode("1.8.9-forge", 10809, "srg")
 
-    fabric12102.link(fabric12100)
+    neoForge12104.link(fabric12104)
+    forge12104.link(fabric12104)
+    fabric12104.link(fabric12103)
+    neoForge12103.link(fabric12103)
+    forge12103.link(fabric12103)
+    fabric12103.link(fabric12100)
+    neoForge12100.link(fabric12100)
+    forge12100.link(fabric12100)
     fabric12100.link(fabric12006)
+    neoForge12006.link(fabric12006)
+    forge12006.link(fabric12006)
     fabric12006.link(fabric12004)
+    neoForge12004.link(fabric12004)
     forge12004.link(fabric12004)
     fabric12004.link(fabric12002, file("versions/1.20.4-1.20.2.txt"))
     forge12002.link(fabric12002)
