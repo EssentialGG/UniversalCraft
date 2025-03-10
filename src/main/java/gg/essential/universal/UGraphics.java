@@ -1078,7 +1078,8 @@ public class UGraphics {
         //$$ doDraw();
         //#else
         //#if MC>=12100
-        //$$ BuiltBuffer builtBuffer = instance.end();
+        //$$ BuiltBuffer builtBuffer = instance.endNullable();
+        //$$ if (builtBuffer == null) return;
         //#endif
         //#if MC>=11600
         //$$ if (renderLayer != null) {
@@ -1106,7 +1107,8 @@ public class UGraphics {
         //$$ doDraw();
         //#else
         //#if MC>=12100
-        //$$ BuiltBuffer builtBuffer = instance.end();
+        //$$ BuiltBuffer builtBuffer = instance.endNullable();
+        //$$ if (builtBuffer == null) return;
         //#if MC>=12102
         //$$ builtBuffer.sortQuads(SORTED_QUADS_ALLOCATOR, RenderSystem.getProjectionType().getVertexSorter());
         //#else
