@@ -1,3 +1,5 @@
+//#if MC<12105
+@file:Suppress("DEPRECATION")
 
 package gg.essential.universal.wrappers.message
 
@@ -16,9 +18,10 @@ import net.minecraft.util.ChatComponentText
 //#endif
 
 //#if MC>=11602
+//$$ import gg.essential.universal.utils.toFormattedString
+//$$ import gg.essential.universal.utils.toUnformattedString
 //$$ import net.minecraft.util.IReorderingProcessor
 //$$ import net.minecraft.util.text.IFormattableTextComponent
-//$$ import net.minecraft.util.ICharacterConsumer
 //$$ import net.minecraft.util.text.Color
 //$$ import net.minecraft.util.text.ITextProperties.IStyledTextAcceptor
 //$$ import net.minecraft.util.text.ITextProperties.ITextAcceptor
@@ -33,6 +36,7 @@ import net.minecraft.util.ChatComponentText
 //$$ import java.util.function.Consumer
 //#endif
 
+@Deprecated("API is fairly bad and no longer works at all in 1.21.5+, just use vanilla components")
 @Suppress("MemberVisibilityCanBePrivate")
 //#if MC>=11900
 //$$ class UTextComponent : Text {
@@ -208,48 +212,6 @@ class UTextComponent : IChatComponent {
 
     private fun String.formatIf(predicate: Boolean) = if (predicate) UChat.addColor(this) else this
 
-    //#if MC>=11602
-    //$$ private class TextBuilder(private val isFormatted: Boolean) : ICharacterConsumer {
-    //$$     private val builder = StringBuilder()
-    //$$     private var cachedStyle: Style? = null
-    //$$
-    //$$     override fun accept(index: Int, style: Style, codePoint: Int): Boolean  {
-    //$$         if (isFormatted && style != cachedStyle) {
-    //$$             cachedStyle = style
-    //$$             builder.append(formatString(style))
-    //$$         }
-    //$$
-    //$$         builder.append(codePoint.toChar())
-    //$$         return true
-    //$$     }
-    //$$
-    //$$     fun getString() = builder.toString()
-    //$$
-    //$$     private fun formatString(style: Style): String {
-    //$$         val builder = StringBuilder("§r")
-    //$$
-    //$$         when {
-    //$$             style.bold -> builder.append("§l")
-    //$$             style.italic -> builder.append("§o")
-    //$$             style.underlined -> builder.append("§n")
-    //$$             style.strikethrough -> builder.append("§m")
-    //$$             style.obfuscated -> builder.append("§k")
-    //$$         }
-    //$$
-    //$$         style.color?.let(colorToFormatChar::get)?.let {
-    //$$             builder.append(it)
-    //$$         }
-    //$$         return builder.toString()
-    //$$     }
-    //$$
-    //$$     companion object {
-    //$$         private val colorToFormatChar = TextFormatting.values().mapNotNull { format ->
-    //$$             Color.fromTextFormatting(format)?.let { it to format }
-    //$$         }.toMap()
-    //$$     }
-    //$$ }
-    //#endif
-
     // **********************
     // * METHOD DELEGATIONS *
     // **********************
@@ -259,17 +221,9 @@ class UTextComponent : IChatComponent {
     //#endif
 
     //#if MC>=11602
-    //$$ val unformattedText: String get() {
-    //$$     val builder = TextBuilder(false)
-    //$$     component.func_241878_f().accept(builder)
-    //$$     return builder.getString()
-    //$$ }
+    //$$ val unformattedText: String get() = component.toUnformattedString()
     //$$
-    //$$ val formattedText: String get() {
-    //$$     val builder = TextBuilder(true)
-    //$$     component.func_241878_f().accept(builder)
-    //$$     return builder.getString()
-    //$$ }
+    //$$ val formattedText: String get() = component.toFormattedString()
     //$$
     //$$ fun appendSibling(text: ITextComponent): IFormattableTextComponent = component.append(text)
     //$$
@@ -429,3 +383,4 @@ class UTextComponent : IChatComponent {
         }
     }
 }
+//#endif

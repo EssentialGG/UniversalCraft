@@ -9,7 +9,7 @@ package gg.essential.universal
 import net.minecraft.client.settings.KeyBinding
 
 //#if MC>=11600
-//$$ import gg.essential.universal.wrappers.message.UTextComponent
+//$$ import gg.essential.universal.utils.toUnformattedString
 //#endif
 
 //#if MC>=11502
@@ -342,7 +342,7 @@ object UKeyboard {
     fun getKeyName(keyBinding: KeyBinding): String? {
         //#if MC>=11400
         //#if MC>=11600
-        //$$ return UTextComponent(keyBinding.func_238171_j_()).unformattedText.let {
+        //$$ return keyBinding.func_238171_j_().toUnformattedString().let {
         //#else
         //$$ return keyBinding.localizedName?.let {
         //#endif

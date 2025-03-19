@@ -2,8 +2,9 @@ package gg.essential.universal
 
 //#if !STANDALONE
 import gg.essential.universal.wrappers.UPlayer
-import gg.essential.universal.wrappers.message.UMessage
-import gg.essential.universal.wrappers.message.UTextComponent
+//#if MC>=12105
+//$$ import net.minecraft.text.Text
+//#endif
 //#endif
 import java.util.regex.Pattern
 
@@ -21,15 +22,19 @@ object UChat {
     fun chat(obj: Any) {
         //#if STANDALONE
         //$$ println(obj)
+        //#elseif MC>=12105
+        //$$ if (!UPlayer.hasPlayer()) return
+        //$$ UPlayer.sendClientSideMessage(obj as? Text ?: Text.literal(obj.toString()))
         //#else
-        if (obj is String || obj is UTextComponent) {
-            UMessage(obj).chat()
+        @Suppress("DEPRECATION")
+        if (obj is String || obj is gg.essential.universal.wrappers.message.UTextComponent) {
+            gg.essential.universal.wrappers.message.UMessage(obj).chat()
         } else {
-            val component = UTextComponent.from(obj)
+            val component = gg.essential.universal.wrappers.message.UTextComponent.from(obj)
             if (component != null) {
                 component.chat()
             } else {
-                UMessage(obj.toString()).chat()
+                gg.essential.universal.wrappers.message.UMessage(obj.toString()).chat()
             }
         }
         //#endif
@@ -46,15 +51,18 @@ object UChat {
     fun actionBar(obj: Any) {
         //#if STANDALONE
         //$$ throw UnsupportedOperationException("actionBar($obj)")
+        //#elseif MC>=12105
+        //$$ UPacket.sendActionBarMessage(obj as? Text ?: Text.literal(obj.toString()))
         //#else
-        if (obj is String || obj is UTextComponent) {
-            UMessage(obj).actionBar()
+        @Suppress("DEPRECATION")
+        if (obj is String || obj is gg.essential.universal.wrappers.message.UTextComponent) {
+            gg.essential.universal.wrappers.message.UMessage(obj).actionBar()
         } else {
-            val component = UTextComponent.from(obj)
+            val component = gg.essential.universal.wrappers.message.UTextComponent.from(obj)
             if (component != null) {
                 component.actionBar()
             } else {
-                UMessage(obj.toString()).actionBar()
+                gg.essential.universal.wrappers.message.UMessage(obj.toString()).actionBar()
             }
         }
         //#endif
