@@ -182,9 +182,10 @@ class UMatrixStack private constructor(
             // If the quaternion is close to zero, just treat it as no rotation
             return
         }
-        val x = quaternion.x / s
-        val y = quaternion.y / s
-        val z = quaternion.z / s
+        val sInverse = 1 / s // Slight loss of precision with floats, balanced by performance gain
+        val x = quaternion.x * sInverse
+        val y = quaternion.y * sInverse
+        val z = quaternion.z * sInverse
 
         // Apply to stack.last
         rotate(angle, x, y, z, degrees = false)
