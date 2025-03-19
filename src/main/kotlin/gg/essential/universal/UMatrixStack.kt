@@ -160,6 +160,9 @@ class UMatrixStack private constructor(
         }
     }
 
+    /**
+     * For < 1.14 the input quaternion MUST be normalized prior to calling.
+     */
     fun multiply(quaternion: Quaternion) {
         //#if MC>=11903
         //$$ stack.last.run {
@@ -173,7 +176,6 @@ class UMatrixStack private constructor(
         //$$ }
         //#else
         // Calculate the angle and axis for the rotate() function
-        quaternion.normalise() // Must be normalized
         val angle = 2 * acos(quaternion.w)
         val s = sqrt(1.0 - quaternion.w * quaternion.w).toFloat()
         if (s < 1e-8) {
