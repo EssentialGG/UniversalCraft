@@ -637,6 +637,22 @@ public class UGraphics {
         //#endif
     }
 
+    public static void clearColor(float r, float g, float b, float a) {
+        //#if MC>=12105
+        //$$ GL11.glClearColor(r, g, b, a);
+        //#else
+        GlStateManager.clearColor(r, g, b, a);
+        //#endif
+    }
+
+    public static void clearDepth(double depth) {
+        //#if MC>=12105
+        //$$ GL11.glClearDepth(depth);
+        //#else
+        GlStateManager.clearDepth(depth);
+        //#endif
+    }
+
     public static void glClear(int mode) {
         GL11.glClear(mode);
     }
