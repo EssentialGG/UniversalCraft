@@ -145,6 +145,8 @@ public class gg/essential/universal/UGraphics {
 	@1.12.2-forge,1.16.2-forge,1.8.9-forge
 	public static fun bindTexture (Lnet/minecraft/util/ResourceLocation;)V
 	public static fun blendEquation (I)V
+	public static fun clearColor (FFFF)V
+	public static fun clearDepth (D)V
 	public fun color (FFFF)Lgg/essential/universal/UGraphics;
 	public fun color (IIII)Lgg/essential/universal/UGraphics;
 	public fun color (Ljava/awt/Color;)Lgg/essential/universal/UGraphics;
