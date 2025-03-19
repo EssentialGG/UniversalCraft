@@ -23,6 +23,9 @@ import net.minecraft.client.renderer.GLAllocation
 
 //#if MC>=11400
 //$$ import net.minecraft.util.math.MathHelper
+//#else
+import kotlin.math.acos
+import kotlin.math.sqrt
 //#endif
 
 /**
@@ -157,16 +160,32 @@ class UMatrixStack private constructor(
         }
     }
 
-    fun multiply(quaternion: Quaternion): Unit = stack.last.run {
+    fun multiply(quaternion: Quaternion) {
         //#if MC>=11903
-        //$$ model.rotate(quaternion)
-        //$$ normal.rotate(quaternion)
+        //$$ stack.last.run {
+        //$$     model.rotate(quaternion)
+        //$$     normal.rotate(quaternion)
+        //$$ }
         //#elseif MC>=11400
-        //$$ model.mul(quaternion)
-        //$$ normal.mul(quaternion)
+        //$$ stack.last.run {
+        //$$     model.mul(quaternion)
+        //$$     normal.mul(quaternion)
+        //$$ }
         //#else
-        @Suppress("UNUSED_EXPRESSION") quaternion
-        TODO("lwjgl quaternion multiply") // there seems to be no existing methods to do this
+        // Calculate the angle and axis for the rotate() function
+        quaternion.normalise() // Must be normalized
+        val angle = 2 * acos(quaternion.w)
+        val s = sqrt(1.0 - quaternion.w * quaternion.w).toFloat()
+        if (s < 1e-8) {
+            // If the quaternion is close to zero, just treat it as no rotation
+            return
+        }
+        val x = quaternion.x / s
+        val y = quaternion.y / s
+        val z = quaternion.z / s
+
+        // Apply to stack.last
+        rotate(angle, x, y, z, degrees = false)
         //#endif
     }
 
