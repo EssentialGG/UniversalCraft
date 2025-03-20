@@ -11,11 +11,11 @@ plugins {
 group = "gg.essential"
 
 java.withSourcesJar()
-tasks.compileKotlin.setJvmDefault(if (platform.mcVersion >= 11400) "all" else "all-compatibility")
+tasks.compileKotlin.setJvmDefault("all")
 loom.noServerRunConfigs()
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")
 }
 
 tasks.withType<KotlinCompile> {

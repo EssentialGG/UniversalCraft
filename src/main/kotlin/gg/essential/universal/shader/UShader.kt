@@ -10,6 +10,9 @@ import gg.essential.universal.UGraphics
 //$$ import net.minecraft.client.render.Shader
 //#endif
 
+//#if MC<11600
+@JvmDefaultWithCompatibility
+//#endif
 interface UShader {
     val usable: Boolean
 
