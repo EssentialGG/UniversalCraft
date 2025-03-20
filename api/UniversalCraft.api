@@ -734,7 +734,23 @@ public final class gg/essential/universal/UMouse$Scaled {
 public final class gg/essential/universal/UPacket {
 	public static final field INSTANCE Lgg/essential/universal/UPacket;
 	public static final fun sendActionBarMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+	@1.8.9-forge
+	public static final fun sendActionBarMessage (Lnet/minecraft/util/IChatComponent;)V
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge,1.20.4-neoforge,1.20.6-forge,1.20.6-neoforge,1.21-forge,1.21-neoforge,1.21.3-forge,1.21.3-neoforge,1.21.4-forge,1.21.4-neoforge
+	public static final fun sendActionBarMessage (Lnet/minecraft/network/chat/Component;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric,1.21.3-fabric,1.21.4-fabric
+	public static final fun sendActionBarMessage (Lnet/minecraft/text/Text;)V
+	@1.12.2-forge,1.16.2-forge
+	public static final fun sendActionBarMessage (Lnet/minecraft/util/text/ITextComponent;)V
 	public static final fun sendChatMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+	@1.8.9-forge
+	public static final fun sendChatMessage (Lnet/minecraft/util/IChatComponent;)V
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge,1.20.4-neoforge,1.20.6-forge,1.20.6-neoforge,1.21-forge,1.21-neoforge,1.21.3-forge,1.21.3-neoforge,1.21.4-forge,1.21.4-neoforge
+	public static final fun sendChatMessage (Lnet/minecraft/network/chat/Component;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric,1.21.3-fabric,1.21.4-fabric
+	public static final fun sendChatMessage (Lnet/minecraft/text/Text;)V
+	@1.12.2-forge,1.16.2-forge
+	public static final fun sendChatMessage (Lnet/minecraft/util/text/ITextComponent;)V
 }
 
 public final class gg/essential/universal/UResolution {
@@ -1181,6 +1197,25 @@ public final class gg/essential/universal/utils/ReleasedDynamicTexture : net/min
 	public final fun uploadTexture ()V
 }
 
+public final class gg/essential/universal/utils/TextUtilsKt {
+	@1.8.9-forge
+	public static final fun toFormattedString (Lnet/minecraft/util/IChatComponent;)Ljava/lang/String;
+	@1.8.9-forge
+	public static final fun toUnformattedString (Lnet/minecraft/util/IChatComponent;)Ljava/lang/String;
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge,1.20.4-neoforge,1.20.6-forge,1.20.6-neoforge,1.21-forge,1.21-neoforge,1.21.3-forge,1.21.3-neoforge,1.21.4-forge,1.21.4-neoforge
+	public static final fun toFormattedString (Lnet/minecraft/network/chat/Component;)Ljava/lang/String;
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge,1.20.4-neoforge,1.20.6-forge,1.20.6-neoforge,1.21-forge,1.21-neoforge,1.21.3-forge,1.21.3-neoforge,1.21.4-forge,1.21.4-neoforge
+	public static final fun toUnformattedString (Lnet/minecraft/network/chat/Component;)Ljava/lang/String;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric,1.21.3-fabric,1.21.4-fabric
+	public static final fun toFormattedString (Lnet/minecraft/text/Text;)Ljava/lang/String;
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric,1.21.3-fabric,1.21.4-fabric
+	public static final fun toUnformattedString (Lnet/minecraft/text/Text;)Ljava/lang/String;
+	@1.12.2-forge,1.16.2-forge
+	public static final fun toFormattedString (Lnet/minecraft/util/text/ITextComponent;)Ljava/lang/String;
+	@1.12.2-forge,1.16.2-forge
+	public static final fun toUnformattedString (Lnet/minecraft/util/text/ITextComponent;)Ljava/lang/String;
+}
+
 public abstract interface class gg/essential/universal/vertex/UVertexConsumer {
 	public static final field Companion Lgg/essential/universal/vertex/UVertexConsumer$Companion;
 	public fun color (FFFF)Lgg/essential/universal/vertex/UVertexConsumer;
@@ -1242,6 +1277,14 @@ public final class gg/essential/universal/wrappers/UPlayer {
 	public static final fun getUUID ()Ljava/util/UUID;
 	public static final fun hasPlayer ()Z
 	public static final fun sendClientSideMessage (Lgg/essential/universal/wrappers/message/UTextComponent;)V
+	@1.8.9-forge
+	public static final fun sendClientSideMessage (Lnet/minecraft/util/IChatComponent;)V
+	@1.17.1-forge,1.18.1-forge,1.19.2-forge,1.19.3-forge,1.19.4-forge,1.20.1-forge,1.20.2-forge,1.20.4-forge,1.20.4-neoforge,1.20.6-forge,1.20.6-neoforge,1.21-forge,1.21-neoforge,1.21.3-forge,1.21.3-neoforge,1.21.4-forge,1.21.4-neoforge
+	public static final fun sendClientSideMessage (Lnet/minecraft/network/chat/Component;)V
+	@1.16.2-fabric,1.17.1-fabric,1.18.1-fabric,1.19-fabric,1.19.1-fabric,1.19.2-fabric,1.19.3-fabric,1.19.4-fabric,1.20-fabric,1.20.1-fabric,1.20.2-fabric,1.20.4-fabric,1.20.6-fabric,1.21-fabric,1.21.3-fabric,1.21.4-fabric
+	public static final fun sendClientSideMessage (Lnet/minecraft/text/Text;)V
+	@1.12.2-forge,1.16.2-forge
+	public static final fun sendClientSideMessage (Lnet/minecraft/util/text/ITextComponent;)V
 }
 
 public final class gg/essential/universal/wrappers/message/UMessage {

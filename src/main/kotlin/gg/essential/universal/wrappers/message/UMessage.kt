@@ -1,3 +1,5 @@
+//#if MC<12105
+@file:Suppress("DEPRECATION")
 package gg.essential.universal.wrappers.message
 
 import gg.essential.universal.UMinecraft
@@ -13,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom
 //$$ import net.minecraft.util.text.IFormattableTextComponent
 //#endif
 
+@Deprecated("No longer exists as of 1.21.5, unmaintained even on versions before that. Use UChat instead.")
 class UMessage {
     private lateinit var _chatMessage: UTextComponent
     val messageParts: MutableList<UTextComponent> = mutableListOf()
@@ -146,3 +149,4 @@ internal fun printChatMessageWithOptionalDeletion(textComponent: UTextComponent,
     // as `V`, otherwise it'll infer `Ljava/lang/Object;` which does not match our target method.
     printChatMessageWithOptionalDeletion?.apply { invokeExact(UMinecraft.getChatGUI(), textComponent as MCITextComponent, lineID) }
 }
+//#endif

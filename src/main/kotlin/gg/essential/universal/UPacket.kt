@@ -1,7 +1,7 @@
 package gg.essential.universal
 
-import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.network.play.server.S02PacketChat
+import net.minecraft.util.IChatComponent
 
 //#if MC>=11602
 //$$ import gg.essential.universal.wrappers.UPlayer
@@ -35,8 +35,13 @@ private object ChatType {
 //#endif
 
 object UPacket {
+    //#if MC<12105
+    @Suppress("DEPRECATION")
     @JvmStatic
-    fun sendChatMessage(message: UTextComponent) {
+    fun sendChatMessage(message: gg.essential.universal.wrappers.message.UTextComponent) = sendChatMessage(message as IChatComponent)
+    //#endif
+    @JvmStatic
+    fun sendChatMessage(message: IChatComponent) {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
             //#if MC>=11901
@@ -49,9 +54,14 @@ object UPacket {
             //#endif
         ))
     }
-    
+
+    //#if MC<12105
+    @Suppress("DEPRECATION")
     @JvmStatic
-    fun sendActionBarMessage(message: UTextComponent) {
+    fun sendActionBarMessage(message: gg.essential.universal.wrappers.message.UTextComponent) = sendActionBarMessage(message as IChatComponent)
+    //#endif
+    @JvmStatic
+    fun sendActionBarMessage(message: IChatComponent) {
         UMinecraft.getNetHandler()!!.handleChat(S02PacketChat(
             message,
             //#if MC>=11901
