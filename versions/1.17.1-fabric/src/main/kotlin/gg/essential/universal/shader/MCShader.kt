@@ -1,9 +1,8 @@
-// MC 1.17+
+// MC 1.17 - 1.21.4
 package gg.essential.universal.shader
 
 import com.google.common.collect.ImmutableMap
 import gg.essential.universal.UGraphics
-import gg.essential.universal.UGraphics.CommonVertexFormats
 import net.minecraft.client.gl.GlUniform
 import net.minecraft.client.render.Shader
 import net.minecraft.client.render.VertexFormat
@@ -31,24 +30,24 @@ import net.minecraft.resource.ResourceImpl
 //#endif
 
 internal class MCShader(
-    private val mc: Shader,
+    val mc: Shader,
     private val blendState: BlendState
 ) : UShader {
     override var usable = true
 
     override fun bind() {
-        UGraphics.setShader(::mc)
+        UGraphics.Globals.setShader(::mc)
 
         // MC's GlBlendState is fundamentally broken because it is lazy in that it does not update anything
         // if the previously active blend state matches this one. But that assumes that it is the only method which
         // can modify the global GL state, which is just a horrible assumption and MC itself immediately violates
         // it in RenderLayer.
         // So, to actually get our state applied, we gotta do it ourselves.
-        blendState.activate()
+        UGraphics.Globals.blendState(blendState)
     }
 
     override fun unbind() {
-        UGraphics.setShader { null }
+        UGraphics.Globals.setShader { null }
     }
 
     private fun getUniformOrNull(name: String) = mc.getUniform(name)?.let(::MCShaderUniform)
@@ -63,7 +62,7 @@ internal class MCShader(
     companion object {
         private val DEBUG_LEGACY = System.getProperty("universalcraft.shader.legacy.debug", "") == "true"
 
-        fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: CommonVertexFormats?): MCShader {
+        fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: VertexFormat?): MCShader {
             val transformer = ShaderTransformer(vertexFormat, 150)
 
             val transformedVertSource = transformer.transform(vertSource)
@@ -130,7 +129,7 @@ internal class MCShader(
                 // Shader calls glBindAttribLocation using the names in the VertexFormat, not the shader json...
                 // Easiest way to work around this is to construct a custom VertexFormat with our prefixed names.
                 buildVertexFormat(transformer.attributes.withIndex()
-                        .associate { it.value to vertexFormat.mc.elements[it.index] })
+                        .associate { it.value to vertexFormat.elements[it.index] })
             } else {
                 // Legacy fallback: The actual element doesn't matter here, Shader only cares about the names
                 buildVertexFormat(transformer.attributes.associateWith {

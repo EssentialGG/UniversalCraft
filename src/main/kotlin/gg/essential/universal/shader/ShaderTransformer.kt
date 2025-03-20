@@ -1,8 +1,12 @@
 package gg.essential.universal.shader
 
-import gg.essential.universal.UGraphics.CommonVertexFormats
+//#if STANDALONE
+//$$ import gg.essential.universal.standalone.render.VertexFormat
+//#else
+import net.minecraft.client.renderer.vertex.VertexFormat
+//#endif
 
-internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?, private val targetVersion: Int) {
+internal class ShaderTransformer(private val vertexFormat: VertexFormat?, private val targetVersion: Int) {
     init {
         check(targetVersion in listOf(110, 130, 150))
     }
@@ -60,7 +64,7 @@ internal class ShaderTransformer(private val vertexFormat: CommonVertexFormats?,
 
             if (vertexFormat != null) {
                 //#if MC>=11700 && !STANDALONE
-                //$$ newAttributes.sortedBy { vertexFormat.mc.shaderAttributes.indexOf(it.first.removePrefix("uc_")) }
+                //$$ newAttributes.sortedBy { vertexFormat.shaderAttributes.indexOf(it.first.removePrefix("uc_")) }
                 //$$     .forEach {
                 //$$         attributes.add(it.first)
                 //$$         transformed.add(it.second)
@@ -123,6 +127,20 @@ internal enum class UniformType(val typeName: String, val glslName: String, val 
     Mat3("matrix3x3", "mat3", intArrayOf(1, 0, 0, 0, 1, 0, 0, 0, 1)),
     Mat4("matrix4x4", "mat4", intArrayOf(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)),
     ;
+
+    //#if MC>=12105 && !STANDALONE
+    //$$ val mc: net.minecraft.client.gl.UniformType
+    //$$     get() = when (this) {
+    //$$         Int1 -> net.minecraft.client.gl.UniformType.INT
+    //$$         Float1 -> net.minecraft.client.gl.UniformType.FLOAT
+    //$$         Float2 -> net.minecraft.client.gl.UniformType.VEC2
+    //$$         Float3 -> net.minecraft.client.gl.UniformType.VEC3
+    //$$         Float4 -> net.minecraft.client.gl.UniformType.VEC4
+    //$$         Mat2 -> throw UnsupportedOperationException("This version of Minecraft does not support Mat2 uniforms.")
+    //$$         Mat3 -> throw UnsupportedOperationException("This version of Minecraft does not support Mat3 uniforms.")
+    //$$         Mat4 -> net.minecraft.client.gl.UniformType.MATRIX4X4
+    //$$     }
+    //#endif
 
     companion object {
         fun fromGlsl(glslName: String): UniformType =

@@ -3,6 +3,12 @@ package gg.essential.universal.shader
 import gg.essential.universal.UGraphics
 
 //#if STANDALONE
+//$$ import gg.essential.universal.standalone.render.VertexFormat
+//#else
+import net.minecraft.client.renderer.vertex.VertexFormat
+//#endif
+
+//#if STANDALONE
 //$$ import gg.essential.universal.standalone.render.VertexFormat.Part
 //$$ import org.lwjgl.opengl.GL
 //$$ import org.lwjgl.opengl.GL20C
@@ -36,12 +42,14 @@ interface UShader {
     fun getSamplerUniform(name: String): SamplerUniform = getSamplerUniformOrNull(name) ?: throw NoSuchElementException(name)
 
     companion object {
+        //#if MC<12105 || STANDALONE
         @Deprecated(
             "Use the overload which takes a vertex format to ensure proper operation on all versions.",
             replaceWith = ReplaceWith("UShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)")
         )
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState): UShader {
             //#if STANDALONE
+            //$$ @Suppress("DEPRECATION")
             //$$ return fromLegacyShader(vertSource, fragSource, blendState, UGraphics.CommonVertexFormats.POSITION_COLOR)
             //#elseif MC>=11700
             //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, null)
@@ -50,9 +58,14 @@ interface UShader {
             //#endif
         }
 
+        @Deprecated("No longer supported on 1.21.5+, use URenderPipeline instead.")
         fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: UGraphics.CommonVertexFormats): UShader {
+            return fromLegacyShader(vertSource, fragSource, blendState, vertexFormat.mc)
+        }
+
+        fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, vertexFormat: VertexFormat): UShader {
             //#if STANDALONE
-            //$$ return fromLegacyShader(vertSource, fragSource, blendState, vertexFormat.mc.parts)
+            //$$ return fromLegacyShader(vertSource, fragSource, blendState, vertexFormat.parts)
             //#elseif MC>=11700
             //$$ return MCShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)
             //#else
@@ -60,6 +73,7 @@ interface UShader {
             return GlShader(vertSource, fragSource, blendState) {}
             //#endif
         }
+        //#endif
 
         //#if STANDALONE
         //$$ internal fun fromLegacyShader(vertSource: String, fragSource: String, blendState: BlendState, attributes: List<Part>): UShader {
@@ -82,7 +96,7 @@ interface UShader {
         //$$         }
         //$$     }
         //$$ }
-        //#elseif MC>=11700
+        //#elseif MC>=11700 && MC<12105
         //$$ fun fromMcShader(shader: Shader, blendState: BlendState): UShader {
         //$$     return MCShader(shader, blendState)
         //$$ }

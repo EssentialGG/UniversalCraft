@@ -4,6 +4,11 @@ import gg.essential.universal.UGraphics
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL14
 
+//#if MC>=12105 && !STANDALONE
+//$$ import com.mojang.blaze3d.platform.DestFactor
+//$$ import com.mojang.blaze3d.platform.SourceFactor
+//#endif
+
 //#if MC>=11700 && MC<12102
 //$$ import net.minecraft.client.gl.GlBlendState
 //#endif
@@ -48,11 +53,14 @@ data class BlendState(
     //$$     McBlendState()
     //$$ }
     //$$
+    //$$ @Deprecated("No longer supported on 1.21.5+, see UGraphics.Globals docs")
     //$$ fun activate() = mc.enable()
     //#else
+    @Deprecated("No longer supported on 1.21.5+, see UGraphics.Globals docs")
     fun activate() = applyState()
     //#endif
 
+    @Suppress("DEPRECATION")
     private fun applyState() {
         if (enabled) {
             UGraphics.enableBlend()
@@ -111,6 +119,36 @@ data class BlendState(
         DST_ALPHA("dstalpha", GL11.GL_DST_ALPHA),
         ONE_MINUS_DST_ALPHA("1-dstalpha", GL11.GL_ONE_MINUS_DST_ALPHA),
         ;
+
+        //#if MC>=12105 && !STANDALONE
+        //$$ internal val mcSourceFactor: SourceFactor
+        //$$     get() = when (this) {
+        //$$         ZERO -> SourceFactor.ZERO
+        //$$         ONE -> SourceFactor.ONE
+        //$$         SRC_COLOR -> SourceFactor.SRC_COLOR
+        //$$         ONE_MINUS_SRC_COLOR -> SourceFactor.ONE_MINUS_SRC_COLOR
+        //$$         DST_COLOR -> SourceFactor.DST_COLOR
+        //$$         ONE_MINUS_DST_COLOR -> SourceFactor.ONE_MINUS_DST_COLOR
+        //$$         SRC_ALPHA -> SourceFactor.SRC_ALPHA
+        //$$         ONE_MINUS_SRC_ALPHA -> SourceFactor.ONE_MINUS_SRC_ALPHA
+        //$$         DST_ALPHA -> SourceFactor.DST_ALPHA
+        //$$         ONE_MINUS_DST_ALPHA -> SourceFactor.ONE_MINUS_DST_ALPHA
+        //$$     }
+        //$$
+        //$$ internal val mcDestFactor: DestFactor
+        //$$     get() = when (this) {
+        //$$         ZERO -> DestFactor.ZERO
+        //$$         ONE -> DestFactor.ONE
+        //$$         SRC_COLOR -> DestFactor.SRC_COLOR
+        //$$         ONE_MINUS_SRC_COLOR -> DestFactor.ONE_MINUS_SRC_COLOR
+        //$$         DST_COLOR -> DestFactor.DST_COLOR
+        //$$         ONE_MINUS_DST_COLOR -> DestFactor.ONE_MINUS_DST_COLOR
+        //$$         SRC_ALPHA -> DestFactor.SRC_ALPHA
+        //$$         ONE_MINUS_SRC_ALPHA -> DestFactor.ONE_MINUS_SRC_ALPHA
+        //$$         DST_ALPHA -> DestFactor.DST_ALPHA
+        //$$         ONE_MINUS_DST_ALPHA -> DestFactor.ONE_MINUS_DST_ALPHA
+        //$$     }
+        //#endif
 
         companion object {
             private val byGlId = values().associateBy { it.glId }

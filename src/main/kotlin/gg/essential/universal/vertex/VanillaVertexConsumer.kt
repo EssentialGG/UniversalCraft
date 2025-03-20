@@ -16,7 +16,7 @@ import org.lwjgl.util.vector.Vector3f
 import org.lwjgl.util.vector.Vector4f
 //#endif
 
-internal class VanillaVertexConsumer(
+internal open class VanillaVertexConsumer(
     //#if MC>=11600
     //$$ private val inner: IVertexBuilder,
     //#else

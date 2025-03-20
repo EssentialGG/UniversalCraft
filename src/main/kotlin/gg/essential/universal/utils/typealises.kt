@@ -4,7 +4,9 @@ typealias MCMinecraft = net.minecraft.client.Minecraft
 typealias MCFontRenderer = net.minecraft.client.gui.FontRenderer
 
 typealias MCClickEventAction = net.minecraft.event.ClickEvent.Action
-//#if MC>=11600
+//#if MC>=12105
+//$$ typealias MCHoverEventAction = net.minecraft.text.HoverEvent.Action
+//#elseif MC>=11600
 //$$ typealias MCHoverEventAction = net.minecraft.util.text.event.HoverEvent.Action<*>
 //#else
 typealias MCHoverEventAction = net.minecraft.event.HoverEvent.Action

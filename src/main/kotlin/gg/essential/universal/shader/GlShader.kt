@@ -52,13 +52,17 @@ internal class GlShader(
     //$$ private val modelViewMatrixUniform = getFloatMatrixUniformOrNull("ModelViewMat")
     //#endif
 
-    override fun bind() {
+    override fun bind() = bind(false)
+    fun bind(skipBlendState: Boolean) {
         prevActiveTexture = GL11.glGetInteger(GL_ACTIVE_TEXTURE)
         for (sampler in samplers.values) {
             doBindTexture(sampler.textureUnit, sampler.textureId)
         }
-        prevBlendState = BlendState.active()
-        blendState.activate()
+        if (!skipBlendState) {
+            prevBlendState = BlendState.active()
+            @Suppress("DEPRECATION")
+            blendState.activate()
+        }
 
         UGraphics.glUseProgram(program)
         //#if STANDALONE
@@ -75,7 +79,8 @@ internal class GlShader(
         UGraphics.bindTexture(textureId)
     }
 
-    override fun unbind() {
+    override fun unbind() = unbind(false)
+    fun unbind(skipBlendState: Boolean) {
         for ((textureUnit, textureId) in prevTextureBindings) {
             UGraphics.setActiveTexture(GL_TEXTURE0 + textureUnit)
             @Suppress("DEPRECATION") // we actively manage the active texture unit, so this is fine
@@ -83,7 +88,10 @@ internal class GlShader(
         }
         prevTextureBindings.clear()
         UGraphics.setActiveTexture(prevActiveTexture)
-        prevBlendState?.activate()
+        if (!skipBlendState) {
+            @Suppress("DEPRECATION")
+            prevBlendState?.activate()
+        }
 
         UGraphics.glUseProgram(0)
         bound = false
