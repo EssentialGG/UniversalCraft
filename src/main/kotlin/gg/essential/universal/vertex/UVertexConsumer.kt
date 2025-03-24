@@ -3,6 +3,9 @@ package gg.essential.universal.vertex
 import gg.essential.universal.UMatrixStack
 import java.awt.Color
 
+//#if MC<11600
+@JvmDefaultWithCompatibility
+//#endif
 interface UVertexConsumer {
     fun pos(stack: UMatrixStack, x: Double, y: Double, z: Double): UVertexConsumer
 
