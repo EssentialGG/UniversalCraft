@@ -1,8 +1,8 @@
 package gg.essential.universal.wrappers
 
 import gg.essential.universal.UMinecraft
-import gg.essential.universal.wrappers.message.UTextComponent
 import net.minecraft.client.entity.EntityPlayerSP
+import net.minecraft.util.IChatComponent
 import java.util.*
 
 object UPlayer {
@@ -14,8 +14,14 @@ object UPlayer {
     @JvmStatic
     fun hasPlayer() = getPlayer() != null
 
+    //#if MC<12105
+    @Suppress("DEPRECATION")
     @JvmStatic
-    fun sendClientSideMessage(message: UTextComponent) {
+    fun sendClientSideMessage(message: gg.essential.universal.wrappers.message.UTextComponent) = sendClientSideMessage(message as IChatComponent)
+    //#endif
+
+    @JvmStatic
+    fun sendClientSideMessage(message: IChatComponent) {
         //#if MC>=12102
         //$$ getPlayer()!!.sendMessage(message, false)
         //#elseif MC>=11900
