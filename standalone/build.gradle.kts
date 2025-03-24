@@ -1,4 +1,5 @@
 import com.replaymod.gradle.preprocess.PreprocessTask
+import gg.essential.gradle.util.setJvmDefault
 
 plugins {
     kotlin("jvm")
@@ -14,6 +15,7 @@ base.archivesName = "universalcraft-standalone"
 kotlin.compilerOptions.moduleName = "universalcraft-standalone"
 publishing.publications.named<MavenPublication>("maven") { artifactId = "universalcraft-standalone" }
 java.withSourcesJar()
+tasks.compileKotlin.setJvmDefault("all")
 kotlin.jvmToolchain(8)
 
 dependencies {
