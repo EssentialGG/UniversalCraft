@@ -24,4 +24,8 @@ com.mojang.blaze3d.systems.RenderSystem blendFuncSeparate() tryBlendFuncSeparate
 com.mojang.blaze3d.systems.RenderSystem activeTexture() net.minecraft.client.renderer.GlStateManager setActiveTexture()
 com.mojang.blaze3d.systems.RenderSystem enableTexture() net.minecraft.client.renderer.GlStateManager enableTexture2D()
 com.mojang.blaze3d.systems.RenderSystem disableTexture() net.minecraft.client.renderer.GlStateManager disableTexture2D()
+com.mojang.blaze3d.systems.RenderSystem disableColorLogicOp() disableColorLogic()
+com.mojang.blaze3d.systems.RenderSystem enableColorLogicOp() enableColorLogic()
+com.mojang.blaze3d.systems.RenderSystem logicOp() colorLogicOp()
+com.mojang.blaze3d.systems.RenderSystem polygonOffset() doPolygonOffset()
 net.minecraft.client.renderer.vertex.DefaultVertexFormats POSITION_TEX_LIGHTMAP_COLOR POSITION_TEX_LMAP_COLOR

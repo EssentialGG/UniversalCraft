@@ -1,5 +1,7 @@
 package gg.essential.universal;
 
+import gg.essential.universal.render.ScissorState;
+import gg.essential.universal.shader.BlendState;
 import gg.essential.universal.utils.ReleasedDynamicTexture;
 import gg.essential.universal.vertex.UVertexConsumer;
 
@@ -21,6 +23,7 @@ import java.util.regex.Pattern;
 //$$ import gg.essential.universal.standalone.render.DefaultVertexFormats;
 //$$ import gg.essential.universal.standalone.render.Gl2Renderer;
 //$$ import gg.essential.universal.standalone.render.VertexFormat;
+//$$ import org.jetbrains.annotations.ApiStatus;
 //$$ import org.lwjgl.opengl.GL11;
 //$$ import org.lwjgl.opengl.GL20;
 //$$ import java.net.URL;
@@ -35,7 +38,6 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -44,14 +46,25 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12105
+//$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
+//$$ import com.mojang.blaze3d.textures.TextureFormat;
+//$$ import net.minecraft.client.gl.ShaderPipelines;
+//$$ import net.minecraft.client.texture.GlTexture;
+//#endif
+
 //#if MC>=12102
+//#if MC<12105
 //$$ import net.minecraft.client.gl.ShaderProgramKey;
 //$$ import net.minecraft.client.gl.ShaderProgramKeys;
+//#endif
 //$$ import java.util.HashMap;
 //#endif
 
 //#if MC>=12100
+//#if MC<12105
 //$$ import net.minecraft.client.render.BufferRenderer;
+//#endif
 //$$ import net.minecraft.client.render.BuiltBuffer;
 //$$ import net.minecraft.client.util.BufferAllocator;
 //#endif
@@ -71,9 +84,12 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#if MC>=11700
 //$$ import net.minecraft.client.render.GameRenderer;
 //$$ import net.minecraft.client.render.Shader;
+//$$ import org.jetbrains.annotations.ApiStatus;
 //$$ import java.util.IdentityHashMap;
 //$$ import java.util.Map;
 //$$ import java.util.function.Supplier;
+//#else
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 //#endif
 
 //#if MC>=11602
@@ -117,7 +133,8 @@ public class UGraphics {
 
     //#if STANDALONE
     //$$ public static void init() { /* triggers static initializer */ }
-    //$$ private static final Gl2Renderer RENDERER = new Gl2Renderer();
+    //$$ @ApiStatus.Internal
+    //$$ public static final Gl2Renderer RENDERER = new Gl2Renderer();
     //$$ private static final NvgFont MC_FONT;
     //$$ static {
     //$$     URL fontUrl = UGraphics.class.getResource("/fonts/Minecraft-Regular.otf");
@@ -255,8 +272,10 @@ public class UGraphics {
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void cullFace(int mode) {
-        //#if MC>=11502
+        //#if MC>=12105 && !STANDALONE
+        //#elseif MC>=11502
         //$$ GL11.glCullFace(mode);
         //#elseif MC>10809
         //$$ GlStateManager.CullFace[] values = GlStateManager.CullFace.values();
@@ -297,10 +316,11 @@ public class UGraphics {
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void enableBlend() {
         //#if STANDALONE
         //$$ glEnable(GL_BLEND);
-        //#else
+        //#elseif MC<12105
         GlStateManager.enableBlend();
         //#endif
     }
@@ -336,18 +356,23 @@ public class UGraphics {
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void blendEquation(int equation) {
-        //#if MC>=10900 && !STANDALONE
+        //#if STANDALONE
+        //$$ org.lwjgl.opengl.GL14.glBlendEquation(equation);
+        //#elseif MC>=12105
+        //#elseif MC>=10900
         //$$ GlStateManager.glBlendEquation(equation);
         //#else
         org.lwjgl.opengl.GL14.glBlendEquation(equation);
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
         //#if STANDALONE
         //$$ glBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
-        //#else
+        //#elseif MC<12105
         GlStateManager.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
         //#endif
     }
@@ -369,17 +394,18 @@ public class UGraphics {
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void disableBlend() {
         //#if STANDALONE
         //$$ glDisable(GL_BLEND);
-        //#else
+        //#elseif MC<12105
         GlStateManager.disableBlend();
         //#endif
     }
 
     public static void deleteTexture(int glTextureId) {
-        //#if STANDALONE
-        //$$ glDeleteTextures(GL_BLEND);
+        //#if STANDALONE || MC>=12105
+        //$$ GL11.glDeleteTextures(glTextureId);
         //#else
         GlStateManager.deleteTexture(glTextureId);
         //#endif
@@ -395,6 +421,8 @@ public class UGraphics {
         int prevTextureBinding = GL11.glGetInteger(GL_TEXTURE_BINDING_2D);
         //#if STANDALONE
         //$$ glBindTexture(GL_TEXTURE_2D, glTextureId);
+        //#elseif MC>=12105
+        //$$ GlStateManager._bindTexture(glTextureId);
         //#else
         GlStateManager.bindTexture(glTextureId);
         //#endif
@@ -403,6 +431,8 @@ public class UGraphics {
 
         //#if STANDALONE
         //$$ glBindTexture(GL_TEXTURE_2D, prevTextureBinding);
+        //#elseif MC>=12105
+        //$$ GlStateManager._bindTexture(prevTextureBinding);
         //#else
         GlStateManager.bindTexture(prevTextureBinding);
         //#endif
@@ -455,7 +485,7 @@ public class UGraphics {
         //#if STANDALONE
         //$$ glBindTexture(GL_TEXTURE_2D, glTextureId);
         //#elseif MC>=11700
-        //$$ RenderSystem.setShaderTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
+        //$$ bindTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
         //#else
         GlStateManager.bindTexture(glTextureId);
         //#endif
@@ -475,6 +505,8 @@ public class UGraphics {
     public static void bindTexture(int index, int glTextureId) {
         //#if STANDALONE
         //$$ configureTextureUnit(index, () -> glBindTexture(GL_TEXTURE_2D, glTextureId));
+        //#elseif MC>=12105
+        //$$ RenderSystem.setShaderTexture(index, new UnownedGlTexture(glTextureId));
         //#elseif MC>=11700
         //$$ RenderSystem.setShaderTexture(index, glTextureId);
         //#else
@@ -498,7 +530,11 @@ public class UGraphics {
             texture = new SimpleTexture(resourceLocation);
             textureManager.loadTexture(resourceLocation, texture);
         }
+        //#if MC>=12105 && !STANDALONE
+        //$$ return ((GlTexture) texture.getGlTexture()).getGlId();
+        //#else
         return texture.getGlTextureId();
+        //#endif
     }
     //#endif
 
@@ -825,39 +861,52 @@ public class UGraphics {
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void enableDepth() {
         //#if STANDALONE
         //$$ glEnable(GL_DEPTH_TEST);
-        //#else
+        //#elseif MC<12105
         GlStateManager.enableDepth();
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void depthFunc(int mode) {
         //#if STANDALONE
         //$$ glDepthFunc(mode);
-        //#else
+        //#elseif MC<12105
         GlStateManager.depthFunc(mode);
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void depthMask(boolean flag) {
         //#if STANDALONE
         //$$ glDepthMask(flag);
-        //#else
+        //#elseif MC<12105
         GlStateManager.depthMask(flag);
         //#endif
     }
 
+    @Deprecated // see UGraphics.Globals
     public static void disableDepth() {
         //#if STANDALONE
         //$$ glDisable(GL_DEPTH_TEST);
-        //#else
+        //#elseif MC<12105
         GlStateManager.disableDepth();
         //#endif
     }
 
-    //#if MC>=11700 && !STANDALONE
+    public static void enableScissor(int x, int y, int width, int height) {
+        new ScissorState(true, x, y, width, height).activate();
+    }
+
+    public static void disableScissor() {
+        new ScissorState(false, 0, 0, 0, 0).activate();
+    }
+
+    //#if MC>=11700 && MC<12105 && !STANDALONE
+    //$$ @Deprecated // see UGraphics.Globals
     //$$ public static void setShader(Supplier<Shader> shader) {
         //#if MC>=12102
         //$$ RenderSystem.setShader(shader.get());
@@ -876,12 +925,12 @@ public class UGraphics {
         QUADS(GL11.GL_QUADS),
         ;
 
-        private final int glMode;
+        public final int glMode;
         //#if !STANDALONE
         //#if MC>=11700
-        //$$ private final VertexFormat.DrawMode mcMode;
+        //$$ public final VertexFormat.DrawMode mcMode;
         //#else
-        private final int mcMode;
+        public final int mcMode;
         //#endif
         //#endif
 
@@ -973,6 +1022,7 @@ public class UGraphics {
         }
     }
 
+    @Deprecated // see UGraphics.Globals
     public UGraphics beginWithActiveShader(DrawMode mode, CommonVertexFormats format) {
         //#if STANDALONE
         //$$ vertexFormat = format;
@@ -986,7 +1036,11 @@ public class UGraphics {
     }
 
     //#if !STANDALONE
+    @Deprecated // see UGraphics.Globals
     public UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
+        return beginInternal(mode, format);
+    }
+    private UGraphics beginInternal(DrawMode mode, VertexFormat format) {
         vertexFormat = format;
         //#if MC>=12100
         //$$ instance = getTessellator().begin(mode.mcMode, format);
@@ -998,8 +1052,22 @@ public class UGraphics {
     //#endif
 
     //#if STANDALONE
+    //#elseif MC>=12105
+    //$$ @ApiStatus.Internal
+    //$$ public static final Map<VertexFormat, String> DEFAULT_SHADERS = new HashMap<>();
+    //$$ static {
+    //$$     DEFAULT_SHADERS.put(VertexFormats.LINE_COLOR_NORMAL, "core/rendertype_lines");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, "core/particle");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION, "core/position");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, "core/position_color");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_LIGHT, "core/position_color_lightmap");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE, "core/position_tex");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR, "core/position_tex_color");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_TEXTURE_LIGHT, "core/position_color_tex_lightmap");
+    //$$ }
     //#elseif MC>=12102
-    //$$ private static final Map<VertexFormat, ShaderProgramKey> DEFAULT_SHADERS = new HashMap<>();
+    //$$ @ApiStatus.Internal
+    //$$ public static final Map<VertexFormat, ShaderProgramKey> DEFAULT_SHADERS = new HashMap<>();
     //$$ static {
     //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, ShaderProgramKeys.RENDERTYPE_LINES);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, ShaderProgramKeys.PARTICLE);
@@ -1013,7 +1081,8 @@ public class UGraphics {
     //#elseif MC>=11700
     //$$ // Note: Needs to be an Identity hash map because VertexFormat's equals method is broken (compares via its
     //$$ //       component Map but order very much matters for VertexFormat) as of 1.17
-    //$$ private static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new IdentityHashMap<>();
+    //$$ @ApiStatus.Internal
+    //$$ public static final Map<VertexFormat, Supplier<Shader>> DEFAULT_SHADERS = new IdentityHashMap<>();
     //$$ static {
     //$$     DEFAULT_SHADERS.put(VertexFormats.LINES, GameRenderer::getRenderTypeLinesShader);
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, GameRenderer::getParticleShader);
@@ -1037,6 +1106,7 @@ public class UGraphics {
     //$$ }
     //#endif
 
+    @Deprecated // see UGraphics.Globals
     public UGraphics beginWithDefaultShader(DrawMode mode, CommonVertexFormats format) {
         //#if STANDALONE
         //$$ beginWithActiveShader(mode, format);
@@ -1048,8 +1118,9 @@ public class UGraphics {
     }
 
     //#if !STANDALONE
+    @Deprecated // see UGraphics.Globals
     public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
-        //#if MC>=11700
+        //#if MC>=11700 && MC<12105
         //#if MC>=12102
         //$$ ShaderProgramKey shader = DEFAULT_SHADERS.get(format);
         //#else
@@ -1068,7 +1139,7 @@ public class UGraphics {
     //$$ private RenderType renderLayer;
     //$$ public UGraphics beginRenderLayer(RenderType renderLayer) {
     //$$     this.renderLayer = renderLayer;
-    //$$     beginWithActiveShader(DrawMode.fromRenderLayer(renderLayer), renderLayer.getVertexFormat());
+    //$$     beginInternal(DrawMode.fromRenderLayer(renderLayer), renderLayer.getVertexFormat());
     //$$     return this;
     //$$ }
     //#endif
@@ -1192,6 +1263,9 @@ public class UGraphics {
         //$$ BuiltBuffer builtBuffer
         //#endif
     ) {
+        //#if MC>=12105 && !STANDALONE
+        //$$ throw new UnsupportedOperationException("Drawing via UGraphics on 1.21.5+ is only supported via `beginRenderLayer`. Use that or `UBufferBulider`/`URenderPipeline` instead.");
+        //#else
         VertexFormat vertexFormat = this.vertexFormat;
         if (vertexFormat == null) {
             //#if MC>=12100
@@ -1238,6 +1312,7 @@ public class UGraphics {
                 configureTextureUnit(i, GlStateManager::disableTexture2D);
             }
         }
+        //#endif
         //#endif
     }
     //#endif
@@ -1358,6 +1433,15 @@ public class UGraphics {
         return this;
     }
 
+    //#if MC>=12105 && !STANDALONE
+    //$$ private static class UnownedGlTexture extends GlTexture {
+    //$$     public UnownedGlTexture(int glId) {
+    //$$         super("", TextureFormat.RGBA8, 0, 0, 0, glId);
+    //$$         needsReinit = false;
+    //$$     }
+    //$$ }
+    //#endif
+
     /**
      * Using UMatrixStack should be preferred for all versions as direct GL transforms will break in 1.17.
      *
@@ -1395,4 +1479,103 @@ public class UGraphics {
         }
     }
     //#endif
+
+    /**
+     * Minecraft 1.21.5 switches to a more Vulkan-style rendering, that is, almost all state is now specified directly
+     * as part of the draw call and most global OpenGL state is no longer useful because it is overwritten right before
+     * each draw call.
+     * <p>
+     * The recommended replacement is to use {@link gg.essential.universal.render.URenderPipeline}
+     * (via {@link gg.essential.universal.vertex.UBufferBuilder}) instead, which provides the same
+     * all-state-is-declared-explicitly system for all versions.<br>
+     * Note that unlike the vanilla {@code RenderLayer} system, which still uses the global
+     * {@code RenderSystem.setShaderTexture}, but just like the vanilla {@code RenderPipeline},
+     * {@code URenderPipeline} also requires textures to be set explicitly, despite {@code UGraphics.bindTexture} not
+     * yet being deprecated (because it's still used for {@code RenderLayer}).
+     * <p>
+     * If you need to still use the old global state on versions prior to 1.21.5, you may use the methods declared in
+     * this class. They are functionally identical to the ones in UGraphics but are not deprecated with the
+     * understanding that they will only be used in explicitly version-dependent code.
+     */
+    public static class Globals {
+        //#if MC<12105 || STANDALONE
+        public static void cullFace(int mode) {
+            UGraphics.cullFace(mode);
+        }
+
+        public static void enableBlend() {
+            UGraphics.enableBlend();
+        }
+
+        public static void disableBlend() {
+            UGraphics.disableBlend();
+        }
+
+        public static void blendEquation(int equation) {
+            UGraphics.blendEquation(equation);
+        }
+
+        public static void blendFunc(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
+            UGraphics.tryBlendFuncSeparate(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
+        }
+
+        public static void blendState(BlendState state) {
+            state.activate();
+        }
+
+        public static void enableDepth() {
+            UGraphics.enableDepth();
+        }
+
+        public static void disableDepth() {
+            UGraphics.disableDepth();
+        }
+
+        public static void depthFunc(int mode) {
+            UGraphics.depthFunc(mode);
+        }
+
+        public static void depthMask(boolean flag) {
+            UGraphics.depthMask(flag);
+        }
+
+        //#if MC>=11700 && !STANDALONE
+        //$$ public static void setShader(Supplier<Shader> shader) {
+            //#if MC>=12102
+            //$$ RenderSystem.setShader(shader.get());
+            //#else
+            //$$ RenderSystem.setShader(shader);
+            //#endif
+        //$$ }
+        //#endif
+
+        public static UGraphics beginWithActiveShader(DrawMode mode, CommonVertexFormats format) {
+            UGraphics instance = UGraphics.getFromTessellator();
+            instance.beginWithActiveShader(mode, format);
+            return instance;
+        }
+
+        //#if !STANDALONE
+        public static UGraphics beginWithActiveShader(DrawMode mode, VertexFormat format) {
+            UGraphics instance = UGraphics.getFromTessellator();
+            instance.beginWithActiveShader(mode, format);
+            return instance;
+        }
+        //#endif
+
+        public static UGraphics beginWithDefaultShader(DrawMode mode, CommonVertexFormats format) {
+            UGraphics instance = UGraphics.getFromTessellator();
+            instance.beginWithDefaultShader(mode, format);
+            return instance;
+        }
+
+        //#if !STANDALONE
+        public UGraphics beginWithDefaultShader(DrawMode mode, VertexFormat format) {
+            UGraphics instance = UGraphics.getFromTessellator();
+            instance.beginWithDefaultShader(mode, format);
+            return instance;
+        }
+        //#endif
+        //#endif
+    }
 }

@@ -5,11 +5,14 @@ import dev.folomeev.kotgl.matrix.vectors.mutables.mutableVec4
 import gg.essential.universal.UMatrixStack
 import gg.essential.universal.standalone.render.VertexFormat.Part
 import gg.essential.universal.standalone.utils.timesSelf
+import gg.essential.universal.vertex.UBufferBuilder
+import gg.essential.universal.vertex.UBuiltBuffer
+import gg.essential.universal.vertex.UBuiltBufferInternal
 import gg.essential.universal.vertex.UVertexConsumer
 
 internal class BufferBuilder(
     val attributes: List<Part>,
-) : UVertexConsumer {
+) : UVertexConsumer, UBufferBuilder, UBuiltBufferInternal {
     /** How many floats there are in one vertex */
     val stride: Int = attributes.sumOf { it.size }
 
@@ -70,6 +73,16 @@ internal class BufferBuilder(
         if (idx > array.lastIndex) {
             array = array.copyOf(array.size * 2)
         }
+    }
+
+    override fun build(): UBuiltBuffer? {
+        return this.takeIf { count > 0 }
+    }
+
+    override val mc: BufferBuilder
+        get() = this
+
+    override fun close() {
     }
 }
 

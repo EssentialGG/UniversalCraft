@@ -7,6 +7,14 @@ import gg.essential.universal.UGraphics
 //$$ import org.lwjgl.opengl.GL20C
 //$$ import java.nio.Buffer
 //#else
+//#if MC>=12105
+//$$ import com.mojang.blaze3d.systems.RenderSystem
+//$$ import com.mojang.blaze3d.textures.FilterMode
+//$$ import com.mojang.blaze3d.textures.GpuTexture
+//$$ import com.mojang.blaze3d.textures.TextureFormat
+//$$ import net.minecraft.client.texture.GlTexture
+//#endif
+
 import net.minecraft.client.renderer.texture.AbstractTexture
 import net.minecraft.client.renderer.texture.TextureUtil
 import net.minecraft.client.resources.IResourceManager
@@ -106,6 +114,15 @@ class ReleasedDynamicTexture private constructor(
             //$$
             //$$ uploaded = true
             //$$ resources.glId = glId
+            //#elseif MC>=12105
+            //$$ val device = RenderSystem.getDevice()
+            //$$ val texture = device.createTexture(null as String?, TextureFormat.RGBA8, width, height, 1)
+            //$$ texture.setTextureFilter(FilterMode.NEAREST, true)
+            //$$ device.createCommandEncoder().writeToTexture(texture, textureData!!)
+            //$$ textureData = null
+            //$$ uploaded = true
+            //$$ resources.gpuTexture = texture
+            //$$ this.glTexture = texture
             //#else
             TextureUtil.allocateTexture(allocGlId(), width, height)
 
@@ -131,12 +148,19 @@ class ReleasedDynamicTexture private constructor(
         }
     }
 
-    //#if !STANDALONE
+    //#if MC<12105
     private fun allocGlId() = super.getGlTextureId()
     //#endif
 
     val dynamicGlId: Int
+        //#if MC>=12105 && !STANDALONE
+        //$$ get() {
+        //$$     uploadTexture()
+        //$$     return (resources.gpuTexture as GlTexture?)?.glId ?: -1
+        //$$ }
+        //#else
         get() = getGlTextureId()
+        //#endif
 
     //#if STANDALONE
     //$$ fun getGlTextureId(): Int {
@@ -148,6 +172,21 @@ class ReleasedDynamicTexture private constructor(
     //$$     UGraphics.deleteTexture(resources.glId)
     //$$     resources.glId = -1
     //$$ }
+    //#elseif MC>=12105
+    //$$ override fun setClamp(clamp: Boolean) {
+    //$$     uploadTexture()
+    //$$     super.setClamp(clamp)
+    //$$ }
+    //$$
+    //$$ override fun setFilter(bilinear: Boolean, mipmap: Boolean) {
+    //$$     uploadTexture()
+    //$$     super.setFilter(bilinear, mipmap)
+    //$$ }
+    //$$
+    //$$ override fun getGlTexture(): GpuTexture {
+    //$$     uploadTexture()
+    //$$     return super.getGlTexture()
+    //$$ }
     //#else
     override fun getGlTextureId(): Int {
         uploadTexture()
@@ -158,17 +197,32 @@ class ReleasedDynamicTexture private constructor(
         super.deleteGlTexture()
         resources.glId = -1
     }
+    //#endif
 
-    //#if MC>=11600
+    //#if STANDALONE
+    //#elseif MC>=12105
+    //$$ override fun close() {
+    //$$     super.close()
+    //$$     resources.close()
+    //$$ }
+    //#elseif MC>=11600
     //$$ override fun close() {
     //$$     deleteGlTexture()
     //$$     resources.close()
     //$$ }
     //#endif
-    //#endif
 
     private class Resources(referent: ReleasedDynamicTexture) : PhantomReference<ReleasedDynamicTexture>(referent, referenceQueue), Closeable {
+        //#if MC>=12105 && !STANDALONE
+        //$$ var gpuTexture: GpuTexture? = null
+        //$$    set(value) {
+        //$$        field?.close()
+        //$$        field = value
+        //$$    }
+        //#else
         var glId: Int = -1
+        //#endif
+
         //#if MC>=11400 && !STANDALONE
         //$$ var textureData: NativeImage? = null
         //$$    set(value) {
@@ -184,10 +238,14 @@ class ReleasedDynamicTexture private constructor(
         override fun close() {
             toBeCleanedUp.remove(this)
 
+            //#if MC>=12105 && !STANDALONE
+            //$$ gpuTexture = null
+            //#else
             if (glId != -1) {
                 UGraphics.deleteTexture(glId)
                 glId = -1
             }
+            //#endif
 
             //#if MC>=11400 && !STANDALONE
             //$$ textureData = null

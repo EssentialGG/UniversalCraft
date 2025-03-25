@@ -1,0 +1,3 @@
+com.mojang.blaze3d.vertex.VertexFormat net.minecraft.client.render.VertexFormat
+com.mojang.blaze3d.vertex.VertexFormat getElementAttributeNames() getAttributeNames()
+com.mojang.blaze3d.opengl.GlStateManager com.mojang.blaze3d.platform.GlStateManager

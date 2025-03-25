@@ -12,6 +12,7 @@ version = versionFromBuildIdAndBranch()
 preprocess {
     strictExtraMappings.set(true)
 
+    val fabric12105 = createNode("1.21.5-fabric", 12105, "srg")
     val neoForge12104 = createNode("1.21.4-neoforge", 12104, "srg")
     val forge12104 = createNode("1.21.4-forge", 12104, "srg")
     val fabric12104 = createNode("1.21.4-fabric", 12104, "srg")
@@ -49,6 +50,7 @@ preprocess {
     val forge11202 = createNode("1.12.2-forge", 11202, "srg")
     val forge10809 = createNode("1.8.9-forge", 10809, "srg")
 
+    fabric12105.link(fabric12104, file("versions/1.21.5-1.21.4.txt"))
     neoForge12104.link(fabric12104)
     forge12104.link(fabric12104)
     fabric12104.link(fabric12103)
@@ -88,4 +90,5 @@ preprocess {
 
 apiValidation {
     ignoredProjects += listOf("standalone", "example")
+    nonPublicMarkers += "org.jetbrains.annotations.ApiStatus\$Internal"
 }
