@@ -210,7 +210,7 @@ class URenderPipeline private constructor(
 
         class LegacySource(val vertexFormat: VertexFormat, val vertSource: String, val fragSource: String) : ShaderSupplier {
             //#if MC<12105 || STANDALONE
-            val shader = gg.essential.universal.shader.UShader.fromLegacyShader(vertSource, fragSource, BlendState.DISABLED, vertexFormat)
+            val shader by lazy { gg.essential.universal.shader.UShader.fromLegacyShader(vertSource, fragSource, BlendState.DISABLED, vertexFormat) }
 
             override fun bind() {
                 //#if MC>=12102 && !STANDALONE
