@@ -12,4 +12,5 @@ import net.minecraft.client.renderer.WorldRenderer as BuiltBuffer
 
 internal interface UBuiltBufferInternal : UBuiltBuffer {
     val mc: BuiltBuffer
+    fun closedExternally()
 }
