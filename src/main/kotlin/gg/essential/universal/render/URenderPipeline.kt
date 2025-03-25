@@ -98,6 +98,9 @@ class URenderPipeline private constructor(
         WorldVertexBufferUploader().draw(mcBuiltBuffer)
         //#endif
         //#endif
+        //#if MC>=11900 && MC<12100
+        //$$ builtBuffer.closedExternally()
+        //#endif
     }
 
     internal fun bind() {

@@ -79,6 +79,10 @@ interface UBuiltBuffer : AutoCloseable {
                 mc.reset()
                 //#endif
             }
+
+            override fun closedExternally() {
+                closed = true
+            }
         }
         //#endif
     }

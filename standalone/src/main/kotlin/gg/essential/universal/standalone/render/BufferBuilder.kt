@@ -84,5 +84,8 @@ internal class BufferBuilder(
 
     override fun close() {
     }
+
+    override fun closedExternally() {
+    }
 }
 

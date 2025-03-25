@@ -110,6 +110,13 @@ interface UBufferBuilder : UVertexConsumer {
                 UBufferBuilderImpl.POOL.add(mc)
                 //#endif
             }
+
+            override fun closedExternally() {
+                closed = true
+                //#if MC<11900
+                UBufferBuilderImpl.POOL.add(mc)
+                //#endif
+            }
         }
         //#endif
     }
