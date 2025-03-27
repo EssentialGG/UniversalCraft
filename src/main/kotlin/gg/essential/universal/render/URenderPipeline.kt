@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11
 
 //#if STANDALONE
 //$$ import gg.essential.universal.shader.GlShader
+//$$ import gg.essential.universal.shader.UShader
 //$$ import gg.essential.universal.standalone.render.DefaultShader
 //$$ import gg.essential.universal.standalone.render.VertexFormat
 //$$ import gg.essential.universal.vertex.UBuiltBufferInternal
@@ -31,6 +32,7 @@ import net.minecraft.util.ResourceLocation
 //$$ import org.apache.commons.codec.digest.DigestUtils
 //$$ import java.util.function.BiFunction
 //#else
+import gg.essential.universal.shader.UShader
 import gg.essential.universal.vertex.UBuiltBufferInternal
 import net.minecraft.client.renderer.WorldVertexBufferUploader
 //#endif
@@ -104,7 +106,7 @@ class URenderPipeline private constructor(
     }
 
     internal fun bind() {
-        shader?.bind()
+        shader?.bind(glState.blendState)
     }
 
     internal fun unbind() {
@@ -207,15 +209,19 @@ class URenderPipeline private constructor(
 
     private sealed interface ShaderSupplier {
         //#if MC<12105 || STANDALONE
-        fun bind()
+        fun bind(blendState: BlendState)
         fun unbind()
         //#endif
 
         class LegacySource(val vertexFormat: VertexFormat, val vertSource: String, val fragSource: String) : ShaderSupplier {
             //#if MC<12105 || STANDALONE
-            val shader by lazy { gg.essential.universal.shader.UShader.fromLegacyShader(vertSource, fragSource, BlendState.DISABLED, vertexFormat) }
+            lateinit var shader: UShader
 
-            override fun bind() {
+            override fun bind(blendState: BlendState) {
+                if (!::shader.isInitialized) {
+                    shader = UShader.fromLegacyShader(vertSource, fragSource, blendState, vertexFormat)
+                }
+
                 //#if MC>=12102 && !STANDALONE
                 //$$ RenderSystem.setShader((shader as MCShader).mc)
                 //#elseif MC>=11700 && !STANDALONE
@@ -242,7 +248,7 @@ class URenderPipeline private constructor(
         //$$ class Mc(val vert: Identifier, val frag: Identifier, val samplers: List<String>, val uniforms: Map<String, UniformType>) : ShaderSupplier
         //#else
         //$$ class Mc(val shader: Supplier<Shader>) : ShaderSupplier {
-        //$$     override fun bind() {
+        //$$     override fun bind(blendState: BlendState) {
                 //#if MC>=12102
                 //$$ RenderSystem.setShader(shader.get())
                 //#else
