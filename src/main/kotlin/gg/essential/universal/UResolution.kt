@@ -7,7 +7,7 @@ import net.minecraft.client.gui.ScaledResolution
 object UResolution {
     //#if MC<=11202
     private var scaledResolution: ScaledResolution? = null
-    private data class ScaledResolutionInputs(val width: Int, val height: Int, val scale: Int, val unicode: Boolean)
+    private data class ScaledResolutionInputs(val width: Int, val height: Int, val scale: Int, val unicode: Boolean, val currentScreenWidth: Int?, val currentScreenHeight: Int?)
     private var cachedScaledResolutionInputs: ScaledResolutionInputs? = null
     //#endif
 
@@ -69,7 +69,10 @@ object UResolution {
     //#if MC<=11202
     private fun get(): ScaledResolution {
         val mc = UMinecraft.getMinecraft()
-        val inputs = ScaledResolutionInputs(viewportWidth, viewportHeight, mc.gameSettings.guiScale, mc.isUnicode)
+        val inputs = ScaledResolutionInputs(viewportWidth, viewportHeight, mc.gameSettings.guiScale, mc.isUnicode,
+            // capture the current screen width and height to detect if scaling has been modified by another mod
+            mc.currentScreen?.width, mc.currentScreen?.height)
+
         if (cachedScaledResolutionInputs != inputs) {
             cachedScaledResolutionInputs = inputs
             scaledResolution = ScaledResolution(mc)
