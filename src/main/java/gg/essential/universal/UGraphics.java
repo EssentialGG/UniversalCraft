@@ -49,7 +49,6 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 //#if MC>=12105
 //$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
 //$$ import com.mojang.blaze3d.textures.TextureFormat;
-//$$ import net.minecraft.client.gl.ShaderPipelines;
 //$$ import net.minecraft.client.texture.GlTexture;
 //#endif
 
@@ -1056,7 +1055,7 @@ public class UGraphics {
     //$$ @ApiStatus.Internal
     //$$ public static final Map<VertexFormat, String> DEFAULT_SHADERS = new HashMap<>();
     //$$ static {
-    //$$     DEFAULT_SHADERS.put(VertexFormats.LINE_COLOR_NORMAL, "core/rendertype_lines");
+    //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR_NORMAL, "core/rendertype_lines");
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_TEXTURE_COLOR_LIGHT, "core/particle");
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION, "core/position");
     //$$     DEFAULT_SHADERS.put(VertexFormats.POSITION_COLOR, "core/position_color");
@@ -1437,7 +1436,7 @@ public class UGraphics {
     //$$ private static class UnownedGlTexture extends GlTexture {
     //$$     public UnownedGlTexture(int glId) {
     //$$         super("", TextureFormat.RGBA8, 0, 0, 0, glId);
-    //$$         needsReinit = false;
+    //$$         this.needsReinit = false;
     //$$     }
     //$$ }
     //#endif
