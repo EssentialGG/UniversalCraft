@@ -483,6 +483,7 @@ public final class gg/essential/universal/UKeyboard {
 	public static final field KEY_NUMPAD7 I
 	public static final field KEY_NUMPAD8 I
 	public static final field KEY_NUMPAD9 I
+	public static final field KEY_NUMPADENTER I
 	public static final field KEY_O I
 	public static final field KEY_P I
 	public static final field KEY_PERIOD I
@@ -523,6 +524,7 @@ public final class gg/essential/universal/UKeyboard {
 	public static final fun getModifiers ()Lgg/essential/universal/UKeyboard$Modifiers;
 	public static final fun isAltKeyDown ()Z
 	public static final fun isCtrlKeyDown ()Z
+	public static final fun isEnterKey (I)Z
 	public static final fun isKeyComboCtrlA (I)Z
 	public static final fun isKeyComboCtrlC (I)Z
 	public static final fun isKeyComboCtrlShiftZ (I)Z
