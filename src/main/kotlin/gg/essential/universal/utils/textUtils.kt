@@ -16,11 +16,11 @@ import net.minecraft.util.IChatComponent
 //$$
 //$$ private fun formatString(style: Style): String = buildString {
 //$$    style.color?.let(colorToFormatChar::get)?.let(::append)
-//$$    if (style.isBold) append("§l")
-//$$    if (style.isItalic) append("§o")
-//$$    if (style.isUnderlined) append("§n")
-//$$    if (style.isObfuscated) append("§k")
-//$$    if (style.isStrikethrough) append("§m")
+//$$    if (style.bold) append("§l")
+//$$    if (style.italic) append("§o")
+//$$    if (style.underlined) append("§n")
+//$$    if (style.obfuscated) append("§k")
+//$$    if (style.strikethrough) append("§m")
 //$$ }
 //#endif
 
@@ -36,7 +36,7 @@ fun IChatComponent.toFormattedString(): String {
     //#if MC>=11600
     //$$ return buildString {
     //$$    append(formatString(style))
-    //$$    this@toFormattedString.visit<String> {
+    //$$    this@toFormattedString.getComponent<String> {
     //$$        append(it)
     //$$        Optional.empty()
     //$$    }
