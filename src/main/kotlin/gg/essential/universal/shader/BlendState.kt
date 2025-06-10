@@ -75,7 +75,12 @@ data class BlendState(
         @JvmField
         val DISABLED = BlendState(Equation.ADD, Param.ONE, Param.ZERO, enabled = false)
         @JvmField
+        @Deprecated("Produces incorrect results when rendering on a non-opaque background.", ReplaceWith("ALPHA"))
         val NORMAL = BlendState(Equation.ADD, Param.SRC_ALPHA, Param.ONE_MINUS_SRC_ALPHA)
+        @JvmField
+        val ALPHA = BlendState(Equation.ADD, Param.SRC_ALPHA, Param.ONE_MINUS_SRC_ALPHA, Param.ONE, Param.ONE_MINUS_SRC_ALPHA)
+        @JvmField
+        val PREMULTIPLIED_ALPHA = BlendState(Equation.ADD, Param.ONE, Param.ONE_MINUS_SRC_ALPHA)
 
         @JvmStatic
         fun active() = BlendState(
