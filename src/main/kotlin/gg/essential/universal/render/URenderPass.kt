@@ -5,6 +5,11 @@ import gg.essential.universal.vertex.UBuiltBufferInternal
 
 //#if STANDALONE
 //#else
+//#if MC>=12106
+//$$ import com.mojang.blaze3d.buffers.GpuBuffer
+//$$ import org.lwjgl.system.MemoryStack
+//#endif
+
 //#if MC>=12105
 //$$ import com.mojang.blaze3d.systems.RenderPass
 //$$ import com.mojang.blaze3d.systems.RenderSystem
@@ -50,6 +55,15 @@ internal class URenderPass : AutoCloseable {
         //#if MC>=12105 && !STANDALONE
         //$$ val mc: RenderPass
         //$$ init {
+            //#if MC>=12106
+            //$$ val dynamicUniforms = RenderSystem.getDynamicUniforms().write(
+            //$$     RenderSystem.getModelViewMatrix(),
+            //$$     org.joml.Vector4f(1f, 1f, 1f, 1f),
+            //$$     RenderSystem.getModelOffset(),
+            //$$     RenderSystem.getTextureMatrix(),
+            //$$     RenderSystem.getShaderLineWidth(),
+            //$$ )
+            //#endif
         //$$     val builtBuffer = builtBuffer.mc
         //$$     val vertexBuffer = pipeline.format.uploadImmediateVertexBuffer(builtBuffer.buffer)
         //$$     val sortedBuffer = builtBuffer.sortedBuffer
@@ -61,11 +75,23 @@ internal class URenderPass : AutoCloseable {
         //$$     }
         //$$     mc = MinecraftClient.getInstance().framebuffer.let { fb ->
         //$$         RenderSystem.getDevice().createCommandEncoder().createRenderPass(
-        //$$             fb.colorAttachment!!, OptionalInt.empty(), fb.depthAttachment, OptionalDouble.empty()
+                    //#if MC>=12106
+                    //$$ { "Immediate draw for $pipeline" },
+                    //$$ RenderSystem.outputColorTextureOverride ?: fb.colorAttachmentView!!,
+                    //$$ OptionalInt.empty(),
+                    //$$ RenderSystem.outputDepthTextureOverride ?: fb.depthAttachmentView,
+                    //$$ OptionalDouble.empty(),
+                    //#else
+                    //$$ fb.colorAttachment!!, OptionalInt.empty(), fb.depthAttachment, OptionalDouble.empty()
+                    //#endif
         //$$         )
         //$$     }
         //$$     mc.setVertexBuffer(0, vertexBuffer)
         //$$     mc.setIndexBuffer(indexBuffer, indexType)
+            //#if MC>=12106
+            //$$ RenderSystem.bindDefaultUniforms(mc)
+            //$$ mc.setUniform("DynamicTransforms", dynamicUniforms);
+            //#endif
         //$$ }
         //#else
         init {
@@ -83,9 +109,22 @@ internal class URenderPass : AutoCloseable {
             scissor = ScissorState(true, x, y, width, height)
         }
 
+        //#if MC>=12106 && !STANDALONE
+        //$$ private val tmpBuffers = mutableListOf<GpuBuffer>()
+        //#endif
+
         override fun uniform(name: String, vararg values: Float): DrawCallBuilder = apply {
             //#if MC>=12105 && !STANDALONE
+            //#if MC>=12106
+            //$$ mc.setUniform(name, MemoryStack.stackPush().use { stack ->
+            //$$     val byteBuf = stack.malloc(values.size * 4)
+            //$$     values.forEach { byteBuf.putFloat(it) }
+            //$$     byteBuf.flip()
+            //$$     RenderSystem.getDevice().createBuffer({ "$name UBO" }, GpuBuffer.USAGE_UNIFORM, byteBuf)
+            //$$ }.also { tmpBuffers.add(it) })
+            //#else
             //$$ mc.setUniform(name, *values)
+            //#endif
             //#else
             pipeline.uniform(name, *values)
             //#endif
@@ -93,7 +132,16 @@ internal class URenderPass : AutoCloseable {
 
         override fun uniform(name: String, vararg values: Int): DrawCallBuilder = apply {
             //#if MC>=12105 && !STANDALONE
+            //#if MC>=12106
+            //$$ mc.setUniform(name, MemoryStack.stackPush().use { stack ->
+            //$$     val byteBuf = stack.malloc(values.size * 4)
+            //$$     values.forEach { byteBuf.putInt(it) }
+            //$$     byteBuf.flip()
+            //$$     RenderSystem.getDevice().createBuffer({ "$name UBO" }, GpuBuffer.USAGE_UNIFORM, byteBuf)
+            //$$ }.also { tmpBuffers.add(it) })
+            //#else
             //$$ mc.setUniform(name, *values)
+            //#endif
             //#else
             pipeline.uniform(name, *values)
             //#endif
@@ -101,11 +149,20 @@ internal class URenderPass : AutoCloseable {
 
         override fun texture(name: String, textureGlId: Int): DrawCallBuilder = apply {
             //#if MC>=12105 && !STANDALONE
-            //$$ mc.bindSampler(name, object : GlTexture("", TextureFormat.RGBA8, 0, 0, 0, textureGlId) {
+            //#if MC>=12106
+            //$$ val texture = object : GlTexture(USAGE_TEXTURE_BINDING, "", TextureFormat.RGBA8, 0, 0, 0, 1, textureGlId) {
+            //#else
+            //$$ val texture = object : GlTexture("", TextureFormat.RGBA8, 0, 0, 0, textureGlId) {
+            //#endif
             //$$     init {
             //$$         needsReinit = false
             //$$     }
-            //$$ })
+            //$$ }
+            //#if MC>=12106
+            //$$ mc.bindSampler(name, RenderSystem.getDevice().createTextureView(texture))
+            //#else
+            //$$ mc.bindSampler(name, texture)
+            //#endif
             //#else
             pipeline.texture(name, textureGlId)
             //#endif
@@ -131,6 +188,9 @@ internal class URenderPass : AutoCloseable {
             //$$ pipeline.draw(mc, builtBuffer.mc)
             //$$
             //$$ mc.close()
+            //#if MC>=12106
+            //$$ tmpBuffers.forEach { it.close() }
+            //#endif
             //#else
             if (currPipeline != pipeline) {
                 currPipeline = pipeline

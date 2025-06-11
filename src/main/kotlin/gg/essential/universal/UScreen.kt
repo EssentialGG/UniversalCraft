@@ -42,11 +42,24 @@ abstract class UScreen(
     private var guiScaleToRestore = -1
     private var restoringGuiScale = false
     private val screenToRestore: GuiScreen? = if (restoreCurrentGuiOnClose) currentScreen else null
+    //#if MC>=12106
+    //$$ // Background is now draw from the final `renderWithTooltip` method, before we ever get control, so we need
+    //$$ // to suppress by default and can only allow during `onDrawScreen`.
+    //$$ private var suppressBackground = true
+    //#else
     private var suppressBackground = false
+    //#endif
 
     //#if MC>=12000
     //$$ private var drawContexts = mutableListOf<DrawContext>()
     //$$ private inline fun <R> withDrawContext(matrixStack: UMatrixStack, block: (DrawContext) -> R) {
+    //#if MC>=12106
+    //$$     val context = drawContexts.last()
+    //$$     context.matrices.pushMatrix()
+    //$$     matrixStack.to3x2Joml(context.matrices)
+    //$$     block(context)
+    //$$     context.matrices.popMatrix()
+    //#else
     //$$     val client = this.client!!
     //$$     val context = drawContexts.lastOrNull()
     //$$         ?: DrawContext(client, client.bufferBuilders.entityVertexConsumers)
@@ -60,6 +73,7 @@ abstract class UScreen(
         //$$ context.draw()
         //#endif
     //$$     context.matrices.pop()
+    //#endif
     //$$ }
     //#endif
 
@@ -85,7 +99,15 @@ abstract class UScreen(
     //#if MC>=12000
     //$$ final override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
     //$$     drawContexts.add(context)
-    //$$     onDrawScreenCompat(UMatrixStack(context.matrices), mouseX, mouseY, delta)
+        //#if MC>=12106
+        //$$ AdvancedDrawContext.drawImmediate(context) { stack ->
+        //$$     suppressBackground = false
+        //$$     onDrawScreenCompat(stack, mouseX, mouseY, delta)
+        //$$     suppressBackground = true
+        //$$ }
+        //#else
+        //$$ onDrawScreenCompat(UMatrixStack(context.matrices), mouseX, mouseY, delta)
+        //#endif
     //$$     drawContexts.removeLast()
     //#elseif MC>=11602
     //$$ final override fun render(matrixStack: MatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -267,7 +289,9 @@ abstract class UScreen(
     }
 
     open fun onDrawScreen(matrixStack: UMatrixStack, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        //#if MC<12106
         suppressBackground = true
+        //#endif
         //#if MC>=12000
         //$$ withDrawContext(matrixStack) { drawContext ->
         //$$     super.render(drawContext, mouseX, mouseY, partialTicks)
@@ -283,7 +307,9 @@ abstract class UScreen(
             //#endif
         }
         //#endif
+        //#if MC<12106
         suppressBackground = false
+        //#endif
     }
 
     @Deprecated(
@@ -382,10 +408,16 @@ abstract class UScreen(
     open fun onDrawBackground(matrixStack: UMatrixStack, tint: Int) {
         //#if MC>=12000
         //$$ withDrawContext(matrixStack) { drawContext ->
+            //#if MC>=12106
+            //$$ drawContext.createNewRootLayer()
+            //#endif
             //#if MC>=12002
             //$$ super.renderBackground(drawContext, lastBackgroundMouseX, lastBackgroundMouseY, lastBackgroundDelta)
             //#else
             //$$ super.renderBackground(drawContext)
+            //#endif
+            //#if MC>=12106
+            //$$ drawContext.createNewRootLayer()
             //#endif
         //$$ }
         //#elseif MC>=11904

@@ -65,9 +65,10 @@ import net.minecraft.client.renderer.vertex.VertexFormatElement
 class URenderPipeline private constructor(
     private val id: ResourceLocation,
     internal val format: VertexFormat,
-    private val drawMode: DrawMode,
+    //#if STANDALONE
+    //$$ private val drawMode: DrawMode,
+    //#endif
     //#if MC>=12105 && !STANDALONE
-    //$$ private val shader: ShaderSupplier,
     //$$ private var shaderSourceGetter: BiFunction<Identifier, ShaderType, String?>?,
     //$$ internal val mcRenderPipeline: RenderPipeline,
     //#else
@@ -84,7 +85,11 @@ class URenderPipeline private constructor(
     //$$     }
     //$$     renderPass.setPipeline(mcRenderPipeline)
     //$$
-    //$$     renderPass.drawIndexed(0, builtBuffer.drawParameters.indexCount())
+        //#if MC>=12106
+        //$$ renderPass.drawIndexed(0, 0, builtBuffer.drawParameters.comp_751(), 1)
+        //#else
+        //$$ renderPass.drawIndexed(0, builtBuffer.drawParameters.indexCount())
+        //#endif
     //$$ }
     //#else
     internal fun draw(builtBuffer: UBuiltBufferInternal) {
@@ -389,7 +394,12 @@ class URenderPipeline private constructor(
             //$$ }.build()
             //$$
             //$$ if (depthTest == DepthTest.Always) {
-            //$$     abstract class CustomRenderPipeline(inner: RenderPipeline) : RenderPipeline(inner.location, inner.vertexShader, inner.fragmentShader, inner.shaderDefines, inner.samplers, inner.uniforms, inner.blendFunction, inner.depthTestFunction, inner.polygonMode, inner.isCull, inner.isWriteColor, inner.isWriteAlpha, inner.isWriteDepth, inner.colorLogic, inner.vertexFormat, inner.vertexFormatMode, inner.depthBiasScaleFactor, inner.depthBiasConstant)
+            //$$     abstract class CustomRenderPipeline(inner: RenderPipeline) : RenderPipeline(
+            //$$         inner.location, inner.vertexShader, inner.fragmentShader, inner.shaderDefines, inner.samplers, inner.uniforms, inner.blendFunction, inner.depthTestFunction, inner.polygonMode, inner.isCull, inner.isWriteColor, inner.isWriteAlpha, inner.isWriteDepth, inner.colorLogic, inner.vertexFormat, inner.vertexFormatMode, inner.depthBiasScaleFactor, inner.depthBiasConstant,
+                    //#if MC>=12106
+                    //$$ inner.sortKey,
+                    //#endif
+            //$$     )
             //$$     mcRenderPipeline = object : CustomRenderPipeline(mcRenderPipeline) {
             //$$         val stackWalker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
             //$$         override fun isCull(): Boolean {
@@ -405,8 +415,6 @@ class URenderPipeline private constructor(
             //$$ return URenderPipeline(
             //$$     id,
             //$$     format,
-            //$$     drawMode,
-            //$$     shader,
             //$$     shaderSourceGetter,
             //$$     mcRenderPipeline,
             //$$ )
@@ -414,7 +422,9 @@ class URenderPipeline private constructor(
             return URenderPipeline(
                 id,
                 format,
-                drawMode,
+                //#if STANDALONE
+                //$$ drawMode,
+                //#endif
                 shader,
                 ManagedGlState(
                     depthTest = depthTest != DepthTest.Disabled,
@@ -469,6 +479,9 @@ class URenderPipeline private constructor(
 
         //#if !STANDALONE
         //#if MC>=12105
+        //$$ @JvmStatic
+        //$$ fun wrap(mc: RenderPipeline): URenderPipeline =
+        //$$     URenderPipeline(mc.location, mc.vertexFormat, null, mc)
         //$$ fun builder(id: Identifier, drawMode: DrawMode, format: VertexFormat, vert: Identifier, frag: Identifier, samplers: List<String>, uniforms: Map<String, UniformType>): Builder {
         //$$     return BuilderImpl(id, drawMode, format, ShaderSupplier.Mc(vert, frag, samplers, uniforms))
         //$$ }
@@ -506,9 +519,13 @@ class URenderPipeline private constructor(
             //$$ val shaderId = Identifier.ofVanilla(shader)
             //$$ val samplers = List(format.mc.elements.count { it.usage == VertexFormatElement.Usage.UV }) { i -> "Sampler$i" }
             //$$ val uniforms = mapOf(
-            //$$     "ModelViewMat" to UniformType.MATRIX4X4,
-            //$$     "ProjMat" to UniformType.MATRIX4X4,
-            //$$     "ColorModulator" to UniformType.VEC4,
+                //#if MC>=12106
+                //$$ "DynamicTransforms" to UniformType.UNIFORM_BUFFER,
+                //#else
+                //$$ "ModelViewMat" to UniformType.MATRIX4X4,
+                //$$ "ProjMat" to UniformType.MATRIX4X4,
+                //$$ "ColorModulator" to UniformType.VEC4,
+                //#endif
             //$$ )
             //$$ return builder(mcId, drawMode, format.mc, shaderId, shaderId, samplers, uniforms)
             //#else
