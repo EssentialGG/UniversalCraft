@@ -23,7 +23,7 @@ internal class DefaultShader(val shader: UShader) {
                 val shader = UShader.fromLegacyShader(
                     genVertexShaderSource(texture, color),
                     genFragmentShaderSource(texture, color),
-                    BlendState.NORMAL,
+                    BlendState.ALPHA,
                     attributes,
                 )
                 DefaultShader(shader)

@@ -1121,9 +1121,11 @@ public final class gg/essential/universal/render/URenderPipeline$DepthTest : jav
 }
 
 public final class gg/essential/universal/shader/BlendState {
+	public static final field ALPHA Lgg/essential/universal/shader/BlendState;
 	public static final field Companion Lgg/essential/universal/shader/BlendState$Companion;
 	public static final field DISABLED Lgg/essential/universal/shader/BlendState;
 	public static final field NORMAL Lgg/essential/universal/shader/BlendState;
+	public static final field PREMULTIPLIED_ALPHA Lgg/essential/universal/shader/BlendState;
 	public fun <init> (Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Z)V
 	public synthetic fun <init> (Lgg/essential/universal/shader/BlendState$Equation;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;Lgg/essential/universal/shader/BlendState$Param;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun activate ()V
