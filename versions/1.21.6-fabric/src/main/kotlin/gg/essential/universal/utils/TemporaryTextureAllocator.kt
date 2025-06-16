@@ -11,9 +11,7 @@ import net.minecraft.client.MinecraftClient
  */
 internal class TemporaryTextureAllocator(
     private val allCleanedUp: () -> Unit = {},
-) {
-    private var taskQueued = false
-
+) : AutoCloseable {
     // When we allocate a texture, we need to hold on to it until the next frame so MC's gui renderer can use it
     private val usedAllocations = mutableListOf<TextureAllocation>()
     // We hold on to it for an additionally frame so we can re-use it instead of having to re-allocate one each frame
@@ -35,7 +33,6 @@ internal class TemporaryTextureAllocator(
         device.createCommandEncoder().clearColorAndDepthTextures(texture.texture, 0, texture.depthTexture, 1.0)
 
         usedAllocations.add(texture)
-        queueCleanup()
 
         return texture
     }
@@ -46,16 +43,7 @@ internal class TemporaryTextureAllocator(
         }
     }
 
-    private fun queueCleanup() {
-        if (!taskQueued) {
-            taskQueued = true
-            MinecraftClient.getInstance().send(::cleanup)
-        }
-    }
-
-    private fun cleanup() {
-        taskQueued = false
-
+    fun nextFrame() {
         reusableAllocations.forEach { it.close() }
         reusableAllocations.clear()
         reusableAllocations.addAll(usedAllocations)
@@ -64,11 +52,13 @@ internal class TemporaryTextureAllocator(
         if (reusableAllocations.isEmpty()) {
             allCleanedUp()
         }
+    }
 
-        if (reusableAllocations.isNotEmpty()) {
-            // We don't care about the fencing here, we just need a way to submit a task for a future frame
-            RenderSystem.queueFencedTask { queueCleanup() }
-        }
+    override fun close() {
+        nextFrame()
+        nextFrame()
+        assert(usedAllocations.isEmpty())
+        assert(reusableAllocations.isEmpty())
     }
 
     class TextureAllocation(

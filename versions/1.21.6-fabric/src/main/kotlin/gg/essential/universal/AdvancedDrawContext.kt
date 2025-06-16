@@ -10,7 +10,18 @@ import net.minecraft.client.render.ProjectionMatrix2
 import net.minecraft.client.texture.AbstractTexture
 import net.minecraft.util.Identifier
 
-internal object AdvancedDrawContext {
+/**
+ * Allows rendering of raw OpenGL into [DrawContext] by drawing to a temporary texture which is then submitted as a
+ * plain textured quad to [DrawContext].
+ *
+ * You **MUST** call [nextFrame] before the next frame begins but no sooner than MC's GuiRenderer actually using the
+ * submitted textures. Repeated calls to [drawImmediate] without [nextFrame] or [close] inbetween will keep allocating
+ * more and more gpu memory!
+ * If you cannot guarantee further calls to [nextFrame], you must call [close] to release all resources.
+ * The [AdvancedDrawContext] remains usable, [close] merely frees all resources, further calls to [drawImmediate] will
+ * simply re-allocate them.
+ */
+internal class AdvancedDrawContext : AutoCloseable {
     private var allocatedProjectionMatrix: ProjectionMatrix2? = null
 
     private val textureAllocator = TemporaryTextureAllocator {
@@ -81,5 +92,13 @@ internal object AdvancedDrawContext {
         context.matrices.popMatrix()
 
         textureManager.destroyTexture(identifier)
+    }
+
+    fun nextFrame() {
+        textureAllocator.nextFrame()
+    }
+
+    override fun close() {
+        textureAllocator.close()
     }
 }
