@@ -112,6 +112,9 @@ object UResolution {
             //$$ return UMinecraft.guiScale.toDouble()
             //#elseif MC>=11502
             //$$ return UMinecraft.getMinecraft().mainWindow.guiScaleFactor
+                //#if MC>=12106
+                //$$ .toDouble()
+                //#endif
             //#else
             return get().scaleFactor.toDouble()
             //#endif

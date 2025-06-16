@@ -7,6 +7,10 @@ import gg.essential.universal.UGraphics
 //$$ import org.lwjgl.opengl.GL20C
 //$$ import java.nio.Buffer
 //#else
+//#if MC>=12106
+//$$ import com.mojang.blaze3d.textures.GpuTextureView
+//#endif
+
 //#if MC>=12105
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //$$ import com.mojang.blaze3d.textures.FilterMode
@@ -116,13 +120,23 @@ class ReleasedDynamicTexture private constructor(
             //$$ resources.glId = glId
             //#elseif MC>=12105
             //$$ val device = RenderSystem.getDevice()
+            //#if MC>=12106
+            //$$ val usage = GpuTexture.USAGE_TEXTURE_BINDING or GpuTexture.USAGE_COPY_SRC or GpuTexture.USAGE_COPY_DST
+            //$$ val texture = device.createTexture(null as String?, usage, TextureFormat.RGBA8, width, height, 1, 1)
+            //#else
             //$$ val texture = device.createTexture(null as String?, TextureFormat.RGBA8, width, height, 1)
+            //#endif
             //$$ texture.setTextureFilter(FilterMode.NEAREST, true)
             //$$ device.createCommandEncoder().writeToTexture(texture, textureData!!)
             //$$ textureData = null
             //$$ uploaded = true
             //$$ resources.gpuTexture = texture
             //$$ this.glTexture = texture
+            //#if MC>=12106
+            //$$ val view = device.createTextureView(texture)
+            //$$ resources.gpuTextureView = view
+            //$$ this.glTextureView = view
+            //#endif
             //#else
             TextureUtil.allocateTexture(allocGlId(), width, height)
 
@@ -173,6 +187,18 @@ class ReleasedDynamicTexture private constructor(
     //$$     resources.glId = -1
     //$$ }
     //#elseif MC>=12105
+    //#if MC>=12106
+    //$$ override fun getGlTextureView(): GpuTextureView {
+    //$$     uploadTexture()
+    //$$     return super.getGlTextureView()
+    //$$ }
+    //$$
+    //$$ override fun setUseMipmaps(mipmaps: Boolean) {
+    //$$     uploadTexture()
+    //$$     super.setUseMipmaps(mipmaps)
+    //$$ }
+    //#endif
+    //$$
     //$$ override fun setClamp(clamp: Boolean) {
     //$$     uploadTexture()
     //$$     super.setClamp(clamp)
@@ -219,6 +245,14 @@ class ReleasedDynamicTexture private constructor(
         //$$        field?.close()
         //$$        field = value
         //$$    }
+        //$$
+        //#if MC>=12106
+        //$$ var gpuTextureView: GpuTextureView? = null
+        //$$     set(value) {
+        //$$         field?.close()
+        //$$         field = value
+        //$$     }
+        //#endif
         //#else
         var glId: Int = -1
         //#endif
@@ -240,6 +274,9 @@ class ReleasedDynamicTexture private constructor(
 
             //#if MC>=12105 && !STANDALONE
             //$$ gpuTexture = null
+            //#if MC>=12106
+            //$$ gpuTextureView = null
+            //#endif
             //#else
             if (glId != -1) {
                 UGraphics.deleteTexture(glId)

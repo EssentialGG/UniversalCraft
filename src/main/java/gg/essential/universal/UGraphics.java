@@ -46,6 +46,15 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12106
+//$$ import com.mojang.blaze3d.systems.RenderPass;
+//$$ import com.mojang.blaze3d.textures.GpuTextureView;
+//$$ import gg.essential.universal.render.URenderPass;
+//$$ import gg.essential.universal.render.URenderPipeline;
+//$$ import gg.essential.universal.vertex.UBuiltBuffer;
+//$$ import net.minecraft.client.font.BakedGlyph;
+//#endif
+
 //#if MC>=12105
 //$$ import com.mojang.blaze3d.pipeline.RenderPipeline;
 //$$ import com.mojang.blaze3d.textures.TextureFormat;
@@ -504,6 +513,8 @@ public class UGraphics {
     public static void bindTexture(int index, int glTextureId) {
         //#if STANDALONE
         //$$ configureTextureUnit(index, () -> glBindTexture(GL_TEXTURE_2D, glTextureId));
+        //#elseif MC>=12106
+        //$$ RenderSystem.setShaderTexture(index, RenderSystem.getDevice().createTextureView(new UnownedGlTexture(glTextureId)));
         //#elseif MC>=12105
         //$$ RenderSystem.setShaderTexture(index, new UnownedGlTexture(glTextureId));
         //#elseif MC>=11700
@@ -563,6 +574,11 @@ public class UGraphics {
         //#if STANDALONE
         //$$ MC_FONT.drawString(stack, text, new Color(color), x, y, 10f, 1f, shadow, null);
         //#else
+        //#if MC>=12106
+        //$$ GlyphDrawerImpl drawerImpl = new GlyphDrawerImpl(stack.peek().getModel());
+        //$$ UMinecraft.getFontRenderer().prepare(text, x, y, color, shadow, 0).draw(drawerImpl);
+        //$$ drawerImpl.flush();
+        //#else
         //#if MC>=11602
         //#if MC>=12100
         //$$ VertexConsumerProvider.Immediate irendertypebuffer$impl = UMinecraft.getMinecraft().getBufferBuilders().getEntityVertexConsumers();
@@ -586,6 +602,7 @@ public class UGraphics {
         if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
         //#endif
+        //#endif
     }
 
     @Deprecated // Pass UMatrixStack as first arg, required for 1.17+
@@ -599,6 +616,12 @@ public class UGraphics {
         //#if STANDALONE
         //$$ MC_FONT.drawString(stack, shadowText, new Color(shadowColor), x + 1f, y + 1f, 10f, 1f, false, null);
         //$$ MC_FONT.drawString(stack, text, new Color(color), x, y, 10f, 1f, false, null);
+        //#else
+        //#if MC>=12106
+        //$$ GlyphDrawerImpl drawerImpl = new GlyphDrawerImpl(stack.peek().getModel());
+        //$$ UMinecraft.getFontRenderer().prepare(shadowText, x + 1f, y + 1f, shadowColor, false, 0).draw(drawerImpl);
+        //$$ UMinecraft.getFontRenderer().prepare(text, x, y, color, false, 0).draw(drawerImpl);
+        //$$ drawerImpl.flush();
         //#else
         //#if MC>=11602
         //#if MC>=12100
@@ -622,7 +645,71 @@ public class UGraphics {
         if (stack != UNIT_STACK) GL.popMatrix();
         //#endif
         //#endif
+        //#endif
     }
+
+    //#if MC>=12106 && !STANDALONE
+    //$$ private static class GlyphDrawerImpl implements TextRenderer.GlyphDrawer {
+    //$$     private static final int LIGHT = 0x00F0_00F0; // see GlyphGuiElementRenderState.setupVertices
+    //$$     private final org.joml.Matrix4f matrix;
+    //$$     private RenderPipeline pipeline;
+    //$$     private GpuTextureView texture;
+    //$$     private BufferBuilder bufferBuilder;
+    //$$
+    //$$     private GlyphDrawerImpl(org.joml.Matrix4f matrix) {
+    //$$         this.matrix = matrix;
+    //$$     }
+    //$$
+    //$$     public void flush() {
+    //$$         if (bufferBuilder == null) {
+    //$$             return;
+    //$$         }
+    //$$         RenderPipeline pipeline = this.pipeline;
+    //$$         GpuTextureView texture = this.texture;
+    //$$         BufferBuilder bufferBuilder = this.bufferBuilder;
+    //$$         this.pipeline = null;
+    //$$         this.texture = null;
+    //$$         this.bufferBuilder = null;
+    //$$
+    //$$         try (BuiltBuffer builtBuffer = bufferBuilder.endNullable()) {
+    //$$             if (builtBuffer == null) return;
+    //$$             GpuTextureView lightTexture = MinecraftClient.getInstance().gameRenderer.getLightmapTextureManager().getGlTextureView();
+    //$$             try (URenderPass renderPass = new URenderPass()) {
+    //$$                 renderPass.draw(UBuiltBuffer.wrap(builtBuffer), URenderPipeline.wrap(pipeline), builder -> {
+    //$$                     RenderPass mcRenderPass = ((URenderPass.DrawCallBuilderImpl) builder).getMc();
+    //$$                     mcRenderPass.bindSampler("Sampler0", texture);
+    //$$                     mcRenderPass.bindSampler("Sampler2", lightTexture);
+    //$$                     return kotlin.Unit.INSTANCE;
+    //$$                 });
+    //$$             }
+    //$$         }
+    //$$     }
+    //$$
+    //$$     private void setupBuffer(BakedGlyph bakedGlyph) {
+    //$$         if (pipeline == bakedGlyph.getPipeline() && texture == bakedGlyph.getTexture()) {
+    //$$             return;
+    //$$         }
+    //$$         flush();
+    //$$         pipeline = bakedGlyph.getPipeline();
+    //$$         texture = bakedGlyph.getTexture();
+    //$$         bufferBuilder = Tessellator.getInstance().begin(pipeline.getVertexFormatMode(), pipeline.getVertexFormat());
+    //$$     }
+    //$$
+    //$$     @Override
+    //$$     public void drawGlyph(BakedGlyph.DrawnGlyph drawnGlyph) {
+    //$$         BakedGlyph bakedGlyph = drawnGlyph.comp_3316();
+    //$$         if (bakedGlyph.getTexture() == null) return;
+    //$$         setupBuffer(bakedGlyph);
+    //$$         bakedGlyph.draw(drawnGlyph, matrix, bufferBuilder, LIGHT, false);
+    //$$     }
+    //$$
+    //$$     @Override
+    //$$     public void drawRectangle(BakedGlyph bakedGlyph, BakedGlyph.Rectangle rectangle) {
+    //$$         if (bakedGlyph.getTexture() == null) return;
+    //$$         bakedGlyph.drawRectangle(rectangle, matrix, bufferBuilder, LIGHT, false);
+    //$$     }
+    //$$ }
+    //#endif
 
     public static List<String> listFormattedStringToWidth(String str, int wrapWidth) {
         return listFormattedStringToWidth(str, wrapWidth, true);
@@ -847,7 +934,7 @@ public class UGraphics {
     public static void color4f(float red, float green, float blue, float alpha) {
         //#if STANDALONE
         //$$ throw new UnsupportedOperationException();
-        //#else
+        //#elseif MC<12106
         GlStateManager.color(red, green, blue, alpha);
         //#endif
     }
@@ -1435,7 +1522,11 @@ public class UGraphics {
     //#if MC>=12105 && !STANDALONE
     //$$ private static class UnownedGlTexture extends GlTexture {
     //$$     public UnownedGlTexture(int glId) {
-    //$$         super("", TextureFormat.RGBA8, 0, 0, 0, glId);
+            //#if MC>=12106
+            //$$ super(USAGE_TEXTURE_BINDING, "", TextureFormat.RGBA8, 0, 0, 0, 1, glId);
+            //#else
+            //$$ super("", TextureFormat.RGBA8, 0, 0, 0, glId);
+            //#endif
     //$$         this.needsReinit = false;
     //$$     }
     //$$ }

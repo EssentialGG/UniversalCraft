@@ -55,6 +55,24 @@ class UMatrixStack private constructor(
     //$$ fun toMC() = peek().toMCStack()
     //#endif
 
+    //#if MC>=12106
+    //$$ constructor(mc: org.joml.Matrix3x2f) : this() {
+    //$$     peek().model.apply {
+    //$$         m00(mc.m00)
+    //$$         m01(mc.m01)
+    //$$         m10(mc.m10)
+    //$$         m11(mc.m11)
+    //$$         m30(mc.m20)
+    //$$         m31(mc.m21)
+    //$$     }
+    //$$ }
+    //$$ fun to3x2Joml(dst: org.joml.Matrix3x2f = org.joml.Matrix3x2f()): org.joml.Matrix3x2f {
+    //$$     val uc = peek().model
+    //$$     dst.set(uc.m00(), uc.m01(), uc.m10(), uc.m11(), uc.m30(), uc.m31())
+    //$$     return dst
+    //$$ }
+    //#endif
+
     fun translate(x: Double, y: Double, z: Double) = translate(x.toFloat(), y.toFloat(), z.toFloat())
 
     fun translate(x: Float, y: Float, z: Float) {
