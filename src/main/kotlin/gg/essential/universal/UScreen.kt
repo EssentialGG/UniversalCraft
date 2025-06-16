@@ -172,7 +172,9 @@ abstract class UScreen(
     //$$ final override fun tick(): Unit = onTick()
     //$$
     //$$ final override fun onClose() {
-    //$$     advancedDrawContext.close()
+        //#if MC>=12106
+        //$$ advancedDrawContext.close()
+        //#endif
     //$$     onScreenClose()
     //$$     restoreGuiScale()
     //$$ }
