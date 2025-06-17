@@ -50,6 +50,10 @@ abstract class UScreen(
     private var suppressBackground = false
     //#endif
 
+    //#if MC>=12106
+    //$$ private val advancedDrawContext = AdvancedDrawContext()
+    //#endif
+
     //#if MC>=12000
     //$$ private var drawContexts = mutableListOf<DrawContext>()
     //$$ private inline fun <R> withDrawContext(matrixStack: UMatrixStack, block: (DrawContext) -> R) {
@@ -100,7 +104,8 @@ abstract class UScreen(
     //$$ final override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
     //$$     drawContexts.add(context)
         //#if MC>=12106
-        //$$ AdvancedDrawContext.drawImmediate(context) { stack ->
+        //$$ advancedDrawContext.nextFrame()
+        //$$ advancedDrawContext.drawImmediate(context) { stack ->
         //$$     suppressBackground = false
         //$$     onDrawScreenCompat(stack, mouseX, mouseY, delta)
         //$$     suppressBackground = true
@@ -167,6 +172,9 @@ abstract class UScreen(
     //$$ final override fun tick(): Unit = onTick()
     //$$
     //$$ final override fun onClose() {
+        //#if MC>=12106
+        //$$ advancedDrawContext.close()
+        //#endif
     //$$     onScreenClose()
     //$$     restoreGuiScale()
     //$$ }
