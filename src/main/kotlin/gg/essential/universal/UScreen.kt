@@ -2,6 +2,10 @@ package gg.essential.universal
 
 import net.minecraft.client.gui.GuiScreen
 
+//#if MC>=12106
+//$$ import com.mojang.blaze3d.systems.RenderSystem
+//#endif
+
 //#if MC>=12000
 //$$ import net.minecraft.client.gui.DrawContext
 //#endif
@@ -418,6 +422,8 @@ abstract class UScreen(
         //$$ withDrawContext(matrixStack) { drawContext ->
             //#if MC>=12106
             //$$ drawContext.createNewRootLayer()
+            //$$ val orgProjectionMatrixBuffer = RenderSystem.getProjectionMatrixBuffer()
+            //$$ val orgProjectionType = RenderSystem.getProjectionType()
             //#endif
             //#if MC>=12002
             //$$ super.renderBackground(drawContext, lastBackgroundMouseX, lastBackgroundMouseY, lastBackgroundDelta)
@@ -425,6 +431,8 @@ abstract class UScreen(
             //$$ super.renderBackground(drawContext)
             //#endif
             //#if MC>=12106
+            //$$ @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            //$$ RenderSystem.setProjectionMatrix(orgProjectionMatrixBuffer, orgProjectionType)
             //$$ drawContext.createNewRootLayer()
             //#endif
         //$$ }
