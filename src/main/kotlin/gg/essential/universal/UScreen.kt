@@ -422,19 +422,17 @@ abstract class UScreen(
         //$$ withDrawContext(matrixStack) { drawContext ->
             //#if MC>=12106
             //$$ drawContext.createNewRootLayer()
-            //#endif
-            //#if MC>=12106
             //$$ val orgProjectionMatrixBuffer = RenderSystem.getProjectionMatrixBuffer()
             //$$ val orgProjectionType = RenderSystem.getProjectionType()
-            //$$ super.renderBackground(drawContext, lastBackgroundMouseX, lastBackgroundMouseY, lastBackgroundDelta)
-            //$$ @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-            //$$ RenderSystem.setProjectionMatrix(orgProjectionMatrixBuffer, orgProjectionType)
-            //#elseif MC>=12002
+            //#endif
+            //#if MC>=12002
             //$$ super.renderBackground(drawContext, lastBackgroundMouseX, lastBackgroundMouseY, lastBackgroundDelta)
             //#else
             //$$ super.renderBackground(drawContext)
             //#endif
             //#if MC>=12106
+            //$$ @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            //$$ RenderSystem.setProjectionMatrix(orgProjectionMatrixBuffer, orgProjectionType)
             //$$ drawContext.createNewRootLayer()
             //#endif
         //$$ }
