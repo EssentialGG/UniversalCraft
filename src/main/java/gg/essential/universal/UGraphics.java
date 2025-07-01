@@ -620,6 +620,7 @@ public class UGraphics {
         //#if MC>=12106
         //$$ GlyphDrawerImpl drawerImpl = new GlyphDrawerImpl(stack.peek().getModel());
         //$$ UMinecraft.getFontRenderer().prepare(shadowText, x + 1f, y + 1f, shadowColor, false, 0).draw(drawerImpl);
+        //$$ drawerImpl.matrix = drawerImpl.matrix.translate(0f, 0f, TextRenderer.FORWARD_SHIFT, new org.joml.Matrix4f());
         //$$ UMinecraft.getFontRenderer().prepare(text, x, y, color, false, 0).draw(drawerImpl);
         //$$ drawerImpl.flush();
         //#else
@@ -651,7 +652,7 @@ public class UGraphics {
     //#if MC>=12106 && !STANDALONE
     //$$ private static class GlyphDrawerImpl implements TextRenderer.GlyphDrawer {
     //$$     private static final int LIGHT = 0x00F0_00F0; // see GlyphGuiElementRenderState.setupVertices
-    //$$     private final org.joml.Matrix4f matrix;
+    //$$     private org.joml.Matrix4f matrix;
     //$$     private RenderPipeline pipeline;
     //$$     private GpuTextureView texture;
     //$$     private BufferBuilder bufferBuilder;
