@@ -83,7 +83,7 @@ internal class ShaderTransformer(private val vertexFormat: VertexFormat?, privat
             }
         }
 
-        //#if MC>=12106
+        //#if MC>=12106 && !STANDALONE
         //$$ transformed.add("""
         //$$     layout(std140) uniform Projection {
         //$$         mat4 ProjMat;
@@ -126,7 +126,7 @@ internal class ShaderTransformer(private val vertexFormat: VertexFormat?, privat
                         line
                     } else {
                         uniforms[name] = UniformType.fromGlsl(glslType)
-                        //#if MC>=12106
+                        //#if MC>=12106 && !STANDALONE
                         //$$ replacements[name] = "u_$name"
                         //$$ "layout(std140) uniform $name { $glslType u_$name; };"
                         //#else
