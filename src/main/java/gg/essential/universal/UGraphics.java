@@ -698,7 +698,7 @@ public class UGraphics {
     //$$
     //$$     @Override
     //$$     public void drawGlyph(BakedGlyph.DrawnGlyph drawnGlyph) {
-    //$$         BakedGlyph bakedGlyph = drawnGlyph.comp_3316();
+    //$$         BakedGlyph bakedGlyph = drawnGlyph.glyph();
     //$$         if (bakedGlyph.getTexture() == null) return;
     //$$         setupBuffer(bakedGlyph);
     //$$         bakedGlyph.draw(drawnGlyph, matrix, bufferBuilder, LIGHT, false);
