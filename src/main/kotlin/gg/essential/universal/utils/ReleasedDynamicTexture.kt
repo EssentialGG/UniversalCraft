@@ -127,6 +127,13 @@ class ReleasedDynamicTexture private constructor(
             //$$ val texture = device.createTexture(null as String?, TextureFormat.RGBA8, width, height, 1)
             //#endif
             //$$ texture.setTextureFilter(FilterMode.NEAREST, true)
+            //$$ UGraphics.configureTexture((texture as GlTexture).glId) {
+                //#if MC>=12106
+                //$$ texture.checkDirty(GL11.GL_TEXTURE_2D)
+                //#else
+                //$$ texture.checkDirty()
+                //#endif
+            //$$ }
             //$$ device.createCommandEncoder().writeToTexture(texture, textureData!!)
             //$$ textureData = null
             //$$ uploaded = true
