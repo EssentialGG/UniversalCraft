@@ -351,6 +351,23 @@ class URenderPipeline private constructor(
             //$$
             //$$             transformer.samplers.forEach { withSampler(it) }
             //$$             transformer.uniforms.forEach { withUniform(it.key, it.value.mc) }
+            //$$
+            //$$             // ShaderProgram calls glBindAttribLocation using the names in the VertexFormat so we need to
+            //$$             // construct a custom one based on the original but with our prefixed names
+            //$$             val builder = VertexFormat.builder()
+            //$$             var expectedOffset = 0
+            //$$             format.elements.mapIndexed { index, element ->
+            //$$                 val offset = format.getOffset(element)
+            //$$                 val padding = offset - expectedOffset
+            //$$                 if (padding > 0) {
+            //$$                     expectedOffset += padding
+            //$$                     builder.padding(padding)
+            //$$                 }
+            //$$                 expectedOffset += element.byteSize()
+            //$$                 val name = transformer.attributes.getOrNull(index) ?: format.getElementName(element)
+            //$$                 builder.add(name, element)
+            //$$             }
+            //$$             withVertexFormat(builder.build(), drawMode.mcMode)
             //$$         }
             //$$         is ShaderSupplier.Mc -> {
             //$$             withVertexShader(shader.vert)
