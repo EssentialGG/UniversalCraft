@@ -46,6 +46,11 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12109
+//$$ import net.minecraft.client.font.TextDrawable;
+//$$ import net.minecraft.text.StyleSpriteSource;
+//#endif
+
 //#if MC>=12106
 //$$ import com.mojang.blaze3d.systems.RenderPass;
 //$$ import com.mojang.blaze3d.textures.GpuTextureView;
@@ -164,7 +169,9 @@ public class UGraphics {
     //$$ private DefaultShader shader;
     //#else
 
-    //#if MC>=12100
+    //#if MC>=12109
+    //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.withFont(new StyleSpriteSource.Font(Identifier.of("minecraft", "alt")));
+    //#elseif MC>=12100
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.withFont(Identifier.of("minecraft", "alt"));
     //#elseif MC>=11602
     //$$ public static Style EMPTY_WITH_FONT_ID = Style.EMPTY.setFontId(new ResourceLocation("minecraft", "alt"));
@@ -492,6 +499,8 @@ public class UGraphics {
     public static void bindTexture(int glTextureId) {
         //#if STANDALONE
         //$$ glBindTexture(GL_TEXTURE_2D, glTextureId);
+        //#elseif MC>=12109
+        //$$ bindTexture(getActiveTexture() - GL_TEXTURE0, glTextureId);
         //#elseif MC>=11700
         //$$ bindTexture(GlStateManager._getActiveTexture() - GL_TEXTURE0, glTextureId);
         //#else
@@ -686,6 +695,19 @@ public class UGraphics {
     //$$         }
     //$$     }
     //$$
+    //#if MC>=12109
+    //$$     private void draw(TextDrawable drawable) {
+    //$$         if (pipeline != drawable.getPipeline() || texture != drawable.textureView()) {
+    //$$             flush();
+    //$$             pipeline = drawable.getPipeline();
+    //$$             texture = drawable.textureView();
+    //$$             bufferBuilder = Tessellator.getInstance().begin(pipeline.getVertexFormatMode(), pipeline.getVertexFormat());
+    //$$         }
+    //$$         drawable.render(matrix, bufferBuilder, LIGHT, false);
+    //$$     }
+    //$$     @Override public void drawGlyph(TextDrawable drawable) { draw(drawable); }
+    //$$     @Override public void drawRectangle(TextDrawable drawable) { draw(drawable); }
+    //#else
     //$$     private void setupBuffer(BakedGlyph bakedGlyph) {
     //$$         if (pipeline == bakedGlyph.getPipeline() && texture == bakedGlyph.getTexture()) {
     //$$             return;
@@ -709,6 +731,7 @@ public class UGraphics {
     //$$         if (bakedGlyph.getTexture() == null) return;
     //$$         bakedGlyph.drawRectangle(rectangle, matrix, bufferBuilder, LIGHT, false);
     //$$     }
+    //#endif
     //$$ }
     //#endif
 

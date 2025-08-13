@@ -2,6 +2,13 @@ package gg.essential.universal
 
 import net.minecraft.client.gui.GuiScreen
 
+//#if MC>=12109
+//$$ import net.minecraft.client.gui.Click
+//$$ import net.minecraft.client.input.CharInput
+//$$ import net.minecraft.client.input.KeyInput
+//$$ import net.minecraft.client.input.MouseInput
+//#endif
+
 //#if MC>=12106
 //$$ import com.mojang.blaze3d.systems.RenderSystem
 //#endif
@@ -127,6 +134,57 @@ abstract class UScreen(
     //#endif
     //$$ }
     //$$
+    //#if MC>=12109
+    //$$ final override fun keyPressed(input: KeyInput): Boolean {
+    //$$     onKeyPressed(input.key, 0.toChar(), input.modifiers.toModifiers())
+    //$$     return false
+    //$$ }
+    //$$
+    //$$ final override fun keyReleased(input: KeyInput): Boolean {
+    //$$     onKeyReleased(input.key, 0.toChar(), input.modifiers.toModifiers())
+    //$$     return false
+    //$$ }
+    //$$
+    //$$ final override fun charTyped(input: CharInput): Boolean {
+    //$$     val codepoint = input.codepoint
+    //$$     if (Character.isBmpCodePoint(codepoint)) {
+    //$$         onKeyPressed(0, input.codepoint.toChar(), input.modifiers.toModifiers())
+    //$$     } else if (Character.isValidCodePoint(codepoint)) {
+    //$$         onKeyPressed(0, Character.highSurrogate(input.codepoint), input.modifiers.toModifiers())
+    //$$         onKeyPressed(0, Character.lowSurrogate(input.codepoint), input.modifiers.toModifiers())
+    //$$     }
+    //$$     return false
+    //$$ }
+    //$$
+    //$$ private var lastMouseInput: MouseInput? = null
+    //$$ private var lastDoubled: Boolean? = null
+    //$$
+    //$$ final override fun mouseClicked(click: Click, doubled: Boolean): Boolean {
+    //$$     lastMouseInput = click.buttonInfo
+    //$$     lastDoubled = doubled
+    //$$     if (click.button() == 1) lastClick = UMinecraft.getTime()
+    //$$     onMouseClicked(click.x, click.y, click.button())
+    //$$     lastMouseInput = null
+    //$$     lastDoubled = null
+    //$$     return false
+    //$$ }
+    //$$
+    //$$ final override fun mouseReleased(click: Click): Boolean {
+    //$$     lastMouseInput = click.buttonInfo
+    //$$     onMouseReleased(click.x, click.y, click.button())
+    //$$     lastMouseInput = null
+    //$$     return false
+    //$$ }
+    //$$
+    //$$ override fun mouseDragged(click: Click, offsetX: Double, offsetY: Double): Boolean {
+    //$$     lastMouseInput = click.buttonInfo
+    //$$     lastDraggedDx = offsetX
+    //$$     lastDraggedDy = offsetY
+    //$$     onMouseDragged(click.x, click.y, click.button(), UMinecraft.getTime() - lastClick)
+    //$$     lastMouseInput = null
+    //$$     return false
+    //$$ }
+    //#else
     //$$ final override fun keyPressed(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
     //$$     onKeyPressed(keyCode, 0.toChar(), modifierCode.toModifiers())
     //$$     return false
@@ -160,6 +218,7 @@ abstract class UScreen(
     //$$     onMouseDragged(x, y, mouseButton, UMinecraft.getTime() - lastClick)
     //$$     return false
     //$$ }
+    //#endif
     //$$
     //#if MC>=12002
     //$$ override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, delta: Double): Boolean {
@@ -341,10 +400,18 @@ abstract class UScreen(
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
         //$$ if (keyCode != 0) {
-        //$$     super.keyPressed(keyCode, 0, modifiers.toInt())
+            //#if MC>=12109
+            //$$ super.keyPressed(KeyInput(keyCode, 0, modifiers.toInt()))
+            //#else
+            //$$ super.keyPressed(keyCode, 0, modifiers.toInt())
+            //#endif
         //$$ }
         //$$ if (typedChar != 0.toChar()) {
-        //$$     super.charTyped(typedChar, modifiers.toInt())
+            //#if MC>=12109
+            //$$ super.charTyped(CharInput(typedChar.code, modifiers.toInt()))
+            //#else
+            //$$ super.charTyped(typedChar, modifiers.toInt())
+            //#endif
         //$$ }
         //#else
         try {
@@ -358,7 +425,11 @@ abstract class UScreen(
     open fun onKeyReleased(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
         //$$ if (keyCode != 0) {
-        //$$     super.keyReleased(keyCode, 0, modifiers.toInt())
+            //#if MC>=12109
+            //$$ super.keyReleased(KeyInput(keyCode, 0, modifiers.toInt()))
+            //#else
+            //$$ super.keyReleased(keyCode, 0, modifiers.toInt())
+            //#endif
         //$$ }
         //#endif
     }
@@ -367,7 +438,11 @@ abstract class UScreen(
         //#if MC>=11502
         //$$ if (mouseButton == 1)
         //$$     lastClick = UMinecraft.getTime()
+        //#if MC>=12109
+        //$$ super.mouseClicked(Click(mouseX, mouseY, MouseInput(mouseButton, lastMouseInput?.modifiers ?: 0)), lastDoubled ?: false)
+        //#else
         //$$ super.mouseClicked(mouseX, mouseY, mouseButton)
+        //#endif
         //#else
         try {
             super.mouseClicked(mouseX.toInt(), mouseY.toInt(), mouseButton)
@@ -378,7 +453,9 @@ abstract class UScreen(
     }
 
     open fun onMouseReleased(mouseX: Double, mouseY: Double, state: Int) {
-        //#if MC>=11502
+        //#if MC>=12109
+        //$$ super.mouseReleased(Click(mouseX, mouseY, MouseInput(state, lastMouseInput?.modifiers ?: 0)))
+        //#elseif MC>=11502
         //$$ super.mouseReleased(mouseX, mouseY, state)
         //#else
         super.mouseReleased(mouseX.toInt(), mouseY.toInt(), state)
@@ -386,7 +463,9 @@ abstract class UScreen(
     }
 
     open fun onMouseDragged(x: Double, y: Double, clickedButton: Int, timeSinceLastClick: Long) {
-        //#if MC>=11502
+        //#if MC>=12109
+        //$$ super.mouseDragged(Click(x, y, MouseInput(clickedButton, lastMouseInput?.modifiers ?: 0)), lastDraggedDx, lastDraggedDy)
+        //#elseif MC>=11502
         //$$ super.mouseDragged(x, y, clickedButton, lastDraggedDx, lastDraggedDy)
         //#else
         super.mouseClickMove(x.toInt(), y.toInt(), clickedButton, timeSinceLastClick)

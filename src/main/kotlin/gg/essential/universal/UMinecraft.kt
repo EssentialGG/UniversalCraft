@@ -52,6 +52,8 @@ object UMinecraft {
     val isRunningOnMac: Boolean =
         //#if STANDALONE
         //$$ UDesktop.isMac
+        //#elseif MC>=12109
+        //$$ net.minecraft.client.input.SystemKeycodes.IS_MAC_OS
         //#else
         Minecraft.isRunningOnMac
         //#endif
