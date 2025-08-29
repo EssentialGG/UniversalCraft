@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiScreen
 //$$ import net.minecraft.util.text.TranslationTextComponent
 //#endif
 //#else
+import org.lwjgl.input.Keyboard
 import org.lwjgl.input.Mouse
 import java.io.IOException
 
@@ -85,6 +86,16 @@ abstract class UScreen(
     //$$ }
     //#endif
 
+    private var smuggleKeyPressed = true
+    private var smuggleKeyReleased = true
+    private var smuggleCharTyped = true
+    private var smuggleMouseClicked = true
+    private var smuggleMouseReleased = true
+    private var smuggleMouseDragged = true
+    private var smuggleMouseScrolled = true
+
+    private var lastScanCode = 0
+
     //#if MC>=11502
     //$$ private var lastClick = 0L
     //$$ private var lastDraggedDx = -1.0
@@ -128,37 +139,31 @@ abstract class UScreen(
     //$$ }
     //$$
     //$$ final override fun keyPressed(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     onKeyPressed(keyCode, 0.toChar(), modifierCode.toModifiers())
-    //$$     return false
+    //$$     return uKeyPressed(keyCode, scanCode, modifierCode.toModifiers())
     //$$ }
     //$$
     //$$ final override fun keyReleased(keyCode: Int, scanCode: Int, modifierCode: Int): Boolean {
-    //$$     onKeyReleased(keyCode, 0.toChar(), modifierCode.toModifiers())
-    //$$     return false
+    //$$     return uKeyReleased(keyCode, scanCode, modifierCode.toModifiers())
     //$$ }
     //$$
     //$$ final override fun charTyped(char: Char, modifierCode: Int): Boolean {
-    //$$     onKeyPressed(0, char, modifierCode.toModifiers())
-    //$$     return false
+    //$$     return uCharTyped(char, modifierCode.toModifiers())
     //$$ }
     //$$
     //$$ final override fun mouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
     //$$     if (mouseButton == 1)
     //$$         lastClick = UMinecraft.getTime()
-    //$$     onMouseClicked(mouseX, mouseY, mouseButton)
-    //$$     return false
+    //$$     return uMouseClicked(mouseX, mouseY, mouseButton)
     //$$ }
     //$$
     //$$ final override fun mouseReleased(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
-    //$$     onMouseReleased(mouseX, mouseY, mouseButton)
-    //$$     return false
+    //$$     return uMouseReleased(mouseX, mouseY, mouseButton)
     //$$ }
     //$$
     //$$ final override fun mouseDragged(x: Double, y: Double, mouseButton: Int, dx: Double, dy: Double): Boolean {
     //$$     lastDraggedDx = dx
     //$$     lastDraggedDy = dy
-    //$$     onMouseDragged(x, y, mouseButton, UMinecraft.getTime() - lastClick)
-    //$$     return false
+    //$$     return uMouseDragged(x, y, mouseButton, UMinecraft.getTime() - lastClick)
     //$$ }
     //$$
     //#if MC>=12002
@@ -169,8 +174,7 @@ abstract class UScreen(
     //#endif
     //$$     lastScrolledX = mouseX
     //$$     lastScrolledY = mouseY
-    //$$     onMouseScrolled(delta)
-    //$$     return false
+    //$$     return uMouseScrolled(delta)
     //$$ }
     //$$
     //$$ final override fun tick(): Unit = onTick()
@@ -224,26 +228,40 @@ abstract class UScreen(
     }
 
     final override fun keyTyped(typedChar: Char, keyCode: Int) {
-        onKeyPressed(keyCode, typedChar, UKeyboard.getModifiers())
+        if (keyCode != 0) {
+            uKeyPressed(keyCode, 0, UKeyboard.getModifiers())
+        }
+        if (typedChar != 0.toChar()) {
+            uCharTyped(typedChar, UKeyboard.getModifiers())
+        }
+    }
+
+    // Handles key release events on legacy versions
+    // Not final since that would be a breaking change
+    override fun handleKeyboardInput() {
+        super.handleKeyboardInput()
+        if (!Keyboard.getEventKeyState()) {
+            uKeyReleased(Keyboard.getEventKey(), 0, UKeyboard.getModifiers())
+        }
     }
 
     final override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
-        onMouseClicked(mouseX.toDouble(), mouseY.toDouble(), mouseButton)
+        uMouseClicked(mouseX.toDouble(), mouseY.toDouble(), mouseButton)
     }
 
     final override fun mouseReleased(mouseX: Int, mouseY: Int, state: Int) {
-        onMouseReleased(mouseX.toDouble(), mouseY.toDouble(), state)
+        uMouseReleased(mouseX.toDouble(), mouseY.toDouble(), state)
     }
 
     final override fun mouseClickMove(mouseX: Int, mouseY: Int, clickedMouseButton: Int, timeSinceLastClick: Long) {
-        onMouseDragged(mouseX.toDouble(), mouseY.toDouble(), clickedMouseButton, timeSinceLastClick)
+        uMouseDragged(mouseX.toDouble(), mouseY.toDouble(), clickedMouseButton, timeSinceLastClick)
     }
 
     final override fun handleMouseInput() {
         super.handleMouseInput()
         val scrollDelta = Mouse.getEventDWheel()
         if (scrollDelta != 0)
-            onMouseScrolled(scrollDelta.toDouble())
+            uMouseScrolled(scrollDelta.toDouble())
     }
 
     final override fun updateScreen() {
@@ -338,36 +356,42 @@ abstract class UScreen(
         onDrawScreen(mouseX, mouseY, partialTicks)
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onKeyPressed(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
         //$$ if (keyCode != 0) {
-        //$$     super.keyPressed(keyCode, 0, modifiers.toInt())
+        //$$     smuggleKeyPressed = super.keyPressed(keyCode, lastScanCode, modifiers.toInt())
         //$$ }
         //$$ if (typedChar != 0.toChar()) {
-        //$$     super.charTyped(typedChar, modifiers.toInt())
+        //$$     smuggleCharTyped = super.charTyped(typedChar, modifiers.toInt())
         //$$ }
         //#else
-        try {
-            super.keyTyped(typedChar, keyCode)
-        } catch (e: IOException) {
-            e.printStackTrace()
+        // If we are calling through from uCharTyped, don't call super
+        if (keyCode != 0) {
+            try {
+                super.keyTyped(typedChar, keyCode)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
         //#endif
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onKeyReleased(keyCode: Int, typedChar: Char, modifiers: UKeyboard.Modifiers?) {
         //#if MC>=11502
         //$$ if (keyCode != 0) {
-        //$$     super.keyReleased(keyCode, 0, modifiers.toInt())
+        //$$     smuggleKeyReleased = super.keyReleased(keyCode, lastScanCode, modifiers.toInt())
         //$$ }
         //#endif
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onMouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int) {
         //#if MC>=11502
         //$$ if (mouseButton == 1)
         //$$     lastClick = UMinecraft.getTime()
-        //$$ super.mouseClicked(mouseX, mouseY, mouseButton)
+        //$$ smuggleMouseClicked = super.mouseClicked(mouseX, mouseY, mouseButton)
         //#else
         try {
             super.mouseClicked(mouseX.toInt(), mouseY.toInt(), mouseButton)
@@ -377,28 +401,129 @@ abstract class UScreen(
         //#endif
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onMouseReleased(mouseX: Double, mouseY: Double, state: Int) {
         //#if MC>=11502
-        //$$ super.mouseReleased(mouseX, mouseY, state)
+        //$$ smuggleMouseReleased = super.mouseReleased(mouseX, mouseY, state)
         //#else
         super.mouseReleased(mouseX.toInt(), mouseY.toInt(), state)
         //#endif
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onMouseDragged(x: Double, y: Double, clickedButton: Int, timeSinceLastClick: Long) {
         //#if MC>=11502
-        //$$ super.mouseDragged(x, y, clickedButton, lastDraggedDx, lastDraggedDy)
+        //$$ smuggleMouseDragged = super.mouseDragged(x, y, clickedButton, lastDraggedDx, lastDraggedDy)
         //#else
         super.mouseClickMove(x.toInt(), y.toInt(), clickedButton, timeSinceLastClick)
         //#endif
     }
 
+    @Deprecated(DEPRECATED_INPUT)
     open fun onMouseScrolled(delta: Double) {
         //#if MC>=12002
         //$$ super.mouseScrolled(lastScrolledX, lastScrolledY, lastScrolledDX, delta)
         //#elseif MC>=11502
         //$$ super.mouseScrolled(lastScrolledX, lastScrolledY, delta)
         //#endif
+    }
+
+    /**
+     * Called when a key is pressed.
+     *
+     * @param keyCode the key code of the key. See [UKeyboard].
+     * @param scanCode the platform specific scanCode of the key. Always 0 on versions that use LWJGL2.
+     * @param modifiers the modifiers of the event.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uKeyPressed(keyCode: Int, scanCode: Int, modifiers: UKeyboard.Modifiers?): Boolean {
+        lastScanCode = scanCode
+        @Suppress("DEPRECATION")
+        onKeyPressed(keyCode, 0.toChar(), modifiers)
+        return smuggleKeyPressed
+    }
+
+    /**
+     * Called when a key is released.
+     *
+     * @param keyCode the key code of the key. See [UKeyboard].
+     * @param scanCode the platform specific scanCode of the key. Always 0 on versions that use LWJGL2.
+     * @param modifiers the modifiers of the event.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uKeyReleased(keyCode: Int, scanCode: Int, modifiers: UKeyboard.Modifiers?): Boolean {
+        lastScanCode = scanCode
+        @Suppress("DEPRECATION")
+        onKeyReleased(keyCode, 0.toChar(), modifiers)
+        return smuggleKeyReleased
+    }
+
+    /**
+     * Called when a character is typed.
+     *
+     * @param char the character that was typed
+     * @param modifiers the modifiers of the event.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uCharTyped(char: Char, modifiers: UKeyboard.Modifiers?): Boolean {
+        @Suppress("DEPRECATION")
+        onKeyPressed(0, char, modifiers)
+        return smuggleCharTyped
+    }
+
+    /**
+     * Called when the mouse is clicked.
+     *
+     * @param mouseX the X position of the mouse.
+     * @param mouseY the Y position of the mouse.
+     * @param mouseButton the mouse button that was clicked.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uMouseClicked(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
+        @Suppress("DEPRECATION")
+        onMouseClicked(mouseX, mouseY, mouseButton)
+        return smuggleMouseClicked
+    }
+
+    /**
+     * Called when the mouse is released.
+     *
+     * @param mouseX the X position of the mouse.
+     * @param mouseY the Y position of the mouse.
+     * @param mouseButton the mouse button that was released.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uMouseReleased(mouseX: Double, mouseY: Double, mouseButton: Int): Boolean {
+        @Suppress("DEPRECATION")
+        onMouseReleased(mouseX, mouseY, mouseButton)
+        return smuggleMouseReleased
+    }
+
+    /**
+     * Called when the mouse is dragged (moved while the mouse button is down).
+     *
+     * @param x the current mouse X.
+     * @param y the current mouse Y.
+     * @param clickedButton the button that is being held.
+     * @param timeSinceLastClick the time since the last click (the start of the drag).
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uMouseDragged(x: Double, y: Double, clickedButton: Int, timeSinceLastClick: Long): Boolean {
+        @Suppress("DEPRECATION")
+        onMouseDragged(x, y, clickedButton, timeSinceLastClick)
+        return smuggleMouseDragged
+    }
+
+    /**
+     * Called when the mouse is scrolled.
+     *
+     * @param delta the distance scrolled.
+     * @return `true` if the input has been handled, `false` otherwise.
+     */
+    open fun uMouseScrolled(delta: Double): Boolean {
+        @Suppress("DEPRECATION")
+        onMouseScrolled(delta)
+        return smuggleMouseScrolled
     }
 
     open fun onTick() {
@@ -466,6 +591,8 @@ abstract class UScreen(
     }
 
     companion object {
+        private const val DEPRECATED_INPUT = "Use the u prefixed input methods for better behavior."
+
         @JvmStatic
         val currentScreen: GuiScreen?
             get() = UMinecraft.getMinecraft().currentScreen
