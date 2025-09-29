@@ -2,7 +2,7 @@ import gg.essential.gradle.util.*
 
 plugins {
     kotlin("jvm") version "1.9.23" apply false
-    id("gg.essential.loom") version "1.7.28" apply false
+    id("gg.essential.loom") version "1.7.35" apply false
     id("gg.essential.multi-version.root")
     id("gg.essential.multi-version.api-validation")
 }
@@ -12,6 +12,7 @@ version = versionFromBuildIdAndBranch()
 preprocess {
     strictExtraMappings.set(true)
 
+    val fabric12109 = createNode("1.21.9-fabric", 12109, "srg")
     val neoForge12107 = createNode("1.21.7-neoforge", 12107, "srg")
     val forge12107 = createNode("1.21.7-forge", 12107, "srg")
     val fabric12107 = createNode("1.21.7-fabric", 12107, "srg")
@@ -56,6 +57,7 @@ preprocess {
     val forge11202 = createNode("1.12.2-forge", 11202, "srg")
     val forge10809 = createNode("1.8.9-forge", 10809, "srg")
 
+    fabric12109.link(fabric12107)
     neoForge12107.link(fabric12107)
     forge12107.link(fabric12107)
     fabric12107.link(fabric12106)
