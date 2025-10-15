@@ -465,6 +465,7 @@ class URenderPipeline private constructor(
                     polygonOffset = polygonOffset.first != 0f || polygonOffset.second != 0f,
                     polygonOffsetFactor = polygonOffset.first,
                     polygonOffsetUnits = polygonOffset.second,
+                    shadeModel = GL11.GL_SMOOTH,
                     alphaTest = true,
                     alphaTestFunc = GL11.GL_ALWAYS,
                     alphaTestRef = 0f,
