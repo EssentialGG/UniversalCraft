@@ -112,6 +112,29 @@ class URenderPipeline private constructor(
 
     internal fun bind() {
         shader?.bind(glState.blendState)
+
+        // These seemingly pointless calls are used to bypass the builtin `GlBlendState` applied by Minecraft's
+        // `ShaderProgram` class right before the actual draw call (so no way for us to change it afterwards) on these
+        // versions.
+        // This is so we can apply the BlendState of this URenderPipeline, even when using a pre-existing ShaderProgram
+        // (such as all the default programs) which has a different builtin `GlBlendState`.
+        // This works by exploiting one of the (many) bugs of `GlBlendState`, namely that it is lazy in that it does
+        // not update anything if the previously active blend state matches the new one. In general that behavior is
+        // wrong because there's plenty other things which update the global GL state but we use this to our advantage
+        // here: We'll apply its GlBlendState now, and then revert the global GL state to our expected state, so that
+        // later when MC calls `ShaderProgram.bind` right before the actual draw, its `GlBlendState.enable` call will
+        // no-op and our desired blend state will stay active.
+        // (Prior to 1.17, we only support the fixed-function pipeline and our own shader class which we call with
+        //  `skipBlendState = true`, so it doesn't mess with the global blend state at all)
+        // (On 1.21+, MC's `GlBlendState` is still broken, but `ShaderProgram` no longer applies it)
+        //#if MC>=11700 && MC<12100
+        //$$ RenderSystem.getShader()?.let { shaderProgram ->
+        //$$     val prevBlendState = BlendState.active()
+        //$$     shaderProgram.bind()
+        //$$     shaderProgram.unbind()
+        //$$     UGraphics.Globals.blendState(prevBlendState)
+        //$$ }
+        //#endif
     }
 
     internal fun unbind() {
