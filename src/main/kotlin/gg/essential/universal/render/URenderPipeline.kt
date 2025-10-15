@@ -492,6 +492,10 @@ class URenderPipeline private constructor(
                     alphaTest = true,
                     alphaTestFunc = GL11.GL_ALWAYS,
                     alphaTestRef = 0f,
+                    colorR = 1f,
+                    colorG = 1f,
+                    colorB = 1f,
+                    colorA = 1f,
                     //#if MC>=11700
                     //$$ texture2DStates = mutableListOf(),
                     //#else

@@ -3,6 +3,7 @@ package gg.essential.universal.render
 
 import gg.essential.universal.UGraphics
 import gg.essential.universal.shader.BlendState
+import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL11
 import java.nio.ByteBuffer
 
@@ -27,6 +28,10 @@ internal class ManagedGlState(
     var alphaTest: Boolean,
     var alphaTestFunc: Int,
     var alphaTestRef: Float,
+    var colorR: Float,
+    var colorG: Float,
+    var colorB: Float,
+    var colorA: Float,
     val texture2DStates: MutableList<Boolean>,
 ) {
     constructor(other: ManagedGlState) : this(
@@ -45,6 +50,10 @@ internal class ManagedGlState(
         alphaTest = other.alphaTest,
         alphaTestFunc = other.alphaTestFunc,
         alphaTestRef = other.alphaTestRef,
+        colorR = other.colorR,
+        colorG = other.colorG,
+        colorB = other.colorB,
+        colorA = other.colorA,
         texture2DStates = other.texture2DStates.toMutableList(),
     )
 
@@ -184,6 +193,13 @@ internal class ManagedGlState(
             //#endif
             GlStateManager.alphaFunc(alphaTestFunc, alphaTestRef)
         }
+        if (curr.colorR != colorR || curr.colorG != colorG || curr.colorB != colorB && curr.colorA != colorA) {
+            curr.colorR = colorR
+            curr.colorG = colorG
+            curr.colorB = colorB
+            curr.colorA = colorA
+            GlStateManager.color(colorR, colorG, colorB, colorA)
+        }
         for ((index, wantEnabled) in texture2DStates.withIndex()) {
             val isEnabled = curr.texture2DStates.getOrNull(index)
             if (isEnabled == wantEnabled) continue
@@ -222,17 +238,33 @@ internal class ManagedGlState(
             //$$ alphaTest = false,
             //$$ alphaTestFunc = 0,
             //$$ alphaTestRef = 0f,
+            //$$ colorR = 0f,
+            //$$ colorG = 0f,
+            //$$ colorB = 0f,
+            //$$ colorA = 0f,
             //#else
             shadeModel = GL11.glGetInteger(GL11.GL_SHADE_MODEL),
             alphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST),
             alphaTestFunc = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC),
             alphaTestRef = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF),
+            colorR = run {
+                //#if MC>=11600
+                //$$ GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, tmpFloatBuffer)
+                //#else
+                GL11.glGetFloat(GL11.GL_CURRENT_COLOR, tmpFloatBuffer)
+                //#endif
+                tmpFloatBuffer.get(0)
+            },
+            colorG = tmpFloatBuffer.get(1),
+            colorB = tmpFloatBuffer.get(2),
+            colorA = tmpFloatBuffer.get(3),
             //#endif
             texture2DStates = mutableListOf(), // populated on demand
         )
 
         // Note: LWJGL2 requires a buffer of 16 elements, even if the properties we query have fewer
         private val tmpByteBuffer = ByteBuffer.allocateDirect(16)
+        private val tmpFloatBuffer = BufferUtils.createFloatBuffer(16)
 
         private fun glGetBooleans(param: Int, count: Int) =
             tmpByteBuffer
