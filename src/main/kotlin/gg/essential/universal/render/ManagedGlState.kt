@@ -23,6 +23,7 @@ internal class ManagedGlState(
     var polygonOffset: Boolean,
     var polygonOffsetFactor: Float,
     var polygonOffsetUnits: Float,
+    var shadeModel: Int,
     var alphaTest: Boolean,
     var alphaTestFunc: Int,
     var alphaTestRef: Float,
@@ -40,6 +41,7 @@ internal class ManagedGlState(
         polygonOffset = other.polygonOffset,
         polygonOffsetFactor = other.polygonOffsetFactor,
         polygonOffsetUnits = other.polygonOffsetUnits,
+        shadeModel = other.shadeModel,
         alphaTest = other.alphaTest,
         alphaTestFunc = other.alphaTestFunc,
         alphaTestRef = other.alphaTestRef,
@@ -160,6 +162,10 @@ internal class ManagedGlState(
         //#if MC>=11700
         //$$ @Suppress("UNUSED_VARIABLE") val unused = org
         //#else
+        if (curr.shadeModel != shadeModel) {
+            curr.shadeModel = shadeModel
+            GlStateManager.shadeModel(shadeModel)
+        }
         if (curr.alphaTest != alphaTest) {
             curr.alphaTest = alphaTest
             //#if MC==11602
@@ -212,10 +218,12 @@ internal class ManagedGlState(
             polygonOffsetFactor = GL11.glGetFloat(GL11.GL_POLYGON_OFFSET_FACTOR),
             polygonOffsetUnits = GL11.glGetFloat(GL11.GL_POLYGON_OFFSET_UNITS),
             //#if MC>=11700
+            //$$ shadeModel = 0,
             //$$ alphaTest = false,
             //$$ alphaTestFunc = 0,
             //$$ alphaTestRef = 0f,
             //#else
+            shadeModel = GL11.glGetInteger(GL11.GL_SHADE_MODEL),
             alphaTest = GL11.glGetBoolean(GL11.GL_ALPHA_TEST),
             alphaTestFunc = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC),
             alphaTestRef = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF),
