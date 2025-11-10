@@ -7,6 +7,10 @@ import gg.essential.universal.UGraphics
 //$$ import org.lwjgl.opengl.GL20C
 //$$ import java.nio.Buffer
 //#else
+//#if MC>=12111
+//$$ import com.mojang.blaze3d.textures.AddressMode
+//#endif
+
 //#if MC>=12106
 //$$ import com.mojang.blaze3d.textures.GpuTextureView
 //#endif
@@ -126,6 +130,9 @@ class ReleasedDynamicTexture private constructor(
             //#else
             //$$ val texture = device.createTexture(null as String?, TextureFormat.RGBA8, width, height, 1)
             //#endif
+            //#if MC>=12111
+            //$$ sampler = RenderSystem.getSamplerCache().get(AddressMode.REPEAT, AddressMode.REPEAT, FilterMode.LINEAR, FilterMode.NEAREST, true);
+            //#else
             //$$ texture.setTextureFilter(FilterMode.NEAREST, true)
             //$$ UGraphics.configureTexture((texture as GlTexture).glId) {
                 //#if MC>=12106
@@ -134,6 +141,7 @@ class ReleasedDynamicTexture private constructor(
                 //$$ texture.checkDirty()
                 //#endif
             //$$ }
+            //#endif
             //$$ device.createCommandEncoder().writeToTexture(texture, textureData!!)
             //$$ textureData = null
             //$$ uploaded = true
@@ -200,12 +208,15 @@ class ReleasedDynamicTexture private constructor(
     //$$     return super.getGlTextureView()
     //$$ }
     //$$
+    //#if MC<12111
     //$$ override fun setUseMipmaps(mipmaps: Boolean) {
     //$$     uploadTexture()
     //$$     super.setUseMipmaps(mipmaps)
     //$$ }
     //#endif
+    //#endif
     //$$
+    //#if MC<12111
     //$$ override fun setClamp(clamp: Boolean) {
     //$$     uploadTexture()
     //$$     super.setClamp(clamp)
@@ -215,6 +226,7 @@ class ReleasedDynamicTexture private constructor(
     //$$     uploadTexture()
     //$$     super.setFilter(bilinear, mipmap)
     //$$ }
+    //#endif
     //$$
     //$$ override fun getGlTexture(): GpuTexture {
     //$$     uploadTexture()
