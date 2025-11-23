@@ -3,59 +3,30 @@ package gg.essential.universal.utils
 import net.minecraft.util.IChatComponent
 
 //#if MC>=11600
-//$$ import net.minecraft.util.ICharacterConsumer
 //$$ import net.minecraft.util.text.Color
 //$$ import net.minecraft.util.text.Style
 //$$ import net.minecraft.util.text.TextFormatting
+//$$ import java.util.Optional
 //#endif
 
 //#if MC>=11602
-//$$ private class TextBuilder(private val isFormatted: Boolean) : ICharacterConsumer {
-//$$     private val builder = StringBuilder()
-//$$     private var cachedStyle: Style? = null
+//$$ private val colorToFormatChar = TextFormatting.values().mapNotNull { format ->
+//$$     Color.fromTextFormatting(format)?.let { it to format }
+//$$ }.toMap()
 //$$
-//$$     override fun accept(index: Int, style: Style, codePoint: Int): Boolean  {
-//$$         if (isFormatted && style != cachedStyle) {
-//$$             cachedStyle = style
-//$$             builder.append(formatString(style))
-//$$         }
-//$$
-//$$         builder.append(codePoint.toChar())
-//$$         return true
-//$$     }
-//$$
-//$$     fun getString() = builder.toString()
-//$$
-//$$     private fun formatString(style: Style): String {
-//$$         val builder = StringBuilder("§r")
-//$$
-//$$         when {
-//$$             style.bold -> builder.append("§l")
-//$$             style.italic -> builder.append("§o")
-//$$             style.underlined -> builder.append("§n")
-//$$             style.strikethrough -> builder.append("§m")
-//$$             style.obfuscated -> builder.append("§k")
-//$$         }
-//$$
-//$$         style.color?.let(colorToFormatChar::get)?.let {
-//$$             builder.append(it)
-//$$         }
-//$$         return builder.toString()
-//$$     }
-//$$
-//$$     companion object {
-//$$         private val colorToFormatChar = TextFormatting.values().mapNotNull { format ->
-//$$             Color.fromTextFormatting(format)?.let { it to format }
-//$$         }.toMap()
-//$$     }
+//$$ private fun formatString(style: Style): String = buildString {
+//$$    style.color?.let(colorToFormatChar::get)?.let(::append)
+//$$    if (style.bold) append("§l")
+//$$    if (style.italic) append("§o")
+//$$    if (style.underlined) append("§n")
+//$$    if (style.obfuscated) append("§k")
+//$$    if (style.strikethrough) append("§m")
 //$$ }
 //#endif
 
 fun IChatComponent.toUnformattedString(): String {
     //#if MC>=11600
-    //$$ val builder = TextBuilder(false)
-    //$$ func_241878_f().accept(builder)
-    //$$ return builder.getString()
+    //$$ return string
     //#else
     return unformattedText
     //#endif
@@ -63,9 +34,15 @@ fun IChatComponent.toUnformattedString(): String {
 
 fun IChatComponent.toFormattedString(): String {
     //#if MC>=11600
-    //$$ val builder = TextBuilder(true)
-    //$$ func_241878_f().accept(builder)
-    //$$ return builder.getString()
+    //$$ return buildString {
+    //$$    append(formatString(style))
+    //$$    this@toFormattedString.getComponent<String> {
+    //$$        append(it)
+    //$$        Optional.empty()
+    //$$    }
+    //$$    append("§r")
+    //$$    siblings.forEach { append(it.toFormattedString()) }
+    //$$ }
     //#else
     return formattedText
     //#endif
