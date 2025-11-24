@@ -29,6 +29,10 @@ import net.minecraft.util.IChatComponent
 //$$     private fun formatString(style: Style): String {
 //$$         val builder = StringBuilder("§r")
 //$$
+//$$         style.color?.let(colorToFormatChar::get)?.let {
+//$$             builder.append(it)
+//$$         }
+//$$
 //$$         when {
 //$$             style.bold -> builder.append("§l")
 //$$             style.italic -> builder.append("§o")
@@ -37,9 +41,6 @@ import net.minecraft.util.IChatComponent
 //$$             style.obfuscated -> builder.append("§k")
 //$$         }
 //$$
-//$$         style.color?.let(colorToFormatChar::get)?.let {
-//$$             builder.append(it)
-//$$         }
 //$$         return builder.toString()
 //$$     }
 //$$
