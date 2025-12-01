@@ -60,6 +60,8 @@ data class BlendState(
     fun activate() = applyState()
     //#endif
 
+    internal fun activateWithoutChangingMcBlendState() = applyState()
+
     @Suppress("DEPRECATION")
     private fun applyState() {
         if (enabled) {

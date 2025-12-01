@@ -132,7 +132,7 @@ class URenderPipeline private constructor(
         //$$     val prevBlendState = BlendState.active()
         //$$     shaderProgram.bind()
         //$$     shaderProgram.unbind()
-        //$$     UGraphics.Globals.blendState(prevBlendState)
+        //$$     prevBlendState.activateWithoutChangingMcBlendState()
         //$$ }
         //#endif
     }
