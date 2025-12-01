@@ -126,8 +126,7 @@ internal class ManagedGlState(
         }
         if (curr.blendState != blendState) {
             curr.blendState = blendState
-            @Suppress("DEPRECATION")
-            blendState.activate()
+            blendState.activateWithoutChangingMcBlendState()
         }
         if (curr.colorMask != colorMask) {
             curr.colorMask = colorMask
