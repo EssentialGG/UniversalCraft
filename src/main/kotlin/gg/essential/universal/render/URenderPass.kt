@@ -173,7 +173,7 @@ internal class URenderPass : AutoCloseable {
             //#endif
             //$$ }
             //#if MC>=12111
-            //$$ mc.bindTexture(name, RenderSystem.getDevice().createTextureView(texture), RenderLayers.field_64462.get())
+            //$$ mc.bindTexture(name, RenderSystem.getDevice().createTextureView(texture), RenderLayers.BLOCK_SAMPLER.get())
             //#elseif MC>=12106
             //$$ mc.bindSampler(name, RenderSystem.getDevice().createTextureView(texture))
             //#else
