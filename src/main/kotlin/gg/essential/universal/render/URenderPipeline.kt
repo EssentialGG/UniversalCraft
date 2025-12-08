@@ -30,7 +30,6 @@ import net.minecraft.util.ResourceLocation
 //$$ import net.minecraft.client.gl.UniformType
 //$$ import net.minecraft.client.render.BuiltBuffer
 //$$ import org.apache.commons.codec.digest.DigestUtils
-//$$ import java.util.function.BiFunction
 //#else
 import gg.essential.universal.shader.UShader
 import gg.essential.universal.vertex.UBuiltBufferInternal
@@ -66,6 +65,14 @@ import net.minecraft.client.renderer.vertex.VertexFormatElement
 
 //#endif
 
+//#if MC>=12105 && !STANDALONE
+//#if MC>=12111
+//$$ typealias ShaderSourceGetter = net.minecraft.client.gl.ShaderSourceGetter
+//#else
+//$$ typealias ShaderSourceGetter = java.util.function.BiFunction<Identifier, ShaderType, String?>
+//#endif
+//#endif
+
 class URenderPipeline private constructor(
     private val id: ResourceLocation,
     internal val format: VertexFormat,
@@ -73,7 +80,7 @@ class URenderPipeline private constructor(
     //$$ private val drawMode: DrawMode,
     //#endif
     //#if MC>=12105 && !STANDALONE
-    //$$ private var shaderSourceGetter: BiFunction<Identifier, ShaderType, String?>?,
+    //$$ private var shaderSourceGetter: ShaderSourceGetter?,
     //$$ internal val mcRenderPipeline: RenderPipeline,
     //#else
     private val shader: ShaderSupplier?,
@@ -230,7 +237,7 @@ class URenderPipeline private constructor(
             //$$     return
             //$$ }
             //#endif
-            null -> UGraphics.bindTexture(index, glId)
+            null -> UGraphics.Globals.bindTexture(index, glId)
         }
     }
     //#endif
@@ -365,7 +372,7 @@ class URenderPipeline private constructor(
     ) : Builder, BuilderProps by BuilderPropsImpl() {
         override fun build(): URenderPipeline {
             //#if MC>=12105 && !STANDALONE
-            //$$ var shaderSourceGetter: BiFunction<Identifier, ShaderType, String?>? = null
+            //$$ var shaderSourceGetter: ShaderSourceGetter? = null
             //$$ var mcRenderPipeline = RenderPipeline.builder().apply {
             //$$     withLocation(id)
             //$$     withVertexFormat(format, drawMode.mcMode)
@@ -379,7 +386,7 @@ class URenderPipeline private constructor(
             //$$             val vertId = Identifier.of("universalcraft", "shader/generated/" + DigestUtils.sha1Hex(transformedVertSource).lowercase())
             //$$             val fragId = Identifier.of("universalcraft", "shader/generated/" + DigestUtils.sha1Hex(transformedFragSource).lowercase())
             //$$
-            //$$             shaderSourceGetter = BiFunction { id: Identifier, type: ShaderType ->
+            //$$             shaderSourceGetter = ShaderSourceGetter { id: Identifier, type: ShaderType ->
             //$$                 when (id) {
             //$$                     vertId -> transformedVertSource
             //$$                     fragId -> transformedFragSource

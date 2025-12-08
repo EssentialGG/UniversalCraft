@@ -5,6 +5,10 @@ import gg.essential.universal.vertex.UBuiltBufferInternal
 
 //#if STANDALONE
 //#else
+//#if MC>=12111
+//$$ import net.minecraft.client.render.RenderLayers
+//#endif
+
 //#if MC>=12106
 //$$ import com.mojang.blaze3d.buffers.GpuBuffer
 //$$ import org.lwjgl.system.MemoryStack
@@ -64,8 +68,12 @@ internal class URenderPass : AutoCloseable {
             //#else
             //$$     RenderSystem.getModelOffset(),
             //#endif
+            //#if MC>=12111
+            //$$     org.joml.Matrix4f(),
+            //#else
             //$$     RenderSystem.getTextureMatrix(),
             //$$     RenderSystem.getShaderLineWidth(),
+            //#endif
             //$$ )
             //#endif
         //$$     val builtBuffer = builtBuffer.mc
@@ -158,11 +166,15 @@ internal class URenderPass : AutoCloseable {
             //#else
             //$$ val texture = object : GlTexture("", TextureFormat.RGBA8, 0, 0, 0, textureGlId) {
             //#endif
+            //#if MC<12111
             //$$     init {
             //$$         needsReinit = false
             //$$     }
+            //#endif
             //$$ }
-            //#if MC>=12106
+            //#if MC>=12111
+            //$$ mc.bindTexture(name, RenderSystem.getDevice().createTextureView(texture), RenderLayers.BLOCK_SAMPLER.get())
+            //#elseif MC>=12106
             //$$ mc.bindSampler(name, RenderSystem.getDevice().createTextureView(texture))
             //#else
             //$$ mc.bindSampler(name, texture)

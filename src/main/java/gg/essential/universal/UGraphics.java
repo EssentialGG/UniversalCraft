@@ -46,6 +46,10 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_BINDING_2D;
 import static org.lwjgl.opengl.GL13.GL_ACTIVE_TEXTURE;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
+//#if MC>=12111
+//$$ import com.mojang.blaze3d.textures.FilterMode;
+//#endif
+
 //#if MC>=12109
 //$$ import net.minecraft.client.font.TextDrawable;
 //$$ import net.minecraft.text.StyleSpriteSource;
@@ -519,9 +523,12 @@ public class UGraphics {
     }
     //#endif
 
+    @Deprecated // see UGraphics.Globals
     public static void bindTexture(int index, int glTextureId) {
         //#if STANDALONE
         //$$ configureTextureUnit(index, () -> glBindTexture(GL_TEXTURE_2D, glTextureId));
+        //#elseif MC>=12111
+        //$$ throw new UnsupportedOperationException("No longer supported on 1.21.11+, use `UBufferBuilder`/`URenderPipeline` instead.");
         //#elseif MC>=12106
         //$$ RenderSystem.setShaderTexture(index, RenderSystem.getDevice().createTextureView(new UnownedGlTexture(glTextureId)));
         //#elseif MC>=12105
@@ -534,6 +541,7 @@ public class UGraphics {
     }
 
     //#if !STANDALONE
+    @Deprecated // see UGraphics.Globals
     public static void bindTexture(int index, ResourceLocation resourceLocation) {
         bindTexture(index, getOrLoadTextureId(resourceLocation));
     }
@@ -687,8 +695,13 @@ public class UGraphics {
     //$$             try (URenderPass renderPass = new URenderPass()) {
     //$$                 renderPass.draw(UBuiltBuffer.wrap(builtBuffer), URenderPipeline.wrap(pipeline), builder -> {
     //$$                     RenderPass mcRenderPass = ((URenderPass.DrawCallBuilderImpl) builder).getMc();
-    //$$                     mcRenderPass.bindSampler("Sampler0", texture);
-    //$$                     mcRenderPass.bindSampler("Sampler2", lightTexture);
+                        //#if MC>=12111
+                        //$$ mcRenderPass.bindTexture("Sampler0", texture, RenderSystem.getSamplerCache().get(FilterMode.NEAREST));
+                        //$$ mcRenderPass.bindTexture("Sampler2", lightTexture, RenderSystem.getSamplerCache().get(FilterMode.LINEAR));
+                        //#else
+                        //$$ mcRenderPass.bindSampler("Sampler0", texture);
+                        //$$ mcRenderPass.bindSampler("Sampler2", lightTexture);
+                        //#endif
     //$$                     return kotlin.Unit.INSTANCE;
     //$$                 });
     //$$             }
@@ -705,7 +718,11 @@ public class UGraphics {
     //$$         }
     //$$         drawable.render(matrix, bufferBuilder, LIGHT, false);
     //$$     }
+    //#if MC>=12111
+    //$$     @Override public void drawGlyph(TextDrawable.DrawnGlyphRect glyph) { draw(glyph); }
+    //#else
     //$$     @Override public void drawGlyph(TextDrawable drawable) { draw(drawable); }
+    //#endif
     //$$     @Override public void drawRectangle(TextDrawable drawable) { draw(drawable); }
     //#else
     //$$     private void setupBuffer(BakedGlyph bakedGlyph) {
@@ -1028,6 +1045,10 @@ public class UGraphics {
 
     public enum DrawMode {
         LINES(GL11.GL_LINES),
+        /**
+         * @deprecated No longer properly supported as of 1.21.11, use {@link #LINES} instead
+         */
+        @Deprecated
         LINE_STRIP(GL11.GL_LINE_STRIP),
         TRIANGLES(GL11.GL_TRIANGLES),
         TRIANGLE_STRIP(GL11.GL_TRIANGLE_STRIP),
@@ -1059,7 +1080,11 @@ public class UGraphics {
         //$$ private static VertexFormat.DrawMode glToMcDrawMode(int glMode) {
         //$$     switch (glMode) {
         //$$         case GL11.GL_LINES: return VertexFormat.DrawMode.LINES;
-        //$$         case GL11.GL_LINE_STRIP: return VertexFormat.DrawMode.LINE_STRIP;
+                //#if MC>=12111
+                //$$ case GL11.GL_LINE_STRIP: return VertexFormat.DrawMode.DEBUG_LINE_STRIP;
+                //#else
+                //$$ case GL11.GL_LINE_STRIP: return VertexFormat.DrawMode.LINE_STRIP;
+                //#endif
         //$$         case GL11.GL_TRIANGLES: return VertexFormat.DrawMode.TRIANGLES;
         //$$         case GL11.GL_TRIANGLE_STRIP: return VertexFormat.DrawMode.TRIANGLE_STRIP;
         //$$         case GL11.GL_TRIANGLE_FAN: return VertexFormat.DrawMode.TRIANGLE_FAN;
@@ -1071,7 +1096,11 @@ public class UGraphics {
         //$$ private static DrawMode fromMc(VertexFormat.DrawMode mcMode) {
         //$$     switch (mcMode) {
         //$$         case LINES: return DrawMode.LINES;
-        //$$         case LINE_STRIP: return DrawMode.LINE_STRIP;
+                //#if MC>=12111
+                //$$ case DEBUG_LINE_STRIP: return DrawMode.LINE_STRIP;
+                //#else
+                //$$ case LINE_STRIP: return DrawMode.LINE_STRIP;
+                //#endif
         //$$         case TRIANGLES: return DrawMode.TRIANGLES;
         //$$         case TRIANGLE_STRIP: return DrawMode.TRIANGLE_STRIP;
         //$$         case TRIANGLE_FAN: return DrawMode.TRIANGLE_FAN;
@@ -1543,7 +1572,7 @@ public class UGraphics {
         return this;
     }
 
-    //#if MC>=12105 && !STANDALONE
+    //#if MC>=12105 && MC<12111
     //$$ private static class UnownedGlTexture extends GlTexture {
     //$$     public UnownedGlTexture(int glId) {
             //#if MC>=12106
@@ -1606,6 +1635,8 @@ public class UGraphics {
      * {@code RenderSystem.setShaderTexture}, but just like the vanilla {@code RenderPipeline},
      * {@code URenderPipeline} also requires textures to be set explicitly, despite {@code UGraphics.bindTexture} not
      * yet being deprecated (because it's still used for {@code RenderLayer}).
+     * <br>
+     * Update: As of 1.21.11, {@code UGraphics.bindTexture} is now deprecated too.
      * <p>
      * If you need to still use the old global state on versions prior to 1.21.5, you may use the methods declared in
      * this class. They are functionally identical to the ones in UGraphics but are not deprecated with the
@@ -1688,6 +1719,18 @@ public class UGraphics {
             UGraphics instance = UGraphics.getFromTessellator();
             instance.beginWithDefaultShader(mode, format);
             return instance;
+        }
+        //#endif
+        //#endif
+
+        //#if MC<12111 || STANDALONE
+        public static void bindTexture(int index, int glTextureId) {
+            UGraphics.bindTexture(index, glTextureId);
+        }
+
+        //#if !STANDALONE
+        public static void bindTexture(int index, ResourceLocation resourceLocation) {
+            UGraphics.bindTexture(index, resourceLocation);
         }
         //#endif
         //#endif
