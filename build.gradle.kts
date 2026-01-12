@@ -1,5 +1,5 @@
 import gg.essential.gradle.util.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     kotlin("jvm")
@@ -15,13 +15,13 @@ tasks.compileKotlin.setJvmDefault("all")
 loom.noServerRunConfigs()
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        languageVersion = "1.6"
-        apiVersion = "1.6"
+kotlin {
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_1_9
+        apiVersion = KotlinVersion.KOTLIN_1_9
     }
 }
 
