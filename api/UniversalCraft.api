@@ -25,6 +25,7 @@ public final class gg/essential/universal/ChatColor : java/lang/Enum {
 	public static final field YELLOW Lgg/essential/universal/ChatColor;
 	public final fun getChar ()C
 	public final fun getColor ()Ljava/awt/Color;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun isColor ()Z
 	public final fun isFormat ()Z
 	public final fun plus (Ljava/lang/String;)Ljava/lang/String;
@@ -49,6 +50,7 @@ public final class gg/essential/universal/GuiScale : java/lang/Enum {
 	public static final field Small Lgg/essential/universal/GuiScale;
 	public static final field VeryLarge Lgg/essential/universal/GuiScale;
 	public static final fun fromNumber (I)Lgg/essential/universal/GuiScale;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static final fun scaleForScreenSize ()Lgg/essential/universal/GuiScale;
 	public static final fun scaleForScreenSize (I)Lgg/essential/universal/GuiScale;
 	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/GuiScale;
@@ -1119,6 +1121,7 @@ public abstract interface class gg/essential/universal/render/URenderPipeline$Bu
 public final class gg/essential/universal/render/URenderPipeline$ColorLogic : java/lang/Enum {
 	public static final field None Lgg/essential/universal/render/URenderPipeline$ColorLogic;
 	public static final field OrReverse Lgg/essential/universal/render/URenderPipeline$ColorLogic;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/render/URenderPipeline$ColorLogic;
 	public static fun values ()[Lgg/essential/universal/render/URenderPipeline$ColorLogic;
 }
@@ -1156,6 +1159,7 @@ public final class gg/essential/universal/render/URenderPipeline$DepthTest : jav
 	public static final field Greater Lgg/essential/universal/render/URenderPipeline$DepthTest;
 	public static final field Less Lgg/essential/universal/render/URenderPipeline$DepthTest;
 	public static final field LessOrEqual Lgg/essential/universal/render/URenderPipeline$DepthTest;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/render/URenderPipeline$DepthTest;
 	public static fun values ()[Lgg/essential/universal/render/URenderPipeline$DepthTest;
 }
@@ -1206,6 +1210,7 @@ public final class gg/essential/universal/shader/BlendState$Equation : java/lang
 	public static final field REVERSE_SUBTRACT Lgg/essential/universal/shader/BlendState$Equation;
 	public static final field SUBTRACT Lgg/essential/universal/shader/BlendState$Equation;
 	public static final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Equation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/shader/BlendState$Equation;
 	public static fun values ()[Lgg/essential/universal/shader/BlendState$Equation;
 }
@@ -1227,6 +1232,7 @@ public final class gg/essential/universal/shader/BlendState$Param : java/lang/En
 	public static final field SRC_COLOR Lgg/essential/universal/shader/BlendState$Param;
 	public static final field ZERO Lgg/essential/universal/shader/BlendState$Param;
 	public static final fun fromGl (I)Lgg/essential/universal/shader/BlendState$Param;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lgg/essential/universal/shader/BlendState$Param;
 	public static fun values ()[Lgg/essential/universal/shader/BlendState$Param;
 }

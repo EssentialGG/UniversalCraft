@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
     application
     // Optional, to create a single output jar containing the application and all necessary dependencies
-    id("com.gradleup.shadow") version "8.3.0"
+    id("com.gradleup.shadow") version "8.3.9"
 }
 
 // Setup repositories; most dependencies are served by Maven Central, UniversalCraft is served by Essential's repo.

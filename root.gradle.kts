@@ -1,8 +1,8 @@
 import gg.essential.gradle.util.*
 
 plugins {
-    kotlin("jvm") version "1.9.23" apply false
-    id("gg.essential.loom") version "1.7.35" apply false
+    kotlin("jvm") version "2.3.0" apply false
+    id("gg.essential.loom") version "1.13.44" apply false
     id("gg.essential.multi-version.root")
     id("gg.essential.multi-version.api-validation")
 }
