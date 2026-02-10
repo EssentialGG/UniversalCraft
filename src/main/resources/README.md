@@ -1,1 +1,0 @@
-# ModCore Universal Versioning Api
