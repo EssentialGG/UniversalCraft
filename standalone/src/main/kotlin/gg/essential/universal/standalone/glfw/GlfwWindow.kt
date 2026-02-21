@@ -64,16 +64,16 @@ class GlfwWindow(
             ?.let { return@run it }
 
         // Failed to create any context, fetch the error and throw
-        val message = MemoryStack.stackPush().use { stack ->
+        val (message, code) = MemoryStack.stackPush().use { stack ->
             val pointer = stack.mallocPointer(1)
             val error = GLFW.glfwGetError(pointer)
             if (error != GLFW.GLFW_NO_ERROR) {
-                "${MemoryUtil.memUTF8Safe(pointer.get(0))} (code $error)"
+                MemoryUtil.memUTF8Safe(pointer.get(0)) to error
             } else {
-                "unknown error"
+                "unknown error" to null
             }
         }
-        throw RuntimeException("Failed to create the GLFW window: $message")
+        throw GLFWException("Failed to create the GLFW window", message, code)
     }
 
     init {
